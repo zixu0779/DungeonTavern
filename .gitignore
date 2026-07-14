@@ -105,3 +105,14 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# macOS and local IDE state
+.DS_Store
+.idea/
+
+# Unity-generated solution files
+*.slnx
+
+# Numbered Blender backups
+*.blend[0-9]*
+*.blend[0-9]*.meta
