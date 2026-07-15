@@ -1,0 +1,2641 @@
+fileFormatVersion: 2
+guid: 9acc8937382f4457fa7a1ffcef6d1d5f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 725140240339141005
+    second: Interior_1st_floor_0
+  - first:
+      213: -644039347402560501
+    second: Interior_1st_floor_1
+  - first:
+      213: 3356457574095188032
+    second: Interior_1st_floor_2
+  - first:
+      213: -4888196060802550803
+    second: Interior_1st_floor_3
+  - first:
+      213: 317673882534960308
+    second: Interior_1st_floor_4
+  - first:
+      213: 6743308586760803155
+    second: Interior_1st_floor_5
+  - first:
+      213: 908527092444708105
+    second: Interior_1st_floor_6
+  - first:
+      213: -4444838717065604459
+    second: Interior_1st_floor_7
+  - first:
+      213: 5236293207151962264
+    second: Interior_1st_floor_8
+  - first:
+      213: 5074810689490419781
+    second: Interior_1st_floor_9
+  - first:
+      213: -209715681517203595
+    second: Interior_1st_floor_10
+  - first:
+      213: 6333440716676588374
+    second: Interior_1st_floor_11
+  - first:
+      213: -5958687631666010113
+    second: Interior_1st_floor_12
+  - first:
+      213: -4809859677027008626
+    second: Interior_1st_floor_13
+  - first:
+      213: 356460330941700431
+    second: Interior_1st_floor_14
+  - first:
+      213: 4421127478651043617
+    second: Interior_1st_floor_15
+  - first:
+      213: -6778103563150519514
+    second: Interior_1st_floor_16
+  - first:
+      213: -8680746985451962554
+    second: Interior_1st_floor_17
+  - first:
+      213: -3223695739931929307
+    second: Interior_1st_floor_18
+  - first:
+      213: 1401565672243144880
+    second: Interior_1st_floor_19
+  - first:
+      213: 7185016284698425454
+    second: Interior_1st_floor_20
+  - first:
+      213: -9169074602319215920
+    second: Interior_1st_floor_21
+  - first:
+      213: 3417026493236340931
+    second: Interior_1st_floor_22
+  - first:
+      213: 6630041221358853687
+    second: Interior_1st_floor_23
+  - first:
+      213: 5879106610639758079
+    second: Interior_1st_floor_24
+  - first:
+      213: 2486181083632513869
+    second: Interior_1st_floor_25
+  - first:
+      213: -4312592293668482455
+    second: Interior_1st_floor_26
+  - first:
+      213: 3282777854272182645
+    second: Interior_1st_floor_27
+  - first:
+      213: -6097735002185987930
+    second: Interior_1st_floor_28
+  - first:
+      213: -7755971226644225798
+    second: Interior_1st_floor_29
+  - first:
+      213: 6207263274092524954
+    second: Interior_1st_floor_30
+  - first:
+      213: -8169133321456171604
+    second: Interior_1st_floor_31
+  - first:
+      213: 7107194475440477023
+    second: Interior_1st_floor_32
+  - first:
+      213: 3582859383708421899
+    second: Interior_1st_floor_33
+  - first:
+      213: -4335549380996026798
+    second: Interior_1st_floor_34
+  - first:
+      213: 4653243219027755940
+    second: Interior_1st_floor_35
+  - first:
+      213: 4689094827606370846
+    second: Interior_1st_floor_36
+  - first:
+      213: 2181366230625017869
+    second: Interior_1st_floor_37
+  - first:
+      213: 2122738301634912426
+    second: Interior_1st_floor_38
+  - first:
+      213: 4964545389994338399
+    second: Interior_1st_floor_39
+  - first:
+      213: 7087703204971487902
+    second: Interior_1st_floor_40
+  - first:
+      213: 6155977783436579698
+    second: Interior_1st_floor_41
+  - first:
+      213: 6575598875817086068
+    second: Interior_1st_floor_42
+  - first:
+      213: 2097526540755973724
+    second: Interior_1st_floor_43
+  - first:
+      213: -6357869419099925308
+    second: Interior_1st_floor_44
+  - first:
+      213: -7331387519848920578
+    second: Interior_1st_floor_45
+  - first:
+      213: -7786289264449216061
+    second: Interior_1st_floor_46
+  - first:
+      213: -3700553740657610124
+    second: Interior_1st_floor_47
+  - first:
+      213: 4174074659704213823
+    second: Interior_1st_floor_48
+  - first:
+      213: -9193464113180224940
+    second: Interior_1st_floor_49
+  - first:
+      213: 8184097255656793902
+    second: Interior_1st_floor_50
+  - first:
+      213: 62560300499802580
+    second: Interior_1st_floor_51
+  - first:
+      213: -7273226142694531677
+    second: Interior_1st_floor_52
+  - first:
+      213: 2947214733565009222
+    second: Interior_1st_floor_53
+  - first:
+      213: -7043800097477756068
+    second: Interior_1st_floor_54
+  - first:
+      213: -2025597202156927380
+    second: Interior_1st_floor_55
+  - first:
+      213: -1201035109305500304
+    second: Interior_1st_floor_56
+  - first:
+      213: -7298322920316470558
+    second: Interior_1st_floor_57
+  - first:
+      213: 5925807566467984962
+    second: Interior_1st_floor_58
+  - first:
+      213: -7908193762316980300
+    second: Interior_1st_floor_59
+  - first:
+      213: 8344311337529172902
+    second: Interior_1st_floor_60
+  - first:
+      213: -3038099236843790415
+    second: Interior_1st_floor_61
+  - first:
+      213: 2556164774768672612
+    second: Interior_1st_floor_62
+  - first:
+      213: 9218824455449604815
+    second: Interior_1st_floor_63
+  - first:
+      213: -3425552926695831644
+    second: Interior_1st_floor_64
+  - first:
+      213: 7167041418613090888
+    second: Interior_1st_floor_65
+  - first:
+      213: -4436916381483013623
+    second: Interior_1st_floor_66
+  - first:
+      213: 1621419870172251114
+    second: Interior_1st_floor_67
+  - first:
+      213: 5336285995478079006
+    second: Interior_1st_floor_68
+  - first:
+      213: 1722109142407662866
+    second: Interior_1st_floor_69
+  - first:
+      213: -1045017305113683884
+    second: Interior_1st_floor_70
+  - first:
+      213: -6936198686367952398
+    second: Interior_1st_floor_71
+  - first:
+      213: 3994194562262449175
+    second: Interior_1st_floor_72
+  - first:
+      213: 1569038883290986493
+    second: Interior_1st_floor_73
+  - first:
+      213: -712471651713342008
+    second: Interior_1st_floor_74
+  - first:
+      213: 5197143048177131217
+    second: Interior_1st_floor_75
+  - first:
+      213: -4392874724480555725
+    second: Interior_1st_floor_76
+  - first:
+      213: 2200241421858715248
+    second: Interior_1st_floor_77
+  - first:
+      213: -8775547115633363015
+    second: Interior_1st_floor_78
+  - first:
+      213: 5148944896823936996
+    second: Interior_1st_floor_79
+  - first:
+      213: -3001639616900676900
+    second: Interior_1st_floor_80
+  - first:
+      213: 6938603078802667214
+    second: Interior_1st_floor_81
+  - first:
+      213: 7126048020364614422
+    second: Interior_1st_floor_82
+  - first:
+      213: 3978998670502083512
+    second: Interior_1st_floor_83
+  - first:
+      213: -1546811255098401256
+    second: Interior_1st_floor_84
+  - first:
+      213: 7051657410721549041
+    second: Interior_1st_floor_85
+  - first:
+      213: -5342249443387814443
+    second: Interior_1st_floor_86
+  - first:
+      213: -6946290473708625380
+    second: Interior_1st_floor_87
+  - first:
+      213: -1365183184330808185
+    second: Interior_1st_floor_88
+  - first:
+      213: 4708586806052395951
+    second: Interior_1st_floor_89
+  - first:
+      213: 1988162170341939733
+    second: Interior_1st_floor_90
+  - first:
+      213: -8999350444991273942
+    second: Interior_1st_floor_91
+  - first:
+      213: -3216529942962215350
+    second: Interior_1st_floor_92
+  - first:
+      213: 1109541050335736101
+    second: Interior_1st_floor_93
+  - first:
+      213: 4300648514104432956
+    second: Interior_1st_floor_94
+  - first:
+      213: 6123507167602960708
+    second: Interior_1st_floor_95
+  - first:
+      213: -4686887291317656198
+    second: Interior_1st_floor_96
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Interior_1st_floor_0
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 307
+        width: 51
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 637068549404f4363af30fd99b36d081
+      internalID: 725140240339141005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_1
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 307
+        width: 52
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95d9efee7769745a8bca28c2d89a851d
+      internalID: -644039347402560501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_2
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 259
+        width: 158
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 212214e544648427e8f0a960eac88e1a
+      internalID: 3356457574095188032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_3
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 294
+        width: 46
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf38f983bbb104e48bb99a19e3abb20f
+      internalID: -4888196060802550803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_4
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 294
+        width: 46
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d03864a5cf354c7baa31944bc7c0334
+      internalID: 317673882534960308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_5
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 285
+        width: 42
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6d72949282814db2bffb80cc0be247b
+      internalID: 6743308586760803155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_6
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 263
+        width: 51
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d04aff45befd42ea9dbd6cb5875826f
+      internalID: 908527092444708105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_7
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 263
+        width: 52
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0b00e98954af4ed7b1da80ed0ce28d8
+      internalID: -4444838717065604459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_8
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 240
+        width: 42
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7839d761307b44fe7b5ff165c00f9900
+      internalID: 5236293207151962264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_9
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 226
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17dfd77838abe491597cc5a97eb81d55
+      internalID: 5074810689490419781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_10
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 242
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ccf3654c74db4bdd957e0af99b04b16
+      internalID: -209715681517203595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_11
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 213
+        width: 29
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f59b17f0fd474ea083c4062970f1f49
+      internalID: 6333440716676588374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_12
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 214
+        width: 25
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b3ffab9097ff485986e7c681e3978a4
+      internalID: -5958687631666010113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_13
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 210
+        width: 43
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92d4cf68cef384e89b9821fa5d55479f
+      internalID: -4809859677027008626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_14
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 228
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba647372ab4544948ad82658456704a1
+      internalID: 356460330941700431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_15
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 210
+        width: 43
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06573f6b7576d4262a97e0fb0d3d98e5
+      internalID: 4421127478651043617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_16
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 220
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cd1ae387298b438091bc60e76abe382
+      internalID: -6778103563150519514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_17
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 226
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e196ee0b90d440488ad70907517baae
+      internalID: -8680746985451962554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_18
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 226
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 501733e8b1c58402d8ab696018572a67
+      internalID: -3223695739931929307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_19
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 210
+        width: 51
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f07dc106e4cc5489c9c1711c302833cf
+      internalID: 1401565672243144880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_20
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 194
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5eda7b5be3bb459e84608cc471c3d93
+      internalID: 7185016284698425454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_21
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 209
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 495adb9f707c148ac9725240fff2769e
+      internalID: -9169074602319215920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_22
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 063bbb047e260439090f2c304e6705ba
+      internalID: 3417026493236340931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_23
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 172
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5eb9ecd8515244af819b38b33fb9731
+      internalID: 6630041221358853687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_24
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89f7735be11ee450a862fb6f61954c89
+      internalID: 5879106610639758079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_25
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67fe133f37b0b41d1b384cf1e0091f84
+      internalID: 2486181083632513869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_26
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 172
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 769521093e9b84a9681750abdb9432fd
+      internalID: -4312592293668482455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_27
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5448e33c3360d4dafb8e485478c99d7b
+      internalID: 3282777854272182645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_28
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82255c80cd36144c4ac5b507ac70fc69
+      internalID: -6097735002185987930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_29
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 172
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b416e65b7f24407bab8879e50b9af4a
+      internalID: -7755971226644225798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_30
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffda05ff705ed43e3bd15353eac733cd
+      internalID: 6207263274092524954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_31
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0664c14f63ebc45ee8c558eacbc1f19c
+      internalID: -8169133321456171604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_32
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 172
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a8562473c66a447da4925fc3d1c2f70
+      internalID: 7107194475440477023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_33
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 178
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cbbec610af374ef6bc3eb92226a6150
+      internalID: 3582859383708421899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_34
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 176
+        width: 39
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb822c5eac0fb4f29a195447648a0885
+      internalID: -4335549380996026798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 161
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6687e077f22d479595eaf389f1a3449
+      internalID: 4653243219027755940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_36
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 123
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 519ad93c5dc0d4392bdaebc1eaa9bf16
+      internalID: 4689094827606370846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_37
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 123
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 564353f9e9bc2490a877605061e0acd5
+      internalID: 2181366230625017869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_38
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 131
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b6aa1afbddaa46108c95c0033e1a858
+      internalID: 2122738301634912426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_39
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 112
+        width: 5
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5424e451596194662ac3505f5d297154
+      internalID: 4964545389994338399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_40
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 145
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 454755d5db0da4b5aac54f5b55d1afe8
+      internalID: 7087703204971487902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_41
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 145
+        width: 5
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff59602ff26ea457dbea37ae067fe9f2
+      internalID: 6155977783436579698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_42
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 145
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad0f024476dc8496b8a20dc69ec237bd
+      internalID: 6575598875817086068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_43
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 144
+        width: 5
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8de8089aa86f545e78adc6f663477bc2
+      internalID: 2097526540755973724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_44
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 145
+        width: 5
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 224ab42cc06ad48579757602c24b7406
+      internalID: -6357869419099925308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_45
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 112
+        width: 84
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a19eef8d0c36145d48ee33afbbfaafb6
+      internalID: -7331387519848920578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_46
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 117
+        width: 21
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ea58569a141f423189673e320cad80a
+      internalID: -7786289264449216061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_47
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 114
+        width: 21
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe3323e2c88e84b49b0c5587ff1b5320
+      internalID: -3700553740657610124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_48
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 129
+        width: 5
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 031bf1b53a5e4449a9b566b38491a167
+      internalID: 4174074659704213823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_49
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 129
+        width: 5
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bf529802c3124f41ac9416544bdd571
+      internalID: -9193464113180224940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_50
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 129
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61df4e69c744b414cbe2f9dc5ab31896
+      internalID: 8184097255656793902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_51
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 129
+        width: 5
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa431663bb225483596d378dfdcad96b
+      internalID: 62560300499802580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_52
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 129
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 255ce6d0e4895458eb87d4a1d613b58c
+      internalID: -7273226142694531677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_53
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 113
+        width: 5
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8de6f0250270a4058ab52838c31d7055
+      internalID: 2947214733565009222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_54
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 113
+        width: 5
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6de50adf5a63743f59de43c67ebb5e27
+      internalID: -7043800097477756068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_55
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 113
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5ec42f8751b3476d88776a4ea792b47
+      internalID: -2025597202156927380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_56
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 113
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eb7f037e9b5f4c4a9f3baa47383d9e0
+      internalID: -1201035109305500304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_57
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 87
+        width: 28
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea6a87b9f944e4f16b2eab791cd39721
+      internalID: -7298322920316470558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_58
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 87
+        width: 28
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56887b6965aa04280be5d7e77a92957b
+      internalID: 5925807566467984962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_59
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 103
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43a7b1992545e4247998ce24625ade48
+      internalID: -7908193762316980300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_60
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 85
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d534ac93a8244c2fbb0560cf442f16a
+      internalID: 8344311337529172902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_61
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 81
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d121d67b8ff8240d48722d9e4ac1eca8
+      internalID: -3038099236843790415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_62
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 83
+        width: 28
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aea63ad1c979641a5a1eaf6ad39be2cb
+      internalID: 2556164774768672612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_63
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 81
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0042c932809a545efa8bba6a31183df8
+      internalID: 9218824455449604815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_64
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 83
+        width: 28
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa1199c19ccf94917932bd9207a05e11
+      internalID: -3425552926695831644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_65
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 85
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70052f8b96dc34682b4f8363308e6ae9
+      internalID: 7167041418613090888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_66
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 86
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb6706c646b944a31a6c22fb7d4a32b9
+      internalID: -4436916381483013623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_67
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 84
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cf9809880c1a4cc09e81481559fd5c6
+      internalID: 1621419870172251114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_68
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 94
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bc7c44635ae14e819e2c1a2fb248469
+      internalID: 5336285995478079006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_69
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 86
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66d744959e482445da76449c6f35a2c6
+      internalID: 1722109142407662866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_70
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 84
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14802b9345c6541b5be84af9d02c9401
+      internalID: -1045017305113683884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_71
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 94
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4803bce53dba44d48f80d64b1a6bd0c
+      internalID: -6936198686367952398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_72
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 87
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 557c36434aefc43d089d981faedf9759
+      internalID: 3994194562262449175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_73
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 52
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72164dce079274769a6e858e42df55c4
+      internalID: 1569038883290986493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_74
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 51
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62b73c478aeac43679c5f0e7dc3e784a
+      internalID: -712471651713342008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_75
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 52
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61740be36cbaa4b51944b741910d3faa
+      internalID: 5197143048177131217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_76
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 51
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43f6204030272403d86cc1deaba7644b
+      internalID: -4392874724480555725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_77
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 56
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 818d6e4c5b34443bbadbbc43f5600de8
+      internalID: 2200241421858715248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_78
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 55
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dadc3d6650284a239991ff1c01229c3
+      internalID: -8775547115633363015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_79
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 56
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd126b5c04e97466db12066b7409cc95
+      internalID: 5148944896823936996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_80
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 55
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcaba5742ed574900a5487ef9f289eb8
+      internalID: -3001639616900676900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_81
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 61
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af6c0c6dffddb47169759047d52f6fbd
+      internalID: 6938603078802667214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_82
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 61
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 140907b47cbb0478a884580db2fd1688
+      internalID: 7126048020364614422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_83
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 54
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56c1a300289664186996c88e955a1202
+      internalID: 3978998670502083512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_84
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 54
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8dda11adfc3464526a827c701d44b87a
+      internalID: -1546811255098401256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_85
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 65
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7556f92db97574b7f90e0f1af996a7ea
+      internalID: 7051657410721549041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_86
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 65
+        width: 5
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9eca1934b5f948f6b7e72dd470de685
+      internalID: -5342249443387814443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_87
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 65
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 961dd79e2b22b402eb9df39d41800b33
+      internalID: -6946290473708625380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_88
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 65
+        width: 5
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b23094c3cb97c424387ad98f6322a3a1
+      internalID: -1365183184330808185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_89
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 54
+        width: 4
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06b157f01c48a4be6ab87185e2a64d70
+      internalID: 4708586806052395951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_90
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 55
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 533796b7bfbc5413d8810ba66481a77a
+      internalID: 1988162170341939733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_91
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 54
+        width: 4
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5f203755de7c4e6084a7cae525c515e
+      internalID: -8999350444991273942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_92
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 55
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74bcea7c92ae949958c85ac1cf69c92b
+      internalID: -3216529942962215350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_93
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 3
+        width: 52
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5058554ad448940b8a5d99d3d250e225
+      internalID: 1109541050335736101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_94
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 3
+        width: 52
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ab4091ba280f4e3f8de962ab8598a47
+      internalID: 4300648514104432956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_95
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 7
+        width: 52
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06e9ed63da741429caf1dd3288a5423b
+      internalID: 6123507167602960708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_96
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 7
+        width: 52
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c85e2a97579204933bf445227793f4b0
+      internalID: -4686887291317656198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 19833ebb43fc945b9a035467fb06cd3e
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Interior_1st_floor_0: 725140240339141005
+      Interior_1st_floor_1: -644039347402560501
+      Interior_1st_floor_10: -209715681517203595
+      Interior_1st_floor_11: 6333440716676588374
+      Interior_1st_floor_12: -5958687631666010113
+      Interior_1st_floor_13: -4809859677027008626
+      Interior_1st_floor_14: 356460330941700431
+      Interior_1st_floor_15: 4421127478651043617
+      Interior_1st_floor_16: -6778103563150519514
+      Interior_1st_floor_17: -8680746985451962554
+      Interior_1st_floor_18: -3223695739931929307
+      Interior_1st_floor_19: 1401565672243144880
+      Interior_1st_floor_2: 3356457574095188032
+      Interior_1st_floor_20: 7185016284698425454
+      Interior_1st_floor_21: -9169074602319215920
+      Interior_1st_floor_22: 3417026493236340931
+      Interior_1st_floor_23: 6630041221358853687
+      Interior_1st_floor_24: 5879106610639758079
+      Interior_1st_floor_25: 2486181083632513869
+      Interior_1st_floor_26: -4312592293668482455
+      Interior_1st_floor_27: 3282777854272182645
+      Interior_1st_floor_28: -6097735002185987930
+      Interior_1st_floor_29: -7755971226644225798
+      Interior_1st_floor_3: -4888196060802550803
+      Interior_1st_floor_30: 6207263274092524954
+      Interior_1st_floor_31: -8169133321456171604
+      Interior_1st_floor_32: 7107194475440477023
+      Interior_1st_floor_33: 3582859383708421899
+      Interior_1st_floor_34: -4335549380996026798
+      Interior_1st_floor_35: 4653243219027755940
+      Interior_1st_floor_36: 4689094827606370846
+      Interior_1st_floor_37: 2181366230625017869
+      Interior_1st_floor_38: 2122738301634912426
+      Interior_1st_floor_39: 4964545389994338399
+      Interior_1st_floor_4: 317673882534960308
+      Interior_1st_floor_40: 7087703204971487902
+      Interior_1st_floor_41: 6155977783436579698
+      Interior_1st_floor_42: 6575598875817086068
+      Interior_1st_floor_43: 2097526540755973724
+      Interior_1st_floor_44: -6357869419099925308
+      Interior_1st_floor_45: -7331387519848920578
+      Interior_1st_floor_46: -7786289264449216061
+      Interior_1st_floor_47: -3700553740657610124
+      Interior_1st_floor_48: 4174074659704213823
+      Interior_1st_floor_49: -9193464113180224940
+      Interior_1st_floor_5: 6743308586760803155
+      Interior_1st_floor_50: 8184097255656793902
+      Interior_1st_floor_51: 62560300499802580
+      Interior_1st_floor_52: -7273226142694531677
+      Interior_1st_floor_53: 2947214733565009222
+      Interior_1st_floor_54: -7043800097477756068
+      Interior_1st_floor_55: -2025597202156927380
+      Interior_1st_floor_56: -1201035109305500304
+      Interior_1st_floor_57: -7298322920316470558
+      Interior_1st_floor_58: 5925807566467984962
+      Interior_1st_floor_59: -7908193762316980300
+      Interior_1st_floor_6: 908527092444708105
+      Interior_1st_floor_60: 8344311337529172902
+      Interior_1st_floor_61: -3038099236843790415
+      Interior_1st_floor_62: 2556164774768672612
+      Interior_1st_floor_63: 9218824455449604815
+      Interior_1st_floor_64: -3425552926695831644
+      Interior_1st_floor_65: 7167041418613090888
+      Interior_1st_floor_66: -4436916381483013623
+      Interior_1st_floor_67: 1621419870172251114
+      Interior_1st_floor_68: 5336285995478079006
+      Interior_1st_floor_69: 1722109142407662866
+      Interior_1st_floor_7: -4444838717065604459
+      Interior_1st_floor_70: -1045017305113683884
+      Interior_1st_floor_71: -6936198686367952398
+      Interior_1st_floor_72: 3994194562262449175
+      Interior_1st_floor_73: 1569038883290986493
+      Interior_1st_floor_74: -712471651713342008
+      Interior_1st_floor_75: 5197143048177131217
+      Interior_1st_floor_76: -4392874724480555725
+      Interior_1st_floor_77: 2200241421858715248
+      Interior_1st_floor_78: -8775547115633363015
+      Interior_1st_floor_79: 5148944896823936996
+      Interior_1st_floor_8: 5236293207151962264
+      Interior_1st_floor_80: -3001639616900676900
+      Interior_1st_floor_81: 6938603078802667214
+      Interior_1st_floor_82: 7126048020364614422
+      Interior_1st_floor_83: 3978998670502083512
+      Interior_1st_floor_84: -1546811255098401256
+      Interior_1st_floor_85: 7051657410721549041
+      Interior_1st_floor_86: -5342249443387814443
+      Interior_1st_floor_87: -6946290473708625380
+      Interior_1st_floor_88: -1365183184330808185
+      Interior_1st_floor_89: 4708586806052395951
+      Interior_1st_floor_9: 5074810689490419781
+      Interior_1st_floor_90: 1988162170341939733
+      Interior_1st_floor_91: -8999350444991273942
+      Interior_1st_floor_92: -3216529942962215350
+      Interior_1st_floor_93: 1109541050335736101
+      Interior_1st_floor_94: 4300648514104432956
+      Interior_1st_floor_95: 6123507167602960708
+      Interior_1st_floor_96: -4686887291317656198
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
