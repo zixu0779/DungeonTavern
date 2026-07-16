@@ -438,7 +438,7 @@ TextureImporter:
         x: 130
         y: 259
         width: 158
-        height: 57
+        height: 28
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -680,7 +680,7 @@ TextureImporter:
         x: 132
         y: 210
         width: 43
-        height: 37
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -724,7 +724,7 @@ TextureImporter:
         x: 177
         y: 210
         width: 43
-        height: 37
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2521,6 +2521,94 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_97
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 287
+        width: 14
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 488254fa8202e421c9d8009b390c9882
+      internalID: -1758567133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_98
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 287
+        width: 14
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6762e77550d5f4c9fbf23d3be240fd01
+      internalID: -431094866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_99
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 224
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60a1ec0251e5e4181af505a79bf5a893
+      internalID: -1602169987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Interior_1st_floor_100
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 224
+        width: 21
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a47d385bce014017a276fe85569fc7d
+      internalID: 2056385720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -2540,6 +2628,7 @@ TextureImporter:
       Interior_1st_floor_0: 725140240339141005
       Interior_1st_floor_1: -644039347402560501
       Interior_1st_floor_10: -209715681517203595
+      Interior_1st_floor_100: 2056385720
       Interior_1st_floor_11: 6333440716676588374
       Interior_1st_floor_12: -5958687631666010113
       Interior_1st_floor_13: -4809859677027008626
@@ -2634,6 +2723,9 @@ TextureImporter:
       Interior_1st_floor_94: 4300648514104432956
       Interior_1st_floor_95: 6123507167602960708
       Interior_1st_floor_96: -4686887291317656198
+      Interior_1st_floor_97: -1758567133
+      Interior_1st_floor_98: -431094866
+      Interior_1st_floor_99: -1602169987
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

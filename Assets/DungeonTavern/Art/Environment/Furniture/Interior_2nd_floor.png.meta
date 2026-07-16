@@ -464,9 +464,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 80
-        y: 16
+        y: 32
         width: 80
-        height: 64
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -921,6 +921,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Interior_2nd_floor_33
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 16
+        width: 80
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 799b9c9daa4a24db697e56fb9d5e4dfc
+      internalID: 1585374598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -964,6 +986,7 @@ TextureImporter:
       Interior_2nd_floor_30: 7626554540023954241
       Interior_2nd_floor_31: -5744991268809157318
       Interior_2nd_floor_32: -4039416268862933060
+      Interior_2nd_floor_33: 1585374598
       Interior_2nd_floor_4: -1747630889103251477
       Interior_2nd_floor_5: -3875418866218872561
       Interior_2nd_floor_6: -8138501820297822339

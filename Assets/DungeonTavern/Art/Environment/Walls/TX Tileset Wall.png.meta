@@ -337,10 +337,10 @@ TextureImporter:
         serializedVersion: 2
         x: 32
         y: 352
-        width: 96
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 20
+        height: 96
+      alignment: 9
+      pivot: {x: 0.2, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -358,11 +358,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 152
-        y: 376
-        width: 114
-        height: 104
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        y: 384
+        width: 22
+        height: 96
+      alignment: 9
+      pivot: {x: 0.18, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -383,8 +383,8 @@ TextureImporter:
         y: 384
         width: 10
         height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -447,10 +447,10 @@ TextureImporter:
         serializedVersion: 2
         x: 384
         y: 352
-        width: 64
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 20
+        height: 80
+      alignment: 9
+      pivot: {x: 0.2, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -471,8 +471,8 @@ TextureImporter:
         y: 256
         width: 128
         height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.125, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -493,8 +493,8 @@ TextureImporter:
         y: 256
         width: 32
         height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -515,8 +515,8 @@ TextureImporter:
         y: 160
         width: 64
         height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.25, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -537,8 +537,8 @@ TextureImporter:
         y: 160
         width: 64
         height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.25, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -547,6 +547,336 @@ TextureImporter:
       bones: []
       spriteID: 67e8e31769bcd4e18856570101f202dc
       internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_10
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 352
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.25, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75fc137f9813f4913b1842ed77cfc050
+      internalID: -1910637758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_11
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 352
+        width: 20
+        height: 96
+      alignment: 9
+      pivot: {x: 0.8, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b18126498c0594b6384fdebf2fa76728
+      internalID: 1544714490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_12
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 472
+        width: 64
+        height: 8
+      alignment: 9
+      pivot: {x: 0.25, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20e788ef3c583435182aef9eea5f0793
+      internalID: 1247209882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_13
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 416
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.25, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c33e4a3062be2435ca24a7b00792c78e
+      internalID: -1490599098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_14
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 384
+        width: 22
+        height: 96
+      alignment: 9
+      pivot: {x: 0.72, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 873fd29eac3894417a1d9dab3720605c
+      internalID: -1585645478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_15
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 460
+        width: 20
+        height: 20
+      alignment: 9
+      pivot: {x: 0.2, y: 0.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2cec6c6679444070aec4ef60632c2e0
+      internalID: 1061259927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_16
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 460
+        width: 20
+        height: 20
+      alignment: 9
+      pivot: {x: 0.8, y: 0.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6f34a1a9fdd34032865ce1526b2f658
+      internalID: -825882107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_17
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 376
+        width: 20
+        height: 20
+      alignment: 9
+      pivot: {x: 0.2, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3da04ef6daa743dbaf94a5abac3b0c5
+      internalID: -189565277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_18
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 376
+        width: 22
+        height: 20
+      alignment: 9
+      pivot: {x: 0.72, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88f57a19ab23841c1ae4b2c8923faf3e
+      internalID: -1931143002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_19
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 352
+        width: 20
+        height: 80
+      alignment: 9
+      pivot: {x: 0.8, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 273ad1478419f478d92e95d83fe12c0e
+      internalID: -711195352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_20
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 352
+        width: 32
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6200fb010507f498c89804f16ace5d1f
+      internalID: -136559996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_21
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 440
+        width: 32
+        height: 8
+      alignment: 9
+      pivot: {x: 0.5, y: -1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05ccc19d81a31441db61517c377f40af
+      internalID: -464884446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_22
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 376
+        width: 64
+        height: 8
+      alignment: 9
+      pivot: {x: 0.25, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50b28ad0de111450abbae34986affb75
+      internalID: -1206015578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_23
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 428
+        width: 20
+        height: 20
+      alignment: 9
+      pivot: {x: 0.2, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 513951cabbcc44b52ae6d5f36b06ac4d
+      internalID: 1037016118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Tileset Wall_24
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 428
+        width: 20
+        height: 20
+      alignment: 9
+      pivot: {x: 0.8, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ec38feb614c64f2cbc4103a9441ddee
+      internalID: -1329699164
       vertices: []
       indices: 
       edges: []
@@ -569,7 +899,22 @@ TextureImporter:
     nameFileIdTable:
       TX Tileset Wall_0: 21300000
       TX Tileset Wall_1: 21300002
+      TX Tileset Wall_10: -1910637758
+      TX Tileset Wall_11: 1544714490
+      TX Tileset Wall_12: 1247209882
+      TX Tileset Wall_13: -1490599098
+      TX Tileset Wall_14: -1585645478
+      TX Tileset Wall_15: 1061259927
+      TX Tileset Wall_16: -825882107
+      TX Tileset Wall_17: -189565277
+      TX Tileset Wall_18: -1931143002
+      TX Tileset Wall_19: -711195352
       TX Tileset Wall_2: 21300004
+      TX Tileset Wall_20: -136559996
+      TX Tileset Wall_21: -464884446
+      TX Tileset Wall_22: -1206015578
+      TX Tileset Wall_23: 1037016118
+      TX Tileset Wall_24: -1329699164
       TX Tileset Wall_3: 21300006
       TX Tileset Wall_4: 21300008
       TX Tileset Wall_5: 21300010
