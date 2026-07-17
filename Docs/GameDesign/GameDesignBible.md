@@ -43,10 +43,15 @@ The tavern has no conventional building-upgrade ladder. Progression may expose o
 ## Confirmed visual direction
 
 - Pixel-art presentation.
+- The game uses an oblique top-down view, not a completely vertical overhead view.
+- Walls must show readable vertical faces or height. They must not be represented only as flat floor boundaries.
+- Furniture and architecture must share the same oblique perspective; fully overhead props are not suitable for final scene dressing.
 - Dungeon and underground atmosphere: dark, enclosed, and subdued rather than bright outdoor fantasy.
 - Architecture should read darker than loose props while preserving enough local contrast for cracks, masonry, and material texture to remain legible.
 - Cainos and CraftPix Tavern assets may be combined through project palettes organized by scene function rather than source pack.
-- The current palettes and source assets are retained unless a later task explicitly requests further cleanup or recoloring.
+- The curated assets, slicing data, Tile assets, and Palettes currently present in the project are the working baseline. Do not delete, reslice, recolor, regenerate, or reorder material outside the explicit scope of a task.
+
+Detailed visual rules are maintained in `Docs/Art/ArtDirection.md`. Sprite slicing and Palette workflow rules are maintained in `Docs/Art/TileAuthoringGuide.md`.
 
 ## Open questions
 
@@ -60,10 +65,25 @@ The following are not design commitments:
 - Technical implementation of the no-fighting rules
 - Exact conditions and ordering for opening expansion areas
 - Camera-follow, collision, navigation, and interaction architecture
+- Final internal room boundaries, furniture arrangement, and circulation measurements for the current tavern layout
+- Final lighting and post-processing configuration
 
-## Current scene contract
+## Current scene status and contract
 
-The first tavern scene is a layout greybox. Its purpose is to validate scale, circulation, area relationships, and the shared-space premise. It must not imply final gameplay systems.
+- `Assets/Scenes/Tavern/Tavern_ReadabilityPrototype.unity` is the current authoritative work scene.
+- `Assets/Scenes/Tavern/Tavern_Main.unity` is the superseded greybox. It is retained as a historical reference and must not receive new production work.
+- At an explicitly approved milestone, the authoritative work scene may replace or overwrite `Tavern_Main`; this must not happen implicitly.
+- The current stage is a tile-authoring layout stage rather than a gameplay-complete greybox. The scene currently exposes only the tavern outer boundary, the shared entrance boundary, and empty Tilemap painting layers.
+- Removing internal guide lines does not cancel the confirmed room list or shared-space premise. Exact internal geometry and circulation remain pending until reviewed through actual tile placement.
+
+Current painting interfaces:
+
+- `LayoutGuide/00_TavernOuterBoundary`
+- `LayoutGuide/01_PublicEntrance_3Wide`
+- `Ground/GroundTiles`
+- `GroundDetails/GroundDetailTiles`
+- `Walls/WallTiles`
+- `FurnitureBlockout/FurnitureTiles`
 
 Stable marker names for future integrations:
 
@@ -74,3 +94,5 @@ Stable marker names for future integrations:
 ## Change log
 
 - 2026-07-16: Created the durable design bible and recorded the confirmed tavern setting, peace rules, initial/locked areas, visual direction, and intentionally open gameplay questions.
+- 2026-07-20: Confirmed the oblique top-down perspective, made `Tavern_ReadabilityPrototype` the authoritative work scene, reclassified `Tavern_Main` as the superseded greybox, and linked the dedicated art-direction and tile-authoring documents.
+- 2026-07-20: Configured the authoritative scene camera for pixel-perfect rendering at 32 PPU with a 640×360 reference resolution.

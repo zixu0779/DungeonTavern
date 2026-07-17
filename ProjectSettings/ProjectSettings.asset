@@ -939,13 +939,13 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   enableDirectStorage: 0
   cloudProjectId: d259ec49-e76b-4b86-b75c-c71ada2cd143
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
+  projectName: DungeonTavern
   organizationId: zixu0779
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

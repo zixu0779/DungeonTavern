@@ -3,6 +3,9 @@
 Before changing gameplay, scenes, narrative, or art direction, read
 `Docs/GameDesign/GameDesignBible.md`.
 
+Before changing environment art, sprites, palettes, tilemaps, or scene presentation,
+also read `Docs/Art/ArtDirection.md` and `Docs/Art/TileAuthoringGuide.md`.
+
 ## Stable constraints
 
 - The tavern occupies a secluded corner of a dungeon floor. It is not the dungeon entrance.
@@ -20,3 +23,5 @@ Before changing gameplay, scenes, narrative, or art direction, read
 - Record newly confirmed design truths in `Docs/GameDesign/GameDesignBible.md`.
 - Keep this file concise; only copy rules here when they must constrain every future task.
 - Preserve existing user assets and project changes unless deletion or replacement is explicitly requested.
+- Treat `Assets/Scenes/Tavern/Tavern_ReadabilityPrototype.unity` as the current authoritative work scene.
+- Treat `Assets/Scenes/Tavern/Tavern_Main.unity` as the superseded greybox until an explicitly approved milestone replaces it.
