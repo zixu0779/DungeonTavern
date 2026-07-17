@@ -148,11 +148,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 58
-        y: 270
+        y: 269
         width: 16
-        height: 2
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 3
+      alignment: 9
+      pivot: {x: 0.5, y: -1.33}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -821,6 +821,28 @@ TextureImporter:
       bones: []
       spriteID: 2c62a6bfecd5e4f28875a91e092c4bee
       internalID: 1611210892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_interior_2
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 226
+        width: 16
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a2491ab8cd7945a6a4a0a99d870c46c
+      internalID: -1798406766
       vertices: []
       indices: 
       edges: []

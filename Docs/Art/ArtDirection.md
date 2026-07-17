@@ -24,7 +24,6 @@ This document defines the stable visual language for environment art. It supplem
 - The authoritative scene uses the URP `PixelPerfectCamera` component.
 - Assets PPU is `32` and the reference resolution is `640×360` (16:9).
 - Upscale Render Texture and Pixel Snapping are enabled; Stretch Fill is disabled.
-- Pixel Perfect Camera Filter Mode must be `Point`, not `RetroAA`; RetroAA performs a bilinear final blit and visibly softens Tile edges.
 - Pixel-art quality must be judged in Game View at the reference resolution or an integer multiple such as `1280×720` or `1920×1080`.
 - Arbitrary Scene View zoom levels may look uneven and are not the final rendering reference.
 

@@ -6,6 +6,9 @@ Before changing gameplay, scenes, narrative, or art direction, read
 Before changing environment art, sprites, palettes, tilemaps, or scene presentation,
 also read `Docs/Art/ArtDirection.md` and `Docs/Art/TileAuthoringGuide.md`.
 
+Before starting or continuing the current environment-art production tasks, also read
+`Docs/Art/EnvironmentArtHandoff.md` for task priority, current asset state, and review gates.
+
 ## Stable constraints
 
 - The tavern occupies a secluded corner of a dungeon floor. It is not the dungeon entrance.
