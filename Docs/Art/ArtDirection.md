@@ -27,6 +27,25 @@ This document defines the stable visual language for environment art. It supplem
 - Pixel-art quality must be judged in Game View at the reference resolution or an integer multiple such as `1280×720` or `1920×1080`.
 - Arbitrary Scene View zoom levels may look uneven and are not the final rendering reference.
 
+## Native-resolution pixel authoring
+
+- Pixel-art source images and candidate images must be drawn directly at their intended final
+  pixel dimensions. For example, a `32×32` Tile must be authored as `32×32` pixels from the
+  beginning.
+- Do not draw or generate a larger image and then reduce it to the final asset size. Downsampling,
+  including nearest-neighbour downsampling, changes pixel clusters, line weight, gaps, cracks,
+  material texture, and edge interfaces in ways that cannot be reliably repaired afterward.
+- AI-generated drafts are subject to the same rule: generate or construct the actual final-size
+  atlas or final-size Tiles directly. A high-resolution concept may be used only as visual
+  reference and must not be resized into the production asset.
+- Nearest-neighbour enlargement is allowed only for review images and documentation. The enlarged
+  image is never the production source.
+- Resizing an existing source is allowed only when the user explicitly requests that specific
+  transformation. It must be treated as a conversion task with separate pixel-level review, not
+  as the default pixel-art creation workflow.
+- Judge line weight, cracks, holes, repairs, texture density, and edge compatibility on the
+  native-resolution production image before import.
+
 ## Stone floor language
 
 - The formal Ground baseline is `Ground_Cracked_Seamless.png` and `Ground_Cracked_Autotile.png`.
@@ -60,4 +79,6 @@ Review environment art at both 100% and enlarged nearest-neighbour scale:
 
 - At 100%, walls, floor structure, cracks, damage, doors, and prop silhouettes must be immediately readable.
 - At enlarged scale, pixels must remain hard-edged, with no anti-aliasing, interpolation blur, compression artifacts, or accidental semi-transparent fringes.
+- Confirm that the production asset was authored at its final native dimensions and was not
+  obtained by shrinking a larger render.
 - Repetition, disconnected seams, incompatible perspectives, overly black damage, and lost masonry outlines are blocking issues rather than optional polish.

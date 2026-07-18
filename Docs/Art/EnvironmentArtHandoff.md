@@ -6,15 +6,16 @@ priority, not permanent game canon.
 
 ## Current priority
 
-Work in this order unless the user explicitly changes it:
+Current active task:
 
-1. Review and adjust `Assets/DungeonTavern/Art/Environment/Walls/Walls_interior.png`.
-2. Produce a new aged wooden tavern-floor tileset.
+1. Produce an aged wooden tavern-floor tileset.
 
-Do not begin the wooden floor before the wall direction has been reviewed far enough to
-establish a compatible perspective, palette, pixel density, and material contrast.
+The `Walls_interior.png` adjustment task is complete. Do not reopen or revise the wall
+assets unless the user explicitly puts them back in scope.
 
 ## Task 1 — Walls_interior
+
+**Status: completed.**
 
 The source atlas is:
 
@@ -121,27 +122,25 @@ Initial review questions to answer from the asset itself:
 
 ## Task 2 — Aged wooden tavern floor
 
-Create this as a new material family; do not overwrite the formal stone-floor sources.
+**Status: active, requirements pending.**
 
-Target language:
+The user has confirmed only the task name and priority: produce aged wooden flooring for
+the dungeon tavern. Detailed requirements have not yet been provided and will be supplied
+incrementally in conversation.
 
-- Old subterranean tavern wood: dark, desaturated brown with slight warm variation.
-- Readable plank separation at 100% scale, restrained grain, wear, dents, stains, and occasional
-  repaired boards; avoid bright clean fantasy-inn flooring.
-- The floor remains mostly top-facing and must fit the same oblique environment presentation.
-- Use 32×32 complete Tiles at 32 PPU with Point filtering, no mipmaps, and no lossy compression.
-- Design adjacency deliberately: plank courses and seams must continue across compatible edges.
-- Include enough intact variants to avoid noisy damage everywhere. Keep cracks, missing chips,
-  stains, and repairs as controlled variants rather than the universal base texture.
-- Generate candidates and practical tiled previews before formal import, slicing, Tile creation,
-  or Palette placement.
+Until those requirements are confirmed:
 
-Before generation, confirm from the wall work:
-
-- final plank direction and approximate plank width;
-- value contrast against stone walls and furniture;
-- whether a stone perimeter or threshold transition Tile is required;
-- whether the first delivery is a freely mixed set, an interface-coded set, or both.
+- Do not generate images, choose a plank layout, define Tile counts, create transitions,
+  import assets, slice Sprites, create Tile assets, or modify a Palette.
+- Do not infer a final color palette, damage density, adjacency system, plank direction,
+  plank dimensions, or relationship to the stone floor.
+- It is acceptable to inspect existing project art when the user asks, but report findings
+  separately from recommendations and do not treat recommendations as approved requirements.
+- Once the user provides a concrete requirement, implement only the approved scope and use
+  candidate review gates before replacing or formalizing assets.
+- When image production begins, author the wooden-floor Tiles and atlas directly at their final
+  pixel dimensions. Do not generate a larger image and compress or downsample it into the
+  production asset.
 
 ## Ground status — do not reopen implicitly
 
@@ -161,15 +160,14 @@ resume Ground editing unless the user explicitly puts Ground back in scope.
 
 - Preserve all user-authored slicing and Palette edits outside the named task.
 - Candidate images must be shown and approved before they replace formal images.
-- Do not modify Ground, Decoration, furniture, scenes, or unrelated Palettes while working on Walls.
-- Do not modify Walls while producing the wooden floor unless a separately approved transition Tile
-  requires both sources.
+- Do not modify Ground, Walls, Decoration, furniture, scenes, or existing Palettes while
+  producing the wooden floor unless the user explicitly includes them in the task.
 - At each approval gate, verify image dimensions, hard pixel edges, Alpha behavior, 32 PPU, Point
   filtering, mipmaps, compression, slicing, GUID stability, Tile references, and Palette references.
 
 ## Suggested start for the next conversation
 
 Read `AGENTS.md`, `Docs/GameDesign/GameDesignBible.md`, `Docs/Art/ArtDirection.md`,
-`Docs/Art/TileAuthoringGuide.md`, and this file. Then inspect `Walls_interior.png`, its `.meta`, the
-current Wall Tile assets, and the Wall Palette. Report the semantic role of each existing slice and
-identify missing pieces before changing any asset.
+`Docs/Art/TileAuthoringGuide.md`, and this file. The active task is aged wooden tavern
+flooring, but its detailed requirements are intentionally pending. Summarize the known
+project context, make no asset changes, and wait for the user's first concrete requirement.

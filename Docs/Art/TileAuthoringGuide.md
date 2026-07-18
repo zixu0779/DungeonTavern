@@ -9,6 +9,25 @@ This document records the project workflow for Sprite slicing, Tile assets, Pale
 - Preserve formal asset paths and GUIDs when replacing approved image pixels, unless a migration is explicitly requested.
 - Candidate images must not replace formal images until they have been reviewed and approved.
 
+## Final-size authoring rule
+
+- Author every pixel-art Tile and atlas directly at its final production dimensions.
+- A `32×32` Tile must be created and edited on a `32×32` pixel canvas. An `8×8` atlas of those
+  Tiles must be authored as the final `256×256` image rather than produced by shrinking a larger
+  image.
+- Never use “draw large, then downscale” as the production workflow. It is prohibited even when
+  the final resize uses nearest-neighbour sampling, because the original pixel decisions and
+  interface geometry were made at the wrong scale.
+- High-resolution images may be used as concepts or style references only. Reconstruct the final
+  asset natively, pixel by pixel or Tile by Tile, at the target dimensions.
+- Nearest-neighbour upscaling is permitted for `400%` inspection images and other previews, but
+  preview dimensions must never be written back as the formal source.
+- If a task explicitly requires converting an existing differently sized source, preserve the
+  original, output a candidate, document the conversion, and perform pixel-level review before
+  formal replacement.
+- Before approval, verify important details at native scale: 1–2 pixel cracks, mortar or plank
+  seams, damage silhouettes, repairs, Alpha edges, and all cross-Tile interface coordinates.
+
 ## Sprite slicing
 
 - Manual slicing is supported and preferred when automatic slicing merges pieces, clips shadows, or fails to represent the atlas structure.
@@ -53,6 +72,8 @@ The authoritative work scene is `Assets/Scenes/Tavern/Tavern_ReadabilityPrototyp
 
 ## Validation before handoff
 
+- Confirm that each newly created pixel-art source was authored at final native dimensions and
+  was not downsampled from a larger generated image.
 - Confirm formal image dimensions, Sprite count, PPU, Point filtering, mipmap state, and compression settings.
 - Check for missing Sprite or Tile references and red cells in every modified Palette.
 - Verify category spacing and assembly examples at normal Palette zoom.
