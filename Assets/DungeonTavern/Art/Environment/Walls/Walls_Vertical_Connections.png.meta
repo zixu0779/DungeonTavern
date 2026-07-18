@@ -1,0 +1,1544 @@
+fileFormatVersion: 2
+guid: 9cfb804c97f85443ac97a7670adb60c3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8451888455450978363
+    second: Walls_Vertical_Right
+  - first:
+      213: 2740801824691325828
+    second: Walls_Vertical_Left
+  - first:
+      213: 5565424980942219343
+    second: Walls_HV_LeftToDown_00
+  - first:
+      213: 5144312546532655505
+    second: Walls_HV_LeftToDown_01
+  - first:
+      213: -5397125472432351034
+    second: Walls_HV_LeftToDown_02
+  - first:
+      213: -6208341319462520918
+    second: Walls_HV_LeftToDown_03
+  - first:
+      213: 7067128929374826401
+    second: Walls_HV_LeftToDown_04
+  - first:
+      213: -6093632021803196598
+    second: Walls_HV_LeftToDown_05
+  - first:
+      213: -3313028051932466719
+    second: Walls_HV_LeftToDown_06
+  - first:
+      213: 7679728334632497259
+    second: Walls_HV_LeftToDown_07
+  - first:
+      213: -1132909295016692421
+    second: Walls_HV_LeftToDown_08
+  - first:
+      213: -5613152838907067014
+    second: Walls_HV_LeftToDown_09
+  - first:
+      213: -1730527490518704943
+    second: Walls_HV_RightToDown_00
+  - first:
+      213: 1283124796858891267
+    second: Walls_HV_RightToDown_01
+  - first:
+      213: -410869441882820506
+    second: Walls_HV_RightToDown_02
+  - first:
+      213: 1420887206608194359
+    second: Walls_HV_RightToDown_03
+  - first:
+      213: 481071492624722565
+    second: Walls_HV_RightToDown_04
+  - first:
+      213: -8103194561759303710
+    second: Walls_HV_RightToDown_05
+  - first:
+      213: -2164811462700717871
+    second: Walls_HV_RightToDown_06
+  - first:
+      213: -1148388179453981013
+    second: Walls_HV_RightToDown_07
+  - first:
+      213: 3635744565812049542
+    second: Walls_HV_RightToDown_08
+  - first:
+      213: 6844033455396544188
+    second: Walls_HV_RightToDown_09
+  - first:
+      213: -3408176555633034026
+    second: Walls_HV_LeftToUp_00
+  - first:
+      213: 7117465011850019360
+    second: Walls_HV_LeftToUp_01
+  - first:
+      213: -4681906751228795817
+    second: Walls_HV_LeftToUp_02
+  - first:
+      213: 1318384138138715939
+    second: Walls_HV_LeftToUp_03
+  - first:
+      213: 1035741765287591307
+    second: Walls_HV_LeftToUp_04
+  - first:
+      213: -1358134004199811894
+    second: Walls_HV_LeftToUp_05
+  - first:
+      213: -8727227711085405768
+    second: Walls_HV_LeftToUp_06
+  - first:
+      213: 5515336991457169037
+    second: Walls_HV_LeftToUp_07
+  - first:
+      213: -8124371354395750318
+    second: Walls_HV_LeftToUp_08
+  - first:
+      213: 7957864956155127077
+    second: Walls_HV_LeftToUp_09
+  - first:
+      213: 5950206670005386693
+    second: Walls_HV_RightToUp_00
+  - first:
+      213: 8664287567334777655
+    second: Walls_HV_RightToUp_01
+  - first:
+      213: 3324043954454249056
+    second: Walls_HV_RightToUp_02
+  - first:
+      213: 1937273625550572581
+    second: Walls_HV_RightToUp_03
+  - first:
+      213: -1102131367260783967
+    second: Walls_HV_RightToUp_04
+  - first:
+      213: 1677981145297197395
+    second: Walls_HV_RightToUp_05
+  - first:
+      213: -3290600923194608521
+    second: Walls_HV_RightToUp_06
+  - first:
+      213: 6925162691399228690
+    second: Walls_HV_RightToUp_07
+  - first:
+      213: -6130175340175430488
+    second: Walls_HV_RightToUp_08
+  - first:
+      213: 1835708699095132889
+    second: Walls_HV_RightToUp_09
+  - first:
+      213: -4351605532660181434
+    second: Walls_HV_Special_LeftDownStripToLeft
+  - first:
+      213: -1878077840997481769
+    second: Walls_HV_Special_RightDownStripToRight
+  - first:
+      213: 1423322714113112689
+    second: Walls_HV_Special_RightDownThirdTileShort_00
+  - first:
+      213: -5353302425391503534
+    second: Walls_HV_Special_RightDownThirdTileShort_01
+  - first:
+      213: -4365042163555680856
+    second: Walls_HV_Special_RightDownThirdTileShort_02
+  - first:
+      213: -326716601371495327
+    second: Walls_HV_Special_RightDownThirdTileShort_03
+  - first:
+      213: -238021530985142502
+    second: Walls_HV_Special_RightDownThirdTileShort_04
+  - first:
+      213: 2120890904141333728
+    second: Walls_HV_Special_RightDownThirdTileShort_05
+  - first:
+      213: 2828180641521450846
+    second: Walls_HV_Special_RightDownThirdTileShort_06
+  - first:
+      213: 1847654252391393286
+    second: Walls_HV_Special_RightDownThirdTileShort_07
+  - first:
+      213: 2599627971394092925
+    second: Walls_HV_Special_RightDownThirdTileShort_08
+  - first:
+      213: 8007125672557788355
+    second: Walls_HV_Special_RightDownThirdTileShort_09
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Walls_Vertical_Right
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 297
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad223a93ea94ac87d07c2fda082c0689
+      internalID: 8451888455450978363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_Vertical_Left
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 297
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6a587b643767f2f8071e353a78b0048
+      internalID: 2740801824691325828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_00
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 082c163154472818dedf5c5bf6b5423d
+      internalID: 5565424980942219343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_01
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 207928f63f7b0faf37da7367c0f0a3e9
+      internalID: 5144312546532655505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_02
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da500799609121dd3cee3ccffefd577b
+      internalID: -5397125472432351034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_03
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e456872afa43159f6edab9066bad4528
+      internalID: -6208341319462520918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_04
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0077bb9ef7d044ef27e9ae8cdf8ba733
+      internalID: 7067128929374826401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_05
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1eebccfca3fe94a94c33176d0dd0fae6
+      internalID: -6093632021803196598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_06
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3b6d27524bb0a6e03d56384be66b0b7
+      internalID: -3313028051932466719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_07
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53a1f39b8a617b864f0214b6fe51032f
+      internalID: 7679728334632497259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_08
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 751fcfee25b7a08ea8b8334eb14db71c
+      internalID: -1132909295016692421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToDown_09
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 242
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 500d4a13813048a033a0749ba300cc2e
+      internalID: -5613152838907067014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_00
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c4cc8f95e62d28d018ecbff6b401625
+      internalID: -1730527490518704943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_01
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c60e9806a7e8b35b04b145619b73acc0
+      internalID: 1283124796858891267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_02
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eac0efc74a20781f33d5a39b2e2f880d
+      internalID: -410869441882820506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_03
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4e3ca6387c79622b42ee7f8ffa85cd8
+      internalID: 1420887206608194359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_04
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffbf63a2abf74e33575e4f5c129ecba0
+      internalID: 481071492624722565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_05
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0372972bedb2577afd53b6985e4bc348
+      internalID: -8103194561759303710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_06
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd6d667b6f67711ee371777fd4e68f64
+      internalID: -2164811462700717871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_07
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 183edad055b00e8320feae640e91e94d
+      internalID: -1148388179453981013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_08
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86843594220b777f146aeb9c2818b5c4
+      internalID: 3635744565812049542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_09
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 188
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4da36d3594f935e90da5513dc548f8e
+      internalID: 6844033455396544188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_00
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0e17bb37780f241d5a602573a0a3a9f
+      internalID: -3408176555633034026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_01
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77d07a55a393cc4bc9bf7f05745fe86d
+      internalID: 7117465011850019360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_02
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec0e5d7463b450b1497f941c24d6317c
+      internalID: -4681906751228795817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_03
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8aea58d6cf0b1b0ec749a29ad2060fd6
+      internalID: 1318384138138715939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_04
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f31a5c2ea014c7ed7cd3cc7278b656d
+      internalID: 1035741765287591307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_05
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6514749189393c74cea35562e2b1a339
+      internalID: -1358134004199811894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_06
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 854430d3d6664cf29a717bfcd2b3aec7
+      internalID: -8727227711085405768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_07
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8a352001026b270aba568eadb59e91a
+      internalID: 5515336991457169037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_08
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 167a32afff26a345339adbab5a3dcc87
+      internalID: -8124371354395750318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_LeftToUp_09
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 134
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f673867c7d1cda790c7fb47d670d69f
+      internalID: 7957864956155127077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_00
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcde1ae75eb86bc4213dec743a3a3e2a
+      internalID: 5950206670005386693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_01
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 627707e306753ad1499b39837d37e06b
+      internalID: 8664287567334777655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_02
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43f2612f8233d59204983fb359b870a0
+      internalID: 3324043954454249056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_03
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 078d27948142a7d676c61f31081ddf5f
+      internalID: 1937273625550572581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_04
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a226b00cd969fc5f57e251a36f54d0a
+      internalID: -1102131367260783967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_05
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b2ccc85fdf4f3b11ae201fdbda86771
+      internalID: 1677981145297197395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_06
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1a77fa704f21cb76fe5f36f78f3decf
+      internalID: -3290600923194608521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_07
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2ab6b75b3d487dabc567b0dc3d032ae
+      internalID: 6925162691399228690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_08
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db666c5483d1516b76e65362f1d7a1b1
+      internalID: -6130175340175430488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToUp_09
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 79
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4893617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc421c82e9e3b42f98baa18e545bda37
+      internalID: 1835708699095132889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_LeftDownStripToLeft
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 31
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ee87b193d028772dfa996d5a1d8fd66
+      internalID: -4351605532660181434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownStripToRight
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 31
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8246ff9399e8f2c3d6cbc7515286b74f
+      internalID: -1878077840997481769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_00
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 088721772519423458d42fdd73ab4450
+      internalID: 1423322714113112689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_01
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adc9852da9d22e29fd9ba38b34b91bef
+      internalID: -5353302425391503534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_02
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9db82427619cffedee479ac65b7884a
+      internalID: -4365042163555680856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_03
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3075f140b5aa2843fe4997bba15b5d90
+      internalID: -326716601371495327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_04
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcd5fa9e6798784f07d1a92978db807c
+      internalID: -238021530985142502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_05
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74322b7890f3a1fa8360493a17258374
+      internalID: 2120890904141333728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_06
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de2cf7610f0e40ec3e975025ada6a616
+      internalID: 2828180641521450846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_07
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 755ac4ce69c3f3bd68ecf7ebc18d1db3
+      internalID: 1847654252391393286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_08
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1a9001562918f8152dc989725932f02
+      internalID: 2599627971394092925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_Special_RightDownThirdTileShort_09
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 55
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c08613e3ab4de8c4b1a4b26bbbda494
+      internalID: 8007125672557788355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls_HV_RightToDown_04_Special
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 0
+        width: 16
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5106383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12c59b70d133641c6954fca8b537eebd
+      internalID: 804813045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 7ffcb2d3d15561f71b505e80820c2f96
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Walls_HV_LeftToDown_00: 5565424980942219343
+      Walls_HV_LeftToDown_01: 5144312546532655505
+      Walls_HV_LeftToDown_02: -5397125472432351034
+      Walls_HV_LeftToDown_03: -6208341319462520918
+      Walls_HV_LeftToDown_04: 7067128929374826401
+      Walls_HV_LeftToDown_05: -6093632021803196598
+      Walls_HV_LeftToDown_06: -3313028051932466719
+      Walls_HV_LeftToDown_07: 7679728334632497259
+      Walls_HV_LeftToDown_08: -1132909295016692421
+      Walls_HV_LeftToDown_09: -5613152838907067014
+      Walls_HV_LeftToUp_00: -3408176555633034026
+      Walls_HV_LeftToUp_01: 7117465011850019360
+      Walls_HV_LeftToUp_02: -4681906751228795817
+      Walls_HV_LeftToUp_03: 1318384138138715939
+      Walls_HV_LeftToUp_04: 1035741765287591307
+      Walls_HV_LeftToUp_05: -1358134004199811894
+      Walls_HV_LeftToUp_06: -8727227711085405768
+      Walls_HV_LeftToUp_07: 5515336991457169037
+      Walls_HV_LeftToUp_08: -8124371354395750318
+      Walls_HV_LeftToUp_09: 7957864956155127077
+      Walls_HV_RightToDown_00: -1730527490518704943
+      Walls_HV_RightToDown_01: 1283124796858891267
+      Walls_HV_RightToDown_02: -410869441882820506
+      Walls_HV_RightToDown_03: 1420887206608194359
+      Walls_HV_RightToDown_04: 481071492624722565
+      Walls_HV_RightToDown_04_Special: 804813045
+      Walls_HV_RightToDown_05: -8103194561759303710
+      Walls_HV_RightToDown_06: -2164811462700717871
+      Walls_HV_RightToDown_07: -1148388179453981013
+      Walls_HV_RightToDown_08: 3635744565812049542
+      Walls_HV_RightToDown_09: 6844033455396544188
+      Walls_HV_RightToUp_00: 5950206670005386693
+      Walls_HV_RightToUp_01: 8664287567334777655
+      Walls_HV_RightToUp_02: 3324043954454249056
+      Walls_HV_RightToUp_03: 1937273625550572581
+      Walls_HV_RightToUp_04: -1102131367260783967
+      Walls_HV_RightToUp_05: 1677981145297197395
+      Walls_HV_RightToUp_06: -3290600923194608521
+      Walls_HV_RightToUp_07: 6925162691399228690
+      Walls_HV_RightToUp_08: -6130175340175430488
+      Walls_HV_RightToUp_09: 1835708699095132889
+      Walls_HV_Special_LeftDownStripToLeft: -4351605532660181434
+      Walls_HV_Special_RightDownStripToRight: -1878077840997481769
+      Walls_HV_Special_RightDownThirdTileShort_00: 1423322714113112689
+      Walls_HV_Special_RightDownThirdTileShort_01: -5353302425391503534
+      Walls_HV_Special_RightDownThirdTileShort_02: -4365042163555680856
+      Walls_HV_Special_RightDownThirdTileShort_03: -326716601371495327
+      Walls_HV_Special_RightDownThirdTileShort_04: -238021530985142502
+      Walls_HV_Special_RightDownThirdTileShort_05: 2120890904141333728
+      Walls_HV_Special_RightDownThirdTileShort_06: 2828180641521450846
+      Walls_HV_Special_RightDownThirdTileShort_07: 1847654252391393286
+      Walls_HV_Special_RightDownThirdTileShort_08: 2599627971394092925
+      Walls_HV_Special_RightDownThirdTileShort_09: 8007125672557788355
+      Walls_Vertical_Left: 2740801824691325828
+      Walls_Vertical_Right: 8451888455450978363
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

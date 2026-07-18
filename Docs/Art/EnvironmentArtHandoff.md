@@ -71,6 +71,54 @@ Initial review questions to answer from the asset itself:
   Palette at X `42..51`, using Y `7/6`, `4/3`, and `1/0` for Up/Down slope pairs.
   The obsolete 42-piece connector kit has been removed. Scenes remain unchanged.
 
+### Vertical wall and orthogonal connector status
+
+- `Assets/DungeonTavern/Art/Environment/Walls/Walls_Vertical_Connections.png`
+  is the formal supplementary atlas for vertical wall tops and horizontal-to-
+  vertical transitions.
+- The atlas contains 55 Sprites: two repeatable vertical bodies, four regular
+  connector directions with ten wall-pattern variants each, two shifted-strip
+  specials, ten texture-matched third-Tile specials, and the user-authored
+  `Walls_HV_RightToDown_04_Special`. The first twelve specials are `16×16`;
+  the user-authored Sprite is `16×47`.
+- Every third-Tile special overlays the complete left four columns of the first
+  `16×16` Tile from `RightToUp_03` (the fourth fifth-row variant). Its base
+  final row stays deleted outside
+  those columns, while the overlay's final row remains visible.
+- The atlas is `176×321`; every Sprite is exactly 16 pixels wide. The taller
+  connector bounds may extend vertically but must never enlarge the Palette
+  cell width.
+- A vertical body is a transparent `16×16` cell containing a four-pixel wall
+  top: two light pixels enclosed by one brown pixel on each side. Brick joints
+  run horizontally at zero-based rows `2/6/10/14`, preserving the approved
+  body pattern without placing a joint on the top or bottom endpoint rows. It
+  does not contain a rotated or compressed 46-pixel wall face.
+- Downward connectors do not add a brown cross-line at the wall-top junction.
+  Their vertical top reaches through the wall and adds one four-pixel-wide
+  brown bottom line, while its inner brown edge is omitted for the first two
+  junction pixels. Upward connectors are also 47 pixels high: one enclosed
+  white-brick row above a
+  four-pixel-wide, 46-pixel extension sampled from the corresponding horizontal
+  wall texture. The first two extension rows clear the specified unwanted
+  texture-side line and bridge the true inside edge; the adjacent horizontal
+  Tile supplies the rest of the wall face.
+- The kit uses `16 PPU`, Point filtering, no mipmaps, and no compression to
+  match the current `Walls_interior` and `Walls_Diagonal` compatibility grid.
+- All 55 matching Tile assets are under
+  `Assets/DungeonTavern/Art/TileAssets/Dungeon_Walls`.
+- `Walls_HV_RightToDown_04_Special` is placed at Wall Palette cell `(68,16)`,
+  immediately right of the managed `RightToDown` row. Its pixels occupy
+  top-left rect `x=56, y=274, 16×47`; its Unity
+  bottom-origin Sprite rect is `x=56, y=0, 16×47`. Extending the canvas adds
+  +17 to every older Sprite rect Y without moving their pixels.
+- The Wall Palette appends the kit at X `57..66`; exact rows and naming are
+  documented in `Docs/Art/WallsVerticalConnectionsLayout.md`.
+- The Wall Palette uses manual cell sizing (`GridPalette.cellSizing = 100`).
+  Do not replace it with automatic sizing: tall wall Sprites would cause all
+  earlier Palette content to appear globally shrunken in the Tile Palette.
+- The authoritative scene remains unchanged. Placement into the reserved
+  vertical-wall gaps is a separate scene-painting step.
+
 ## Task 2 — Aged wooden tavern floor
 
 Create this as a new material family; do not overwrite the formal stone-floor sources.
