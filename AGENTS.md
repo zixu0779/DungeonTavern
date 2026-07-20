@@ -26,5 +26,6 @@ Before starting or continuing the current environment-art production tasks, also
 - Record newly confirmed design truths in `Docs/GameDesign/GameDesignBible.md`.
 - Keep this file concise; only copy rules here when they must constrain every future task.
 - Preserve existing user assets and project changes unless deletion or replacement is explicitly requested.
-- Treat `Assets/Scenes/Tavern/Tavern_ReadabilityPrototype.unity` as the current authoritative work scene.
-- Treat `Assets/Scenes/Tavern/Tavern_Main.unity` as the superseded greybox until an explicitly approved milestone replaces it.
+- Treat `Assets/Scenes/Tavern/Tavern_Main.unity` as the current authoritative 2D work scene.
+- Treat `Assets/Scenes/Prototypes/Tavern_25D_RotationPrototype.unity` as an isolated,
+  reversible 2.5D technical prototype derived from `Tavern_Main`.

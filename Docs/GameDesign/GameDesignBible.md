@@ -70,9 +70,10 @@ The following are not design commitments:
 
 ## Current scene status and contract
 
-- `Assets/Scenes/Tavern/Tavern_ReadabilityPrototype.unity` is the current authoritative work scene.
-- `Assets/Scenes/Tavern/Tavern_Main.unity` is the superseded greybox. It is retained as a historical reference and must not receive new production work.
-- At an explicitly approved milestone, the authoritative work scene may replace or overwrite `Tavern_Main`; this must not happen implicitly.
+- `Assets/Scenes/Tavern/Tavern_Main.unity` is the current authoritative 2D work scene.
+- `Assets/Scenes/Prototypes/Tavern_25D_RotationPrototype.unity` is an isolated,
+  reversible technical prototype derived from `Tavern_Main`; experiments there must not
+  silently overwrite the 2D source scene.
 - The current stage is a tile-authoring layout stage rather than a gameplay-complete greybox. The scene currently exposes only the tavern outer boundary, the shared entrance boundary, and empty Tilemap painting layers.
 - Removing internal guide lines does not cancel the confirmed room list or shared-space premise. Exact internal geometry and circulation remain pending until reviewed through actual tile placement.
 
@@ -96,3 +97,5 @@ Stable marker names for future integrations:
 - 2026-07-16: Created the durable design bible and recorded the confirmed tavern setting, peace rules, initial/locked areas, visual direction, and intentionally open gameplay questions.
 - 2026-07-20: Confirmed the oblique top-down perspective, made `Tavern_ReadabilityPrototype` the authoritative work scene, reclassified `Tavern_Main` as the superseded greybox, and linked the dedicated art-direction and tile-authoring documents.
 - 2026-07-20: Configured the authoritative scene camera for pixel-perfect rendering at 32 PPU with a 640×360 reference resolution.
+- 2026-07-27: Promoted the user-corrected `Tavern_Main` back to the authoritative 2D
+  work scene and defined the rotation prototype as a separate derived experiment.

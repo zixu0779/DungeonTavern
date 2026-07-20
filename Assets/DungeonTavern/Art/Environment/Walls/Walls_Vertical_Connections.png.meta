@@ -1490,6 +1490,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Walls_Vertical_Top
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 297
+        width: 4
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfe3c8b0b308c4c0793d88973e576ba3
+      internalID: -1156924694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -1560,6 +1582,7 @@ TextureImporter:
       Walls_HV_Special_RightDownThirdTileShort_09: 8007125672557788355
       Walls_Vertical_Left: 2740801824691325828
       Walls_Vertical_Right: 8451888455450978363
+      Walls_Vertical_Top: -1156924694
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

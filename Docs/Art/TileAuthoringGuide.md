@@ -61,14 +61,15 @@ This document records the project workflow for Sprite slicing, Tile assets, Pale
 
 ## Current scene painting layers
 
-The authoritative work scene is `Assets/Scenes/Tavern/Tavern_ReadabilityPrototype.unity`.
+The authoritative 2D work scene is `Assets/Scenes/Tavern/Tavern_Main.unity`.
 
 - Paint base walkable floor on `Ground/GroundTiles`.
 - Paint cracks, surface variation, and non-blocking overlays on `GroundDetails/GroundDetailTiles` when they are separate overlay Tiles.
 - Paint structural wall pieces on `Walls/WallTiles`.
 - Paint furniture and movable visual dressing on `FurnitureBlockout/FurnitureTiles` during the current authoring stage.
 - Keep `LayoutGuide/00_TavernOuterBoundary` and `LayoutGuide/01_PublicEntrance_3Wide` visible as planning references until the user approves removing them.
-- `Tavern_Main.unity` is the superseded greybox and must not receive new painting work.
+- `Tavern_25D_RotationPrototype.unity` is a separate derived technical prototype and
+  must not overwrite the 2D source scene.
 
 ## Validation before handoff
 
