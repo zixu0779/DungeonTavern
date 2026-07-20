@@ -42,6 +42,7 @@ public static class GenerateDiagonalWallPrefabs
     public static void Generate()
     {
         EnsureFolders();
+        DeleteLegacyMiterMeshes();
 
         Dictionary<string, Sprite> fronts = AssetDatabase.LoadAllAssetsAtPath(FrontAtlas)
             .OfType<Sprite>()
@@ -105,28 +106,42 @@ public static class GenerateDiagonalWallPrefabs
         float length = Mathf.Sqrt(run * run + rise * rise);
         float angle = Mathf.Atan2(rise, run) * Mathf.Rad2Deg;
         string meshPath = $"{SharedRoot}/DiagonalWall_{familyName}_FiveFaces.asset";
-        Mesh mesh = CreateOrUpdateMesh(
+        Mesh squareMesh = CreateOrUpdateMesh(
             meshPath,
-            $"DiagonalWall_{familyName}_FiveIndependentFaces",
+            $"DiagonalWall_{familyName}_FiveFaces",
             length,
             height,
-            depth);
+            depth,
+            startRelativeAngle: 0f,
+            endRelativeAngle: 0f);
 
         foreach (SlopeDirection direction in Enum.GetValues(typeof(SlopeDirection)))
         {
             float yaw = direction == SlopeDirection.Up ? -angle : angle;
-            foreach (string frontName in FrontNames)
+            float signedSlopeAngle =
+                direction == SlopeDirection.Up ? angle : -angle;
+            Mesh[] interfaceMeshes = CreateOrUpdateInterfaceMeshes(
+                familyName,
+                direction,
+                length,
+                height,
+                depth,
+                signedSlopeAngle,
+                squareMesh);
+
+            for (int index = 0; index < FrontNames.Length; index++)
             {
+                string frontName = FrontNames[index];
                 Sprite front = fronts[frontName];
                 string objectName =
-                    $"Wall_{familyName}_{direction}_{frontName}";
+                    $"Wall_{familyName}_{direction}_{index + 1:00}";
                 GameObject wall = new(objectName);
                 try
                 {
                     wall.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
 
                     MeshFilter filter = wall.AddComponent<MeshFilter>();
-                    filter.sharedMesh = mesh;
+                    filter.sharedMesh = squareMesh;
 
                     MeshRenderer renderer = wall.AddComponent<MeshRenderer>();
                     renderer.sharedMaterials = materials;
@@ -139,6 +154,9 @@ public static class GenerateDiagonalWallPrefabs
                     faces.Right = null;
                     faces.Top = top;
                     faces.MirrorBackHorizontally = true;
+
+                    EditableWallMiter miter = wall.AddComponent<EditableWallMiter>();
+                    miter.Configure(interfaceMeshes);
 
                     BoxCollider collider = wall.AddComponent<BoxCollider>();
                     collider.center = new Vector3(0f, height * 0.5f, 0f);
@@ -163,7 +181,9 @@ public static class GenerateDiagonalWallPrefabs
         string meshName,
         float length,
         float height,
-        float depth)
+        float depth,
+        float startRelativeAngle,
+        float endRelativeAngle)
     {
         Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
         if (mesh == null)
@@ -176,13 +196,33 @@ public static class GenerateDiagonalWallPrefabs
         float x1 = length * 0.5f;
         float z0 = -depth * 0.5f;
         float z1 = depth * 0.5f;
+        float startOffset =
+            depth * 0.5f *
+            Mathf.Tan(startRelativeAngle * 0.5f * Mathf.Deg2Rad);
+        float endOffset =
+            depth * 0.5f *
+            Mathf.Tan(endRelativeAngle * 0.5f * Mathf.Deg2Rad);
+        float startFrontX = x0 + startOffset;
+        float startBackX = x0 - startOffset;
+        float endFrontX = x1 + endOffset;
+        float endBackX = x1 - endOffset;
+
         Vector3[] vertices =
         {
-            new(x0, 0f, z0), new(x0, height, z0), new(x1, height, z0), new(x1, 0f, z0),
-            new(x1, 0f, z1), new(x1, height, z1), new(x0, height, z1), new(x0, 0f, z1),
-            new(x0, 0f, z1), new(x0, height, z1), new(x0, height, z0), new(x0, 0f, z0),
-            new(x1, 0f, z0), new(x1, height, z0), new(x1, height, z1), new(x1, 0f, z1),
-            new(x0, height, z0), new(x0, height, z1), new(x1, height, z1), new(x1, height, z0)
+            new(startFrontX, 0f, z0), new(startFrontX, height, z0),
+            new(endFrontX, height, z0), new(endFrontX, 0f, z0),
+
+            new(endBackX, 0f, z1), new(endBackX, height, z1),
+            new(startBackX, height, z1), new(startBackX, 0f, z1),
+
+            new(startBackX, 0f, z1), new(startBackX, height, z1),
+            new(startFrontX, height, z0), new(startFrontX, 0f, z0),
+
+            new(endFrontX, 0f, z0), new(endFrontX, height, z0),
+            new(endBackX, height, z1), new(endBackX, 0f, z1),
+
+            new(startFrontX, height, z0), new(startBackX, height, z1),
+            new(endBackX, height, z1), new(endFrontX, height, z0)
         };
 
         Vector2[] uv = new Vector2[vertices.Length];
@@ -224,6 +264,88 @@ public static class GenerateDiagonalWallPrefabs
         return mesh;
     }
 
+    private static Mesh[] CreateOrUpdateInterfaceMeshes(
+        string familyName,
+        SlopeDirection direction,
+        float length,
+        float height,
+        float depth,
+        float selfAngle,
+        Mesh squareMesh)
+    {
+        WallMiterInterface[] interfaces =
+            Enum.GetValues(typeof(WallMiterInterface))
+                .Cast<WallMiterInterface>()
+                .ToArray();
+        Mesh[] meshes = new Mesh[interfaces.Length * interfaces.Length];
+
+        foreach (WallMiterInterface start in interfaces)
+        {
+            foreach (WallMiterInterface end in interfaces)
+            {
+                int index = (int)start * interfaces.Length + (int)end;
+                float startRelativeAngle = RelativeAngle(start, selfAngle);
+                float endRelativeAngle = RelativeAngle(end, selfAngle);
+                if (Mathf.Approximately(startRelativeAngle, 0f) &&
+                    Mathf.Approximately(endRelativeAngle, 0f))
+                {
+                    meshes[index] = squareMesh;
+                    continue;
+                }
+
+                string name =
+                    $"DiagonalWall_{familyName}_{direction}_Start{start}_End{end}";
+                string path = $"{SharedRoot}/{name}.asset";
+                meshes[index] = CreateOrUpdateMesh(
+                    path,
+                    name,
+                    length,
+                    height,
+                    depth,
+                    startRelativeAngle,
+                    endRelativeAngle);
+            }
+        }
+
+        return meshes;
+    }
+
+    private static float RelativeAngle(
+        WallMiterInterface wallInterface,
+        float selfAngle)
+    {
+        if (wallInterface == WallMiterInterface.Square)
+            return 0f;
+
+        return NormalizeLineAngle(InterfaceAngle(wallInterface) - selfAngle);
+    }
+
+    private static float InterfaceAngle(WallMiterInterface value)
+    {
+        return value switch
+        {
+            WallMiterInterface.OneToOneUp => 45f,
+            WallMiterInterface.OneToOneDown => -45f,
+            WallMiterInterface.TwoToOneUp =>
+                Mathf.Atan2(0.5f, 1f) * Mathf.Rad2Deg,
+            WallMiterInterface.TwoToOneDown =>
+                -Mathf.Atan2(0.5f, 1f) * Mathf.Rad2Deg,
+            WallMiterInterface.Straight => 0f,
+            WallMiterInterface.Vertical => 90f,
+            _ => 0f
+        };
+    }
+
+    private static float NormalizeLineAngle(float angle)
+    {
+        angle = Mathf.DeltaAngle(0f, angle);
+        if (angle > 90f)
+            angle -= 180f;
+        else if (angle < -90f)
+            angle += 180f;
+        return angle;
+    }
+
     private static Material[] LoadSharedMaterials()
     {
         string[] names = { "Front", "Back", "Left", "Right", "Top" };
@@ -258,4 +380,26 @@ public static class GenerateDiagonalWallPrefabs
         if (!AssetDatabase.IsValidFolder(path))
             AssetDatabase.CreateFolder(parent, name);
     }
+
+    private static void DeleteLegacyMiterMeshes()
+    {
+        string[] families = { "1x1", "2x1" };
+        string[] directions = { "Up", "Down" };
+        string[] suffixes = { "MiterStart", "MiterEnd", "MiterBoth" };
+
+        foreach (string family in families)
+        {
+            foreach (string direction in directions)
+            {
+                foreach (string suffix in suffixes)
+                {
+                    string path =
+                        $"{SharedRoot}/DiagonalWall_{family}_{direction}_{suffix}.asset";
+                    if (AssetDatabase.LoadAssetAtPath<Mesh>(path) != null)
+                        AssetDatabase.DeleteAsset(path);
+                }
+            }
+        }
+    }
+
 }

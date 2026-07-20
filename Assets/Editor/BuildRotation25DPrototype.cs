@@ -29,12 +29,15 @@ public static class BuildRotation25DPrototype
         public string TileName;
     }
 
-    [MenuItem("Tools/Dungeon Tavern/Reset 2.5D Basic Wall Editing Prototype")]
+    [MenuItem("Tools/Dungeon Tavern/Rebuild 2.5D Prototype from Tavern_Main")]
     public static void Build()
     {
         Scene active = SceneManager.GetActiveScene();
-        if (active.isDirty)
-            throw new InvalidOperationException("Save the active scene before rebuilding the 2.5D prototype.");
+        if (active.isDirty && active.path != PrototypeScene)
+        {
+            throw new InvalidOperationException(
+                "Save the active non-prototype scene before rebuilding the 2.5D prototype.");
+        }
 
         EnsureFolder("Assets/Scenes", "Prototypes");
         EnsureFolder("Assets/DungeonTavern", "Prototypes");
@@ -45,8 +48,8 @@ public static class BuildRotation25DPrototype
         List<TileRecord> groundRecords = CaptureTiles(groundTilemap);
         Vector3 playerStart = FindMarkerPosition("PlayerStart", new Vector3(5f, 7f, 0f));
 
-        if (groundRecords.Count != 963)
-            Debug.LogWarning($"Expected 963 Ground tiles but captured {groundRecords.Count}.");
+        if (groundRecords.Count == 0)
+            throw new InvalidOperationException("Tavern_Main contains no Ground tiles.");
 
         CleanupOldWallPrototypeAssets();
         int rendererIndex = EnsureUniversalRenderer();
@@ -55,16 +58,14 @@ public static class BuildRotation25DPrototype
         GameObject root = new("Tavern_25D_RotationPrototype");
         GameObject environment = Child(root, "Environment");
         GameObject floorRoot = Child(environment, "Floor_FromTavernMain");
-        GameObject wallRoot = Child(environment, "EditableWall");
+        Child(environment, "Walls_ToBeFilled");
         GameObject characters = Child(root, "Characters");
         GameObject systems = Child(root, "PrototypeSystems");
         GameObject cameraRigObject = Child(root, "CameraRig");
 
         Camera camera = BuildCamera(cameraRigObject.transform, rendererIndex);
         BuildFloor(floorRoot.transform, groundRecords);
-        GenerateStraightWallPrefabs.Generate();
-        GenerateDiagonalWallPrefabs.Generate();
-        GameObject editableWall = BuildEditableWall(wallRoot.transform, playerStart);
+        ValidateFloorClone(floorRoot.transform, groundRecords);
         GameObject player = BuildPlayer(characters.transform, playerStart, camera.transform);
 
         PrototypeCameraOrbit orbit = cameraRigObject.AddComponent<PrototypeCameraOrbit>();
@@ -88,11 +89,12 @@ public static class BuildRotation25DPrototype
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Selection.activeGameObject = editableWall;
+        Selection.activeGameObject = floorRoot;
 
         Debug.Log(
-            $"Built basic 2.5D wall-editing prototype: {groundRecords.Count} floor tiles, " +
-            $"one editable Walls_interior_22 wall. Scene: {PrototypeScene}");
+            $"Rebuilt the 2.5D prototype from Tavern_Main with " +
+            $"{groundRecords.Count} matching floor tiles and an empty Walls_ToBeFilled root. " +
+            $"Scene: {PrototypeScene}");
     }
 
     private static List<TileRecord> CaptureTiles(Tilemap tilemap)
@@ -154,21 +156,48 @@ public static class BuildRotation25DPrototype
         target.localScale = new Vector3(scaleX, scaleY, 1f);
     }
 
-    private static GameObject BuildEditableWall(Transform parent, Vector3 playerStart)
+    private static void ValidateFloorClone(
+        Transform floorRoot,
+        IReadOnlyList<TileRecord> sourceRecords)
     {
-        const string prefabPath =
-            "Assets/DungeonTavern/Prototypes/Rotation25D/WallPrefabs/Straight/" +
-            "Wall_Walls_interior_22.prefab";
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-        if (prefab == null)
+        if (floorRoot.childCount != sourceRecords.Count)
+        {
             throw new InvalidOperationException(
-                $"Straight wall prefab was not found after generation: {prefabPath}");
+                $"Floor clone count mismatch: source={sourceRecords.Count}, " +
+                $"prototype={floorRoot.childCount}.");
+        }
 
-        GameObject wall = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
-        wall.name = "EditableWallCube_WallsInterior22";
-        wall.transform.localPosition =
-            new Vector3(playerStart.x + 0.5f, 0f, playerStart.y + 3.5f);
-        return wall;
+        for (int i = 0; i < sourceRecords.Count; i++)
+        {
+            TileRecord source = sourceRecords[i];
+            Transform tile = floorRoot.GetChild(i);
+            Vector3 expectedPosition =
+                new(source.Cell.x + 0.5f, 0f, source.Cell.y + 0.5f);
+            SpriteRenderer renderer = tile.GetComponentInChildren<SpriteRenderer>();
+            if (renderer == null ||
+                renderer.sprite != source.Sprite ||
+                renderer.color != source.Color ||
+                tile.localPosition != expectedPosition ||
+                !TileTransformMatches(renderer.transform, source.Transform))
+            {
+                throw new InvalidOperationException(
+                    $"Floor clone mismatch at cell {source.Cell}: {tile.name}");
+            }
+        }
+    }
+
+    private static bool TileTransformMatches(Transform target, Matrix4x4 matrix)
+    {
+        Vector2 xAxis = new(matrix.m00, matrix.m10);
+        Vector2 yAxis = new(matrix.m01, matrix.m11);
+        float expectedScaleX = Mathf.Max(0.0001f, xAxis.magnitude);
+        float determinant = matrix.m00 * matrix.m11 - matrix.m01 * matrix.m10;
+        float expectedScaleY = determinant / expectedScaleX;
+        float expectedAngle = Mathf.Atan2(xAxis.y, xAxis.x) * Mathf.Rad2Deg;
+
+        return Mathf.Approximately(target.localScale.x, expectedScaleX) &&
+               Mathf.Approximately(target.localScale.y, expectedScaleY) &&
+               Mathf.Abs(Mathf.DeltaAngle(target.localEulerAngles.z, expectedAngle)) < 0.01f;
     }
 
     private static GameObject BuildPlayer(

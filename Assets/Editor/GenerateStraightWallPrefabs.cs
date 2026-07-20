@@ -62,6 +62,20 @@ public static class GenerateStraightWallPrefabs
         const float depth = 0.25f;
 
         Mesh mesh = CreateOrUpdateMesh(width, height, depth);
+        Mesh[] horizontalInterfaceMeshes = CreateOrUpdateInterfaceMeshes(
+            width,
+            height,
+            depth,
+            mesh,
+            selfAngle: 0f,
+            orientationName: "Horizontal");
+        Mesh[] verticalInterfaceMeshes = CreateOrUpdateInterfaceMeshes(
+            width,
+            height,
+            depth,
+            mesh,
+            selfAngle: 90f,
+            orientationName: "Vertical");
         Material[] materials =
         {
             CreateOrLoadFaceMaterial("Front"),
@@ -71,10 +85,12 @@ public static class GenerateStraightWallPrefabs
             CreateOrLoadFaceMaterial("Top")
         };
 
-        foreach (string frontName in FrontNames)
+        for (int index = 0; index < FrontNames.Length; index++)
         {
+            string frontName = FrontNames[index];
             Sprite front = fronts[frontName];
-            GameObject wall = new($"Wall_{frontName}");
+            string prefabName = $"Wall_Straight_{index + 1:00}";
+            GameObject wall = new(prefabName);
             try
             {
                 MeshFilter filter = wall.AddComponent<MeshFilter>();
@@ -91,11 +107,17 @@ public static class GenerateStraightWallPrefabs
                 faces.Top = top;
                 faces.MirrorBackHorizontally = true;
 
+                EditableStraightWallMiter miter =
+                    wall.AddComponent<EditableStraightWallMiter>();
+                miter.Configure(
+                    horizontalInterfaceMeshes,
+                    verticalInterfaceMeshes);
+
                 BoxCollider collider = wall.AddComponent<BoxCollider>();
                 collider.center = new Vector3(0f, height * 0.5f, 0f);
                 collider.size = new Vector3(width, height, depth);
 
-                string prefabPath = $"{StraightRoot}/Wall_{frontName}.prefab";
+                string prefabPath = $"{StraightRoot}/{prefabName}.prefab";
                 PrefabUtility.SaveAsPrefabAsset(wall, prefabPath, out bool success);
                 if (!success)
                     throw new InvalidOperationException($"Could not save prefab: {prefabPath}");
@@ -155,7 +177,171 @@ public static class GenerateStraightWallPrefabs
         uv[19] = new Vector2(0f, 1f);
 
         mesh.Clear();
-        mesh.name = "StraightWall_FiveIndependentFaces";
+        mesh.name = "StraightWall_FiveFaces";
+        mesh.vertices = vertices;
+        mesh.uv = uv;
+        mesh.subMeshCount = 5;
+        for (int face = 0; face < 5; face++)
+        {
+            int offset = face * 4;
+            mesh.SetTriangles(
+                new[]
+                {
+                    offset, offset + 1, offset + 2,
+                    offset, offset + 2, offset + 3
+                },
+                face);
+        }
+
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        EditorUtility.SetDirty(mesh);
+        return mesh;
+    }
+
+    private static Mesh[] CreateOrUpdateInterfaceMeshes(
+        float width,
+        float height,
+        float depth,
+        Mesh squareMesh,
+        float selfAngle,
+        string orientationName)
+    {
+        WallMiterInterface[] interfaces =
+            Enum.GetValues(typeof(WallMiterInterface))
+                .Cast<WallMiterInterface>()
+                .ToArray();
+        Mesh[] meshes = new Mesh[interfaces.Length * interfaces.Length];
+
+        foreach (WallMiterInterface start in interfaces)
+        {
+            foreach (WallMiterInterface end in interfaces)
+            {
+                int index = (int)start * interfaces.Length + (int)end;
+                float startRelativeAngle = RelativeAngle(start, selfAngle);
+                float endRelativeAngle = RelativeAngle(end, selfAngle);
+                if (Mathf.Approximately(startRelativeAngle, 0f) &&
+                    Mathf.Approximately(endRelativeAngle, 0f))
+                {
+                    meshes[index] = squareMesh;
+                    continue;
+                }
+
+                string name =
+                    $"StraightWall_{orientationName}_Start{start}_End{end}";
+                string path = $"{SharedRoot}/{name}.asset";
+                meshes[index] = CreateOrUpdateInterfaceMesh(
+                    path,
+                    name,
+                    width,
+                    height,
+                    depth,
+                    startRelativeAngle,
+                    endRelativeAngle);
+            }
+        }
+
+        return meshes;
+    }
+
+    private static float RelativeAngle(
+        WallMiterInterface wallInterface,
+        float selfAngle)
+    {
+        if (wallInterface == WallMiterInterface.Square)
+            return 0f;
+
+        return NormalizeLineAngle(InterfaceAngle(wallInterface) - selfAngle);
+    }
+
+    private static float InterfaceAngle(WallMiterInterface value)
+    {
+        return value switch
+        {
+            WallMiterInterface.OneToOneUp => 45f,
+            WallMiterInterface.OneToOneDown => -45f,
+            WallMiterInterface.TwoToOneUp => Mathf.Atan2(0.5f, 1f) * Mathf.Rad2Deg,
+            WallMiterInterface.TwoToOneDown => -Mathf.Atan2(0.5f, 1f) * Mathf.Rad2Deg,
+            WallMiterInterface.Vertical => 90f,
+            _ => 0f
+        };
+    }
+
+    private static float NormalizeLineAngle(float angle)
+    {
+        angle = Mathf.DeltaAngle(0f, angle);
+        if (angle > 90f)
+            angle -= 180f;
+        else if (angle < -90f)
+            angle += 180f;
+        return angle;
+    }
+
+    private static Mesh CreateOrUpdateInterfaceMesh(
+        string path,
+        string meshName,
+        float width,
+        float height,
+        float depth,
+        float startAngle,
+        float endAngle)
+    {
+        float x0 = -width * 0.5f;
+        float x1 = width * 0.5f;
+        float z0 = -depth * 0.5f;
+        float z1 = depth * 0.5f;
+        float startOffset =
+            depth * 0.5f * Mathf.Tan(startAngle * 0.5f * Mathf.Deg2Rad);
+        float endOffset =
+            depth * 0.5f * Mathf.Tan(endAngle * 0.5f * Mathf.Deg2Rad);
+
+        float startFrontX = x0 + startOffset;
+        float startBackX = x0 - startOffset;
+        float endFrontX = x1 + endOffset;
+        float endBackX = x1 - endOffset;
+
+        Vector3[] vertices =
+        {
+            new(startFrontX, 0f, z0), new(startFrontX, height, z0),
+            new(endFrontX, height, z0), new(endFrontX, 0f, z0),
+
+            new(endBackX, 0f, z1), new(endBackX, height, z1),
+            new(startBackX, height, z1), new(startBackX, 0f, z1),
+
+            new(startBackX, 0f, z1), new(startBackX, height, z1),
+            new(startFrontX, height, z0), new(startFrontX, 0f, z0),
+
+            new(endFrontX, 0f, z0), new(endFrontX, height, z0),
+            new(endBackX, height, z1), new(endBackX, 0f, z1),
+
+            new(startFrontX, height, z0), new(startBackX, height, z1),
+            new(endBackX, height, z1), new(endFrontX, height, z0)
+        };
+
+        Vector2[] uv = new Vector2[vertices.Length];
+        for (int face = 0; face < 4; face++)
+        {
+            int offset = face * 4;
+            uv[offset] = new Vector2(0f, 0f);
+            uv[offset + 1] = new Vector2(0f, 1f);
+            uv[offset + 2] = new Vector2(1f, 1f);
+            uv[offset + 3] = new Vector2(1f, 0f);
+        }
+
+        uv[16] = new Vector2(0f, 0f);
+        uv[17] = new Vector2(1f, 0f);
+        uv[18] = new Vector2(1f, 1f);
+        uv[19] = new Vector2(0f, 1f);
+
+        Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+        if (mesh == null)
+        {
+            mesh = new Mesh();
+            AssetDatabase.CreateAsset(mesh, path);
+        }
+
+        mesh.Clear();
+        mesh.name = meshName;
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.subMeshCount = 5;

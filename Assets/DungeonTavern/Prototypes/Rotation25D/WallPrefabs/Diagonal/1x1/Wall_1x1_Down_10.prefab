@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2065346565053816093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8823992892050214082}
+  - component: {fileID: 8605844947022185063}
+  - component: {fileID: 7028106474139948789}
+  - component: {fileID: 974643160799494439}
+  - component: {fileID: 2316465420942642038}
+  - component: {fileID: 5860452444402957587}
+  m_Layer: 0
+  m_Name: Wall_1x1_Down_10
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8823992892050214082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065346565053816093}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &8605844947022185063
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065346565053816093}
+  m_Mesh: {fileID: 4300000, guid: 51ab82a50deee447f93112b4e2636580, type: 2}
+--- !u!23 &7028106474139948789
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065346565053816093}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: faa9e6bcc02174f69b9a42c17d92e0d6, type: 2}
+  - {fileID: 2100000, guid: 7574ad702b45943239d5333b6fccf43d, type: 2}
+  - {fileID: 2100000, guid: 6148de34ca5024f64b44724b9a4d421b, type: 2}
+  - {fileID: 2100000, guid: 6e686fdd2e3fd4779aef77fc7cf74fb4, type: 2}
+  - {fileID: 2100000, guid: fe766a43786e34cd786be14375dbe7e3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &974643160799494439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065346565053816093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74940cde17623409da9927e0d36c6d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.EditableWallFaceSprites
+  front: {fileID: 1485956994, guid: 71f1d4d84c6ca4e34a12e4a5ce09377f, type: 3}
+  back: {fileID: 1485956994, guid: 71f1d4d84c6ca4e34a12e4a5ce09377f, type: 3}
+  left: {fileID: 0}
+  right: {fileID: 0}
+  top: {fileID: -1156924694, guid: 9cfb804c97f85443ac97a7670adb60c3, type: 3}
+  mirrorBackHorizontally: 1
+--- !u!114 &2316465420942642038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065346565053816093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4a8f8c68b1043c1b539a14530f3260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.EditableWallMiter
+  startInterface: 0
+  endInterface: 0
+  interfaceMeshes:
+  - {fileID: 4300000, guid: 51ab82a50deee447f93112b4e2636580, type: 2}
+  - {fileID: 4300000, guid: 11a17c6c86f4e4baf99f30dc218bc407, type: 2}
+  - {fileID: 4300000, guid: 51ab82a50deee447f93112b4e2636580, type: 2}
+  - {fileID: 4300000, guid: 6438767f329624e1ba38cf933815608a, type: 2}
+  - {fileID: 4300000, guid: 659f37cffe17b4f9f912633311ca9b6a, type: 2}
+  - {fileID: 4300000, guid: e9132888ece924d8f897934b0732a33f, type: 2}
+  - {fileID: 4300000, guid: 850c8b09dd6d94a7d90498c55e93131f, type: 2}
+  - {fileID: 4300000, guid: 9a243a8502f0143adb276ef1f55f6cb4, type: 2}
+  - {fileID: 4300000, guid: 06c964ec84e8d41888a955b507b784de, type: 2}
+  - {fileID: 4300000, guid: b8b0631a39b4f41bc85938c7a37be358, type: 2}
+  - {fileID: 4300000, guid: 0d543a7eeeb9c42bf9c2b160d06419f0, type: 2}
+  - {fileID: 4300000, guid: 75e87ab124bc54c56950d127fb2ac5ca, type: 2}
+  - {fileID: 4300000, guid: 7a089b1e9535843eeae2321c937766e4, type: 2}
+  - {fileID: 4300000, guid: f397d63ee6ed64fa3a9848a806d4b3be, type: 2}
+  - {fileID: 4300000, guid: 51ab82a50deee447f93112b4e2636580, type: 2}
+  - {fileID: 4300000, guid: 9e273cb5b31704e97bfd3c9f01f1a444, type: 2}
+  - {fileID: 4300000, guid: 51ab82a50deee447f93112b4e2636580, type: 2}
+  - {fileID: 4300000, guid: f34c36dbe5feb4ea1a0a98ed016f9fb5, type: 2}
+  - {fileID: 4300000, guid: 60377dca4b9bb4362959bb7179dfa5da, type: 2}
+  - {fileID: 4300000, guid: 056e104cb8118411a92222bcd80c5f64, type: 2}
+  - {fileID: 4300000, guid: fe8c2f241ed9e4a6c9d5877398ab1b12, type: 2}
+  - {fileID: 4300000, guid: 71d79eac835d849018ff6ae9980b9417, type: 2}
+  - {fileID: 4300000, guid: 94c3e47283bc1479ba50b9211ae1daf2, type: 2}
+  - {fileID: 4300000, guid: 961f25482637f4b60a42d9aa77d4fb6e, type: 2}
+  - {fileID: 4300000, guid: 91907cab9758448eb8d303a3940f6a3f, type: 2}
+  - {fileID: 4300000, guid: c84b4e7031f394b498c5a0a41b6b223a, type: 2}
+  - {fileID: 4300000, guid: 6eb33dc06c7f34ea0b3e8b79038f7abe, type: 2}
+  - {fileID: 4300000, guid: 2bdbcde784872447e8dedee669b68591, type: 2}
+  - {fileID: 4300000, guid: de200967e6d2e490d803f16d4d2931e0, type: 2}
+  - {fileID: 4300000, guid: 6fd7e1b674c6c4a6eaeba291b706f0d8, type: 2}
+  - {fileID: 4300000, guid: 0954a22c05bb54fbdbd27eacfabab8eb, type: 2}
+  - {fileID: 4300000, guid: 4d85910819b8d434cb659e1dd56e5b57, type: 2}
+  - {fileID: 4300000, guid: 5daaef41b743f4191954d151f22b5602, type: 2}
+  - {fileID: 4300000, guid: e358194345c56400b8a4e30b83a84b6b, type: 2}
+  - {fileID: 4300000, guid: aeea7e1be627b49ef94dcf594fab021b, type: 2}
+  - {fileID: 4300000, guid: fd365bb8d17ab46fb80a5d08fd9dea8a, type: 2}
+  - {fileID: 4300000, guid: edffbfbcff7d146b0b0f2b5c9146f985, type: 2}
+  - {fileID: 4300000, guid: ce1125b867b8a430ebcbb9f4f9de2e3a, type: 2}
+  - {fileID: 4300000, guid: 5e07798ed37fc42f4bd63d703d190082, type: 2}
+  - {fileID: 4300000, guid: e35cde640cbdc4fc0b68fd72f0ba29d6, type: 2}
+  - {fileID: 4300000, guid: fac020c3045a6486cbf5122e73e031ef, type: 2}
+  - {fileID: 4300000, guid: 5f06e3d3651cd45619536d249b7ba93c, type: 2}
+  - {fileID: 4300000, guid: 0bdf80a5d5bc14712a91e07e7c96f343, type: 2}
+  - {fileID: 4300000, guid: ad28cbcad686f48719f8799fc7be35f7, type: 2}
+  - {fileID: 4300000, guid: 0149c39e5e18c42c68d214e43dd196ae, type: 2}
+  - {fileID: 4300000, guid: 92c48053e35bc46ac856fd7468205e34, type: 2}
+  - {fileID: 4300000, guid: a23df1f0f5edb4e33a0fe68f1a6cef72, type: 2}
+  - {fileID: 4300000, guid: 63d974d76ffe9421bbabd4bd9b67b422, type: 2}
+  - {fileID: 4300000, guid: 35afa0699bc1f427fb7d589c829d14b4, type: 2}
+--- !u!65 &5860452444402957587
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065346565053816093}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.4142135, y: 2.875, z: 0.25}
+  m_Center: {x: 0, y: 1.4375, z: 0}
