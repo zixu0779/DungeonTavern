@@ -71,6 +71,7 @@ public static class BuildRotation25DPrototype
         PrototypeCameraOrbit orbit = cameraRigObject.AddComponent<PrototypeCameraOrbit>();
         orbit.FollowTarget = player.transform;
         cameraRigObject.transform.position = player.transform.position;
+        cameraRigObject.transform.rotation = Quaternion.Euler(0f, 45f, 0f);
 
         PrototypePlayerMover mover = player.AddComponent<PrototypePlayerMover>();
         mover.CameraTransform = camera.transform;
@@ -224,7 +225,10 @@ public static class BuildRotation25DPrototype
         GameObject visual = Child(player, "CharacterSprite");
         SpriteRenderer renderer = visual.AddComponent<SpriteRenderer>();
         renderer.sprite = sprite;
-        visual.transform.localPosition = new Vector3(0f, -sprite.bounds.min.y, 0f);
+        renderer.sortingOrder = 100;
+        renderer.rendererPriority = 100;
+        visual.transform.localPosition =
+            new Vector3(0f, -sprite.bounds.min.y + 0.01f, 0f);
         PrototypeBillboard billboard = visual.AddComponent<PrototypeBillboard>();
         billboard.CameraTransform = cameraTransform;
         return player;
@@ -235,11 +239,11 @@ public static class BuildRotation25DPrototype
         GameObject cameraObject = Child(rig.gameObject, "Main Camera");
         cameraObject.tag = "MainCamera";
         cameraObject.transform.localPosition = new Vector3(0f, 8f, -8f);
-        cameraObject.transform.localRotation = Quaternion.Euler(35f, 0f, 0f);
+        cameraObject.transform.localRotation = Quaternion.Euler(45f, 0f, 0f);
 
         Camera camera = cameraObject.AddComponent<Camera>();
         camera.orthographic = true;
-        camera.orthographicSize = 6f;
+        camera.orthographicSize = 5f;
         camera.clearFlags = CameraClearFlags.SolidColor;
         camera.backgroundColor = new Color(0.025f, 0.032f, 0.04f);
         camera.allowMSAA = false;

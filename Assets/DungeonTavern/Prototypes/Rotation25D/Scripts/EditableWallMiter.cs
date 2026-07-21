@@ -6,7 +6,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
     [RequireComponent(typeof(MeshFilter))]
     public sealed class EditableWallMiter : MonoBehaviour
     {
-        private const int InterfaceCount = 7;
+        private const int InterfaceCount = 9;
 
         [Header("Neighbour wall type at each endpoint")]
         [Tooltip("Square keeps the original flat endpoint.")]

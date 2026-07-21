@@ -8,7 +8,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
     {
         [SerializeField] private Transform followTarget;
         [SerializeField, Min(0.05f)] private float rotationDuration = 0.22f;
-        [SerializeField, Min(0f)] private float followSharpness = 18f;
+        [SerializeField, Range(0f, 90f)] private float cardinalYawOffset = 45f;
 
         private float startYaw;
         private float targetYaw;
@@ -25,7 +25,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Awake()
         {
-            targetYaw = Mathf.Round(transform.eulerAngles.y / 90f) * 90f;
+            targetYaw = SnapCardinalYaw(transform.eulerAngles.y);
             transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
         }
 
@@ -50,8 +50,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
             Vector3 desired = followTarget.position;
             desired.y = 0f;
-            float t = 1f - Mathf.Exp(-followSharpness * Time.deltaTime);
-            transform.position = Vector3.Lerp(transform.position, desired, t);
+            transform.position = desired;
         }
 
         public void RotateLeft()
@@ -67,9 +66,15 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private void BeginRotation(float newTargetYaw)
         {
             startYaw = transform.eulerAngles.y;
-            targetYaw = Mathf.Round(newTargetYaw / 90f) * 90f;
+            targetYaw = SnapCardinalYaw(newTargetYaw);
             rotationElapsed = 0f;
             rotating = true;
+        }
+
+        private float SnapCardinalYaw(float yaw)
+        {
+            return Mathf.Round((yaw - cardinalYawOffset) / 90f) * 90f +
+                   cardinalYawOffset;
         }
 
         private void UpdateRotation()

@@ -330,8 +330,10 @@ public static class GenerateDiagonalWallPrefabs
                 Mathf.Atan2(0.5f, 1f) * Mathf.Rad2Deg,
             WallMiterInterface.TwoToOneDown =>
                 -Mathf.Atan2(0.5f, 1f) * Mathf.Rad2Deg,
-            WallMiterInterface.Straight => 0f,
+            WallMiterInterface.Horizontal => 0f,
             WallMiterInterface.Vertical => 90f,
+            WallMiterInterface.HorizontalReverse => 180f,
+            WallMiterInterface.VerticalReverse => -90f,
             _ => 0f
         };
     }
@@ -352,11 +354,11 @@ public static class GenerateDiagonalWallPrefabs
         Material[] materials = new Material[names.Length];
         for (int i = 0; i < names.Length; i++)
         {
-            string path = $"{SharedRoot}/MAT_StraightWall_{names[i]}.mat";
+            string path = $"{SharedRoot}/MAT_HorizontalWall_{names[i]}.mat";
             materials[i] = AssetDatabase.LoadAssetAtPath<Material>(path);
             if (materials[i] == null)
             {
-                GenerateStraightWallPrefabs.Generate();
+                GenerateHorizontalWallPrefabs.Generate();
                 materials[i] = AssetDatabase.LoadAssetAtPath<Material>(path);
             }
 

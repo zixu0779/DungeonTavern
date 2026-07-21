@@ -40,7 +40,7 @@ public static class RenameWallPrefabsBySourceOrder
 
     private static readonly Family[] Families =
     {
-        new("Straight", "Wall_", "Wall_Straight_"),
+        new("Horizontal", "Wall_", "Wall_Horizontal_"),
         new("Diagonal/1x1", "Wall_1x1_Up_", "Wall_1x1_Up_"),
         new("Diagonal/1x1", "Wall_1x1_Down_", "Wall_1x1_Down_"),
         new("Diagonal/2x1", "Wall_2x1_Up_", "Wall_2x1_Up_"),

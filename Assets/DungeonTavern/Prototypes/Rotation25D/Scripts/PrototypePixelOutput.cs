@@ -10,6 +10,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private Camera targetCamera;
         private RenderTexture pixelTarget;
+        private GameObject displayCameraObject;
 
         private void OnEnable()
         {
@@ -24,12 +25,19 @@ namespace DungeonTavern.Prototypes.Rotation25D
             };
             pixelTarget.Create();
             targetCamera.targetTexture = pixelTarget;
+            CreateDisplayCamera();
         }
 
         private void OnDisable()
         {
             if (targetCamera != null)
                 targetCamera.targetTexture = null;
+
+            if (displayCameraObject != null)
+            {
+                Destroy(displayCameraObject);
+                displayCameraObject = null;
+            }
 
             if (pixelTarget == null)
                 return;
@@ -61,6 +69,25 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
             GL.Clear(true, true, Color.black);
             Graphics.DrawTexture(destination, pixelTarget);
+        }
+
+        private void CreateDisplayCamera()
+        {
+            displayCameraObject = new GameObject("PixelOutput_DisplayCamera")
+            {
+                hideFlags = HideFlags.HideAndDontSave
+            };
+            displayCameraObject.transform.SetParent(transform, false);
+
+            Camera displayCamera = displayCameraObject.AddComponent<Camera>();
+            displayCamera.clearFlags = CameraClearFlags.SolidColor;
+            displayCamera.backgroundColor = Color.black;
+            displayCamera.cullingMask = 0;
+            displayCamera.depth = targetCamera.depth + 1f;
+            displayCamera.targetDisplay = targetCamera.targetDisplay;
+            displayCamera.orthographic = true;
+            displayCamera.allowHDR = false;
+            displayCamera.allowMSAA = false;
         }
     }
 }
