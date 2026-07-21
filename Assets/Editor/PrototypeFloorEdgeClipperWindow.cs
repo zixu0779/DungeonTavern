@@ -8,7 +8,7 @@ using UnityEngine;
 public sealed class PrototypeFloorEdgeClipperWindow : EditorWindow
 {
     private const string AssetRoot =
-        "Assets/DungeonTavern/Prototypes/Rotation25D/FloorClipping";
+        "Assets/DungeonTavern/Tavern25D/FloorClipping";
     private const string MeshRoot = AssetRoot + "/Meshes";
     private const string MaterialPath = AssetRoot + "/MAT_PrototypeFloorClip.mat";
     private const string ClipChildName = "FloorClipMesh";
@@ -52,13 +52,6 @@ public sealed class PrototypeFloorEdgeClipperWindow : EditorWindow
                 focus: true);
         window.minSize = new Vector2(360f, 260f);
         EnsureAssets();
-    }
-
-    [MenuItem("Tools/Dungeon Tavern/Generate 2.5D Floor Clipping Assets")]
-    public static void GenerateAssets()
-    {
-        EnsureAssets();
-        Debug.Log("Generated/validated the 2.5D floor clipping meshes and material.");
     }
 
     private void OnGUI()
@@ -251,7 +244,7 @@ public sealed class PrototypeFloorEdgeClipperWindow : EditorWindow
     private static void EnsureAssets()
     {
         EnsureFolder(
-            "Assets/DungeonTavern/Prototypes/Rotation25D",
+            "Assets/DungeonTavern/Tavern25D",
             "FloorClipping");
         EnsureFolder(AssetRoot, "Meshes");
 

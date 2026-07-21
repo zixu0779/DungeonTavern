@@ -26,6 +26,10 @@ Before starting or continuing the current environment-art production tasks, also
 - Record newly confirmed design truths in `Docs/GameDesign/GameDesignBible.md`.
 - Keep this file concise; only copy rules here when they must constrain every future task.
 - Preserve existing user assets and project changes unless deletion or replacement is explicitly requested.
-- Treat `Assets/Scenes/Tavern/Tavern_Main.unity` as the current authoritative 2D work scene.
-- Treat `Assets/Scenes/Prototypes/Tavern_25D_RotationPrototype.unity` as an isolated,
-  reversible 2.5D technical prototype derived from `Tavern_Main`.
+- Treat `Assets/Scenes/Tavern/Tavern_Main.unity` as the authoritative 2.5D work scene.
+- Treat `Assets/Scenes/Backup/Legacy2D/Tavern_Main_2D_Backup.unity` as a read-only
+  fallback for the former 2D Tilemap approach.
+- Keep runtime 2.5D resources under `Assets/DungeonTavern/Tavern25D`.
+- Keep legacy 2D Palettes and Tile assets under
+  `Assets/DungeonTavern/Archive/Legacy2D`; do not move them back into active art
+  folders unless the 2D workflow is explicitly restored.

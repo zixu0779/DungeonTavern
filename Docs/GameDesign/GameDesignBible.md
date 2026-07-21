@@ -70,21 +70,17 @@ The following are not design commitments:
 
 ## Current scene status and contract
 
-- `Assets/Scenes/Tavern/Tavern_Main.unity` is the current authoritative 2D work scene.
-- `Assets/Scenes/Prototypes/Tavern_25D_RotationPrototype.unity` is an isolated,
-  reversible technical prototype derived from `Tavern_Main`; experiments there must not
-  silently overwrite the 2D source scene.
-- The current stage is a tile-authoring layout stage rather than a gameplay-complete greybox. The scene currently exposes only the tavern outer boundary, the shared entrance boundary, and empty Tilemap painting layers.
-- Removing internal guide lines does not cancel the confirmed room list or shared-space premise. Exact internal geometry and circulation remain pending until reviewed through actual tile placement.
-
-Current painting interfaces:
-
-- `LayoutGuide/00_TavernOuterBoundary`
-- `LayoutGuide/01_PublicEntrance_3Wide`
-- `Ground/GroundTiles`
-- `GroundDetails/GroundDetailTiles`
-- `Walls/WallTiles`
-- `FurnitureBlockout/FurnitureTiles`
+- `Assets/Scenes/Tavern/Tavern_Main.unity` is the authoritative 2.5D work scene.
+- The approved presentation uses an orthographic camera pitched 45 degrees, with
+  camera-relative cardinal headings at 45, 135, 225, and 315 degrees.
+- WASD moves the player and Q/E rotates the view by 90 degrees.
+- `Assets/Scenes/Backup/Legacy2D/Tavern_Main_2D_Backup.unity` preserves the former
+  2D Tilemap scene as a read-only fallback.
+- Runtime 2.5D assets live under `Assets/DungeonTavern/Tavern25D`.
+- Legacy 2D Palettes and Tile assets are archived under
+  `Assets/DungeonTavern/Archive/Legacy2D`.
+- Exact internal geometry, circulation, furniture arrangement, and gameplay systems
+  remain pending review in the authoritative 2.5D scene.
 
 Stable marker names for future integrations:
 
@@ -99,3 +95,6 @@ Stable marker names for future integrations:
 - 2026-07-20: Configured the authoritative scene camera for pixel-perfect rendering at 32 PPU with a 640×360 reference resolution.
 - 2026-07-27: Promoted the user-corrected `Tavern_Main` back to the authoritative 2D
   work scene and defined the rotation prototype as a separate derived experiment.
+- 2026-07-28: Approved the 2.5D orthographic presentation, promoted it to
+  `Tavern_Main`, preserved the former 2D scene as `Tavern_Main_2D_Backup`, and
+  archived 2D-only Palette and Tile authoring assets.

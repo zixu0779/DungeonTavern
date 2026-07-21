@@ -6,12 +6,10 @@ priority, not permanent game canon.
 
 ## Current priority
 
-Current active task:
-
-1. Produce an aged wooden tavern-floor tileset.
-
-The `Walls_interior.png` adjustment task is complete. Do not reopen or revise the wall
-assets unless the user explicitly puts them back in scope.
+The wall and aged wooden-floor source-art tasks are complete for the current baseline.
+The active environment workflow is now construction and refinement of the authoritative
+2.5D `Tavern_Main` scene. Do not reopen or regenerate those source assets unless the user
+explicitly puts them back in scope.
 
 ## Task 1 — Walls_interior
 
@@ -67,8 +65,8 @@ Initial review questions to answer from the asset itself:
   change to the project's long-term `32 PPU` environment target.
 - Detailed slot ordering and asset rules are recorded in
   `Docs/Art/WallsDiagonalLayout.md`.
-- The 60 Sprite slices have 60 matching semantic Tile assets under
-  `Assets/DungeonTavern/Art/TileAssets/Dungeon_Walls`. They are installed in the Wall
+- The 60 Sprite slices have 60 matching legacy semantic Tile assets under
+  `Assets/DungeonTavern/Archive/Legacy2D/TileAssets/Dungeon_Walls`. They are installed in the archived Wall
   Palette at X `42..51`, using Y `7/6`, `4/3`, and `1/0` for Up/Down slope pairs.
   The obsolete 42-piece connector kit has been removed. Scenes remain unchanged.
 
@@ -105,8 +103,8 @@ Initial review questions to answer from the asset itself:
   Tile supplies the rest of the wall face.
 - The kit uses `16 PPU`, Point filtering, no mipmaps, and no compression to
   match the current `Walls_interior` and `Walls_Diagonal` compatibility grid.
-- All 55 matching Tile assets are under
-  `Assets/DungeonTavern/Art/TileAssets/Dungeon_Walls`.
+- All 55 matching legacy Tile assets are under
+  `Assets/DungeonTavern/Archive/Legacy2D/TileAssets/Dungeon_Walls`.
 - `Walls_HV_RightToDown_04_Special` is placed at Wall Palette cell `(68,16)`,
   immediately right of the managed `RightToDown` row. Its pixels occupy
   top-left rect `x=56, y=274, 16×47`; its Unity
@@ -117,30 +115,17 @@ Initial review questions to answer from the asset itself:
 - The Wall Palette uses manual cell sizing (`GridPalette.cellSizing = 100`).
   Do not replace it with automatic sizing: tall wall Sprites would cause all
   earlier Palette content to appear globally shrunken in the Tile Palette.
-- The authoritative scene remains unchanged. Placement into the reserved
-  vertical-wall gaps is a separate scene-painting step.
+- These notes describe the preserved 2D authoring baseline. The authoritative scene is
+  now the 2.5D `Assets/Scenes/Tavern/Tavern_Main.unity`.
 
 ## Task 2 — Aged wooden tavern floor
 
-**Status: active, requirements pending.**
+**Status: completed for the current baseline.**
 
-The user has confirmed only the task name and priority: produce aged wooden flooring for
-the dungeon tavern. Detailed requirements have not yet been provided and will be supplied
-incrementally in conversation.
-
-Until those requirements are confirmed:
-
-- Do not generate images, choose a plank layout, define Tile counts, create transitions,
-  import assets, slice Sprites, create Tile assets, or modify a Palette.
-- Do not infer a final color palette, damage density, adjacency system, plank direction,
-  plank dimensions, or relationship to the stone floor.
-- It is acceptable to inspect existing project art when the user asks, but report findings
-  separately from recommendations and do not treat recommendations as approved requirements.
-- Once the user provides a concrete requirement, implement only the approved scope and use
-  candidate review gates before replacing or formalizing assets.
-- When image production begins, author the wooden-floor Tiles and atlas directly at their final
-  pixel dimensions. Do not generate a larger image and compress or downsample it into the
-  production asset.
+The approved aged wooden-floor atlases are retained under
+`Assets/DungeonTavern/Art/Environment/Ground` and are used by the authoritative 2.5D
+scene. Their legacy Tile wrappers are archived under
+`Assets/DungeonTavern/Archive/Legacy2D/TileAssets`.
 
 ## Ground status — do not reopen implicitly
 

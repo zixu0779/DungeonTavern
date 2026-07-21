@@ -4,7 +4,9 @@ This document defines the stable visual language for environment art. It supplem
 
 ## View and perspective
 
-- The game is top-down pixel art viewed from an oblique angle, not from a perfectly vertical camera.
+- The game uses a 2.5D pixel-art presentation with an orthographic camera pitched
+  45 degrees and cardinal view headings offset by 45 degrees.
+- The view rotates in 90-degree steps through headings 45, 135, 225, and 315 degrees.
 - Floors are seen mostly from above, while walls must expose a readable vertical face and a sense of height.
 - Wall tops, wall faces, corners, pillars, arches, and door openings are distinct construction pieces. A sprite being stored under `Walls` does not mean it can be repeated in every direction.
 - Furniture must use the same oblique perspective as the environment. Fully overhead tables, shelves, counters, or other props must be corrected, replaced, or kept out of final scene dressing.
@@ -21,9 +23,11 @@ This document defines the stable visual language for environment art. It supplem
 
 ## Pixel-perfect presentation
 
-- The authoritative scene uses the URP `PixelPerfectCamera` component.
-- Assets PPU is `32` and the reference resolution is `640×360` (16:9).
-- Upscale Render Texture and Pixel Snapping are enabled; Stretch Fill is disabled.
+- The authoritative 2.5D camera renders through the URP 3D renderer to a fixed
+  `640×360` pixel target, then presents it with point filtering.
+- The main orthographic camera uses size `5`.
+- Assets continue to use their approved PPU settings; do not resample source
+  pixel art merely to compensate for camera projection.
 - Pixel-art quality must be judged in Game View at the reference resolution or an integer multiple such as `1280×720` or `1920×1080`.
 - Arbitrary Scene View zoom levels may look uneven and are not the final rendering reference.
 

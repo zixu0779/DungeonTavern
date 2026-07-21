@@ -59,17 +59,19 @@ This document records the project workflow for Sprite slicing, Tile assets, Pale
 - Four-corner damage Tiles include an assembled large-hole layout.
 - `Ground_Cracked_Seamless.png` and `Ground_Cracked_Autotile.png` are formal sources; their approved Sprite slicing and Tile references must not be silently regenerated.
 
-## Current scene painting layers
+## Current scene and legacy Tilemap status
 
-The authoritative 2D work scene is `Assets/Scenes/Tavern/Tavern_Main.unity`.
+The authoritative work scene is the 2.5D
+`Assets/Scenes/Tavern/Tavern_Main.unity`.
 
-- Paint base walkable floor on `Ground/GroundTiles`.
-- Paint cracks, surface variation, and non-blocking overlays on `GroundDetails/GroundDetailTiles` when they are separate overlay Tiles.
-- Paint structural wall pieces on `Walls/WallTiles`.
-- Paint furniture and movable visual dressing on `FurnitureBlockout/FurnitureTiles` during the current authoring stage.
-- Keep `LayoutGuide/00_TavernOuterBoundary` and `LayoutGuide/01_PublicEntrance_3Wide` visible as planning references until the user approves removing them.
-- `Tavern_25D_RotationPrototype.unity` is a separate derived technical prototype and
-  must not overwrite the 2D source scene.
+- The former 2D Tilemap scene is preserved at
+  `Assets/Scenes/Backup/Legacy2D/Tavern_Main_2D_Backup.unity`.
+- Legacy Palettes and Tile assets are preserved under
+  `Assets/DungeonTavern/Archive/Legacy2D`.
+- The 2.5D scene consumes source Sprites, wall Prefabs, materials, and meshes rather
+  than painting its final environment through the legacy Tile Palette.
+- Do not delete source atlases that are shared by the 2D backup and 2.5D scene.
+- Restore the archived Tilemap workflow only when explicitly requested.
 
 ## Validation before handoff
 
