@@ -26,6 +26,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private const int InterfaceCount = 9;
 
         [Header("Neighbour wall direction at each endpoint")]
+        [Tooltip(
+            "T-junction rule: keep both collinear wall endpoints Square, and set " +
+            "only the branching wall endpoint to Horizontal/Vertical as appropriate.")]
         [SerializeField] private WallMiterInterface startInterface;
         [SerializeField] private WallMiterInterface endInterface;
         [Header("Generated interface meshes")]
