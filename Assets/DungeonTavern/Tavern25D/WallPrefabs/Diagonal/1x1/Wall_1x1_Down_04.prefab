@@ -114,7 +114,37 @@ MonoBehaviour:
   left: {fileID: 0}
   right: {fileID: 0}
   top: {fileID: -1156924694, guid: 9cfb804c97f85443ac97a7670adb60c3, type: 3}
+  leftJamb: {fileID: 0}
+  rightJamb: {fileID: 0}
   mirrorBackHorizontally: 1
+  frontDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  backDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  leftDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  rightDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  topDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  leftJambDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  rightJambDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
 --- !u!114 &2887201769549356591
 MonoBehaviour:
   m_ObjectHideFlags: 0

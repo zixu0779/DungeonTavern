@@ -14,6 +14,12 @@ namespace DungeonTavern.Tavern25D
         [SerializeField] private Collider blockingCollider;
         [SerializeField] private bool isOpen;
 
+        [Header("Optional hinged leaves")]
+        [SerializeField] private Transform leftHinge;
+        [SerializeField] private Transform rightHinge;
+        [SerializeField] private float leftOpenAngle = 100f;
+        [SerializeField] private float rightOpenAngle = -100f;
+
         public bool IsOpen => isOpen;
 
         public event Action<bool> StateChanged;
@@ -37,6 +43,25 @@ namespace DungeonTavern.Tavern25D
             closedVisual = closedState;
             openVisual = openState;
             blockingCollider = passageBlocker;
+            isOpen = initiallyOpen;
+            ApplyState();
+        }
+
+        public void ConfigureHinged(
+            Transform leftDoorHinge,
+            Transform rightDoorHinge,
+            Collider passageBlocker,
+            float leftAngle,
+            float rightAngle,
+            bool initiallyOpen)
+        {
+            closedVisual = null;
+            openVisual = null;
+            leftHinge = leftDoorHinge;
+            rightHinge = rightDoorHinge;
+            blockingCollider = passageBlocker;
+            leftOpenAngle = leftAngle;
+            rightOpenAngle = rightAngle;
             isOpen = initiallyOpen;
             ApplyState();
         }
@@ -87,6 +112,17 @@ namespace DungeonTavern.Tavern25D
                 openVisual.SetActive(isOpen);
             if (blockingCollider != null)
                 blockingCollider.enabled = !isOpen;
+
+            if (leftHinge != null)
+                leftHinge.localRotation = Quaternion.Euler(
+                    0f,
+                    isOpen ? leftOpenAngle : 0f,
+                    0f);
+            if (rightHinge != null)
+                rightHinge.localRotation = Quaternion.Euler(
+                    0f,
+                    isOpen ? rightOpenAngle : 0f,
+                    0f);
         }
     }
 }

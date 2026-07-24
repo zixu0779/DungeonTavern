@@ -328,7 +328,37 @@ MonoBehaviour:
   left: {fileID: -1520177331, guid: 71f1d4d84c6ca4e34a12e4a5ce09377f, type: 3}
   right: {fileID: -1520177331, guid: 71f1d4d84c6ca4e34a12e4a5ce09377f, type: 3}
   top: {fileID: -1156924694, guid: 9cfb804c97f85443ac97a7670adb60c3, type: 3}
+  leftJamb: {fileID: 0}
+  rightJamb: {fileID: 0}
   mirrorBackHorizontally: 1
+  frontDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  backDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  leftDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  rightDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  topDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  leftJambDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
+  rightJambDirection:
+    rotation: 0
+    flipX: 0
+    flipY: 0
 --- !u!1 &6604021269425207949
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,6 +532,10 @@ MonoBehaviour:
   openVisual: {fileID: 6965383651487593894}
   blockingCollider: {fileID: 1106189128630650755}
   isOpen: 0
+  leftHinge: {fileID: 0}
+  rightHinge: {fileID: 0}
+  leftOpenAngle: 100
+  rightOpenAngle: -100
 --- !u!1 &8393064553524051501
 GameObject:
   m_ObjectHideFlags: 0

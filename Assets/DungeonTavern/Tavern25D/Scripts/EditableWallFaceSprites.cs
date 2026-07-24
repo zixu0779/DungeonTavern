@@ -6,9 +6,30 @@ namespace DungeonTavern.Prototypes.Rotation25D
     [RequireComponent(typeof(MeshRenderer))]
     public sealed class EditableWallFaceSprites : MonoBehaviour
     {
+        public enum QuarterTurn
+        {
+            None = 0,
+            Clockwise90 = 1,
+            Rotate180 = 2,
+            Clockwise270 = 3
+        }
+
+        [System.Serializable]
+        private struct FaceUvOptions
+        {
+            public QuarterTurn rotation;
+            public bool flipX;
+            public bool flipY;
+        }
+
         private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
         private static readonly int BaseMapStId = Shader.PropertyToID("_BaseMap_ST");
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+        private static readonly int SpriteRectId = Shader.PropertyToID("_SpriteRect");
+        private static readonly int FaceUvScaleId = Shader.PropertyToID("_FaceUvScale");
+        private static readonly int FaceRotationId = Shader.PropertyToID("_FaceRotation");
+        private static readonly int FlipXId = Shader.PropertyToID("_FlipX");
+        private static readonly int FlipYId = Shader.PropertyToID("_FlipY");
 
         [Header("Drag a Sprite into each wall face")]
         [SerializeField] private Sprite front;
@@ -17,9 +38,24 @@ namespace DungeonTavern.Prototypes.Rotation25D
         [SerializeField] private Sprite right;
         [SerializeField] private Sprite top;
 
+        [Header("Optional doorway inner faces")]
+        [Tooltip("The inner vertical surface on the left side of a doorway. Falls back to Left when empty.")]
+        [SerializeField] private Sprite leftJamb;
+        [Tooltip("The inner vertical surface on the right side of a doorway. Falls back to Left when empty.")]
+        [SerializeField] private Sprite rightJamb;
+
         [Header("Face options")]
         [Tooltip("The back face reuses Front and mirrors it horizontally.")]
         [SerializeField] private bool mirrorBackHorizontally = true;
+
+        [Header("Per-face direction")]
+        [SerializeField] private FaceUvOptions frontDirection;
+        [SerializeField] private FaceUvOptions backDirection;
+        [SerializeField] private FaceUvOptions leftDirection;
+        [SerializeField] private FaceUvOptions rightDirection;
+        [SerializeField] private FaceUvOptions topDirection;
+        [SerializeField] private FaceUvOptions leftJambDirection;
+        [SerializeField] private FaceUvOptions rightJambDirection;
 
         public Sprite Front
         {
@@ -97,19 +133,25 @@ namespace DungeonTavern.Prototypes.Rotation25D
             if (meshRenderer == null)
                 return;
 
-            ApplyFace(meshRenderer, 0, front, false);
-            ApplyFace(meshRenderer, 1, back, mirrorBackHorizontally);
-            ApplyFace(meshRenderer, 2, left, false);
-            ApplyFace(meshRenderer, 3, right, false);
-            ApplyFace(meshRenderer, 4, top, false);
+            ApplyFace(meshRenderer, 0, front, false, frontDirection);
+            ApplyFace(meshRenderer, 1, back, mirrorBackHorizontally, backDirection);
+            ApplyFace(meshRenderer, 2, left, false, leftDirection);
+            ApplyFace(meshRenderer, 3, right, false, rightDirection);
+            ApplyFace(meshRenderer, 4, top, false, topDirection);
+            ApplyFace(meshRenderer, 5, leftJamb != null ? leftJamb : left, false, leftJambDirection);
+            ApplyFace(meshRenderer, 6, rightJamb != null ? rightJamb : left, false, rightJambDirection);
         }
 
         private static void ApplyFace(
             Renderer renderer,
             int materialIndex,
             Sprite sprite,
-            bool mirrorHorizontally)
+            bool mirrorHorizontally,
+            FaceUvOptions direction)
         {
+            if (materialIndex < 0 || materialIndex >= renderer.sharedMaterials.Length)
+                return;
+
             MaterialPropertyBlock block = new();
             block.SetColor(BaseColorId, sprite != null ? Color.white : Color.clear);
 
@@ -138,7 +180,27 @@ namespace DungeonTavern.Prototypes.Rotation25D
                         rect.height / texture.height,
                         offsetX,
                         rect.y / texture.height));
+
+                block.SetVector(
+                    SpriteRectId,
+                    new Vector4(
+                        rect.x / texture.width,
+                        rect.y / texture.height,
+                        rect.width / texture.width,
+                        rect.height / texture.height));
+                block.SetVector(
+                    FaceUvScaleId,
+                    new Vector4(
+                        sprite.pixelsPerUnit / rect.width,
+                        sprite.pixelsPerUnit / rect.height,
+                        0f,
+                        0f));
             }
+
+
+            block.SetFloat(FaceRotationId, (float)direction.rotation);
+            block.SetFloat(FlipXId, (direction.flipX ^ mirrorHorizontally) ? 1f : 0f);
+            block.SetFloat(FlipYId, direction.flipY ? 1f : 0f);
 
             renderer.SetPropertyBlock(block, materialIndex);
         }
