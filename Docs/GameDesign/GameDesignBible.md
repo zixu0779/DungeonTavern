@@ -8,8 +8,26 @@ This document is the durable source of truth for confirmed game and world design
 - The tavern is located in a secluded corner of one dungeon floor, not at the dungeon entrance.
 - The opening may show a character entering the dungeon, but that sequence belongs to a separate intro scene.
 - The player is the tavern owner. Handling tavern affairs reveals the world and advances the story.
+- The 2.5D narrative presentation has three confirmed forms: rare opening/memory
+  cinematics may use voice-over; short in-world reactions use head bubbles;
+  branch-bearing owner/NPC conversations use a close dialogue view with the owner
+  left, NPC right, and dialogue/choices at the bottom of the screen.
+- Optional observation and information questions return to their dialogue hub;
+  each hub has a separately motivated progression choice, and meaningful choices
+  either converge intentionally or persist a later consequence.
 - The tavern treats all creatures equally, including adventurers and native dungeon creatures.
 - There is one shared public entrance, one shared bar, and mixed seating. Public areas are never segregated by species or faction.
+- The owner created the tavern and its peace rules after a long first-floor conflict between adventurers and dungeon residents. All conventional routes to deeper floors are sealed; the sole controlled route is beneath the tavern. The route is open to any species that meets its peace conditions, although deep residents use it most often.
+- The principal seal combines layered wards, rare "anchor crystals", a control core, and a past Wish-like reality change. The owner can no longer cast Wish normally. A later emergency reconfiguration locked the route and cost the owner memories tied to the sealing incident, while leaving their ordinary knowledge and protective strength intact.
+- The antagonist bypassed the seal's purpose check with one unique relic found
+  in a small ruin in the dungeon's deeper levels. Mira's black stone fragment is
+  a different remnant originating from the same ruin, not a broken piece of the
+  unique relic and not a second equivalent relic. Their shared origin may be
+  established through related magic, material, or markings without revealing
+  the unique relic's full identity or function during Chapter 1.
+- The seal chamber is one level below storage. After the opening cinematic, the
+  player begins prone in that chamber, regains control by standing and returning
+  to storage, then meets Eve when she hears movement from the hall.
 
 ## Tavern peace rules
 
@@ -88,6 +106,32 @@ Stable marker names for future integrations:
 - `AreaMarkers`: `Hall`, `Bar`, `MixedSeating`, `Kitchen`, `Storage`
 - `LockedAreaMarkers`: `Performance`, `Lodging`, `QuietRooms`
 
+## Confirmed Chapter 1 character and consequence constraints
+
+- Nox is a neutral-to-evil supplier who buys, stores, and resells dungeon
+  materials, not an innocent hired courier. He may personally deliver valuable
+  or sensitive orders as part of his own trade. He commonly supplies deep-level
+  materials to other buyers, but was not the tavern's established deep-material
+  supplier. The owner deliberately ordered the suspicious shipment from Nox
+  while investigating newly circulating deep-level materials: if Nox could
+  provide fresh goods under an old-stock story, the order would expose a route
+  worth tracing. Thus "old order" means an order placed before the owner's
+  disappearance, not that the goods are truly old.
+  Nox knows the shipment is suspicious and uses the old-stock claim as cover.
+  He values profit and plausible deniability over the victims or legality of a
+  transaction. Repeated questioning must expose evasiveness through wording or
+  low-cost visible action text. He is not required to be the mastermind and
+  should not freely confess everything he knows.
+- Mira may either retain the black fragment or entrust it to the tavern. The
+  choice must persist and trigger different branch content beyond the current
+  three-day slice. The exact advantages, risks, and outcomes of either custody
+  choice remain to be designed.
+- Mira leaves the tavern immediately after her Day 2 conversation, regardless
+  of the later Nox branch. After completing his transaction, Nox stays for a
+  drink and creates another service round unless questioning has pushed him into
+  visibly flustered, stammering answers. Sweating or looking away alone does not
+  make him leave; once he stammers, he completes the transaction and departs.
+
 ## Change log
 
 - 2026-07-16: Created the durable design bible and recorded the confirmed tavern setting, peace rules, initial/locked areas, visual direction, and intentionally open gameplay questions.
@@ -98,3 +142,20 @@ Stable marker names for future integrations:
 - 2026-07-28: Approved the 2.5D orthographic presentation, promoted it to
   `Tavern_Main`, preserved the former 2D scene as `Tavern_Main_2D_Backup`, and
   archived 2D-only Palette and Tile authoring assets.
+- 2026-08-28: Confirmed the sealed deeper-route background and the Chapter 1 narrative premise: after waking with sealing-incident memories missing, the owner reopens the tavern to investigate through returning guests and surviving evidence.
+- 2026-08-29: Confirmed the three-form 2.5D narrative presentation contract:
+  opening/memory voice-over cinematics, in-world head bubbles, and close owner/NPC
+  dialogue with bottom-screen choices.
+- 2026-08-29: Confirmed dialogue-choice flow rule: optional observation and
+  information choices do not force scene progression; progression is a separate,
+  motivated choice unless alternatives intentionally converge or branch.
+- 2026-08-29: Confirmed Day 1 opening flow: player-controlled exit from the
+  seal chamber to storage, Eve's return-key conversation, an in-world tavern
+  opening button at the bar, then Bran's arrival and active approach to settle.
+- 2026-08-29: Confirmed Day 1 closing flow: Eve handles bar, stock, and empty
+  tables during service; when she judges the day complete, she returns to the
+  wall switch and the player presses it to end the business day.
+- 2026-08-30: Confirmed that the unique purpose-deception relic and Mira's black
+  fragment are separate remnants from the same small deep-level ruin; Nox is a
+  knowingly evasive neutral-to-evil merchant; and custody of the fragment
+  creates a persistent post-Chapter-1 branch.
