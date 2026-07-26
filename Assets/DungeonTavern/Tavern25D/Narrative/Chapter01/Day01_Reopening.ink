@@ -117,7 +117,7 @@
     布兰：“会。但我不想每次想起，都只记得炉火和惨叫。”
     -> day01_bran_conversation
 
-+ { bran_return_question_count == 0 } [你为什么还会回来？]
++ { bran_return_question_count == 0 } [你为什么还会回来？] //改！
     ~ bran_return_question_count = bran_return_question_count + 1
     布兰：“因为这里以前让人能坐下来吃完一顿饭，不必先问坐在对面的是谁。”
     -> day01_bran_conversation

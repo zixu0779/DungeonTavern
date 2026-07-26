@@ -67,14 +67,16 @@
 === day03_bran_conversation ===
 + { bran_day3_forge_question_stage == 0 } [“我以前有没有找你做过什么东西？”]
     ~ bran_day3_forge_question_stage = 1
-    布兰：“做过。一只黑铁支架。你不肯说装在哪里，只说按图纸上的尺寸做，绝对不能差。”
+    布兰：“做过。一座黑钢基座。你不肯说装在哪里，只说按图纸上的尺寸做，绝对不能差。”
     
     布兰：“怎么，是出什么问题了吗？”
+    
+    你：『黑钢基座……是封印室的那个吗』
     -> day03_bran_conversation
 
-+ { bran_day3_forge_question_stage == 1 } [“那只支架是按照什么做的？”]
++ { bran_day3_forge_question_stage == 1 } [“黑钢基座上面有几个槽位对吧，你还记得吗？”]
     ~ bran_day3_forge_question_stage = 2
-    布兰：“你给过我一枚晶石，让我按照它的大小留出凹槽。”
+    布兰：“当然。五个槽位都是照你带来的那枚浅色晶石留的。怎么，晶石装不上？”
     -> memory_bran_hammer
 
 * [“没什么。路上小心。”]
@@ -96,16 +98,27 @@
 
 === day03_bran_return_gate ===
 { bran_return_question_count > 0:
-    -> memory_bran_return
+    -> day03_bran_return_trigger
 - else:
     -> day03_bran_leaves
 }
 
+=== day03_bran_return_trigger ===
+布兰：“前天和今天，坐在我对面的客人都不一样。”
+
+布兰：“没人赶我换位置，也没人追问我从哪里来。看来这里确实没变。”
+
+-> memory_bran_return
+
 === memory_bran_return ===
 // [回忆过场] 旧酒馆内，布兰与不同种族的客人坐在同一张长桌旁。
-布兰坐在长桌尽头，面前的汤已经凉了。
+布兰站在长桌旁。一个披着冒险者斗篷的客人把长凳上的行李挪开，给他让出位置。
 
-你把汤重新放回火边：“先吃饭。坐在这里的人，不必先问对面是谁。”
+布兰看了对方一眼，随后坐下。
+
+你把一碗刚出锅的炖菜放到布兰面前：“趁热。”
+
+长桌对面的人把盐罐推了过来。
 
 -> day03_bran_leaves
 
