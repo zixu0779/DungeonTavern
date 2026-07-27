@@ -131,6 +131,11 @@ Stable marker names for future integrations:
   drink and creates another service round unless questioning has pushed him into
   visibly flustered, stammering answers. Sweating or looking away alone does not
   make him leave; once he stammers, he completes the transaction and departs.
+- Peaceful passage does not prohibit ordinary exchange between the two sides of
+  the seal: legitimately gathered or traded deep-level materials may circulate.
+  The suspicious Chapter 1 shipment instead contains material that can only be
+  taken by killing protected peaceful deep creatures, making its fresh condition
+  evidence of a prohibited hunt rather than evidence that all deep trade is illicit.
 
 ## Change log
 
