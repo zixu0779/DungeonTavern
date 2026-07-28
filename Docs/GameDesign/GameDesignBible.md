@@ -136,6 +136,10 @@ Stable marker names for future integrations:
   The suspicious Chapter 1 shipment instead contains material that can only be
   taken by killing protected peaceful deep creatures, making its fresh condition
   evidence of a prohibited hunt rather than evidence that all deep trade is illicit.
+- Cross-seal shipments use a **passage declaration** (`通行申报单`):
+  the traveller declares the time, cargo, purpose, and planned storage location;
+  after approval, the control core stamps a passage number onto the declaration.
+  This declaration is distinct from the tavern's own order and inventory records.
 
 ## Change log
 
