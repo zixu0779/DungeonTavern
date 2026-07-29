@@ -18,6 +18,7 @@ VAR nox_trace_accusation_asked = false
 VAR nox_final_confirmation_asked = false
 VAR nox_became_flustered = false
 VAR material_trace_examined = false
+VAR passage_record_checked = false
 
 // External save/checkpoint sentinel. Unity may use it to avoid replaying the
 // chapter-end event after loading a completed save.
