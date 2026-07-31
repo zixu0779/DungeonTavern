@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DungeonTavern.Tavern25D
@@ -19,6 +20,9 @@ namespace DungeonTavern.Tavern25D
         [SerializeField] private Transform rightHinge;
         [SerializeField] private float leftOpenAngle = 100f;
         [SerializeField] private float rightOpenAngle = -100f;
+        [SerializeField, Min(0f)] private float transitionDuration = 0.22f;
+
+        private Coroutine transition;
 
         public bool IsOpen => isOpen;
 
@@ -98,10 +102,54 @@ namespace DungeonTavern.Tavern25D
         {
             bool changed = isOpen != open;
             isOpen = open;
-            ApplyState();
+
+            if (Application.isPlaying && transitionDuration > 0f && HasHingedLeaves)
+            {
+                if (transition != null)
+                    StopCoroutine(transition);
+                transition = StartCoroutine(AnimateHinges());
+            }
+            else
+            {
+                ApplyState();
+            }
 
             if (changed && Application.isPlaying)
                 StateChanged?.Invoke(isOpen);
+        }
+
+        private bool HasHingedLeaves => leftHinge != null || rightHinge != null;
+
+        private IEnumerator AnimateHinges()
+        {
+            if (isOpen && blockingCollider != null)
+                blockingCollider.enabled = false;
+
+            Quaternion leftStart = leftHinge != null ? leftHinge.localRotation : Quaternion.identity;
+            Quaternion rightStart = rightHinge != null ? rightHinge.localRotation : Quaternion.identity;
+            Quaternion leftTarget = Quaternion.Euler(0f, isOpen ? leftOpenAngle : 0f, 0f);
+            Quaternion rightTarget = Quaternion.Euler(0f, isOpen ? rightOpenAngle : 0f, 0f);
+            float elapsed = 0f;
+
+            while (elapsed < transitionDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / transitionDuration);
+                t = t * t * (3f - 2f * t);
+                if (leftHinge != null)
+                    leftHinge.localRotation = Quaternion.Slerp(leftStart, leftTarget, t);
+                if (rightHinge != null)
+                    rightHinge.localRotation = Quaternion.Slerp(rightStart, rightTarget, t);
+                yield return null;
+            }
+
+            if (leftHinge != null)
+                leftHinge.localRotation = leftTarget;
+            if (rightHinge != null)
+                rightHinge.localRotation = rightTarget;
+            if (!isOpen && blockingCollider != null)
+                blockingCollider.enabled = true;
+            transition = null;
         }
 
         private void ApplyState()

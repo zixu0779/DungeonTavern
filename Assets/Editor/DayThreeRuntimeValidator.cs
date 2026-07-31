@@ -30,10 +30,16 @@ public static class DayThreeRuntimeValidator
             return;
         }
 
-        interaction = Object.FindFirstObjectByType<PlayerInteractionController>();
+        interaction = Object.FindAnyObjectByType<PlayerInteractionController>();
         hands = interaction.GetComponent<PlayerHands>();
         player = interaction.transform;
-        bar = GameObject.Find("Gameplay/InteractionPoints/BarInteraction").transform;
+        GameObject drinkPickup = GameObject.Find("Gameplay/InteractionPoints/DrinkPickup");
+        if (drinkPickup == null)
+        {
+            Debug.LogError("Day 3 runtime validation requires Gameplay/InteractionPoints/DrinkPickup.");
+            return;
+        }
+        bar = drinkPickup.transform;
         phase = Phase.FetchDrink;
         waitFrames = 0;
         EditorApplication.update -= Tick;
@@ -49,7 +55,7 @@ public static class DayThreeRuntimeValidator
             return;
         }
 
-        BusinessDayController day = Object.FindFirstObjectByType<BusinessDayController>();
+        BusinessDayController day = Object.FindAnyObjectByType<BusinessDayController>();
         if (day != null && day.State == BusinessDayState.Completed)
         {
             Finish(true, $"Day 3 runtime validation passed: {day.CompletedCustomers}/{day.TotalCustomers}.");
@@ -110,7 +116,7 @@ public static class DayThreeRuntimeValidator
 
     private static CustomerServicePoint FindWaitingCustomer()
     {
-        return Object.FindObjectsByType<CustomerServicePoint>(FindObjectsSortMode.None)
+        return Object.FindObjectsByType<CustomerServicePoint>()
             .FirstOrDefault(customer => customer.State == CustomerOrderState.WaitingForDrink);
     }
 

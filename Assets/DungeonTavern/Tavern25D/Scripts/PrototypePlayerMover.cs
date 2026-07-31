@@ -9,8 +9,12 @@ namespace DungeonTavern.Prototypes.Rotation25D
         [SerializeField] private Transform cameraTransform;
         [SerializeField, Min(0f)] private float moveSpeed = 3.25f;
         [SerializeField, Min(0f)] private float turnSharpness = 16f;
+        [SerializeField, Min(0f)] private float gravity = 24f;
+        [SerializeField, Min(0f)] private float groundedVelocity = 2f;
+        [SerializeField, Min(0f)] private float maximumFallSpeed = 35f;
 
         private CharacterController controller;
+        private float verticalVelocity;
 
         public Transform CameraTransform
         {
@@ -26,21 +30,33 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
-            if (keyboard == null || cameraTransform == null)
-                return;
-
             Vector2 input = Vector2.zero;
-            if (keyboard.wKey.isPressed) input.y += 1f;
-            if (keyboard.sKey.isPressed) input.y -= 1f;
-            if (keyboard.dKey.isPressed) input.x += 1f;
-            if (keyboard.aKey.isPressed) input.x -= 1f;
+            if (keyboard != null)
+            {
+                if (keyboard.wKey.isPressed) input.y += 1f;
+                if (keyboard.sKey.isPressed) input.y -= 1f;
+                if (keyboard.dKey.isPressed) input.x += 1f;
+                if (keyboard.aKey.isPressed) input.x -= 1f;
+            }
             input = Vector2.ClampMagnitude(input, 1f);
 
-            Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
-            Vector3 right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
-            Vector3 movement = forward * input.y + right * input.x;
+            Vector3 movement = Vector3.zero;
+            if (cameraTransform != null)
+            {
+                Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+                Vector3 right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
+                movement = forward * input.y + right * input.x;
+            }
 
-            controller.Move(movement * (moveSpeed * Time.deltaTime));
+            if (controller.isGrounded && verticalVelocity < 0f)
+                verticalVelocity = -groundedVelocity;
+            else
+                verticalVelocity = Mathf.Max(verticalVelocity - gravity * Time.deltaTime, -maximumFallSpeed);
+
+            Vector3 velocity = movement * moveSpeed + Vector3.up * verticalVelocity;
+            CollisionFlags collision = controller.Move(velocity * Time.deltaTime);
+            if ((collision & CollisionFlags.Below) != 0 && verticalVelocity < 0f)
+                verticalVelocity = -groundedVelocity;
 
             if (movement.sqrMagnitude <= 0.0001f)
                 return;
