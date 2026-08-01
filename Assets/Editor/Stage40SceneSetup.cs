@@ -30,11 +30,7 @@ public static class Stage40SceneSetup
         int undoGroup = Undo.GetCurrentGroup();
         Undo.SetCurrentGroupName("Build Stage 4.0 Foundation");
 
-        Material floorMaterial = EnsureMaterial("MAT_Stage40_Floor", new Color(0.18f, 0.2f, 0.24f));
-        Material wallMaterial = EnsureMaterial("MAT_Stage40_Wall", new Color(0.29f, 0.31f, 0.36f));
         Material stairMaterial = EnsureMaterial("MAT_Stage40_Stair", new Color(0.26f, 0.17f, 0.1f));
-        Material coreMaterial = EnsureMaterial("MAT_Stage40_Core", new Color(0.15f, 0.28f, 0.34f));
-        Material walkablePreviewMaterial = EnsureWalkablePreviewMaterial();
 
         Transform stageRoot = EnsureEmpty("Stage40_Foundation", environment.transform);
         Transform automaticDoorRoot = EnsureEmpty("AutomaticDoorTriggers", stageRoot);
@@ -54,7 +50,7 @@ public static class Stage40SceneSetup
             automaticDoorRoot);
 
         BuildBarGate(bar.transform, automaticDoorRoot, stairMaterial);
-        BuildTavernWalkableFloor(stageRoot, storageAccessRoot, walkablePreviewMaterial);
+        BuildTavernWalkableFloor(stageRoot, storageAccessRoot);
         BuildStorageStairs(storageAccessRoot, stairMaterial);
         ConfigureStorageScenePortal(stageRoot);
         BuildGameplayContract(gameplay.transform);
@@ -105,8 +101,7 @@ public static class Stage40SceneSetup
 
     private static void BuildTavernWalkableFloor(
         Transform stageRoot,
-        Transform storageAccessRoot,
-        Material previewMaterial)
+        Transform storageAccessRoot)
     {
         Transform legacyFloor = storageAccessRoot.Find("StorageSafetyFloor");
         Transform floor;
@@ -123,19 +118,8 @@ public static class Stage40SceneSetup
         }
 
         floor.position = new Vector3(20.5f, -0.15f, 16f);
-        GameObject preview = CreateCube(
-            "WalkableFloorPreview",
-            floor,
-            floor.position,
-            Vector3.one,
-            previewMaterial);
-        preview.tag = "EditorOnly";
-        Collider previewCollider = preview.GetComponent<Collider>();
-        if (previewCollider != null)
-            Undo.DestroyObjectImmediate(previewCollider);
-
         WalkableFloorArea area = GetOrAdd<WalkableFloorArea>(floor.gameObject);
-        area.Initialize(new Vector3(49f, 0.3f, 32f), preview.GetComponent<MeshRenderer>());
+        area.Initialize(new Vector3(49f, 0.3f, 32f));
     }
 
     private static void ConfigureStorageScenePortal(Transform stageRoot)
@@ -321,26 +305,4 @@ public static class Stage40SceneSetup
         return material;
     }
 
-    private static Material EnsureWalkablePreviewMaterial()
-    {
-        const string name = "MAT_WalkableFloorPreview";
-        string path = $"{MaterialFolder}/{name}.mat";
-        Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
-        if (material == null)
-        {
-            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
-            material = new Material(shader) { name = name };
-            AssetDatabase.CreateAsset(material, path);
-        }
-
-        material.SetColor("_BaseColor", new Color(0.1f, 0.95f, 0.35f, 0.3f));
-        material.SetFloat("_Surface", 1f);
-        material.SetFloat("_Blend", 0f);
-        material.SetOverrideTag("RenderType", "Transparent");
-        material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-        material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-        material.SetShaderPassEnabled("ShadowCaster", false);
-        EditorUtility.SetDirty(material);
-        return material;
-    }
 }
