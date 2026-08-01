@@ -88,6 +88,8 @@ The following are not design commitments:
 
 ## Current scene status and contract
 
+- The B1 seal room is authored as `Assets/Scenes/SealRoom/SealRoom_B1.unity`, a separate additive content scene roughly one third the footprint of the tavern. `Tavern_Main` remains loaded so the player, camera, business systems, and narrative state remain continuous; stair travel uses a short fade to load or unload B1.
+
 - `Assets/Scenes/Tavern/Tavern_Main.unity` is the authoritative 2.5D work scene.
 - The approved presentation uses an orthographic camera pitched 45 degrees, with
   camera-relative cardinal headings at 45, 135, 225, and 315 degrees.

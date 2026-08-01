@@ -39,7 +39,6 @@ public static class Stage40SceneSetup
         Transform stageRoot = EnsureEmpty("Stage40_Foundation", environment.transform);
         Transform automaticDoorRoot = EnsureEmpty("AutomaticDoorTriggers", stageRoot);
         Transform storageAccessRoot = EnsureEmpty("StorageSealAccess", stageRoot);
-        Transform sealRoomRoot = EnsureEmpty("SealRoom_B1_Greybox", stageRoot);
 
         ConfigureNamedDoor(
             "Tavern_Main/Environment/Walls/Doors/Door_Small_Stone",
@@ -57,13 +56,13 @@ public static class Stage40SceneSetup
         BuildBarGate(bar.transform, automaticDoorRoot, stairMaterial);
         BuildTavernWalkableFloor(stageRoot, storageAccessRoot, walkablePreviewMaterial);
         BuildStorageStairs(storageAccessRoot, stairMaterial);
-        BuildSealRoom(sealRoomRoot, floorMaterial, wallMaterial, stairMaterial, coreMaterial);
+        ConfigureStorageScenePortal(stageRoot);
         BuildGameplayContract(gameplay.transform);
 
         Undo.CollapseUndoOperations(undoGroup);
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
-        Debug.Log("Stage 4.0 foundation built: automatic doors, bar gate, storage stairs, seal-room greybox, and Day 1 markers.");
+        Debug.Log("Stage 4.0 foundation built: automatic doors, bar gate, storage stairs, B1 scene portal, and Day 1 markers.");
     }
 
     private static void BuildBarGate(Transform bar, Transform triggerRoot, Material material)
@@ -139,39 +138,24 @@ public static class Stage40SceneSetup
         area.Initialize(new Vector3(49f, 0.3f, 32f), preview.GetComponent<MeshRenderer>());
     }
 
-    private static void BuildSealRoom(
-        Transform root,
-        Material floorMaterial,
-        Material wallMaterial,
-        Material stairMaterial,
-        Material coreMaterial)
+    private static void ConfigureStorageScenePortal(Transform stageRoot)
     {
-        CreateCube("SealRoom_Floor", root, new Vector3(80f, -0.1f, 20f), new Vector3(12f, 0.2f, 10f), floorMaterial);
-        CreateCube("SealRoom_Wall_West", root, new Vector3(74f, 1f, 20f), new Vector3(0.35f, 2f, 10f), wallMaterial);
-        CreateCube("SealRoom_Wall_East", root, new Vector3(86f, 1f, 20f), new Vector3(0.35f, 2f, 10f), wallMaterial);
-        CreateCube("SealRoom_Wall_North", root, new Vector3(80f, 1f, 25f), new Vector3(12f, 2f, 0.35f), wallMaterial);
-        CreateCube("SealRoom_Wall_South_A", root, new Vector3(77f, 1f, 15f), new Vector3(6f, 2f, 0.35f), wallMaterial);
-        CreateCube("SealRoom_Wall_South_B", root, new Vector3(83.5f, 1f, 15f), new Vector3(5f, 2f, 0.35f), wallMaterial);
+        Transform storageArrival = EnsureEmpty("StorageStairArrival", stageRoot);
+        storageArrival.SetPositionAndRotation(new Vector3(40.2f, 0f, 22.5f), Quaternion.Euler(0f, -90f, 0f));
 
-        for (int index = 0; index < 5; index++)
-        {
-            float x = 74.7f + index * 0.42f;
-            float y = 0.02f + index * 0.08f;
-            CreateCube($"SealRoomUpStep_{index + 1:00}", root, new Vector3(x, y, 20f), new Vector3(0.48f, 0.14f, 1.6f), stairMaterial);
-        }
-
-        GameObject core = CreatePrimitive("SealCore_Greybox", PrimitiveType.Cylinder, root, new Vector3(82f, 0.65f, 20f), new Vector3(2.2f, 0.65f, 2.2f), coreMaterial);
-        core.transform.rotation = Quaternion.identity;
-
-        Transform storageArrival = EnsureEmpty("StorageStairArrival", root.parent);
-        storageArrival.position = new Vector3(40.2f, 0f, 22.5f);
-        storageArrival.rotation = Quaternion.Euler(0f, -90f, 0f);
-        Transform sealArrival = EnsureEmpty("SealRoomStairArrival", root);
-        sealArrival.position = new Vector3(76.8f, 0f, 20f);
-        sealArrival.rotation = Quaternion.Euler(0f, 90f, 0f);
-
-        CreatePortal("StorageToSealRoom", new Vector3(42.75f, 0.8f, 22.5f), new Vector3(0.8f, 1.6f, 2f), root.parent, sealArrival);
-        CreatePortal("SealRoomToStorage", new Vector3(74.55f, 0.8f, 20f), new Vector3(0.8f, 1.6f, 2f), root, storageArrival);
+        Transform portal = EnsureEmpty("StorageToSealRoom", stageRoot);
+        portal.position = new Vector3(42.75f, 0.8f, 22.5f);
+        BoxCollider collider = GetOrAdd<BoxCollider>(portal.gameObject);
+        collider.isTrigger = true;
+        collider.size = new Vector3(0.8f, 1.6f, 2f);
+        Rigidbody body = GetOrAdd<Rigidbody>(portal.gameObject);
+        body.isKinematic = true;
+        body.useGravity = false;
+        StairPortalTrigger oldPortal = portal.GetComponent<StairPortalTrigger>();
+        if (oldPortal != null)
+            Undo.DestroyObjectImmediate(oldPortal);
+        AdditiveScenePortal scenePortal = GetOrAdd<AdditiveScenePortal>(portal.gameObject);
+        scenePortal.Configure("SealRoom_B1", string.Empty, new Vector3(76.8f, 0f, 20f), new Vector3(0f, 90f, 0f));
     }
 
     private static void BuildGameplayContract(Transform gameplay)
@@ -195,10 +179,8 @@ public static class Stage40SceneSetup
             seat.name = "BranDay1Seat";
         }
 
-        SetMarker("PlayerSealRoomStart", spawnPoints, new Vector3(81f, 0f, 20f));
         SetMarker("StorageStairEntry", spawnPoints, new Vector3(41.2f, 0f, 22.5f));
         SetMarker("BusinessSwitch", interactionPoints, new Vector3(20.5f, 0f, 16.8f));
-        SetMarker("SealCore", interactionPoints, new Vector3(82f, 0f, 20f));
         SetMarker("EveDay1Conversation", narrativePoints, new Vector3(38.8f, 0f, 20f));
         SetMarker("BranSettlement", narrativePoints, new Vector3(20.2f, 0f, 9.5f));
         SetMarker("Day1Closing", narrativePoints, new Vector3(20.5f, 0f, 16.8f));
@@ -207,7 +189,7 @@ public static class Stage40SceneSetup
         if (player != null)
         {
             Undo.RecordObject(player.transform, "Place player at Day 1 start");
-            player.transform.SetPositionAndRotation(new Vector3(81f, 0f, 20f), Quaternion.Euler(0f, -90f, 0f));
+            player.transform.SetPositionAndRotation(new Vector3(40.2f, 0f, 22.5f), Quaternion.Euler(0f, -90f, 0f));
         }
     }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using DungeonTavern.Gameplay.Interaction;
 using DungeonTavern.Prototypes.Rotation25D;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DungeonTavern.Tavern25D
 {
@@ -16,10 +17,9 @@ namespace DungeonTavern.Tavern25D
             DoorStateController kitchen = FindDoor("Tavern_Main/Environment/Walls/Doors/Door_Small_Stone");
             DoorStateController storage = FindDoor("Tavern_Main/Environment/Walls/Doors/Door_Small_Stone_2");
             DoorStateController barGate = FindDoor("Tavern_Main/Environment/Greybox/Bar_Greybox/Bar_ServiceGate");
-            Transform sealArrival = GameObject.Find("Tavern_Main/Environment/Stage40_Foundation/SealRoom_B1_Greybox/SealRoomStairArrival")?.transform;
             Transform storageArrival = GameObject.Find("Tavern_Main/Environment/Stage40_Foundation/StorageStairArrival")?.transform;
 
-            if (player == null || kitchen == null || storage == null || barGate == null || sealArrival == null || storageArrival == null)
+            if (player == null || kitchen == null || storage == null || barGate == null || storageArrival == null)
             {
                 Debug.LogError("Stage 4.0 runtime validation failed: required scene references are missing.", this);
                 yield break;
@@ -39,15 +39,25 @@ namespace DungeonTavern.Tavern25D
             yield return ValidateGravity();
             if (!enabled) yield break;
 
-            TeleportPlayer(new Vector3(42.75f, 0f, 22.5f));
-            yield return new WaitForFixedUpdate();
-            yield return new WaitForSeconds(0.2f);
+            yield return WalkIntoScenePortal(
+                new Vector3(41.6f, 0f, 22.5f),
+                Vector3.right,
+                new Vector3(76.8f, 0f, 20f));
+            yield return WaitForSceneState("SealRoom_B1", true, 5f);
+            Transform sealArrival = GameObject.Find("SealRoom_B1/SealRoomStairArrival")?.transform;
+            if (sealArrival == null)
+            {
+                Fail("separate B1 scene loaded without its arrival marker.");
+                yield break;
+            }
             if (!RequireNear(sealArrival.position, "seal-room arrival")) yield break;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.35f);
 
-            TeleportPlayer(new Vector3(74.55f, 0f, 20f));
-            yield return new WaitForFixedUpdate();
-            yield return new WaitForSeconds(0.2f);
+            yield return WalkIntoScenePortal(
+                new Vector3(75.5f, 0f, 20f),
+                Vector3.left,
+                storageArrival.position);
+            yield return WaitForSceneState("SealRoom_B1", false, 5f);
             if (!RequireNear(storageArrival.position, "storage arrival")) yield break;
             yield return new WaitForSeconds(0.75f);
             if (player.transform.position.y < -0.25f)
@@ -59,8 +69,39 @@ namespace DungeonTavern.Tavern25D
             yield return ValidateDrinkService();
             if (!enabled) yield break;
 
-            TeleportPlayer(new Vector3(81f, 0f, 20f));
-            Debug.Log("Stage 4.0 runtime validation passed: doors, stair travel, seat assignment, drink pickup, and customer service work.", this);
+            TeleportPlayer(storageArrival.position);
+            Debug.Log("Stage 4.0 runtime validation passed: doors, gravity, additive B1 scene travel, seat assignment, drink pickup, and customer service work.", this);
+        }
+
+        private IEnumerator WaitForSceneState(string sceneName, bool loaded, float timeoutSeconds)
+        {
+            float timeout = Time.unscaledTime + timeoutSeconds;
+            while (SceneManager.GetSceneByName(sceneName).isLoaded != loaded && Time.unscaledTime < timeout)
+                yield return null;
+
+            if (SceneManager.GetSceneByName(sceneName).isLoaded != loaded)
+                Fail($"scene {sceneName} did not become {(loaded ? "loaded" : "unloaded")} within {timeoutSeconds:0.0}s.");
+        }
+
+        private IEnumerator WalkIntoScenePortal(
+            Vector3 start,
+            Vector3 direction,
+            Vector3 expectedDestination)
+        {
+            TeleportPlayer(start);
+            yield return new WaitForFixedUpdate();
+
+            CharacterController controller = player.GetComponent<CharacterController>();
+            float timeout = Time.unscaledTime + 2f;
+            while ((player.transform.position - expectedDestination).sqrMagnitude > 0.5f && Time.unscaledTime < timeout)
+            {
+                Vector3 displacement = direction.normalized * (2f * Time.deltaTime);
+                if (controller != null && controller.enabled)
+                    controller.Move(displacement);
+                else
+                    player.transform.position += displacement;
+                yield return null;
+            }
         }
 
         private IEnumerator ValidateGravity()
