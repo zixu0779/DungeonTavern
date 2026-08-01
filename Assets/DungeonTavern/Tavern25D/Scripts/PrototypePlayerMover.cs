@@ -16,6 +16,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private CharacterController controller;
         private float verticalVelocity;
 
+        public bool MovementInputEnabled { get; set; } = true;
+
         public Transform CameraTransform
         {
             get => cameraTransform;
@@ -31,7 +33,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
         {
             Keyboard keyboard = Keyboard.current;
             Vector2 input = Vector2.zero;
-            if (keyboard != null)
+            if (MovementInputEnabled && keyboard != null)
             {
                 if (keyboard.wKey.isPressed) input.y += 1f;
                 if (keyboard.sKey.isPressed) input.y -= 1f;

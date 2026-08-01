@@ -13580,6 +13580,7 @@ GameObject:
   m_Component:
   - component: {fileID: 201627077}
   - component: {fileID: 201627079}
+  - component: {fileID: 201627080}
   m_Layer: 0
   m_Name: TavernWalkableFloorCollider
   m_TagString: Untagged
@@ -13615,10 +13616,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.WalkableFloorArea
   size: {x: 60, y: 0.3, z: 28}
-  showInSceneView: 1
-  sceneViewColor: {r: 0.15, g: 0.85, b: 0.45, a: 0.18}
-  floorCollider: {fileID: 2019333952}
   initialized: 1
+--- !u!65 &201627080
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201627076}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 60, y: 0.3, z: 28}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &201692192
 GameObject:
   m_ObjectHideFlags: 0
@@ -35407,6 +35426,7 @@ GameObject:
   - component: {fileID: 546942402}
   - component: {fileID: 546942403}
   - component: {fileID: 546942404}
+  - component: {fileID: 546942405}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -35473,19 +35493,32 @@ MonoBehaviour:
     type: 3}
   guestEntry: {fileID: 823637247}
   seatRegistry: {fileID: 1130337457}
+  settlementPoint: {fileID: 1928328538}
+  autoStart: 0
   customers:
-  - displayName: Mira
+  - displayName: Bran
     arrivalTime: 0.5
     orderItem: 1
-    tint: {r: 0.72, g: 0.9, b: 1, a: 1}
-  - displayName: Bran
-    arrivalTime: 2
-    orderItem: 1
     tint: {r: 1, g: 0.78, b: 0.62, a: 1}
-  - displayName: Nox
-    arrivalTime: 3.5
-    orderItem: 1
-    tint: {r: 0.78, g: 1, b: 0.72, a: 1}
+    requiresSettlement: 1
+--- !u!114 &546942405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546942400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f023e7af3431411d8e5497c1815079c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.Narrative.Day1NarrativeController
+  chapterOne: {fileID: 6231892579173505729, guid: 518521f8ce43144f9b54c8898bc6a25b,
+    type: 3}
+  player: {fileID: 1312366736}
+  storageArrival: {fileID: 1019096969}
+  businessDay: {fileID: 546942404}
+  storageArrivalRadius: 1.6
 --- !u!1 &548418939
 GameObject:
   m_ObjectHideFlags: 0
@@ -102192,6 +102225,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1557495811}
+  - component: {fileID: 1557495812}
   m_Layer: 0
   m_Name: BusinessSwitch
   m_TagString: Untagged
@@ -102214,6 +102248,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1026561420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1557495812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557495810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 756e67478e62441a29811113af44f95f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.Narrative.Day1SwitchPoint
+  narrative: {fileID: 546942405}
 --- !u!1 &1558330116
 GameObject:
   m_ObjectHideFlags: 0

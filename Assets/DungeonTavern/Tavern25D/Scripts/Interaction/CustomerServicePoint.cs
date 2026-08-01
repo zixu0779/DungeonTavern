@@ -10,6 +10,8 @@ namespace DungeonTavern.Gameplay.Interaction
         Ordering,
         WaitingForDrink,
         Served,
+        ApproachingSettlement,
+        AwaitingSettlement,
         Leaving,
         Finished
     }
@@ -27,6 +29,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private string customerName = "Customer";
         private HeldItem requiredItem = HeldItem.TestDrink;
         private bool isInitialized;
+        private Transform settlementPoint;
 
         public CustomerOrderState State { get; private set; }
 
@@ -41,6 +44,7 @@ namespace DungeonTavern.Gameplay.Interaction
         public event Action<CustomerOrderState> StateChanged;
 
         public event Action<CustomerServicePoint> Finished;
+        public event Action<CustomerServicePoint> SettlementRequested;
 
         private void Awake()
         {
@@ -68,7 +72,16 @@ namespace DungeonTavern.Gameplay.Interaction
 
                 case CustomerOrderState.Served:
                     if (TickTimer())
-                        ChangeState(CustomerOrderState.Leaving);
+                    {
+                        ChangeState(settlementPoint == null
+                            ? CustomerOrderState.Leaving
+                            : CustomerOrderState.ApproachingSettlement);
+                    }
+                    break;
+
+                case CustomerOrderState.ApproachingSettlement:
+                    if (MoveTowards(settlementPoint.position))
+                        ChangeState(CustomerOrderState.AwaitingSettlement);
                     break;
 
                 case CustomerOrderState.Leaving:
@@ -88,7 +101,8 @@ namespace DungeonTavern.Gameplay.Interaction
             HeldItem orderItem,
             Transform entry,
             SeatPoint seat,
-            Color tint)
+            Color tint,
+            Transform billSettlementPoint = null)
         {
             if (isInitialized)
                 throw new InvalidOperationException($"{name} has already been initialized.");
@@ -103,6 +117,7 @@ namespace DungeonTavern.Gameplay.Interaction
             requiredItem = orderItem;
             guestEntry = entry;
             assignedSeat = seat;
+            settlementPoint = billSettlementPoint;
             gameObject.name = $"Customer_{customerName}";
             ApplyTint(tint);
 
@@ -114,6 +129,9 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public override string GetPrompt(PlayerHands hands)
         {
+            if (State == CustomerOrderState.AwaitingSettlement)
+                return $"F: Settle bill with {customerName}";
+
             if (State != CustomerOrderState.WaitingForDrink)
                 return string.Empty;
 
@@ -127,6 +145,12 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public override bool Interact(PlayerHands hands)
         {
+            if (State == CustomerOrderState.AwaitingSettlement)
+            {
+                SettlementRequested?.Invoke(this);
+                return true;
+            }
+
             if (State != CustomerOrderState.WaitingForDrink
                 || hands == null
                 || hands.CurrentItem != RequiredItem)
@@ -137,6 +161,15 @@ namespace DungeonTavern.Gameplay.Interaction
             hands.Clear();
             ChangeState(CustomerOrderState.Served);
             Debug.Log($"Order served: {customerName} received {GetItemLabel(RequiredItem)}.", this);
+            return true;
+        }
+
+        public bool CompleteSettlement()
+        {
+            if (State != CustomerOrderState.AwaitingSettlement)
+                return false;
+
+            ChangeState(CustomerOrderState.Leaving);
             return true;
         }
 
