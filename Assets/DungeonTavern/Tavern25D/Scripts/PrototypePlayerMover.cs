@@ -31,6 +31,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Update()
         {
+            if (cameraTransform == null && Camera.main != null)
+                cameraTransform = Camera.main.transform;
+
             Keyboard keyboard = Keyboard.current;
             Vector2 input = Vector2.zero;
             if (MovementInputEnabled && keyboard != null)

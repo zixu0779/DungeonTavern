@@ -12,6 +12,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void OnGUI()
         {
+            interactionController ??= FindAnyObjectByType<PlayerInteractionController>();
             if (interactionController == null)
                 return;
 

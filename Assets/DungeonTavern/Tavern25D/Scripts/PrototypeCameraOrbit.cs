@@ -46,6 +46,12 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private void LateUpdate()
         {
             if (followTarget == null)
+            {
+                PrototypePlayerMover player = FindAnyObjectByType<PrototypePlayerMover>();
+                if (player != null)
+                    followTarget = player.transform;
+            }
+            if (followTarget == null)
                 return;
 
             Vector3 desired = followTarget.position;

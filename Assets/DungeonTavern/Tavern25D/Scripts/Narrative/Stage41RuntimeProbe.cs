@@ -37,6 +37,22 @@ namespace DungeonTavern.Tavern25D.Narrative
             Teleport(storageArrival.position);
             yield return new WaitForSeconds(0.2f);
 
+            Day1EveActor eve = FindAnyObjectByType<Day1EveActor>(FindObjectsInactive.Include);
+            PlayerHands hands = player.GetComponent<PlayerHands>();
+            float eveTimeout = Time.time + 12f;
+            while (Time.time < eveTimeout
+                   && (narrative.State != Day1FlowState.AwaitingEveInteraction
+                       || eve == null
+                       || !eve.Interact(hands)))
+            {
+                yield return null;
+            }
+            if (narrative.State == Day1FlowState.AwaitingEveInteraction)
+            {
+                Fail("Eve did not arrive or become interactable in storage.");
+                yield break;
+            }
+
             yield return AdvanceDialogueUntil(Day1FlowState.AwaitingOpeningSwitch, 120);
             if (!enabled) yield break;
             if (!narrative.TryUseBusinessSwitch())
@@ -64,7 +80,6 @@ namespace DungeonTavern.Tavern25D.Narrative
                 yield break;
             }
 
-            PlayerHands hands = player.GetComponent<PlayerHands>();
             if (hands == null || !hands.TryHold(HeldItem.TestDrink) || !bran.Interact(hands))
             {
                 Fail("Bran could not be served the test drink.");

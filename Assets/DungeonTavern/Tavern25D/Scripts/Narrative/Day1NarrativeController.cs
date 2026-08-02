@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DungeonTavern.Gameplay.Interaction;
 using DungeonTavern.Prototypes.Rotation25D;
@@ -14,6 +15,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         Uninitialized,
         Dialogue,
         AwaitingStorageReturn,
+        AwaitingEveInteraction,
         AwaitingOpeningSwitch,
         ServingBran,
         AwaitingClosingSwitch,
@@ -29,6 +31,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         [SerializeField] private PrototypePlayerMover player;
         [SerializeField] private Transform storageArrival;
         [SerializeField] private BusinessDayController businessDay;
+        [SerializeField] private Day1EveActor eve;
         [SerializeField, Min(0.5f)] private float storageArrivalRadius = 1.6f;
 
         private readonly List<Choice> choices = new();
@@ -37,6 +40,9 @@ namespace DungeonTavern.Tavern25D.Narrative
         private string currentLine;
         private GUIStyle dialogueStyle;
         private GUIStyle choiceStyle;
+        private GUIStyle cinematicStyle;
+        private bool openingCinematic = true;
+        private bool showingCinematic;
 
         public Day1FlowState State { get; private set; }
         public bool CanOpenTavern => State == Day1FlowState.AwaitingOpeningSwitch;
@@ -49,30 +55,38 @@ namespace DungeonTavern.Tavern25D.Narrative
             InkFile storyAsset,
             PrototypePlayerMover playerMover,
             Transform storagePoint,
-            BusinessDayController day)
+            BusinessDayController day,
+            Day1EveActor eveActor = null)
         {
             chapterOne = storyAsset;
             player = playerMover;
             storageArrival = storagePoint;
             businessDay = day;
+            eve = eveActor;
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
             if (chapterOne == null || string.IsNullOrWhiteSpace(chapterOne.storyJson))
             {
                 Debug.LogError("Day 1 narrative requires a compiled Chapter01 InkFile.", this);
                 enabled = false;
-                return;
+                yield break;
             }
-            if (player == null || storageArrival == null || businessDay == null)
+            while (player == null)
+            {
+                player = FindAnyObjectByType<PrototypePlayerMover>();
+                yield return null;
+            }
+            if (storageArrival == null || businessDay == null || eve == null)
             {
                 Debug.LogError("Day 1 narrative scene references are incomplete.", this);
                 enabled = false;
-                return;
+                yield break;
             }
 
             businessDay.CustomerSpawned += OnCustomerSpawned;
+            eve.ConversationRequested += OnEveConversationRequested;
             story = new Story(chapterOne.storyJson);
             story.ChoosePathString("prologue");
             ShowNextContent();
@@ -84,6 +98,8 @@ namespace DungeonTavern.Tavern25D.Narrative
                 businessDay.CustomerSpawned -= OnCustomerSpawned;
             if (bran != null)
                 bran.SettlementRequested -= OnSettlementRequested;
+            if (eve != null)
+                eve.ConversationRequested -= OnEveConversationRequested;
         }
 
         private void Update()
@@ -92,7 +108,8 @@ namespace DungeonTavern.Tavern25D.Narrative
                 && (player.transform.position - storageArrival.position).sqrMagnitude
                     <= storageArrivalRadius * storageArrivalRadius)
             {
-                SelectExternalGate();
+                State = Day1FlowState.AwaitingEveInteraction;
+                eve.BeginArrival();
                 return;
             }
 
@@ -145,7 +162,15 @@ namespace DungeonTavern.Tavern25D.Narrative
                 return;
 
             bran = customer;
+            if (bran.GetComponent<WorldSpeechBubble>() == null)
+                bran.gameObject.AddComponent<WorldSpeechBubble>();
             bran.SettlementRequested += OnSettlementRequested;
+        }
+
+        private void OnEveConversationRequested()
+        {
+            if (State == Day1FlowState.AwaitingEveInteraction)
+                SelectExternalGate();
         }
 
         private void OnSettlementRequested(CustomerServicePoint customer)
@@ -164,6 +189,12 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (story.canContinue)
             {
                 currentLine = story.Continue().Trim();
+                if (TryPresentAsBubble(currentLine))
+                {
+                    ShowNextContent();
+                    return;
+                }
+                showingCinematic = openingCinematic || currentLine.Contains("黑斗篷遮住了你的脸", StringComparison.Ordinal);
                 State = Day1FlowState.Dialogue;
                 SetDialogueActive(true);
                 return;
@@ -190,7 +221,11 @@ namespace DungeonTavern.Tavern25D.Narrative
             SetDialogueActive(false);
 
             if (gate.Contains("主角起身", StringComparison.Ordinal))
+            {
+                openingCinematic = false;
+                showingCinematic = false;
                 State = Day1FlowState.AwaitingStorageReturn;
+            }
             else if (gate.Contains("营业按钮", StringComparison.Ordinal))
                 State = Day1FlowState.AwaitingOpeningSwitch;
             else if (gate.Contains("完成第一日营业", StringComparison.Ordinal))
@@ -209,6 +244,26 @@ namespace DungeonTavern.Tavern25D.Narrative
                 Debug.LogError($"Unknown Day 1 external Ink gate: {gate}", this);
             }
             return true;
+        }
+
+        private bool TryPresentAsBubble(string line)
+        {
+            if (line.Contains("按这个按钮，然后我们重新开始营业吧", StringComparison.Ordinal))
+            {
+                eve.ShowBubble(line);
+                return true;
+            }
+            if (line.Contains("门口的牌子终于翻回来了", StringComparison.Ordinal))
+            {
+                bran?.GetComponent<WorldSpeechBubble>()?.Show(line);
+                return true;
+            }
+            if (line.Contains("今天差不多了，就到这里吧", StringComparison.Ordinal))
+            {
+                eve.ShowBubble(line);
+                return true;
+            }
+            return false;
         }
 
         private void SelectExternalGate()
@@ -251,6 +306,12 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (State != Day1FlowState.Dialogue)
                 return;
 
+            if (showingCinematic)
+            {
+                DrawCinematicPlaceholder();
+                return;
+            }
+
             dialogueStyle ??= new GUIStyle(GUI.skin.box)
             {
                 alignment = TextAnchor.UpperLeft,
@@ -290,6 +351,33 @@ namespace DungeonTavern.Tavern25D.Narrative
                 }
                 choiceY += 42f;
             }
+        }
+
+        private void DrawCinematicPlaceholder()
+        {
+            GUI.depth = -5000;
+            Color old = GUI.color;
+            GUI.color = new Color(0.11f, 0.075f, 0.055f, 1f);
+            GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture);
+
+            Rect paper = new(Screen.width * 0.12f, Screen.height * 0.1f, Screen.width * 0.76f, Screen.height * 0.7f);
+            GUI.color = new Color(0.76f, 0.66f, 0.48f, 1f);
+            GUI.DrawTexture(paper, Texture2D.whiteTexture);
+            GUI.color = new Color(0.22f, 0.16f, 0.12f, 0.9f);
+            GUI.DrawTexture(new Rect(paper.x + paper.width * 0.1f, paper.y + paper.height * 0.2f, paper.width * 0.28f, paper.height * 0.58f), Texture2D.whiteTexture);
+            GUI.color = new Color(0.45f, 0.35f, 0.24f, 0.85f);
+            GUI.DrawTexture(new Rect(paper.x + paper.width * 0.55f, paper.y + paper.height * 0.3f, paper.width * 0.3f, paper.height * 0.36f), Texture2D.whiteTexture);
+
+            cinematicStyle ??= new GUIStyle(GUI.skin.label)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 22,
+                wordWrap = true,
+                normal = { textColor = new Color(0.94f, 0.88f, 0.75f) }
+            };
+            GUI.color = Color.white;
+            GUI.Label(new Rect(Screen.width * 0.16f, Screen.height * 0.82f, Screen.width * 0.68f, Screen.height * 0.12f), currentLine + "\nEnter / Space ▶", cinematicStyle);
+            GUI.color = old;
         }
     }
 }

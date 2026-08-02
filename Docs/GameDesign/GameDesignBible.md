@@ -88,7 +88,7 @@ The following are not design commitments:
 
 ## Current scene status and contract
 
-- The B1 seal room is authored as `Assets/Scenes/SealRoom/SealRoom_B1.unity`, a separate additive content scene roughly one third the footprint of the tavern. `Tavern_Main` remains loaded so the player, camera, business systems, and narrative state remain continuous; stair travel uses a short fade to load or unload B1.
+- The B1 seal room is authored as `Assets/Scenes/SealRoom/SealRoom_B1.unity`, a separate additive content scene roughly one third the footprint of the tavern. The player is authored in B1 and becomes persistent at runtime before B1 is unloaded; `Tavern_Main` retains the camera, business systems, and narrative state. Stair travel uses a short fade.
 
 - `Assets/Scenes/Tavern/Tavern_Main.unity` is the authoritative 2.5D work scene.
 - The approved presentation uses an orthographic camera pitched 45 degrees, with
@@ -170,3 +170,6 @@ Stable marker names for future integrations:
   fragment are separate remnants from the same small deep-level ruin; Nox is a
   knowingly evasive neutral-to-evil merchant; and custody of the fragment
   creates a persistent post-Chapter-1 branch.
+- 2026-09-02: Confirmed that the player is authored in the B1 seal-room scene,
+  while cross-scene camera, HUD, and narrative systems bind to the persistent
+  player after additive loading.
