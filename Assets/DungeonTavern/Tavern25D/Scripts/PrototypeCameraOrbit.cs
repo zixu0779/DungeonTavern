@@ -19,6 +19,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private Transform dialogueRight;
         private float explorationSize;
         private Camera gameCamera;
+        private Vector3 preDialoguePosition;
+        private Quaternion preDialogueRotation;
+        private float preDialogueSize;
+        private float preDialogueTargetYaw;
 
         public Transform FollowTarget
         {
@@ -88,6 +92,13 @@ namespace DungeonTavern.Prototypes.Rotation25D
         {
             if (leftCharacter == null || rightCharacter == null)
                 return;
+            if (!dialogueFraming)
+            {
+                preDialoguePosition = transform.position;
+                preDialogueRotation = transform.rotation;
+                preDialogueTargetYaw = targetYaw;
+                preDialogueSize = gameCamera != null ? gameCamera.orthographicSize : explorationSize;
+            }
             dialogueLeft = leftCharacter;
             dialogueRight = rightCharacter;
             dialogueFraming = true;
@@ -100,10 +111,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
             dialogueLeft = null;
             dialogueRight = null;
             if (gameCamera != null)
-                gameCamera.orthographicSize = explorationSize;
-            if (followTarget != null)
-                transform.position = new Vector3(followTarget.position.x, 0f, followTarget.position.z);
-            targetYaw = SnapCardinalYaw(transform.eulerAngles.y);
+                gameCamera.orthographicSize = preDialogueSize;
+            transform.SetPositionAndRotation(preDialoguePosition, preDialogueRotation);
+            targetYaw = preDialogueTargetYaw;
+            rotating = false;
         }
 
         private void UpdateDialogueFraming()

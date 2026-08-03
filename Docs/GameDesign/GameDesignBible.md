@@ -184,3 +184,9 @@ Stable marker names for future integrations:
 - 2026-09-02: Confirmed active NPC-to-player dialogue approach distances,
   persistent head bubbles, left-owner/right-NPC close framing, and queued
   counter-side customer settlement.
+- 2026-09-02: Confirmed that a pursuing NPC does not cross scene portals with
+  the player, but waits at that area's entrance and resumes pursuit when the
+  player returns; NPCs use the same automatic doors as the player. Close
+  dialogue uses one scrollable transcript inside a single background, keeps
+  per-conversation history, clears it when a new conversation begins, and
+  places plain-text choices at the end of that transcript.

@@ -11,7 +11,7 @@ namespace DungeonTavern.Tavern25D
         [SerializeField] private DoorStateController door;
         [SerializeField, Min(0f)] private float closeDelay = 0.45f;
 
-        private readonly HashSet<PrototypePlayerMover> occupants = new();
+        private readonly HashSet<GameObject> occupants = new();
         private Coroutine delayedClose;
 
         public void Configure(DoorStateController targetDoor, float delay)
@@ -22,8 +22,8 @@ namespace DungeonTavern.Tavern25D
 
         private void OnTriggerEnter(Collider other)
         {
-            PrototypePlayerMover player = other.GetComponentInParent<PrototypePlayerMover>();
-            if (player == null || !occupants.Add(player))
+            GameObject agent = ResolveAgent(other);
+            if (agent == null || !occupants.Add(agent))
                 return;
 
             if (delayedClose != null)
@@ -36,13 +36,23 @@ namespace DungeonTavern.Tavern25D
 
         private void OnTriggerExit(Collider other)
         {
-            PrototypePlayerMover player = other.GetComponentInParent<PrototypePlayerMover>();
-            if (player == null || !occupants.Remove(player) || occupants.Count > 0)
+            GameObject agent = ResolveAgent(other);
+            if (agent == null || !occupants.Remove(agent) || occupants.Count > 0)
                 return;
 
             if (delayedClose != null)
                 StopCoroutine(delayedClose);
             delayedClose = StartCoroutine(CloseAfterDelay());
+        }
+
+        private static GameObject ResolveAgent(Collider other)
+        {
+            PrototypePlayerMover player = other.GetComponentInParent<PrototypePlayerMover>();
+            if (player != null)
+                return player.gameObject;
+
+            DoorPassageAgent npc = other.GetComponentInParent<DoorPassageAgent>();
+            return npc == null ? null : npc.gameObject;
         }
 
         private IEnumerator CloseAfterDelay()

@@ -5,6 +5,22 @@ using UnityEngine.SceneManagement;
 
 namespace DungeonTavern.Tavern25D
 {
+    public static class PlayerAreaTransition
+    {
+        public static event System.Action<string, string> Started;
+        public static event System.Action<string, string> Completed;
+
+        internal static void RaiseStarted(string loadedScene, string unloadedScene)
+        {
+            Started?.Invoke(loadedScene, unloadedScene);
+        }
+
+        internal static void RaiseCompleted(string loadedScene, string unloadedScene)
+        {
+            Completed?.Invoke(loadedScene, unloadedScene);
+        }
+    }
+
     [RequireComponent(typeof(Collider))]
     public sealed class AdditiveScenePortal : MonoBehaviour
     {
@@ -92,6 +108,7 @@ namespace DungeonTavern.Tavern25D
             float fadeDuration)
         {
             transitioning = true;
+            PlayerAreaTransition.RaiseStarted(sceneToLoad, sceneToUnload);
             yield return Fade(0f, 1f, fadeDuration);
 
             if (!string.IsNullOrWhiteSpace(sceneToLoad))
@@ -103,6 +120,18 @@ namespace DungeonTavern.Tavern25D
                     while (load != null && !load.isDone)
                         yield return null;
                 }
+            }
+
+            // The B1 scene contains its authored startup Player. When the persistent
+            // player returns later, additive loading creates that scene copy again.
+            // Keep the player that initiated this transition and remove only newcomers.
+            PrototypePlayerMover[] players = FindObjectsByType<PrototypePlayerMover>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            for (int index = 0; index < players.Length; index++)
+            {
+                if (players[index] != null && players[index] != player)
+                    Destroy(players[index].gameObject);
             }
 
             CharacterController controller = player.GetComponent<CharacterController>();
@@ -125,6 +154,7 @@ namespace DungeonTavern.Tavern25D
             }
 
             yield return Fade(1f, 0f, fadeDuration);
+            PlayerAreaTransition.RaiseCompleted(sceneToLoad, sceneToUnload);
             nextAllowedTime = Time.unscaledTime + 0.15f;
             transitioning = false;
         }

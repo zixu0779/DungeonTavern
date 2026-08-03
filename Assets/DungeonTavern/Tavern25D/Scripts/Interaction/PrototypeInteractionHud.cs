@@ -19,23 +19,25 @@ namespace DungeonTavern.Gameplay.Interaction
             promptStyle ??= new GUIStyle(GUI.skin.box)
             {
                 alignment = TextAnchor.MiddleCenter,
-                fontSize = 18,
+                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
+                padding = new RectOffset(24, 24, 14, 14),
                 normal = { textColor = new Color(1f, 0.91f, 0.62f) }
             };
 
             heldItemStyle ??= new GUIStyle(GUI.skin.box)
             {
                 alignment = TextAnchor.MiddleRight,
-                fontSize = 15,
+                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
+                padding = new RectOffset(20, 20, 12, 12),
                 normal = { textColor = new Color(0.85f, 0.93f, 1f) }
             };
 
             string prompt = interactionController.CurrentPrompt;
             if (!string.IsNullOrEmpty(prompt))
             {
-                float width = 280f;
+                float width = Mathf.Min(620f, Screen.width - 40f);
                 GUI.Box(
-                    new Rect((Screen.width - width) * 0.5f, Screen.height - 82f, width, 42f),
+                    new Rect((Screen.width - width) * 0.5f, Screen.height - 116f, width, 76f),
                     prompt,
                     promptStyle);
             }
@@ -43,7 +45,7 @@ namespace DungeonTavern.Gameplay.Interaction
             if (interactionController.CurrentItem != HeldItem.None)
             {
                 GUI.Box(
-                    new Rect(Screen.width - 230f, Screen.height - 62f, 216f, 42f),
+                    new Rect(Screen.width - 430f, Screen.height - 96f, 416f, 76f),
                     "Holding: Test Drink",
                     heldItemStyle);
             }
@@ -51,7 +53,7 @@ namespace DungeonTavern.Gameplay.Interaction
             if (businessDay != null)
             {
                 GUI.Box(
-                    new Rect(Screen.width - 230f, 14f, 216f, 42f),
+                    new Rect(Screen.width - 500f, 14f, 486f, 76f),
                     businessDay.State == BusinessDayState.Completed
                         ? $"Day complete: {businessDay.CompletedCustomers} / {businessDay.TotalCustomers}"
                         : $"Customers: {businessDay.CompletedCustomers} / {businessDay.TotalCustomers}  Active: {businessDay.ActiveCustomers}",

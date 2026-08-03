@@ -23,6 +23,7 @@ namespace DungeonTavern.Tavern25D
         [SerializeField, Min(0f)] private float transitionDuration = 0.22f;
 
         private Coroutine transition;
+        private Collider[] movingLeafColliders = Array.Empty<Collider>();
 
         public bool IsOpen => isOpen;
 
@@ -30,6 +31,7 @@ namespace DungeonTavern.Tavern25D
 
         private void OnEnable()
         {
+            CacheMovingLeafColliders();
             ApplyState();
         }
 
@@ -48,6 +50,7 @@ namespace DungeonTavern.Tavern25D
             openVisual = openState;
             blockingCollider = passageBlocker;
             isOpen = initiallyOpen;
+            CacheMovingLeafColliders();
             ApplyState();
         }
 
@@ -122,8 +125,10 @@ namespace DungeonTavern.Tavern25D
 
         private IEnumerator AnimateHinges()
         {
-            if (isOpen && blockingCollider != null)
-                blockingCollider.enabled = false;
+            // A rotating solid leaf can wedge a CharacterController between the leaf and
+            // its frame. The closed passage blocker supplies collision while shut; the
+            // animated visual leaves stay non-solid for the whole transition/open state.
+            SetPassageCollision(false);
 
             Quaternion leftStart = leftHinge != null ? leftHinge.localRotation : Quaternion.identity;
             Quaternion rightStart = rightHinge != null ? rightHinge.localRotation : Quaternion.identity;
@@ -147,8 +152,8 @@ namespace DungeonTavern.Tavern25D
                 leftHinge.localRotation = leftTarget;
             if (rightHinge != null)
                 rightHinge.localRotation = rightTarget;
-            if (!isOpen && blockingCollider != null)
-                blockingCollider.enabled = true;
+            if (!isOpen)
+                SetPassageCollision(true);
             transition = null;
         }
 
@@ -158,8 +163,7 @@ namespace DungeonTavern.Tavern25D
                 closedVisual.SetActive(!isOpen);
             if (openVisual != null)
                 openVisual.SetActive(isOpen);
-            if (blockingCollider != null)
-                blockingCollider.enabled = !isOpen;
+            SetPassageCollision(!isOpen);
 
             if (leftHinge != null)
                 leftHinge.localRotation = Quaternion.Euler(
@@ -171,6 +175,37 @@ namespace DungeonTavern.Tavern25D
                     0f,
                     isOpen ? rightOpenAngle : 0f,
                     0f);
+        }
+
+        private void CacheMovingLeafColliders()
+        {
+            var colliders = new System.Collections.Generic.List<Collider>();
+            CollectLeafColliders(leftHinge, colliders);
+            CollectLeafColliders(rightHinge, colliders);
+            movingLeafColliders = colliders.ToArray();
+        }
+
+        private void CollectLeafColliders(Transform hinge, System.Collections.Generic.List<Collider> results)
+        {
+            if (hinge == null)
+                return;
+            Collider[] found = hinge.GetComponentsInChildren<Collider>(true);
+            for (int index = 0; index < found.Length; index++)
+            {
+                if (found[index] != blockingCollider && !results.Contains(found[index]))
+                    results.Add(found[index]);
+            }
+        }
+
+        private void SetPassageCollision(bool closed)
+        {
+            if (blockingCollider != null)
+                blockingCollider.enabled = closed;
+            for (int index = 0; index < movingLeafColliders.Length; index++)
+            {
+                if (movingLeafColliders[index] != null)
+                    movingLeafColliders[index].enabled = false;
+            }
         }
     }
 }

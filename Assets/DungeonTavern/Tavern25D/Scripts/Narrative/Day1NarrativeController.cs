@@ -24,6 +24,13 @@ namespace DungeonTavern.Tavern25D.Narrative
 
     public sealed class Day1NarrativeController : MonoBehaviour
     {
+        private readonly struct DialogueEntry
+        {
+            public DialogueEntry(string text, bool isPlayer) { Text = text; IsPlayer = isPlayer; }
+            public string Text { get; }
+            public bool IsPlayer { get; }
+        }
+
         [Header("Narrative")]
         [SerializeField] private InkFile chapterOne;
 
@@ -35,15 +42,21 @@ namespace DungeonTavern.Tavern25D.Narrative
         [SerializeField, Min(0.5f)] private float storageArrivalRadius = 1.6f;
 
         private readonly List<Choice> choices = new();
+        private readonly List<DialogueEntry> dialogueHistory = new();
         private Story story;
         private CustomerServicePoint bran;
         private string currentLine;
+        private GUIStyle dialoguePanelStyle;
         private GUIStyle dialogueStyle;
         private GUIStyle choiceStyle;
         private GUIStyle cinematicStyle;
         private bool openingCinematic = true;
         private bool showingCinematic;
+        private bool closeDialogueActive;
         private PrototypeCameraOrbit cameraOrbit;
+        private Vector2 dialogueScroll;
+        private int renderedHistoryCount = -1;
+        private int renderedChoiceCount = -1;
 
         public Day1FlowState State { get; private set; }
         public bool CanOpenTavern => State == Day1FlowState.AwaitingOpeningSwitch;
@@ -189,6 +202,11 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void BeginCloseDialogue(Transform speaker)
         {
+            dialogueHistory.Clear();
+            dialogueScroll = Vector2.zero;
+            renderedHistoryCount = -1;
+            renderedChoiceCount = -1;
+            closeDialogueActive = true;
             SetDialogueActive(true);
             cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
             cameraOrbit?.BeginDialogueFraming(player.transform, speaker);
@@ -208,6 +226,8 @@ namespace DungeonTavern.Tavern25D.Narrative
                     return;
                 }
                 showingCinematic = openingCinematic || currentLine.Contains("黑斗篷遮住了你的脸", StringComparison.Ordinal);
+                if (closeDialogueActive && !showingCinematic)
+                    dialogueHistory.Add(new DialogueEntry(currentLine, IsPlayerLine(currentLine)));
                 State = Day1FlowState.Dialogue;
                 SetDialogueActive(true);
                 return;
@@ -232,6 +252,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             string gate = choices[0].text;
             currentLine = string.Empty;
             SetDialogueActive(false);
+            closeDialogueActive = false;
 
             if (gate.Contains("主角起身", StringComparison.Ordinal))
             {
@@ -330,20 +351,27 @@ namespace DungeonTavern.Tavern25D.Narrative
                 return;
             }
 
-            dialogueStyle ??= new GUIStyle(GUI.skin.box)
+            dialoguePanelStyle ??= new GUIStyle(GUI.skin.box)
+            {
+                padding = new RectOffset(30, 30, 24, 24)
+            };
+            dialogueStyle ??= new GUIStyle(GUI.skin.label)
             {
                 alignment = TextAnchor.UpperLeft,
                 fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
                 wordWrap = true,
-                padding = new RectOffset(34, 34, 28, 28),
+                padding = new RectOffset(8, 8, 6, 6),
                 normal = { textColor = Color.white }
             };
-            choiceStyle ??= new GUIStyle(GUI.skin.button)
+            choiceStyle ??= new GUIStyle(GUI.skin.label)
             {
-                alignment = TextAnchor.MiddleLeft,
-                fontSize = Mathf.Max(23, Mathf.RoundToInt(Screen.height / 38f)),
+                alignment = TextAnchor.UpperLeft,
+                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
                 wordWrap = true,
-                padding = new RectOffset(24, 24, 14, 14)
+                padding = new RectOffset(18, 18, 8, 8),
+                normal = { textColor = new Color(1f, 0.9f, 0.58f) },
+                hover = { textColor = Color.white },
+                active = { textColor = new Color(1f, 0.78f, 0.3f) }
             };
 
             float margin = Mathf.Max(34f, Screen.height * 0.045f);
@@ -351,26 +379,79 @@ namespace DungeonTavern.Tavern25D.Narrative
             float height = Mathf.Clamp(Screen.height * 0.42f, 300f, 480f);
             float x = margin;
             float y = Screen.height - height - margin;
-            GUI.Box(new Rect(x, y, width, height), currentLine, dialogueStyle);
+            Rect panel = new(x, y, width, height);
+            GUI.Box(panel, GUIContent.none, dialoguePanelStyle);
 
-            if (choices.Count == 0)
+            Rect viewport = new(x + 34f, y + 28f, width - 68f, height - 56f);
+            float contentWidth = Mathf.Max(100f, viewport.width - 24f);
+            float contentHeight = 12f;
+            if (dialogueHistory.Count > 0)
             {
-                GUI.Label(new Rect(x + width - 230f, y + height - 48f, 210f, 32f), "Enter / Space ▶");
-                return;
+                for (int index = 0; index < dialogueHistory.Count; index++)
+                    contentHeight += dialogueStyle.CalcHeight(new GUIContent(dialogueHistory[index].Text), contentWidth) + 12f;
+            }
+            else if (!string.IsNullOrEmpty(currentLine))
+            {
+                contentHeight += dialogueStyle.CalcHeight(new GUIContent(currentLine), contentWidth) + 12f;
             }
 
-            float choiceY = y + 26f;
+            for (int index = 0; index < choices.Count; index++)
+                contentHeight += choiceStyle.CalcHeight(new GUIContent($"› {index + 1}. {choices[index].text}"), contentWidth) + 8f;
+            if (choices.Count == 0)
+                contentHeight += 40f;
+
+            bool contentChanged = renderedHistoryCount != dialogueHistory.Count
+                || renderedChoiceCount != choices.Count;
+            Rect content = new(0f, 0f, contentWidth, Mathf.Max(viewport.height, contentHeight));
+            dialogueScroll = GUI.BeginScrollView(viewport, dialogueScroll, content);
+            float contentY = 8f;
+            if (dialogueHistory.Count > 0)
+            {
+                for (int index = 0; index < dialogueHistory.Count; index++)
+                {
+                    string text = dialogueHistory[index].Text;
+                    float lineHeight = dialogueStyle.CalcHeight(new GUIContent(text), contentWidth);
+                    GUI.Label(new Rect(0f, contentY, contentWidth, lineHeight), text, dialogueStyle);
+                    contentY += lineHeight + 12f;
+                }
+            }
+            else if (!string.IsNullOrEmpty(currentLine))
+            {
+                float lineHeight = dialogueStyle.CalcHeight(new GUIContent(currentLine), contentWidth);
+                GUI.Label(new Rect(0f, contentY, contentWidth, lineHeight), currentLine, dialogueStyle);
+                contentY += lineHeight + 12f;
+            }
+
+            int clickedChoice = -1;
             for (int index = 0; index < choices.Count; index++)
             {
-                if (GUI.Button(
-                    new Rect(x + 26f, choiceY, width - 52f, 54f),
-                    $"{index + 1}. {choices[index].text}",
-                    choiceStyle))
-                {
-                    Choose(index);
-                }
-                choiceY += 62f;
+                string text = $"› {index + 1}. {choices[index].text}";
+                float choiceHeight = choiceStyle.CalcHeight(new GUIContent(text), contentWidth);
+                if (GUI.Button(new Rect(0f, contentY, contentWidth, choiceHeight), text, choiceStyle))
+                    clickedChoice = index;
+                contentY += choiceHeight + 8f;
             }
+            if (choices.Count == 0)
+                GUI.Label(new Rect(0f, contentY, contentWidth, 36f), "Enter / Space ▶", choiceStyle);
+            GUI.EndScrollView();
+
+            if (contentChanged)
+            {
+                dialogueScroll.y = Mathf.Max(0f, contentHeight - viewport.height);
+                renderedHistoryCount = dialogueHistory.Count;
+                renderedChoiceCount = choices.Count;
+            }
+            if (clickedChoice >= 0)
+                Choose(clickedChoice);
+        }
+
+        private static bool IsPlayerLine(string line)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+                return false;
+            string trimmed = line.TrimStart();
+            return trimmed.StartsWith("你：", StringComparison.Ordinal)
+                || trimmed.StartsWith("你:", StringComparison.Ordinal);
         }
 
         private void DrawCinematicPlaceholder()
@@ -391,8 +472,9 @@ namespace DungeonTavern.Tavern25D.Narrative
             cinematicStyle ??= new GUIStyle(GUI.skin.label)
             {
                 alignment = TextAnchor.MiddleCenter,
-                fontSize = 22,
+                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
                 wordWrap = true,
+                padding = new RectOffset(44, 44, 24, 24),
                 normal = { textColor = new Color(0.94f, 0.88f, 0.75f) }
             };
             GUI.color = Color.white;

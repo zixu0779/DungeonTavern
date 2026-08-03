@@ -22,6 +22,7 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField, Min(0.1f)] private float moveSpeed = 2.2f;
         [SerializeField, Min(0f)] private float orderingDuration = 1.25f;
         [SerializeField, Min(0f)] private float servedPauseDuration = 1f;
+        [SerializeField, Min(0.1f)] private float arrivalTolerance = 0.75f;
 
         private Renderer[] customerRenderers;
         private Transform guestEntry;
@@ -31,6 +32,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private HeldItem requiredItem = HeldItem.TestDrink;
         private bool isInitialized;
         private SettlementQueue settlementQueue;
+        private CharacterController movementController;
 
         public CustomerOrderState State { get; private set; }
 
@@ -50,6 +52,15 @@ namespace DungeonTavern.Gameplay.Interaction
         private void Awake()
         {
             customerRenderers = GetComponentsInChildren<Renderer>(true);
+            movementController = GetComponent<CharacterController>();
+            if (movementController == null)
+                movementController = gameObject.AddComponent<CharacterController>();
+            movementController.radius = 0.28f;
+            movementController.height = 1.5f;
+            movementController.center = new Vector3(0f, 0.75f, 0f);
+            movementController.stepOffset = 0.25f;
+            if (GetComponent<DungeonTavern.Tavern25D.DoorPassageAgent>() == null)
+                gameObject.AddComponent<DungeonTavern.Tavern25D.DoorPassageAgent>();
             SetCustomerVisible(false);
             ChangeState(CustomerOrderState.Inactive, true);
         }
@@ -182,21 +193,27 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private bool MoveTowards(Vector3 destination)
         {
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                destination,
-                moveSpeed * Time.deltaTime);
+            destination.y = transform.position.y;
+            Vector3 planarOffset = destination - transform.position;
+            planarOffset.y = 0f;
+            if (planarOffset.sqrMagnitude <= arrivalTolerance * arrivalTolerance)
+                return true;
+
+            Vector3 next = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
+            Vector3 delta = next - transform.position;
+            if (movementController != null && movementController.enabled)
+                movementController.Move(delta);
+            else
+                transform.position = next;
 
             Vector3 direction = destination - transform.position;
             direction.y = 0f;
             if (direction.sqrMagnitude > 0.0001f)
                 transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
 
-            if ((transform.position - destination).sqrMagnitude > 0.0004f)
-                return false;
-
-            transform.position = destination;
-            return true;
+            planarOffset = destination - transform.position;
+            planarOffset.y = 0f;
+            return planarOffset.sqrMagnitude <= arrivalTolerance * arrivalTolerance;
         }
 
         private bool TickTimer()

@@ -44,6 +44,14 @@ namespace DungeonTavern.Tavern25D
                 Vector3.right,
                 new Vector3(76.8f, 0f, 20f));
             yield return WaitForSceneState("SealRoom_B1", true, 5f);
+            PrototypePlayerMover[] players = Object.FindObjectsByType<PrototypePlayerMover>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            if (players.Length != 1)
+            {
+                Fail($"B1 reload produced {players.Length} controllable players; expected exactly one persistent player.");
+                yield break;
+            }
             Transform sealArrival = GameObject.Find("SealRoom_B1/SealRoomStairArrival")?.transform;
             if (sealArrival == null)
             {
@@ -166,14 +174,20 @@ namespace DungeonTavern.Tavern25D
             GameObject drinkPickup = GameObject.Find("Gameplay/InteractionPoints/DrinkPickup");
             PlayerInteractionController interaction = player.GetComponent<PlayerInteractionController>();
             PlayerHands hands = player.GetComponent<PlayerHands>();
-            if (drinkPickup == null || interaction == null || hands == null)
+            BusinessDayController businessDay = Object.FindAnyObjectByType<BusinessDayController>();
+            if (drinkPickup == null || interaction == null || hands == null || businessDay == null)
             {
                 Fail("drink-service references are missing.");
                 yield break;
             }
 
+            if (businessDay.State == BusinessDayState.Preparing)
+                businessDay.BeginDay();
+
             CustomerServicePoint customer = null;
-            float timeout = Time.time + 5f;
+            // Customers now use physical controllers and walk the authored route instead
+            // of passing through furniture, so allow the full entrance-to-seat travel time.
+            float timeout = Time.time + 30f;
             while (customer == null && Time.time < timeout)
             {
                 customer = Object.FindObjectsByType<CustomerServicePoint>()

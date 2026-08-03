@@ -32,7 +32,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             style ??= new GUIStyle(GUI.skin.box)
             {
                 alignment = TextAnchor.MiddleCenter,
-                fontSize = Mathf.Max(20, Mathf.RoundToInt(Screen.height / 40f)),
+                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
                 wordWrap = true,
                 padding = new RectOffset(14, 14, 9, 9),
                 normal = { textColor = new Color(0.19f, 0.13f, 0.1f) }

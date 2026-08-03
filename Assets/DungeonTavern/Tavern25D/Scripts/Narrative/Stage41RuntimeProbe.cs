@@ -34,11 +34,33 @@ namespace DungeonTavern.Tavern25D.Narrative
                 Fail("storage arrival marker is missing.");
                 yield break;
             }
+            Day1EveActor eve = Object.FindObjectsByType<Day1EveActor>(
+                    FindObjectsInactive.Include,
+                    FindObjectsSortMode.None)
+                .FirstOrDefault();
+            if (eve == null)
+            {
+                Fail("Eve actor is missing.");
+                yield break;
+            }
+
+            // Do not land on the stair portal trigger: that immediately returns the
+            // player to B1 and would incorrectly expect Eve to pursue across scenes.
             Teleport(storageArrival.position);
             yield return new WaitForSeconds(0.2f);
 
+            GameObject eveEntrance = GameObject.Find("EveDay1Conversation");
+            if (eveEntrance == null)
+            {
+                Fail("Eve entrance marker is missing.");
+                yield break;
+            }
+            // Simulate the player walking out from the stair landing to the storage
+            // entrance, where Eve is designed to wait and intercept them.
+            Teleport(eveEntrance.transform.position);
+
             PlayerHands hands = player.GetComponent<PlayerHands>();
-            float eveTimeout = Time.time + 12f;
+            float eveTimeout = Time.time + 25f;
             while (Time.time < eveTimeout
                    && narrative.State is Day1FlowState.AwaitingStorageReturn or Day1FlowState.AwaitingEveInteraction)
                 yield return null;
