@@ -43,6 +43,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         private GUIStyle cinematicStyle;
         private bool openingCinematic = true;
         private bool showingCinematic;
+        private PrototypeCameraOrbit cameraOrbit;
 
         public Day1FlowState State { get; private set; }
         public bool CanOpenTavern => State == Day1FlowState.AwaitingOpeningSwitch;
@@ -170,7 +171,10 @@ namespace DungeonTavern.Tavern25D.Narrative
         private void OnEveConversationRequested()
         {
             if (State == Day1FlowState.AwaitingEveInteraction)
+            {
+                BeginCloseDialogue(eve.transform);
                 SelectExternalGate();
+            }
         }
 
         private void OnSettlementRequested(CustomerServicePoint customer)
@@ -178,7 +182,16 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (State != Day1FlowState.ServingBran || customer != bran)
                 return;
 
+            customer.GetComponent<WorldSpeechBubble>()?.Hide();
+            BeginCloseDialogue(customer.transform);
             SelectExternalGate();
+        }
+
+        private void BeginCloseDialogue(Transform speaker)
+        {
+            SetDialogueActive(true);
+            cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
+            cameraOrbit?.BeginDialogueFraming(player.transform, speaker);
         }
 
         private void ShowNextContent()
@@ -299,6 +312,11 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             if (player != null)
                 player.MovementInputEnabled = !active;
+            if (!active)
+            {
+                cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
+                cameraOrbit?.EndDialogueFraming();
+            }
         }
 
         private void OnGUI()
@@ -315,41 +333,43 @@ namespace DungeonTavern.Tavern25D.Narrative
             dialogueStyle ??= new GUIStyle(GUI.skin.box)
             {
                 alignment = TextAnchor.UpperLeft,
-                fontSize = 20,
+                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
                 wordWrap = true,
-                padding = new RectOffset(24, 24, 20, 20),
+                padding = new RectOffset(34, 34, 28, 28),
                 normal = { textColor = Color.white }
             };
             choiceStyle ??= new GUIStyle(GUI.skin.button)
             {
                 alignment = TextAnchor.MiddleLeft,
-                fontSize = 17,
+                fontSize = Mathf.Max(23, Mathf.RoundToInt(Screen.height / 38f)),
                 wordWrap = true,
-                padding = new RectOffset(18, 18, 10, 10)
+                padding = new RectOffset(24, 24, 14, 14)
             };
 
-            float width = Mathf.Min(760f, Screen.width - 48f);
-            float x = (Screen.width - width) * 0.5f;
-            float y = Screen.height - 250f;
-            GUI.Box(new Rect(x, y, width, 210f), currentLine, dialogueStyle);
+            float margin = Mathf.Max(34f, Screen.height * 0.045f);
+            float width = Screen.width - margin * 2f;
+            float height = Mathf.Clamp(Screen.height * 0.42f, 300f, 480f);
+            float x = margin;
+            float y = Screen.height - height - margin;
+            GUI.Box(new Rect(x, y, width, height), currentLine, dialogueStyle);
 
             if (choices.Count == 0)
             {
-                GUI.Label(new Rect(x + width - 170f, y + 168f, 150f, 28f), "Enter / Space ▶");
+                GUI.Label(new Rect(x + width - 230f, y + height - 48f, 210f, 32f), "Enter / Space ▶");
                 return;
             }
 
-            float choiceY = y + 18f;
+            float choiceY = y + 26f;
             for (int index = 0; index < choices.Count; index++)
             {
                 if (GUI.Button(
-                    new Rect(x + 18f, choiceY, width - 36f, 36f),
+                    new Rect(x + 26f, choiceY, width - 52f, 54f),
                     $"{index + 1}. {choices[index].text}",
                     choiceStyle))
                 {
                     Choose(index);
                 }
-                choiceY += 42f;
+                choiceY += 62f;
             }
         }
 

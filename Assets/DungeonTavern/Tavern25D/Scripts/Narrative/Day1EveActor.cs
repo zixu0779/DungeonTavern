@@ -6,18 +6,20 @@ namespace DungeonTavern.Tavern25D.Narrative
 {
     public sealed class Day1EveActor : InteractionPoint
     {
-        [SerializeField] private Transform storageConversationPoint;
         [SerializeField, Min(0.1f)] private float moveSpeed = 2f;
+        [SerializeField, Min(0.5f)] private float conversationRange = 1.35f;
+        [SerializeField, Min(0.5f)] private float minimumSpacing = 0.65f;
 
         private WorldSpeechBubble bubble;
+        private Transform player;
         private bool arriving;
-        private bool ready;
+        private bool conversationStarted;
 
         public event Action ConversationRequested;
 
         public void Configure(Transform destination)
         {
-            storageConversationPoint = destination;
+            // Kept for scene-setup compatibility. Eve now follows the player.
         }
 
         private void Awake()
@@ -30,21 +32,36 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             gameObject.SetActive(true);
             arriving = true;
-            ready = false;
+            conversationStarted = false;
+            player = FindAnyObjectByType<DungeonTavern.Prototypes.Rotation25D.PrototypePlayerMover>()?.transform;
+            bubble?.Show("我听见储藏室有动静……老板？");
         }
 
         private void Update()
         {
-            if (!arriving || storageConversationPoint == null)
+            if (!arriving)
                 return;
 
-            transform.position = Vector3.MoveTowards(transform.position, storageConversationPoint.position, moveSpeed * Time.deltaTime);
-            if ((transform.position - storageConversationPoint.position).sqrMagnitude > 0.02f)
+            player ??= FindAnyObjectByType<DungeonTavern.Prototypes.Rotation25D.PrototypePlayerMover>()?.transform;
+            if (player == null)
                 return;
+
+            Vector3 toPlayer = player.position - transform.position;
+            toPlayer.y = 0f;
+            float distance = toPlayer.magnitude;
+            if (distance > conversationRange)
+            {
+                Vector3 destination = player.position - toPlayer.normalized * minimumSpacing;
+                destination.y = player.position.y;
+                transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
+                if (toPlayer.sqrMagnitude > 0.001f)
+                    transform.rotation = Quaternion.LookRotation(toPlayer.normalized, Vector3.up);
+                return;
+            }
 
             arriving = false;
-            ready = true;
-            bubble?.Show("我听见储藏室有动静……老板？");
+            transform.position = new Vector3(transform.position.x, player.position.y, transform.position.z);
+            StartConversation();
         }
 
         public void ShowBubble(string text)
@@ -54,17 +71,21 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         public override string GetPrompt(PlayerHands hands)
         {
-            return ready ? "F: 和伊芙说话" : string.Empty;
+            return string.Empty;
         }
 
         public override bool Interact(PlayerHands hands)
         {
-            if (!ready)
-                return false;
-            ready = false;
+            return false;
+        }
+
+        private void StartConversation()
+        {
+            if (conversationStarted)
+                return;
+            conversationStarted = true;
             bubble?.Hide();
             ConversationRequested?.Invoke();
-            return true;
         }
     }
 }

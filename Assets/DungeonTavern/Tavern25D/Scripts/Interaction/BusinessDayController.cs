@@ -57,6 +57,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private readonly List<CustomerServicePoint> activeCustomers = new();
         private float elapsedTime;
         private int nextCustomerIndex;
+        private SettlementQueue settlementQueue;
 
         public BusinessDayState State { get; private set; } = BusinessDayState.Preparing;
         public int TotalCustomers => customers.Count;
@@ -86,6 +87,9 @@ namespace DungeonTavern.Gameplay.Interaction
                 return false;
 
             pendingCustomers.Clear();
+            if (settlementPoint != null)
+                settlementQueue = settlementPoint.GetComponent<SettlementQueue>()
+                    ?? settlementPoint.gameObject.AddComponent<SettlementQueue>();
             pendingCustomers.AddRange(customers);
             pendingCustomers.Sort((left, right) => left.ArrivalTime.CompareTo(right.ArrivalTime));
             elapsedTime = 0f;
@@ -150,7 +154,7 @@ namespace DungeonTavern.Gameplay.Interaction
                 guestEntry,
                 seat,
                 entry.Tint,
-                entry.RequiresSettlement ? settlementPoint : null);
+                entry.RequiresSettlement ? settlementQueue : null);
             Debug.Log($"Customer spawned: {entry.DisplayName}; active {ActiveCustomers}, pending {WaitingCustomers}.", this);
             CustomerSpawned?.Invoke(customer);
             ProgressChanged?.Invoke();

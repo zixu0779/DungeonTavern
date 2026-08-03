@@ -5,18 +5,14 @@ namespace DungeonTavern.Tavern25D.Narrative
     public sealed class WorldSpeechBubble : MonoBehaviour
     {
         [SerializeField] private Vector3 worldOffset = new(0f, 2.2f, 0f);
-        [SerializeField, Min(1f)] private float duration = 5f;
-
         private string line;
-        private float hideAt;
         private GUIStyle style;
 
-        public bool IsVisible => !string.IsNullOrEmpty(line) && Time.unscaledTime < hideAt;
+        public bool IsVisible => !string.IsNullOrEmpty(line);
 
         public void Show(string text, float visibleSeconds = -1f)
         {
             line = text;
-            hideAt = Time.unscaledTime + (visibleSeconds > 0f ? visibleSeconds : duration);
         }
 
         public void Hide()
@@ -36,7 +32,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             style ??= new GUIStyle(GUI.skin.box)
             {
                 alignment = TextAnchor.MiddleCenter,
-                fontSize = 16,
+                fontSize = Mathf.Max(20, Mathf.RoundToInt(Screen.height / 40f)),
                 wordWrap = true,
                 padding = new RectOffset(14, 14, 9, 9),
                 normal = { textColor = new Color(0.19f, 0.13f, 0.1f) }

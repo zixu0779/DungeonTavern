@@ -14,6 +14,11 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private float targetYaw;
         private float rotationElapsed;
         private bool rotating;
+        private bool dialogueFraming;
+        private Transform dialogueLeft;
+        private Transform dialogueRight;
+        private float explorationSize;
+        private Camera gameCamera;
 
         public Transform FollowTarget
         {
@@ -27,11 +32,19 @@ namespace DungeonTavern.Prototypes.Rotation25D
         {
             targetYaw = SnapCardinalYaw(transform.eulerAngles.y);
             transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
+            gameCamera = GetComponentInChildren<Camera>();
+            if (gameCamera != null)
+                explorationSize = gameCamera.orthographicSize;
         }
 
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
+            if (dialogueFraming)
+            {
+                UpdateDialogueFraming();
+                return;
+            }
             if (keyboard != null)
             {
                 if (keyboard.qKey.wasPressedThisFrame)
@@ -45,6 +58,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void LateUpdate()
         {
+            if (dialogueFraming)
+                return;
             if (followTarget == null)
             {
                 PrototypePlayerMover player = FindAnyObjectByType<PrototypePlayerMover>();
@@ -67,6 +82,56 @@ namespace DungeonTavern.Prototypes.Rotation25D
         public void RotateRight()
         {
             BeginRotation(targetYaw + 90f);
+        }
+
+        public void BeginDialogueFraming(Transform leftCharacter, Transform rightCharacter)
+        {
+            if (leftCharacter == null || rightCharacter == null)
+                return;
+            dialogueLeft = leftCharacter;
+            dialogueRight = rightCharacter;
+            dialogueFraming = true;
+            rotating = false;
+        }
+
+        public void EndDialogueFraming()
+        {
+            dialogueFraming = false;
+            dialogueLeft = null;
+            dialogueRight = null;
+            if (gameCamera != null)
+                gameCamera.orthographicSize = explorationSize;
+            if (followTarget != null)
+                transform.position = new Vector3(followTarget.position.x, 0f, followTarget.position.z);
+            targetYaw = SnapCardinalYaw(transform.eulerAngles.y);
+        }
+
+        private void UpdateDialogueFraming()
+        {
+            if (dialogueLeft == null || dialogueRight == null)
+            {
+                EndDialogueFraming();
+                return;
+            }
+
+            Vector3 midpoint = (dialogueLeft.position + dialogueRight.position) * 0.5f;
+            midpoint.y = 0f;
+            transform.position = Vector3.Lerp(transform.position, midpoint, 1f - Mathf.Exp(-8f * Time.unscaledDeltaTime));
+
+            Vector3 leftToRight = dialogueRight.position - dialogueLeft.position;
+            leftToRight.y = 0f;
+            if (leftToRight.sqrMagnitude > 0.01f)
+            {
+                float rightHeading = Mathf.Atan2(leftToRight.x, leftToRight.z) * Mathf.Rad2Deg;
+                float desiredYaw = rightHeading - 90f;
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.Euler(0f, desiredYaw, 0f),
+                    1f - Mathf.Exp(-8f * Time.unscaledDeltaTime));
+            }
+
+            if (gameCamera != null)
+                gameCamera.orthographicSize = Mathf.Lerp(gameCamera.orthographicSize, 3.25f, 1f - Mathf.Exp(-7f * Time.unscaledDeltaTime));
         }
 
         private void BeginRotation(float newTargetYaw)

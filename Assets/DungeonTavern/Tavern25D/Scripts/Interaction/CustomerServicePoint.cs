@@ -11,6 +11,7 @@ namespace DungeonTavern.Gameplay.Interaction
         WaitingForDrink,
         Served,
         ApproachingSettlement,
+        QueueingForSettlement,
         AwaitingSettlement,
         Leaving,
         Finished
@@ -29,7 +30,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private string customerName = "Customer";
         private HeldItem requiredItem = HeldItem.TestDrink;
         private bool isInitialized;
-        private Transform settlementPoint;
+        private SettlementQueue settlementQueue;
 
         public CustomerOrderState State { get; private set; }
 
@@ -73,15 +74,20 @@ namespace DungeonTavern.Gameplay.Interaction
                 case CustomerOrderState.Served:
                     if (TickTimer())
                     {
-                        ChangeState(settlementPoint == null
+                        if (settlementQueue != null)
+                            settlementQueue.Enqueue(this);
+                        ChangeState(settlementQueue == null
                             ? CustomerOrderState.Leaving
                             : CustomerOrderState.ApproachingSettlement);
                     }
                     break;
 
                 case CustomerOrderState.ApproachingSettlement:
-                    if (MoveTowards(settlementPoint.position))
-                        ChangeState(CustomerOrderState.AwaitingSettlement);
+                case CustomerOrderState.QueueingForSettlement:
+                    if (MoveTowards(settlementQueue.GetPosition(this)))
+                        ChangeState(settlementQueue.IsFirst(this)
+                            ? CustomerOrderState.AwaitingSettlement
+                            : CustomerOrderState.QueueingForSettlement);
                     break;
 
                 case CustomerOrderState.Leaving:
@@ -102,7 +108,7 @@ namespace DungeonTavern.Gameplay.Interaction
             Transform entry,
             SeatPoint seat,
             Color tint,
-            Transform billSettlementPoint = null)
+            SettlementQueue billSettlementQueue = null)
         {
             if (isInitialized)
                 throw new InvalidOperationException($"{name} has already been initialized.");
@@ -117,7 +123,7 @@ namespace DungeonTavern.Gameplay.Interaction
             requiredItem = orderItem;
             guestEntry = entry;
             assignedSeat = seat;
-            settlementPoint = billSettlementPoint;
+            settlementQueue = billSettlementQueue;
             gameObject.name = $"Customer_{customerName}";
             ApplyTint(tint);
 
@@ -169,6 +175,7 @@ namespace DungeonTavern.Gameplay.Interaction
             if (State != CustomerOrderState.AwaitingSettlement)
                 return false;
 
+            settlementQueue?.Remove(this);
             ChangeState(CustomerOrderState.Leaving);
             return true;
         }

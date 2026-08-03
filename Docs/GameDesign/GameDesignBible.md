@@ -15,6 +15,14 @@ This document is the durable source of truth for confirmed game and world design
 - Optional observation and information questions return to their dialogue hub;
   each hub has a separately motivated progression choice, and meaningful choices
   either converge intentionally or persist a later consequence.
+- NPC-initiated conversations use active approach: the NPC follows the player
+  until entering a broad 1-1.5 tile trigger range, keeps at least roughly half a
+  tile of personal space, then stops player movement and begins the close view.
+- The close dialogue camera frames the owner on the left and the NPC on the
+  right. World head bubbles persist until replaced by another bubble or closed
+  by the start of a formal dialogue.
+- Customers settle at the counter-side settlement point. Concurrent customers
+  form a spaced queue and advance when the customer ahead finishes.
 - The tavern treats all creatures equally, including adventurers and native dungeon creatures.
 - There is one shared public entrance, one shared bar, and mixed seating. Public areas are never segregated by species or faction.
 - The owner created the tavern and its peace rules after a long first-floor conflict between adventurers and dungeon residents. All conventional routes to deeper floors are sealed; the sole controlled route is beneath the tavern. The route is open to any species that meets its peace conditions, although deep residents use it most often.
@@ -173,3 +181,6 @@ Stable marker names for future integrations:
 - 2026-09-02: Confirmed that the player is authored in the B1 seal-room scene,
   while cross-scene camera, HUD, and narrative systems bind to the persistent
   player after additive loading.
+- 2026-09-02: Confirmed active NPC-to-player dialogue approach distances,
+  persistent head bubbles, left-owner/right-NPC close framing, and queued
+  counter-side customer settlement.
