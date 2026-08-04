@@ -1,4 +1,5 @@
 using System;
+using DungeonTavern.Tavern25D;
 using UnityEngine;
 
 namespace DungeonTavern.Gameplay.Interaction
@@ -33,6 +34,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private bool isInitialized;
         private SettlementQueue settlementQueue;
         private CharacterController movementController;
+        private NpcNavigator navigator;
 
         public CustomerOrderState State { get; private set; }
 
@@ -59,6 +61,10 @@ namespace DungeonTavern.Gameplay.Interaction
             movementController.height = 1.5f;
             movementController.center = new Vector3(0f, 0.75f, 0f);
             movementController.stepOffset = 0.25f;
+            navigator = GetComponent<NpcNavigator>();
+            if (navigator == null)
+                navigator = gameObject.AddComponent<NpcNavigator>();
+            navigator.Configure(moveSpeed, arrivalTolerance);
             if (GetComponent<DungeonTavern.Tavern25D.DoorPassageAgent>() == null)
                 gameObject.AddComponent<DungeonTavern.Tavern25D.DoorPassageAgent>();
             SetCustomerVisible(false);
@@ -193,27 +199,8 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private bool MoveTowards(Vector3 destination)
         {
-            destination.y = transform.position.y;
-            Vector3 planarOffset = destination - transform.position;
-            planarOffset.y = 0f;
-            if (planarOffset.sqrMagnitude <= arrivalTolerance * arrivalTolerance)
-                return true;
-
-            Vector3 next = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
-            Vector3 delta = next - transform.position;
-            if (movementController != null && movementController.enabled)
-                movementController.Move(delta);
-            else
-                transform.position = next;
-
-            Vector3 direction = destination - transform.position;
-            direction.y = 0f;
-            if (direction.sqrMagnitude > 0.0001f)
-                transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
-
-            planarOffset = destination - transform.position;
-            planarOffset.y = 0f;
-            return planarOffset.sqrMagnitude <= arrivalTolerance * arrivalTolerance;
+            navigator.MoveTo(destination, arrivalTolerance);
+            return navigator.HasArrived(arrivalTolerance);
         }
 
         private bool TickTimer()

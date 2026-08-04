@@ -9,7 +9,10 @@ namespace DungeonTavern.Tavern25D.Narrative
         [SerializeField, Min(0.1f)] private float moveSpeed = 2f;
         [SerializeField, Min(0.5f)] private float conversationRange = 1.35f;
         [SerializeField, Min(0.5f)] private float minimumSpacing = 0.65f;
-        [SerializeField, Min(2f)] private float maximumPursuitDistance = 8f;
+        [SerializeField, Min(0.05f)] private float conversationClearanceRadius = 0.2f;
+        [SerializeField, Min(0.1f)] private float sightLowerHeight = 0.35f;
+        [SerializeField, Min(0.2f)] private float sightUpperHeight = 1.15f;
+        [SerializeField] private LayerMask conversationBlockers = ~0;
 
         private WorldSpeechBubble bubble;
         private NpcApproachSpeech approachSpeech;
@@ -17,6 +20,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         [SerializeField] private Transform sceneEntranceWaitPoint;
         private Vector3 entranceWaitPosition;
         private CharacterController movementController;
+        private NpcNavigator navigator;
         private bool arriving;
         private bool conversationStarted;
         private bool playerInTavernArea = true;
@@ -48,6 +52,10 @@ namespace DungeonTavern.Tavern25D.Narrative
             movementController.height = 1.5f;
             movementController.center = new Vector3(0f, 0.75f, 0f);
             movementController.stepOffset = 0.25f;
+            navigator = GetComponent<NpcNavigator>();
+            if (navigator == null)
+                navigator = gameObject.AddComponent<NpcNavigator>();
+            navigator.Configure(moveSpeed, minimumSpacing);
             if (GetComponent<DoorPassageAgent>() == null)
                 gameObject.AddComponent<DoorPassageAgent>();
 
@@ -61,16 +69,18 @@ namespace DungeonTavern.Tavern25D.Narrative
             gameObject.SetActive(false);
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             PlayerAreaTransition.Started += OnPlayerAreaTransitionStarted;
             PlayerAreaTransition.Completed += OnPlayerAreaTransitionCompleted;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             PlayerAreaTransition.Started -= OnPlayerAreaTransitionStarted;
             PlayerAreaTransition.Completed -= OnPlayerAreaTransitionCompleted;
+            base.OnDisable();
         }
 
         public void BeginArrival()
@@ -91,32 +101,21 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (player == null)
                 return;
 
-            Vector3 toPlayer = player.position - transform.position;
-            toPlayer.y = 0f;
-            float distance = toPlayer.magnitude;
             if (!playerInTavernArea)
             {
-                MoveTowards(sceneEntranceWaitPoint != null
+                navigator.MoveTo(sceneEntranceWaitPoint != null
                     ? sceneEntranceWaitPoint.position
-                    : entranceWaitPosition);
+                    : entranceWaitPosition, minimumSpacing);
                 return;
             }
 
-            // Conversation range takes priority over the navigation waypoint. Both
-            // characters have solid controllers, so the player may physically prevent
-            // Eve from reaching the exact marker even though she is already close enough.
-            if (distance <= conversationRange)
+            navigator.MoveTo(player.position, minimumSpacing);
+            if (CanStartConversation())
             {
                 arriving = false;
+                navigator.Stop(true);
                 StartConversation();
-                return;
             }
-
-            Vector3 destination = player.position - toPlayer.normalized * minimumSpacing;
-            destination.y = transform.position.y;
-            MoveTowards(destination);
-            if (toPlayer.sqrMagnitude > 0.001f)
-                transform.rotation = Quaternion.LookRotation(toPlayer.normalized, Vector3.up);
         }
 
         private void OnPlayerAreaTransitionCompleted(string loadedScene, string unloadedScene)
@@ -147,15 +146,43 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
         }
 
-        private void MoveTowards(Vector3 destination)
+        private bool CanStartConversation()
         {
-            destination.y = transform.position.y;
-            Vector3 next = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
-            Vector3 delta = next - transform.position;
-            if (movementController != null && movementController.enabled)
-                movementController.Move(delta);
-            else
-                transform.position = next;
+            return playerInTavernArea
+                && navigator.HasCompletePath
+                && navigator.RemainingDistance <= conversationRange
+                && HasClearConversationLineOfSight();
+        }
+
+        private bool HasClearConversationLineOfSight()
+        {
+            Vector3 direction = player.position - transform.position;
+            direction.y = 0f;
+            float distance = direction.magnitude;
+            if (distance <= 0.001f)
+                return true;
+
+            Vector3 lower = transform.position + Vector3.up * sightLowerHeight;
+            Vector3 upper = transform.position + Vector3.up * sightUpperHeight;
+            RaycastHit[] hits = Physics.CapsuleCastAll(
+                lower,
+                upper,
+                conversationClearanceRadius,
+                direction / distance,
+                distance,
+                conversationBlockers,
+                QueryTriggerInteraction.Ignore);
+            for (int index = 0; index < hits.Length; index++)
+            {
+                Transform hit = hits[index].collider.transform;
+                if (hit == transform || hit.IsChildOf(transform)
+                    || hit == player || hit.IsChildOf(player))
+                {
+                    continue;
+                }
+                return false;
+            }
+            return true;
         }
 
         public void ShowBubble(string text)

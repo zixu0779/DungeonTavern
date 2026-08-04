@@ -26,6 +26,7 @@ namespace DungeonTavern.Tavern25D
         private Collider[] movingLeafColliders = Array.Empty<Collider>();
 
         public bool IsOpen => isOpen;
+        public Collider BlockingCollider => blockingCollider;
 
         public event Action<bool> StateChanged;
 
