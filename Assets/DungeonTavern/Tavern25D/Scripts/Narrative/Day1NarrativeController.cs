@@ -316,6 +316,17 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             if (index < 0 || index >= choices.Count)
                 return;
+            if (closeDialogueActive)
+            {
+                string selectedText = choices[index].text.Trim();
+                if (!selectedText.StartsWith("你：", StringComparison.Ordinal)
+                    && !selectedText.StartsWith("你:", StringComparison.Ordinal))
+                {
+                    selectedText = $"你：{selectedText}";
+                }
+                dialogueHistory.Add(new DialogueEntry(selectedText, true));
+                renderedHistoryCount = -1;
+            }
             story.ChooseChoiceIndex(choices[index].index);
             ShowNextContent();
         }
@@ -403,7 +414,14 @@ namespace DungeonTavern.Tavern25D.Narrative
             bool contentChanged = renderedHistoryCount != dialogueHistory.Count
                 || renderedChoiceCount != choices.Count;
             Rect content = new(0f, 0f, contentWidth, Mathf.Max(viewport.height, contentHeight));
-            dialogueScroll = GUI.BeginScrollView(viewport, dialogueScroll, content);
+            dialogueScroll = GUI.BeginScrollView(
+                viewport,
+                dialogueScroll,
+                content,
+                false,
+                false,
+                GUIStyle.none,
+                GUI.skin.verticalScrollbar);
             float contentY = 8f;
             if (dialogueHistory.Count > 0)
             {

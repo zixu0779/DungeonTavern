@@ -28,6 +28,14 @@ namespace DungeonTavern.Tavern25D.Narrative
             yield return AdvanceDialogueUntil(Day1FlowState.AwaitingStorageReturn, 80);
             if (!enabled) yield break;
 
+            PrototypeCameraOrbit orbit = FindAnyObjectByType<PrototypeCameraOrbit>();
+            Camera gameCamera = orbit == null ? null : orbit.GetComponentInChildren<Camera>();
+            if (!player.MovementInputEnabled || gameCamera == null || gameCamera.orthographicSize <= 0.1f)
+            {
+                Fail("opening cinematic did not restore player input and the exploration camera.");
+                yield break;
+            }
+
             Transform storageArrival = GameObject.Find("Tavern_Main/Environment/Stage40_Foundation/StorageStairArrival")?.transform;
             if (storageArrival == null)
             {
@@ -48,6 +56,13 @@ namespace DungeonTavern.Tavern25D.Narrative
             // player to B1 and would incorrectly expect Eve to pursue across scenes.
             Teleport(storageArrival.position);
             yield return new WaitForSeconds(0.2f);
+
+            WorldSpeechBubble eveBubble = eve.GetComponent<WorldSpeechBubble>();
+            if (eveBubble == null || !eveBubble.IsVisible)
+            {
+                Fail("Eve's upcoming dialogue bubble was not visible while approaching.");
+                yield break;
+            }
 
             GameObject eveEntrance = GameObject.Find("EveDay1Conversation");
             if (eveEntrance == null)

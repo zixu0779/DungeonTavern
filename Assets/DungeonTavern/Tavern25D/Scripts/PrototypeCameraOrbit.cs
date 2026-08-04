@@ -107,6 +107,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         public void EndDialogueFraming()
         {
+            if (!dialogueFraming)
+                return;
+
             dialogueFraming = false;
             dialogueLeft = null;
             dialogueRight = null;

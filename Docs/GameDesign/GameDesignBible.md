@@ -190,3 +190,6 @@ Stable marker names for future integrations:
   dialogue uses one scrollable transcript inside a single background, keeps
   per-conversation history, clears it when a new conversation begins, and
   places plain-text choices at the end of that transcript.
+- 2026-09-02: Confirmed that any NPC actively approaching the player to begin a
+  conversation displays its upcoming first spoken line in a persistent overhead
+  bubble until the close dialogue starts.

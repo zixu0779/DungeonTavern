@@ -12,6 +12,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         [SerializeField, Min(2f)] private float maximumPursuitDistance = 8f;
 
         private WorldSpeechBubble bubble;
+        private NpcApproachSpeech approachSpeech;
         private Transform player;
         [SerializeField] private Transform sceneEntranceWaitPoint;
         private Vector3 entranceWaitPosition;
@@ -32,6 +33,9 @@ namespace DungeonTavern.Tavern25D.Narrative
         private void Awake()
         {
             bubble = GetComponent<WorldSpeechBubble>();
+            approachSpeech = GetComponent<NpcApproachSpeech>();
+            if (approachSpeech == null)
+                approachSpeech = gameObject.AddComponent<NpcApproachSpeech>();
             if (sceneEntranceWaitPoint == null)
                 sceneEntranceWaitPoint = GameObject.Find("EveDay1Conversation")?.transform;
             entranceWaitPosition = sceneEntranceWaitPoint != null
@@ -75,7 +79,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             arriving = true;
             conversationStarted = false;
             player = FindAnyObjectByType<DungeonTavern.Prototypes.Rotation25D.PrototypePlayerMover>()?.transform;
-            bubble?.Show("我听见储藏室有动静……老板？");
+            approachSpeech.BeginApproach("你终于回来了。");
         }
 
         private void Update()
@@ -174,7 +178,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (conversationStarted)
                 return;
             conversationStarted = true;
-            bubble?.Hide();
+            approachSpeech.BeginDialogue();
             ConversationRequested?.Invoke();
         }
     }
