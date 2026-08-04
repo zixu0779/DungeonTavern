@@ -193,3 +193,6 @@ Stable marker names for future integrations:
 - 2026-09-02: Confirmed that any NPC actively approaching the player to begin a
   conversation displays its upcoming first spoken line in a persistent overhead
   bubble until the close dialogue starts.
+- 2026-09-02: Confirmed close-dialogue occlusion handling: choose the least
+  obstructed nearby camera yaw first, then temporarily fade only remaining
+  occluding renderers and restore their original materials when dialogue ends.
