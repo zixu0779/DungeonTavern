@@ -97,22 +97,43 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (!enabled) yield break;
 
             CustomerServicePoint bran = null;
+            bool orderBubbleObserved = false;
             float spawnTimeout = Time.time + 30f;
             while (Time.time < spawnTimeout)
             {
                 bran = FindObjectsByType<CustomerServicePoint>()
                     .FirstOrDefault(customer => customer.CustomerName == "Bran");
+                if (bran != null && bran.State == CustomerOrderState.WaitingToOrder)
+                {
+                    WorldSpeechBubble orderBubble = bran.GetComponent<WorldSpeechBubble>();
+                    if (orderBubble == null || !orderBubble.IsVisible)
+                    {
+                        Fail("Bran's order bubble was not visible before the order was accepted.");
+                        yield break;
+                    }
+                    orderBubbleObserved = true;
+                    bran.Interact(hands);
+                }
                 if (bran != null && bran.State == CustomerOrderState.WaitingForDrink)
                     break;
                 yield return null;
             }
-            if (bran == null || bran.State != CustomerOrderState.WaitingForDrink)
+            if (bran == null
+                || bran.State != CustomerOrderState.WaitingForDrink
+                || !orderBubbleObserved
+                || !hands.OrderBook.HasOrder)
             {
-                Fail("Bran did not reach the drink-service state.");
+                Fail("Bran's visible order was not recorded before drink service.");
                 yield break;
             }
 
-            if (hands == null || !hands.TryHold(HeldItem.TestDrink) || !bran.Interact(hands))
+            TestDrinkPoint drinkPoint = FindAnyObjectByType<TestDrinkPoint>();
+            if (hands == null
+                || drinkPoint == null
+                || !drinkPoint.Interact(hands)
+                || hands.OrderBook.State != PlayerOrderState.Prepared
+                || !bran.Interact(hands)
+                || hands.OrderBook.HasOrder)
             {
                 Fail("Bran could not be served the test drink.");
                 yield break;

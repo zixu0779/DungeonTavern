@@ -1,5 +1,6 @@
 using System;
 using DungeonTavern.Tavern25D;
+using DungeonTavern.Tavern25D.Narrative;
 using UnityEngine;
 
 namespace DungeonTavern.Gameplay.Interaction
@@ -9,6 +10,7 @@ namespace DungeonTavern.Gameplay.Interaction
         Inactive,
         Entering,
         Ordering,
+        WaitingToOrder,
         WaitingForDrink,
         Served,
         ApproachingSettlement,
@@ -20,7 +22,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
     public sealed class CustomerServicePoint : InteractionPoint
     {
-        [SerializeField, Min(0.1f)] private float moveSpeed = 2.2f;
+        [SerializeField, Min(0.1f)] private float moveSpeed = 3.4f;
         [SerializeField, Min(0f)] private float orderingDuration = 1.25f;
         [SerializeField, Min(0f)] private float servedPauseDuration = 1f;
         [SerializeField, Min(0.1f)] private float arrivalTolerance = 0.75f;
@@ -35,6 +37,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private SettlementQueue settlementQueue;
         private CharacterController movementController;
         private NpcNavigator navigator;
+        private WorldSpeechBubble bubble;
 
         public CustomerOrderState State { get; private set; }
 
@@ -54,6 +57,10 @@ namespace DungeonTavern.Gameplay.Interaction
         private void Awake()
         {
             customerRenderers = GetComponentsInChildren<Renderer>(true);
+            moveSpeed = Mathf.Max(moveSpeed, 3.4f);
+            bubble = GetComponent<WorldSpeechBubble>();
+            if (bubble == null)
+                bubble = gameObject.AddComponent<WorldSpeechBubble>();
             movementController = GetComponent<CharacterController>();
             if (movementController == null)
                 movementController = gameObject.AddComponent<CharacterController>();
@@ -85,7 +92,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
                 case CustomerOrderState.Ordering:
                     if (TickTimer())
-                        ChangeState(CustomerOrderState.WaitingForDrink);
+                        ChangeState(CustomerOrderState.WaitingToOrder);
                     break;
 
                 case CustomerOrderState.Served:
@@ -153,17 +160,20 @@ namespace DungeonTavern.Gameplay.Interaction
         public override string GetPrompt(PlayerHands hands)
         {
             if (State == CustomerOrderState.AwaitingSettlement)
-                return $"F: Settle bill with {customerName}";
+                return $"F：和{customerName}结账";
+
+            if (State == CustomerOrderState.WaitingToOrder)
+                return $"F：记下{customerName}的订单";
 
             if (State != CustomerOrderState.WaitingForDrink)
                 return string.Empty;
 
             if (hands == null || hands.CurrentItem == HeldItem.None)
-                return $"{customerName} orders: {GetItemLabel(RequiredItem)}";
+                return $"{customerName}正在等待：{GetItemLabel(RequiredItem)}";
 
             return hands.CurrentItem == RequiredItem
-                ? $"F: Serve {GetItemLabel(RequiredItem)}"
-                : "Wrong item for this order";
+                ? $"F：送上{GetItemLabel(RequiredItem)}"
+                : "这不是这位客人的订单";
         }
 
         public override bool Interact(PlayerHands hands)
@@ -174,9 +184,19 @@ namespace DungeonTavern.Gameplay.Interaction
                 return true;
             }
 
+            if (State == CustomerOrderState.WaitingToOrder)
+            {
+                if (hands == null || !hands.OrderBook.TryAccept(this, RequiredItem))
+                    return false;
+                ChangeState(CustomerOrderState.WaitingForDrink);
+                Debug.Log($"Order accepted: {customerName} requested {GetItemLabel(RequiredItem)}.", this);
+                return true;
+            }
+
             if (State != CustomerOrderState.WaitingForDrink
                 || hands == null
-                || hands.CurrentItem != RequiredItem)
+                || hands.CurrentItem != RequiredItem
+                || !hands.OrderBook.TryComplete(this, RequiredItem))
             {
                 return false;
             }
@@ -222,6 +242,8 @@ namespace DungeonTavern.Gameplay.Interaction
                 _ => 0f
             };
 
+            UpdateBubble(nextState);
+
             Debug.Log($"Customer {customerName} state: {State}", this);
             StateChanged?.Invoke(State);
         }
@@ -239,9 +261,36 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             return item switch
             {
-                HeldItem.TestDrink => "Test Drink",
+                HeldItem.TestDrink => "麦芽饮料",
                 _ => item.ToString()
             };
+        }
+
+        private void UpdateBubble(CustomerOrderState state)
+        {
+            if (bubble == null)
+                return;
+            switch (state)
+            {
+                case CustomerOrderState.WaitingToOrder:
+                    bubble.Show("老板，我想要一杯麦芽饮料。");
+                    break;
+                case CustomerOrderState.WaitingForDrink:
+                    bubble.Show("一杯麦芽饮料，谢谢。");
+                    break;
+                case CustomerOrderState.Served:
+                    bubble.Show("味道不错。");
+                    break;
+                case CustomerOrderState.ApproachingSettlement:
+                case CustomerOrderState.QueueingForSettlement:
+                case CustomerOrderState.AwaitingSettlement:
+                    bubble.Show("老板，结账。");
+                    break;
+                case CustomerOrderState.Leaving:
+                case CustomerOrderState.Finished:
+                    bubble.Hide();
+                    break;
+            }
         }
 
         private void SetCustomerVisible(bool visible)

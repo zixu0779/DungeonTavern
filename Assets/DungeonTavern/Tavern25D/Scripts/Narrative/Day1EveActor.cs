@@ -6,7 +6,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 {
     public sealed class Day1EveActor : InteractionPoint
     {
-        [SerializeField, Min(0.1f)] private float moveSpeed = 2f;
+        [SerializeField, Min(0.1f)] private float moveSpeed = 3.2f;
         [SerializeField, Min(0.5f)] private float conversationRange = 1.35f;
         [SerializeField, Min(0.5f)] private float minimumSpacing = 0.65f;
         [SerializeField, Min(0.05f)] private float conversationClearanceRadius = 0.2f;
@@ -36,6 +36,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void Awake()
         {
+            moveSpeed = Mathf.Max(moveSpeed, 3.2f);
             bubble = GetComponent<WorldSpeechBubble>();
             approachSpeech = GetComponent<NpcApproachSpeech>();
             if (approachSpeech == null)

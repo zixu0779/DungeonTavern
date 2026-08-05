@@ -38,7 +38,9 @@ namespace DungeonTavern.Tavern25D.Narrative
 
             Vector3 anchor = GetHeadAnchor();
             Vector3 viewportPoint = Camera.main.WorldToViewportPoint(anchor);
-            if (viewportPoint.z <= 0f)
+            if (viewportPoint.z <= 0f
+                || viewportPoint.x < 0f || viewportPoint.x > 1f
+                || viewportPoint.y < 0f || viewportPoint.y > 1f)
                 return;
 
             Rect outputRect = GetCameraOutputRect(Camera.main);
@@ -49,17 +51,16 @@ namespace DungeonTavern.Tavern25D.Narrative
             style ??= new GUIStyle(GUI.skin.label)
             {
                 alignment = TextAnchor.MiddleCenter,
-                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
+                fontSize = Mathf.Max(18, Mathf.RoundToInt(Screen.height / 42f)),
                 wordWrap = true,
-                padding = new RectOffset(14, 14, 9, 9),
+                padding = new RectOffset(12, 12, 7, 7),
                 normal = { textColor = new Color(0.19f, 0.13f, 0.1f) }
             };
+            ApplyNonInteractiveTextColor(style, style.normal.textColor);
 
-            float width = Mathf.Min(360f, Mathf.Max(150f, style.CalcHeight(new GUIContent(line), 320f) * 4.2f));
+            float width = Mathf.Clamp(style.CalcSize(new GUIContent(line)).x + 24f, 120f, 300f);
             float height = style.CalcHeight(new GUIContent(line), width);
             Rect rect = new(screen.x - width * 0.5f, screen.y - height - 12f, width, height);
-            rect.x = Mathf.Clamp(rect.x, outputRect.x, outputRect.xMax - rect.width);
-            rect.y = Mathf.Clamp(rect.y, outputRect.y, outputRect.yMax - rect.height);
 
             Color old = GUI.color;
             GUI.color = new Color(0.93f, 0.86f, 0.7f, 1f);
@@ -67,6 +68,24 @@ namespace DungeonTavern.Tavern25D.Narrative
             GUI.color = Color.white;
             GUI.Label(rect, line, style);
             GUI.color = old;
+        }
+
+        private static void ApplyNonInteractiveTextColor(GUIStyle target, Color color)
+        {
+            target.hover.textColor = color;
+            target.hover.background = target.normal.background;
+            target.active.textColor = color;
+            target.active.background = target.normal.background;
+            target.focused.textColor = color;
+            target.focused.background = target.normal.background;
+            target.onNormal.textColor = color;
+            target.onNormal.background = target.normal.background;
+            target.onHover.textColor = color;
+            target.onHover.background = target.normal.background;
+            target.onActive.textColor = color;
+            target.onActive.background = target.normal.background;
+            target.onFocused.textColor = color;
+            target.onFocused.background = target.normal.background;
         }
 
         private Vector3 GetHeadAnchor()

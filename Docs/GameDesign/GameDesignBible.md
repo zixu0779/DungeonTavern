@@ -23,6 +23,13 @@ This document is the durable source of truth for confirmed game and world design
   by the start of a formal dialogue.
 - Customers settle at the counter-side settlement point. Concurrent customers
   form a spaced queue and advance when the customer ahead finishes.
+- NPC movement inside the tavern uses walkable-route navigation rather than
+  direct movement toward a target. An NPC-initiated conversation requires both
+  a complete reachable route within conversation range and an unobstructed
+  line between the speakers, so walls cannot trigger dialogue through them.
+- The lightweight service loop includes an explicit order cycle: a seated
+  customer states an order in a head bubble, the player records it, prepares the
+  matching item at its service point, delivers it, and later handles settlement.
 - The tavern treats all creatures equally, including adventurers and native dungeon creatures.
 - There is one shared public entrance, one shared bar, and mixed seating. Public areas are never segregated by species or faction.
 - The owner created the tavern and its peace rules after a long first-floor conflict between adventurers and dungeon residents. All conventional routes to deeper floors are sealed; the sole controlled route is beneath the tavern. The route is open to any species that meets its peace conditions, although deep residents use it most often.
@@ -196,3 +203,7 @@ Stable marker names for future integrations:
 - 2026-09-02: Confirmed close-dialogue occlusion handling: choose the least
   obstructed nearby camera yaw first, then temporarily fade only remaining
   occluding renderers and restore their original materials when dialogue ends.
+- 2026-09-03: Confirmed NavMesh-based tavern NPC movement and wall-safe dialogue
+  triggering based on complete route distance plus a final line-of-sight check.
+- 2026-09-03: Confirmed the first lightweight customer-order cycle: visible
+  request, player order acceptance, preparation, delivery, and settlement.
