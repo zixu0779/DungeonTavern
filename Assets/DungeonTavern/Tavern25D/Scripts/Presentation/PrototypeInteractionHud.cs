@@ -9,14 +9,12 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private GUIStyle promptStyle;
         private GUIStyle heldItemStyle;
-        private PlayerOrderBook orderBook;
 
         private void OnGUI()
         {
             interactionController ??= FindAnyObjectByType<PlayerInteractionController>();
             if (interactionController == null)
                 return;
-            orderBook ??= FindAnyObjectByType<PlayerOrderBook>();
 
             promptStyle ??= new GUIStyle(GUI.skin.box)
             {
@@ -52,24 +50,10 @@ namespace DungeonTavern.Gameplay.Interaction
                     heldItemStyle);
             }
 
-            if (orderBook != null && orderBook.HasOrder)
-            {
-                string customerName = orderBook.Customer == null
-                    ? "客人"
-                    : orderBook.Customer.CustomerName;
-                string status = orderBook.State == PlayerOrderState.Prepared
-                    ? "已制作，可以送达"
-                    : "待制作";
-                GUI.Box(
-                    new Rect(14f, 14f, 360f, 104f),
-                    $"当前订单\n{customerName} · 麦芽饮料\n{status}",
-                    heldItemStyle);
-            }
-
             if (businessDay != null)
             {
                 GUI.Box(
-                    new Rect(Screen.width - 500f, 14f, 486f, 76f),
+                    new Rect(Screen.width - 500f, 88f, 486f, 76f),
                     businessDay.State == BusinessDayState.Completed
                         ? $"Day complete: {businessDay.CompletedCustomers} / {businessDay.TotalCustomers}"
                         : $"Customers: {businessDay.CompletedCustomers} / {businessDay.TotalCustomers}  Active: {businessDay.ActiveCustomers}",

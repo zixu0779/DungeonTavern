@@ -37,7 +37,7 @@ namespace DungeonTavern.Tavern25D
         {
             EnsureAgent();
             agent.speed = Mathf.Max(0.1f, speed);
-            agent.acceleration = Mathf.Max(8f, agent.speed * 5f);
+            agent.acceleration = Mathf.Max(24f, agent.speed * 8f);
             agent.angularSpeed = 720f;
             agent.radius = 0.28f;
             agent.height = 1.5f;

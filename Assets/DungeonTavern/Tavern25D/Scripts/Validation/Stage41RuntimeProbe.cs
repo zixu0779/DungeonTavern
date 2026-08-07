@@ -115,7 +115,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             CustomerServicePoint bran = null;
             bool entranceBubbleObserved = false;
             bool orderBubbleObserved = false;
-            float spawnTimeout = Time.time + 30f;
+            float spawnTimeout = Time.time + 60f;
             while (Time.time < spawnTimeout)
             {
                 bran = FindObjectsByType<CustomerServicePoint>()
@@ -124,19 +124,10 @@ namespace DungeonTavern.Tavern25D.Narrative
                 {
                     WorldSpeechBubble entranceBubble = bran.GetComponent<WorldSpeechBubble>();
                     entranceBubbleObserved = entranceBubble != null
-                        && entranceBubble.CurrentText == "门口的牌子终于翻回来了。我还以为你不会再开门。";
+                        && entranceBubble.CurrentText.Contains("门口的牌子终于翻回来了");
                 }
-                if (bran != null && bran.State == CustomerOrderState.WaitingToOrder)
-                {
-                    WorldSpeechBubble orderBubble = bran.GetComponent<WorldSpeechBubble>();
-                    if (orderBubble == null || !orderBubble.IsVisible)
-                    {
-                        Fail("Bran's order bubble was not visible before the order was accepted.");
-                        yield break;
-                    }
-                    orderBubbleObserved = true;
-                    bran.Interact(hands);
-                }
+                if (bran != null && bran.State == CustomerOrderState.Ordering)
+                    orderBubbleObserved = bran.GetComponent<WorldSpeechBubble>()?.IsVisible == true;
                 if (bran != null && bran.State == CustomerOrderState.WaitingForDrink)
                     break;
                 yield return null;
@@ -145,19 +136,23 @@ namespace DungeonTavern.Tavern25D.Narrative
                 || bran.State != CustomerOrderState.WaitingForDrink
                 || !entranceBubbleObserved
                 || !orderBubbleObserved
-                || !hands.OrderBook.HasOrder)
+                || FindAnyObjectByType<TavernMenuSystem>()?.PendingOrderCount != 1)
             {
-                Fail("Bran's visible order was not recorded before drink service.");
+                int pendingOrders = FindAnyObjectByType<TavernMenuSystem>()?.PendingOrderCount ?? -1;
+                Fail($"Bran's visible order was not recorded before drink service " +
+                    $"(state={bran?.State}, entranceBubble={entranceBubbleObserved}, " +
+                    $"orderBubble={orderBubbleObserved}, pendingOrders={pendingOrders}).");
                 yield break;
             }
 
             TestDrinkPoint drinkPoint = FindAnyObjectByType<TestDrinkPoint>();
+            TavernMenuSystem menu = FindAnyObjectByType<TavernMenuSystem>();
             if (hands == null
                 || drinkPoint == null
-                || !drinkPoint.Interact(hands)
-                || hands.OrderBook.State != PlayerOrderState.Prepared
+                || menu == null
+                || !menu.TryPrepare(HeldItem.TestDrink, hands)
                 || !bran.Interact(hands)
-                || hands.OrderBook.HasOrder)
+                || menu.PendingOrderCount != 0)
             {
                 Fail("Bran could not be served the test drink.");
                 yield break;

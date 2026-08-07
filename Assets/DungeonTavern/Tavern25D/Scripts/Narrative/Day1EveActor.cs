@@ -1,5 +1,6 @@
 using System;
 using DungeonTavern.Gameplay.Interaction;
+using DungeonTavern.Prototypes.Rotation25D;
 using UnityEngine;
 
 namespace DungeonTavern.Tavern25D.Narrative
@@ -42,7 +43,9 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void Awake()
         {
-            moveSpeed = Mathf.Max(moveSpeed, 4.25f);
+            PrototypePlayerMover playerMover = FindAnyObjectByType<PrototypePlayerMover>();
+            float playerSpeed = playerMover == null ? 3.25f : playerMover.MoveSpeed;
+            moveSpeed = Mathf.Max(5f, playerSpeed * 1.15f);
             bubble = GetComponent<WorldSpeechBubble>();
             approachSpeech = GetComponent<NpcApproachSpeech>();
             if (approachSpeech == null)

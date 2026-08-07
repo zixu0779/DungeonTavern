@@ -212,3 +212,9 @@ Stable marker names for future integrations:
   request, player order acceptance, preparation, delivery, and settlement.
 - 2026-09-03: Chose the mechanical hanging-rope presentation for the Day 1
   business switch, including Eve's in-world guidance and the entrance sign state.
+- 2026-09-04: Confirmed the counter menu/order presentation: customers visit the
+  menu first, then queue along the long counter and turn outward at the inset
+  staff gate; the menu groups pending customers by item, shows their portraits,
+  quantities, and prices, removes an order on service, and the HUD persistently
+  displays tavern money. The counter uses one unified-color prefab with two inset
+  automatic staff gates instead of overlapping light/dark geometry.

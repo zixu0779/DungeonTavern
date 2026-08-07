@@ -1,4 +1,5 @@
 using System;
+using DungeonTavern.Prototypes.Rotation25D;
 using DungeonTavern.Tavern25D;
 using DungeonTavern.Tavern25D.Narrative;
 using UnityEngine;
@@ -9,8 +10,9 @@ namespace DungeonTavern.Gameplay.Interaction
     {
         Inactive,
         Entering,
+        ApproachingMenu,
         Ordering,
-        WaitingToOrder,
+        QueueingForOrder,
         WaitingForDrink,
         Served,
         ApproachingSettlement,
@@ -35,6 +37,9 @@ namespace DungeonTavern.Gameplay.Interaction
         private HeldItem requiredItem = HeldItem.TestDrink;
         private bool isInitialized;
         private SettlementQueue settlementQueue;
+        private ServiceOrderQueue serviceQueue;
+        private TavernMenuSystem menuSystem;
+        private Transform menuPoint;
         private CharacterController movementController;
         private NpcNavigator navigator;
         private WorldSpeechBubble bubble;
@@ -57,7 +62,9 @@ namespace DungeonTavern.Gameplay.Interaction
         private void Awake()
         {
             customerRenderers = GetComponentsInChildren<Renderer>(true);
-            moveSpeed = Mathf.Max(moveSpeed, 4.25f);
+            PrototypePlayerMover player = FindAnyObjectByType<PrototypePlayerMover>();
+            float playerSpeed = player == null ? 3.25f : player.MoveSpeed;
+            moveSpeed = Mathf.Max(5f, playerSpeed * 1.15f);
             bubble = GetComponent<WorldSpeechBubble>();
             if (bubble == null)
                 bubble = gameObject.AddComponent<WorldSpeechBubble>();
@@ -86,13 +93,23 @@ namespace DungeonTavern.Gameplay.Interaction
             switch (State)
             {
                 case CustomerOrderState.Entering:
-                    if (MoveTowards(assignedSeat.Position))
+                case CustomerOrderState.ApproachingMenu:
+                    if (MoveTowards(menuPoint == null ? assignedSeat.Position : menuPoint.position))
                         ChangeState(CustomerOrderState.Ordering);
                     break;
 
                 case CustomerOrderState.Ordering:
                     if (TickTimer())
-                        ChangeState(CustomerOrderState.WaitingToOrder);
+                    {
+                        menuSystem?.RegisterOrder(this, requiredItem);
+                        serviceQueue?.Enqueue(this);
+                        ChangeState(CustomerOrderState.QueueingForOrder);
+                    }
+                    break;
+
+                case CustomerOrderState.QueueingForOrder:
+                    if (serviceQueue == null || MoveTowards(serviceQueue.GetPosition(this)))
+                        ChangeState(CustomerOrderState.WaitingForDrink);
                     break;
 
                 case CustomerOrderState.Served:
@@ -148,6 +165,9 @@ namespace DungeonTavern.Gameplay.Interaction
             guestEntry = entry;
             assignedSeat = seat;
             settlementQueue = billSettlementQueue;
+            menuSystem = FindAnyObjectByType<TavernMenuSystem>();
+            serviceQueue = FindAnyObjectByType<ServiceOrderQueue>();
+            menuPoint = GameObject.Find("MenuApproach")?.transform;
             gameObject.name = $"Customer_{customerName}";
             ApplyTint(tint);
 
@@ -161,9 +181,6 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             if (State == CustomerOrderState.AwaitingSettlement)
                 return $"F：和{customerName}结账";
-
-            if (State == CustomerOrderState.WaitingToOrder)
-                return $"F：记下{customerName}的订单";
 
             if (State != CustomerOrderState.WaitingForDrink)
                 return string.Empty;
@@ -184,24 +201,17 @@ namespace DungeonTavern.Gameplay.Interaction
                 return true;
             }
 
-            if (State == CustomerOrderState.WaitingToOrder)
-            {
-                if (hands == null || !hands.OrderBook.TryAccept(this, RequiredItem))
-                    return false;
-                ChangeState(CustomerOrderState.WaitingForDrink);
-                Debug.Log($"Order accepted: {customerName} requested {GetItemLabel(RequiredItem)}.", this);
-                return true;
-            }
-
             if (State != CustomerOrderState.WaitingForDrink
                 || hands == null
                 || hands.CurrentItem != RequiredItem
-                || !hands.OrderBook.TryComplete(this, RequiredItem))
+                || menuSystem == null
+                || !menuSystem.TryServe(this, RequiredItem))
             {
                 return false;
             }
 
             hands.Clear();
+            serviceQueue?.Remove(this);
             ChangeState(CustomerOrderState.Served);
             Debug.Log($"Order served: {customerName} received {GetItemLabel(RequiredItem)}.", this);
             return true;
@@ -213,6 +223,7 @@ namespace DungeonTavern.Gameplay.Interaction
                 return false;
 
             settlementQueue?.Remove(this);
+            menuSystem?.CompleteSale(requiredItem);
             ChangeState(CustomerOrderState.Leaving);
             return true;
         }
@@ -272,9 +283,16 @@ namespace DungeonTavern.Gameplay.Interaction
                 return;
             switch (state)
             {
-                case CustomerOrderState.WaitingToOrder:
+                case CustomerOrderState.Entering:
+                case CustomerOrderState.ApproachingMenu:
+                    bubble.Show(customerName == "Bran"
+                        ? "门口的牌子终于翻回来了。我还以为你不会再开门。"
+                        : "先看看今天的菜单。");
+                    break;
+                case CustomerOrderState.Ordering:
                     bubble.Show("老板，我想要一杯麦芽饮料。");
                     break;
+                case CustomerOrderState.QueueingForOrder:
                 case CustomerOrderState.WaitingForDrink:
                     bubble.Show("一杯麦芽饮料，谢谢。");
                     break;

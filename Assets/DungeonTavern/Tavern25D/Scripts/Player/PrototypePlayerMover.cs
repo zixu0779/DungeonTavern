@@ -17,6 +17,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private float verticalVelocity;
 
         public bool MovementInputEnabled { get; set; } = true;
+        public float MoveSpeed => moveSpeed;
 
         public Transform CameraTransform
         {
