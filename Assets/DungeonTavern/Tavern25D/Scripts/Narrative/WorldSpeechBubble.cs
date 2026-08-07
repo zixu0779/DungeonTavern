@@ -16,6 +16,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         }
 
         public bool IsVisible => !string.IsNullOrEmpty(line);
+        public string CurrentText => line ?? string.Empty;
 
         public void Show(string text, float visibleSeconds = -1f)
         {

@@ -164,8 +164,9 @@ public static class Stage40SceneSetup
         }
 
         SetMarker("StorageStairEntry", spawnPoints, new Vector3(41.2f, 0f, 22.5f));
-        SetMarker("BusinessSwitch", interactionPoints, new Vector3(20.5f, 0f, 16.8f));
+        SetMarker("BusinessSwitch", interactionPoints, new Vector3(35.5f, 0f, 22f));
         SetMarker("EveDay1Conversation", narrativePoints, new Vector3(38.8f, 0f, 20f));
+        SetMarker("EveOpeningSwitchGuide", narrativePoints, new Vector3(34.5f, 0f, 22f));
         SetMarker("BranSettlement", narrativePoints, new Vector3(20.2f, 0f, 9.5f));
         SetMarker("Day1Closing", narrativePoints, new Vector3(20.5f, 0f, 16.8f));
 

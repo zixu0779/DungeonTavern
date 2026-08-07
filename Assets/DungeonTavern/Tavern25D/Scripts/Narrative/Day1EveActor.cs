@@ -6,7 +6,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 {
     public sealed class Day1EveActor : InteractionPoint
     {
-        [SerializeField, Min(0.1f)] private float moveSpeed = 3.2f;
+        [SerializeField, Min(0.1f)] private float moveSpeed = 4.25f;
         [SerializeField, Min(0.5f)] private float conversationRange = 1.35f;
         [SerializeField, Min(0.5f)] private float minimumSpacing = 0.65f;
         [SerializeField, Min(0.05f)] private float conversationClearanceRadius = 0.2f;
@@ -24,6 +24,12 @@ namespace DungeonTavern.Tavern25D.Narrative
         private bool arriving;
         private bool conversationStarted;
         private bool playerInTavernArea = true;
+        private bool guidingToOpeningSwitch;
+        private bool openingGuidanceReady;
+        private Transform openingGuidePoint;
+        private string openingGuidanceLine;
+
+        public bool IsOpeningGuidanceReady => openingGuidanceReady;
 
         public event Action ConversationRequested;
 
@@ -36,7 +42,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void Awake()
         {
-            moveSpeed = Mathf.Max(moveSpeed, 3.2f);
+            moveSpeed = Mathf.Max(moveSpeed, 4.25f);
             bubble = GetComponent<WorldSpeechBubble>();
             approachSpeech = GetComponent<NpcApproachSpeech>();
             if (approachSpeech == null)
@@ -95,6 +101,11 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void Update()
         {
+            if (guidingToOpeningSwitch)
+            {
+                UpdateOpeningSwitchGuidance();
+                return;
+            }
             if (!arriving)
                 return;
 
@@ -189,6 +200,43 @@ namespace DungeonTavern.Tavern25D.Narrative
         public void ShowBubble(string text)
         {
             bubble?.Show(text);
+        }
+
+        public void BeginOpeningSwitchGuidance(Transform guidePoint, string text)
+        {
+            openingGuidePoint = guidePoint;
+            openingGuidanceLine = text;
+            openingGuidanceReady = false;
+            guidingToOpeningSwitch = guidePoint != null;
+            bubble?.Hide();
+            if (guidePoint == null)
+            {
+                openingGuidanceReady = true;
+                bubble?.Show(text);
+            }
+        }
+
+        public void CompleteOpeningSwitchGuidance()
+        {
+            guidingToOpeningSwitch = false;
+            openingGuidanceReady = false;
+            openingGuidePoint = null;
+            openingGuidanceLine = string.Empty;
+            bubble?.Hide();
+            navigator.Stop(true);
+        }
+
+        private void UpdateOpeningSwitchGuidance()
+        {
+            if (openingGuidePoint == null)
+                return;
+            navigator.MoveTo(openingGuidePoint.position, 0.15f);
+            if (!navigator.HasArrived(0.2f))
+                return;
+            guidingToOpeningSwitch = false;
+            openingGuidanceReady = true;
+            navigator.Stop(true);
+            bubble?.Show(openingGuidanceLine);
         }
 
         public override string GetPrompt(PlayerHands hands)

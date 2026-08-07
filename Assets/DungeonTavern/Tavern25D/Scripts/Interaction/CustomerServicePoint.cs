@@ -22,7 +22,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
     public sealed class CustomerServicePoint : InteractionPoint
     {
-        [SerializeField, Min(0.1f)] private float moveSpeed = 3.4f;
+        [SerializeField, Min(0.1f)] private float moveSpeed = 4.25f;
         [SerializeField, Min(0f)] private float orderingDuration = 1.25f;
         [SerializeField, Min(0f)] private float servedPauseDuration = 1f;
         [SerializeField, Min(0.1f)] private float arrivalTolerance = 0.75f;
@@ -57,7 +57,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private void Awake()
         {
             customerRenderers = GetComponentsInChildren<Renderer>(true);
-            moveSpeed = Mathf.Max(moveSpeed, 3.4f);
+            moveSpeed = Mathf.Max(moveSpeed, 4.25f);
             bubble = GetComponent<WorldSpeechBubble>();
             if (bubble == null)
                 bubble = gameObject.AddComponent<WorldSpeechBubble>();

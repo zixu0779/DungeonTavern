@@ -43,7 +43,13 @@ public static class Stage41PresentationSetup
         Day1NarrativeController narrative = systems.GetComponent<Day1NarrativeController>();
         BusinessDayController businessDay = systems.GetComponent<BusinessDayController>();
         InkFile ink = AssetDatabase.LoadAssetAtPath<InkFile>(InkPath);
-        narrative.Configure(ink, null, Find(tavern, "StorageStairArrival").transform, businessDay, eve);
+        narrative.Configure(
+            ink,
+            null,
+            Find(tavern, "StorageStairArrival").transform,
+            businessDay,
+            eve,
+            Find(tavern, "EveOpeningSwitchGuide")?.transform);
 
         InitialAdditiveSceneLoader loader = systems.GetComponent<InitialAdditiveSceneLoader>();
         if (loader == null)

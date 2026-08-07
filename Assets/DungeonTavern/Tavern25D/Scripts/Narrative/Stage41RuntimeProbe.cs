@@ -87,9 +87,25 @@ namespace DungeonTavern.Tavern25D.Narrative
 
             yield return AdvanceDialogueUntil(Day1FlowState.AwaitingOpeningSwitch, 120);
             if (!enabled) yield break;
+            float guidanceTimeout = Time.time + 20f;
+            while (!narrative.CanOpenTavern && Time.time < guidanceTimeout)
+                yield return null;
+            WorldSpeechBubble eveGuidanceBubble = eve.GetComponent<WorldSpeechBubble>();
+            if (!narrative.CanOpenTavern
+                || eveGuidanceBubble == null
+                || eveGuidanceBubble.CurrentText != "拉一下这根绳子，然后我们重新开始营业吧。")
+            {
+                Fail("Eve did not reach the business rope with a clean guidance bubble.");
+                yield break;
+            }
             if (!narrative.TryUseBusinessSwitch())
             {
                 Fail("opening switch was rejected.");
+                yield break;
+            }
+            if (eveGuidanceBubble.IsVisible)
+            {
+                Fail("Eve's opening guidance bubble remained visible after opening the tavern.");
                 yield break;
             }
 
@@ -97,12 +113,19 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (!enabled) yield break;
 
             CustomerServicePoint bran = null;
+            bool entranceBubbleObserved = false;
             bool orderBubbleObserved = false;
             float spawnTimeout = Time.time + 30f;
             while (Time.time < spawnTimeout)
             {
                 bran = FindObjectsByType<CustomerServicePoint>()
                     .FirstOrDefault(customer => customer.CustomerName == "Bran");
+                if (bran != null && !entranceBubbleObserved)
+                {
+                    WorldSpeechBubble entranceBubble = bran.GetComponent<WorldSpeechBubble>();
+                    entranceBubbleObserved = entranceBubble != null
+                        && entranceBubble.CurrentText == "门口的牌子终于翻回来了。我还以为你不会再开门。";
+                }
                 if (bran != null && bran.State == CustomerOrderState.WaitingToOrder)
                 {
                     WorldSpeechBubble orderBubble = bran.GetComponent<WorldSpeechBubble>();
@@ -120,6 +143,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
             if (bran == null
                 || bran.State != CustomerOrderState.WaitingForDrink
+                || !entranceBubbleObserved
                 || !orderBubbleObserved
                 || !hands.OrderBook.HasOrder)
             {

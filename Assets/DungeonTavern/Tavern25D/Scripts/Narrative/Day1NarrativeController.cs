@@ -39,6 +39,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         [SerializeField] private Transform storageArrival;
         [SerializeField] private BusinessDayController businessDay;
         [SerializeField] private Day1EveActor eve;
+        [SerializeField] private Transform eveOpeningGuidePoint;
         [SerializeField, Min(0.5f)] private float storageArrivalRadius = 1.6f;
 
         private readonly List<Choice> choices = new();
@@ -57,9 +58,12 @@ namespace DungeonTavern.Tavern25D.Narrative
         private Vector2 dialogueScroll;
         private int renderedHistoryCount = -1;
         private int renderedChoiceCount = -1;
+        private string pendingBranBubble;
 
         public Day1FlowState State { get; private set; }
-        public bool CanOpenTavern => State == Day1FlowState.AwaitingOpeningSwitch;
+        public bool CanOpenTavern => State == Day1FlowState.AwaitingOpeningSwitch
+            && eve != null
+            && eve.IsOpeningGuidanceReady;
         public bool CanCloseTavern => State == Day1FlowState.AwaitingClosingSwitch
             && businessDay != null
             && businessDay.State == BusinessDayState.Completed;
@@ -70,13 +74,20 @@ namespace DungeonTavern.Tavern25D.Narrative
             PrototypePlayerMover playerMover,
             Transform storagePoint,
             BusinessDayController day,
-            Day1EveActor eveActor = null)
+            Day1EveActor eveActor = null,
+            Transform openingGuidePoint = null)
         {
             chapterOne = storyAsset;
             player = playerMover;
             storageArrival = storagePoint;
             businessDay = day;
             eve = eveActor;
+            eveOpeningGuidePoint = openingGuidePoint;
+        }
+
+        public void SetOpeningGuidePoint(Transform guidePoint)
+        {
+            eveOpeningGuidePoint = guidePoint;
         }
 
         private IEnumerator Start()
@@ -144,6 +155,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             if (CanOpenTavern)
             {
+                eve.CompleteOpeningSwitchGuidance();
                 SelectExternalGate();
                 return true;
             }
@@ -178,6 +190,11 @@ namespace DungeonTavern.Tavern25D.Narrative
             bran = customer;
             if (bran.GetComponent<WorldSpeechBubble>() == null)
                 bran.gameObject.AddComponent<WorldSpeechBubble>();
+            if (!string.IsNullOrWhiteSpace(pendingBranBubble))
+            {
+                bran.GetComponent<WorldSpeechBubble>().Show(pendingBranBubble);
+                pendingBranBubble = string.Empty;
+            }
             bran.SettlementRequested += OnSettlementRequested;
         }
 
@@ -260,7 +277,8 @@ namespace DungeonTavern.Tavern25D.Narrative
                 showingCinematic = false;
                 State = Day1FlowState.AwaitingStorageReturn;
             }
-            else if (gate.Contains("营业按钮", StringComparison.Ordinal))
+            else if (gate.Contains("营业按钮", StringComparison.Ordinal)
+                     || gate.Contains("营业吊绳", StringComparison.Ordinal))
                 State = Day1FlowState.AwaitingOpeningSwitch;
             else if (gate.Contains("完成第一日营业", StringComparison.Ordinal))
             {
@@ -282,22 +300,39 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private bool TryPresentAsBubble(string line)
         {
-            if (line.Contains("按这个按钮，然后我们重新开始营业吧", StringComparison.Ordinal))
+            if (line.Contains("然后我们重新开始营业吧", StringComparison.Ordinal))
             {
-                eve.ShowBubble(line);
+                eve.BeginOpeningSwitchGuidance(eveOpeningGuidePoint, ExtractBubbleText(line));
                 return true;
             }
             if (line.Contains("门口的牌子终于翻回来了", StringComparison.Ordinal))
             {
-                bran?.GetComponent<WorldSpeechBubble>()?.Show(line);
+                string bubbleText = ExtractBubbleText(line);
+                if (bran == null)
+                    pendingBranBubble = bubbleText;
+                else
+                    bran.GetComponent<WorldSpeechBubble>()?.Show(bubbleText);
                 return true;
             }
             if (line.Contains("今天差不多了，就到这里吧", StringComparison.Ordinal))
             {
-                eve.ShowBubble(line);
+                eve.ShowBubble(ExtractBubbleText(line));
                 return true;
             }
             return false;
+        }
+
+        private static string ExtractBubbleText(string source)
+        {
+            if (string.IsNullOrWhiteSpace(source))
+                return string.Empty;
+            string text = source.Trim();
+            int separator = text.IndexOf('：');
+            if (separator < 0)
+                separator = text.IndexOf(':');
+            if (separator >= 0 && separator + 1 < text.Length)
+                text = text[(separator + 1)..].Trim();
+            return text.Trim('“', '”', '"', ' ', '\t', '\r', '\n');
         }
 
         private void SelectExternalGate()

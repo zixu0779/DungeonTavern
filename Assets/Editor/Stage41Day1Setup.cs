@@ -58,7 +58,13 @@ public static class Stage41Day1Setup
 
         Day1NarrativeController narrative = GetOrAdd<Day1NarrativeController>(systems);
         Undo.RecordObject(narrative, "Configure Day 1 narrative");
-        narrative.Configure(chapter, player, storageArrivalObject.transform, businessDay);
+        narrative.Configure(
+            chapter,
+            player,
+            storageArrivalObject.transform,
+            businessDay,
+            FindInActiveScene("Eve_Day1")?.GetComponent<Day1EveActor>(),
+            FindInActiveScene("EveOpeningSwitchGuide")?.transform);
 
         Day1SwitchPoint businessSwitch = GetOrAdd<Day1SwitchPoint>(businessSwitchObject);
         Undo.RecordObject(businessSwitch, "Configure Day 1 business switch");
