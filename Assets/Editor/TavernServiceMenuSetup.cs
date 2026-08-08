@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DungeonTavern.Gameplay.Interaction;
+using DungeonTavern.Prototypes.Rotation25D;
 using DungeonTavern.Tavern25D;
 using Unity.AI.Navigation;
 using UnityEditor;
@@ -11,10 +12,17 @@ public static class TavernServiceMenuSetup
     private const string ScenePath = "Assets/Scenes/Tavern/Tavern_Main.unity";
     private const string MaterialPath = "Assets/DungeonTavern/Tavern25D/Gameplay/Materials/MAT_Bar_Unified.mat";
     private const string PrefabPath = "Assets/DungeonTavern/Tavern25D/Gameplay/Prefabs/Bar_Unified.prefab";
+    private const string MenuPrefabPath = "Assets/DungeonTavern/Tavern25D/Gameplay/Prefabs/TavernMenuBoard.prefab";
+    private const string BarrelPrefabPath = "Assets/DungeonTavern/Tavern25D/Gameplay/Prefabs/OakDrinkBarrel.prefab";
 
     [MenuItem("Tools/Dungeon Tavern/Build Unified Bar And Menu")]
     public static void Build()
     {
+        if (EditorApplication.isPlaying)
+        {
+            Debug.LogError("Stop Play Mode before rebuilding tavern prefabs.");
+            return;
+        }
         if (EditorSceneManager.GetActiveScene().path != ScenePath)
         {
             Debug.LogError($"Open {ScenePath} before building the unified bar and menu.");
@@ -52,16 +60,26 @@ public static class TavernServiceMenuSetup
         barInstance.name = "Bar_Greybox";
         barInstance.transform.SetSiblingIndex(siblingIndex);
         bar = barInstance.transform;
-        CreateDoorSensor("Bar_ServiceGate_West", bar, triggerRoot, new Vector3(19.38f, 1f, 18.6f), new Vector3(4.4f, 2f, 3.4f));
-        CreateDoorSensor("Bar_ServiceGate_East", bar, triggerRoot, new Vector3(34.5f, 1f, 16.86f), new Vector3(3.4f, 2f, 4.4f));
+        Transform obsoleteWestSensor = triggerRoot.Find("Bar_ServiceGate_West_AutoDoorTrigger");
+        if (obsoleteWestSensor != null)
+            Object.DestroyImmediate(obsoleteWestSensor.gameObject);
+        CreateDoorSensor("Bar_ServiceGate_North", bar, triggerRoot, new Vector3(19.38f, 1f, 22.76f), new Vector3(4.4f, 2f, 3.4f));
+        CreateDoorSensor("Bar_ServiceGate_East", bar, triggerRoot, new Vector3(35.78f, 1f, 16.86f), new Vector3(3.4f, 2f, 4.4f));
 
-        Transform menuPoint = EnsureEmpty("DrinkPickup", interactionPoints);
-        menuPoint.position = new Vector3(25.6f, 0f, 15.35f);
-        if (menuPoint.GetComponent<TestDrinkPoint>() == null)
-            Undo.AddComponent<TestDrinkPoint>(menuPoint.gameObject);
+        Transform oldMenuPoint = interactionPoints.Find("DrinkPickup");
+        if (oldMenuPoint != null)
+            Object.DestroyImmediate(oldMenuPoint.gameObject);
+        Transform oldBoard = interactionPoints.Find("WorldMenuBoard");
+        if (oldBoard != null)
+            Object.DestroyImmediate(oldBoard.gameObject);
+        Transform oldBarrel = interactionPoints.Find("OakDrinkBarrel");
+        if (oldBarrel != null)
+            Object.DestroyImmediate(oldBarrel.gameObject);
+        BuildPhysicalMenuBoard(interactionPoints, material);
+        BuildDrinkBarrel(interactionPoints);
 
         Transform menuApproach = EnsureEmpty("MenuApproach", customerPoints);
-        menuApproach.position = new Vector3(25.6f, 0f, 14.95f);
+        menuApproach.position = new Vector3(25.5f, 0f, 15.05f);
         Transform queueRoot = EnsureEmpty("ServiceOrderQueue", customerPoints);
         ServiceOrderQueue queue = queueRoot.GetComponent<ServiceOrderQueue>();
         if (queue == null)
@@ -95,12 +113,12 @@ public static class TavernServiceMenuSetup
 
     private static void BuildBarContents(Transform bar, Material material)
     {
-        CreateCube("Counter_Long_West", bar, new Vector3(26.64f, 0.55f, 16.86f), new Vector3(13.52f, 1.1f, 1f), material);
-        CreateCube("Counter_Long_East", bar, new Vector3(36.24f, 0.55f, 16.86f), new Vector3(1.28f, 1.1f, 1f), material);
-        CreateCube("Counter_Short_South", bar, new Vector3(19.38f, 0.55f, 16.93f), new Vector3(1f, 1.1f, 1.14f), material);
-        CreateCube("Counter_Short_North", bar, new Vector3(19.38f, 0.55f, 21.98f), new Vector3(1f, 1.1f, 3.76f), material);
-        CreateGate("Bar_ServiceGate_West", bar, new Vector3(19.38f, 0f, 17.5f), Vector3.forward, material);
-        CreateGate("Bar_ServiceGate_East", bar, new Vector3(33.4f, 0f, 16.86f), Vector3.right, material);
+        CreateCounter("Counter_Long_Main", bar, new Vector3(27.28f, 0.55f, 16.86f), new Vector3(14.8f, 1.1f, 1f), material);
+        CreateCounter("Counter_Short_Main", bar, new Vector3(19.38f, 0.55f, 19.51f), new Vector3(1f, 1.1f, 4.3f), material);
+        CreateGate("Bar_ServiceGate_North", bar, new Vector3(19.38f, 0f, 21.66f), Vector3.forward, material);
+        CreateGate("Bar_ServiceGate_East", bar, new Vector3(34.68f, 0f, 16.86f), Vector3.right, material);
+        CreateCube("NorthWallConnector", bar, new Vector3(19.38f, 0.75f, 23.94f), new Vector3(1.16f, 1.5f, 0.16f), material);
+        CreateCube("EastWallConnector", bar, new Vector3(36.96f, 0.75f, 16.86f), new Vector3(0.16f, 1.5f, 1.16f), material);
     }
 
     private static void CreateGate(string name, Transform parent, Vector3 hingePosition, Vector3 axis, Material material)
@@ -121,13 +139,115 @@ public static class TavernServiceMenuSetup
         DoorStateController door = gate.GetComponent<DoorStateController>();
         if (door == null)
             door = gate.gameObject.AddComponent<DoorStateController>();
-        door.ConfigureHinged(gate, null, blocker, axis == Vector3.forward ? -90f : 90f, 0f, false);
+        door.ConfigureUpwardHinged(
+            gate,
+            blocker,
+            axis == Vector3.forward ? new Vector3(-95f, 0f, 0f) : new Vector3(0f, 0f, 95f),
+            false);
         NavMeshModifier modifier = gate.GetComponent<NavMeshModifier>();
         if (modifier == null)
             modifier = gate.gameObject.AddComponent<NavMeshModifier>();
         modifier.ignoreFromBuild = true;
         modifier.applyToChildren = false;
 
+    }
+
+    private static GameObject CreateCounter(string name, Transform parent, Vector3 position, Vector3 scale, Material material)
+    {
+        GameObject counter = CreateCube(name, parent, position, scale, material);
+        if (counter.GetComponent<CounterVaultObstacle>() == null)
+            counter.AddComponent<CounterVaultObstacle>();
+        return counter;
+    }
+
+    private static void BuildPhysicalMenuBoard(Transform parent, Material barMaterial)
+    {
+        Material brass = EnsureMaterialAt("Assets/DungeonTavern/Tavern25D/Gameplay/Materials/MAT_Menu_Brass.mat", new Color(0.48f, 0.31f, 0.12f));
+        GameObject contents = new("TavernMenuBoard");
+        CreateLocalCube("Base", contents.transform, new Vector3(0f, 0.08f, 0f), new Vector3(2.45f, 0.16f, 0.62f), barMaterial);
+        CreateLocalCube("Post_Left", contents.transform, new Vector3(-1.02f, 0.64f, 0f), new Vector3(0.16f, 1.08f, 0.2f), brass);
+        CreateLocalCube("Post_Right", contents.transform, new Vector3(1.02f, 0.64f, 0f), new Vector3(0.16f, 1.08f, 0.2f), brass);
+        CreateLocalCube("CarvedPlaque", contents.transform, new Vector3(0f, 0.68f, 0f), new Vector3(2.12f, 1.02f, 0.16f), barMaterial);
+        CreateLocalCube("RuneTrim_Top", contents.transform, new Vector3(0f, 1.16f, -0.1f), new Vector3(2.18f, 0.07f, 0.06f), brass);
+        CreateLocalCube("RuneTrim_Bottom", contents.transform, new Vector3(0f, 0.2f, -0.1f), new Vector3(2.18f, 0.07f, 0.06f), brass);
+        CreateLocalCylinder("PriceMedallion", contents.transform, new Vector3(0f, 0.72f, -0.18f), new Vector3(0.44f, 0.035f, 0.44f), new Vector3(90f, 0f, 0f), brass, false);
+
+        Transform labelObject = EnsureEmpty("PriceLabel", contents.transform);
+        labelObject.localPosition = new Vector3(0f, 0.72f, -0.235f);
+        TextMesh label = labelObject.GetComponent<TextMesh>();
+        if (label == null) label = labelObject.gameObject.AddComponent<TextMesh>();
+        label.text = "8 G";
+        label.anchor = TextAnchor.MiddleCenter;
+        label.alignment = TextAlignment.Center;
+        label.fontSize = 64;
+        label.characterSize = 0.035f;
+        label.color = new Color(1f, 0.88f, 0.58f);
+        CreateLocalCube("TokenRail", contents.transform, new Vector3(0f, 0.12f, -0.27f), new Vector3(1.55f, 0.08f, 0.18f), brass);
+        for (int index = 0; index < 3; index++)
+            CreateLocalCylinder($"OrderToken_{index + 1}", contents.transform, new Vector3(-0.4f + index * 0.4f, 0.2f, -0.3f), new Vector3(0.13f, 0.025f, 0.13f), new Vector3(90f, 0f, 0f), brass, false);
+        contents.AddComponent<TavernMenuPoint>();
+
+        GameObject prefab = PrefabUtility.SaveAsPrefabAsset(contents, MenuPrefabPath);
+        Object.DestroyImmediate(contents);
+        if (prefab == null) throw new System.InvalidOperationException("Could not save tavern menu prefab.");
+        GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
+        instance.name = "TavernMenuBoard";
+        instance.transform.SetPositionAndRotation(new Vector3(25.5f, 1.14f, 16.35f), Quaternion.identity);
+    }
+
+    private static void BuildDrinkBarrel(Transform parent)
+    {
+        Material wood = EnsureMaterialAt("Assets/DungeonTavern/Tavern25D/Gameplay/Materials/MAT_OakBarrel_Wood.mat", new Color(0.31f, 0.16f, 0.065f));
+        Material iron = EnsureMaterialAt("Assets/DungeonTavern/Tavern25D/Gameplay/Materials/MAT_OakBarrel_Iron.mat", new Color(0.095f, 0.105f, 0.12f));
+        Material brass = EnsureMaterialAt("Assets/DungeonTavern/Tavern25D/Gameplay/Materials/MAT_OakBarrel_Brass.mat", new Color(0.5f, 0.32f, 0.1f));
+        GameObject contents = new("OakDrinkBarrel");
+        CreateLocalCylinder("OakBody", contents.transform, new Vector3(0f, 1.2f, 0f), new Vector3(1.05f, 1.34f, 1.05f), new Vector3(0f, 0f, 90f), wood, true);
+        CreateLocalCylinder("EndCap_Left", contents.transform, new Vector3(-1.33f, 1.2f, 0f), new Vector3(1.08f, 0.07f, 1.08f), new Vector3(0f, 0f, 90f), wood, false);
+        CreateLocalCylinder("EndCap_Right", contents.transform, new Vector3(1.33f, 1.2f, 0f), new Vector3(1.08f, 0.07f, 1.08f), new Vector3(0f, 0f, 90f), wood, false);
+        foreach (float x in new[] { -1.05f, -0.38f, 0.38f, 1.05f })
+            CreateLocalCylinder($"IronHoop_{x:0.00}", contents.transform, new Vector3(x, 1.2f, 0f), new Vector3(1.1f, 0.055f, 1.1f), new Vector3(0f, 0f, 90f), iron, false);
+        CreateLocalCube("Cradle_Left", contents.transform, new Vector3(-0.85f, 0.28f, 0f), new Vector3(0.5f, 0.55f, 1.35f), iron);
+        CreateLocalCube("Cradle_Right", contents.transform, new Vector3(0.85f, 0.28f, 0f), new Vector3(0.5f, 0.55f, 1.35f), iron);
+        CreateLocalCube("TapStem", contents.transform, new Vector3(0f, 1.0f, -1.18f), new Vector3(0.18f, 0.18f, 0.5f), brass);
+        CreateLocalCube("TapHandle", contents.transform, new Vector3(0f, 1.23f, -1.38f), new Vector3(0.12f, 0.48f, 0.12f), brass);
+        CreateLocalCube("CupShelf", contents.transform, new Vector3(1.65f, 0.62f, -0.55f), new Vector3(0.85f, 0.12f, 0.8f), wood);
+        for (int index = 0; index < 3; index++)
+            CreateLocalCylinder($"WoodenCup_{index + 1}", contents.transform, new Vector3(1.4f + index * 0.25f, 0.8f, -0.55f), new Vector3(0.15f, 0.2f, 0.15f), Vector3.zero, wood, false);
+        Transform point = EnsureEmpty("BarrelDrinkPickup", contents.transform);
+        point.localPosition = new Vector3(0f, 0f, -1.65f);
+        point.gameObject.AddComponent<DrinkBarrelPoint>();
+
+        GameObject prefab = PrefabUtility.SaveAsPrefabAsset(contents, BarrelPrefabPath);
+        Object.DestroyImmediate(contents);
+        if (prefab == null) throw new System.InvalidOperationException("Could not save oak barrel prefab.");
+        GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
+        instance.name = "OakDrinkBarrel";
+        instance.transform.SetPositionAndRotation(new Vector3(31.5f, 0f, 24f), Quaternion.identity);
+    }
+
+    private static GameObject CreateLocalCube(string name, Transform parent, Vector3 position, Vector3 scale, Material material)
+    {
+        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.name = name;
+        cube.transform.SetParent(parent, false);
+        cube.transform.localPosition = position;
+        cube.transform.localScale = scale;
+        cube.GetComponent<MeshRenderer>().sharedMaterial = material;
+        return cube;
+    }
+
+    private static GameObject CreateLocalCylinder(string name, Transform parent, Vector3 position, Vector3 scale,
+        Vector3 rotation, Material material, bool keepCollider)
+    {
+        GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        cylinder.name = name;
+        cylinder.transform.SetParent(parent, false);
+        cylinder.transform.localPosition = position;
+        cylinder.transform.localEulerAngles = rotation;
+        cylinder.transform.localScale = scale;
+        cylinder.GetComponent<MeshRenderer>().sharedMaterial = material;
+        if (!keepCollider) Object.DestroyImmediate(cylinder.GetComponent<Collider>());
+        return cylinder;
     }
 
     private static void CreateDoorSensor(string gateName, Transform bar, Transform triggerRoot, Vector3 position, Vector3 size)
@@ -186,6 +306,20 @@ public static class TavernServiceMenuSetup
             AssetDatabase.CreateAsset(material, MaterialPath);
         }
         material.color = new Color(0.26f, 0.17f, 0.10f, 1f);
+        EditorUtility.SetDirty(material);
+        return material;
+    }
+
+    private static Material EnsureMaterialAt(string path, Color color)
+    {
+        Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (material == null)
+        {
+            Shader shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+            material = new Material(shader) { name = System.IO.Path.GetFileNameWithoutExtension(path) };
+            AssetDatabase.CreateAsset(material, path);
+        }
+        material.color = color;
         EditorUtility.SetDirty(material);
         return material;
     }

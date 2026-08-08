@@ -25,6 +25,9 @@ namespace DungeonTavern.Tavern25D
             ? agent.remainingDistance
             : float.PositiveInfinity;
 
+        public float CurrentSpeed => agent == null ? 0f : agent.velocity.magnitude;
+        public float ConfiguredSpeed => agent == null ? 0f : agent.speed;
+
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
@@ -37,14 +40,17 @@ namespace DungeonTavern.Tavern25D
         {
             EnsureAgent();
             agent.speed = Mathf.Max(0.1f, speed);
-            agent.acceleration = Mathf.Max(24f, agent.speed * 8f);
-            agent.angularSpeed = 720f;
+            agent.acceleration = Mathf.Max(80f, agent.speed * 12f);
+            agent.angularSpeed = 1440f;
             agent.radius = 0.28f;
             agent.height = 1.5f;
             agent.baseOffset = 0f;
             agent.stoppingDistance = Mathf.Max(0f, stoppingDistance);
             agent.autoRepath = true;
-            agent.autoBraking = true;
+            // A pursued destination is refreshed several times per second. Automatic
+            // braking treats every refresh as a new arrival and makes the NPC spend
+            // most of the chase below its configured speed.
+            agent.autoBraking = false;
             ConfigurePhysicsBody();
         }
 
@@ -79,9 +85,11 @@ namespace DungeonTavern.Tavern25D
 
         public bool HasArrived(float tolerance)
         {
-            return HasCompletePath
-                && RemainingDistance <= Mathf.Max(tolerance, agent.stoppingDistance)
-                && (!agent.hasPath || agent.velocity.sqrMagnitude <= 0.01f);
+            bool arrived = HasCompletePath
+                && RemainingDistance <= Mathf.Max(tolerance, agent.stoppingDistance);
+            if (arrived)
+                Stop();
+            return arrived;
         }
 
         public void Stop(bool clearPath = false)

@@ -64,7 +64,7 @@ namespace DungeonTavern.Gameplay.Interaction
             customerRenderers = GetComponentsInChildren<Renderer>(true);
             PrototypePlayerMover player = FindAnyObjectByType<PrototypePlayerMover>();
             float playerSpeed = player == null ? 3.25f : player.MoveSpeed;
-            moveSpeed = Mathf.Max(5f, playerSpeed * 1.15f);
+            moveSpeed = Mathf.Max(6.5f, playerSpeed * 1.25f);
             bubble = GetComponent<WorldSpeechBubble>();
             if (bubble == null)
                 bubble = gameObject.AddComponent<WorldSpeechBubble>();

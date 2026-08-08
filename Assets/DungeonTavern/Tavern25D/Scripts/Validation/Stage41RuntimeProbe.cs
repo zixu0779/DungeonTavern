@@ -145,12 +145,12 @@ namespace DungeonTavern.Tavern25D.Narrative
                 yield break;
             }
 
-            TestDrinkPoint drinkPoint = FindAnyObjectByType<TestDrinkPoint>();
+            DrinkBarrelPoint drinkPoint = FindAnyObjectByType<DrinkBarrelPoint>();
             TavernMenuSystem menu = FindAnyObjectByType<TavernMenuSystem>();
             if (hands == null
                 || drinkPoint == null
                 || menu == null
-                || !menu.TryPrepare(HeldItem.TestDrink, hands)
+                || !drinkPoint.Interact(hands)
                 || !bran.Interact(hands)
                 || menu.PendingOrderCount != 0)
             {

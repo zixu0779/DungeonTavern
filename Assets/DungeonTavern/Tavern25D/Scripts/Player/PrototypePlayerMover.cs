@@ -18,6 +18,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         public bool MovementInputEnabled { get; set; } = true;
         public float MoveSpeed => moveSpeed;
+        public Vector3 MovementDirection { get; private set; }
 
         public Transform CameraTransform
         {
@@ -28,6 +29,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
+            if (GetComponent<CounterVaultController>() == null)
+                gameObject.AddComponent<CounterVaultController>();
         }
 
         private void Update()
@@ -53,6 +56,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 Vector3 right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
                 movement = forward * input.y + right * input.x;
             }
+            MovementDirection = movement.sqrMagnitude > 0.0001f ? movement.normalized : Vector3.zero;
 
             if (controller.isGrounded && verticalVelocity < 0f)
                 verticalVelocity = -groundedVelocity;

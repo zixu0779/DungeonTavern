@@ -218,3 +218,15 @@ Stable marker names for future integrations:
   quantities, and prices, removes an order on service, and the HUD persistently
   displays tavern money. The counter uses one unified-color prefab with two inset
   automatic staff gates instead of overlapping light/dark geometry.
+- 2026-09-04: Revised the counter interaction contract: both staff gates sit at
+  the outer ends of the long and short counter runs, connect visually to the
+  adjacent boundary, and lift upward instead of swinging sideways. The physical
+  in-world menu is a compact countertop object at the middle of the long counter;
+  interacting with it opens a separate menu view whose columns are item, price,
+  pending count, and queued customer portraits. The same view is also available
+  through the M shortcut and never prepares drinks. Drinks are drawn manually into
+  wooden cups from the complete oak barrel placed against the back wall near
+  `(31.5, 0, 24)`. Space performs the current prototype counter vault whenever the
+  player's recent movement is directed toward the counter, including diagonal
+  approaches; its later animation should show a one-handed plant and vault when
+  the character action system is introduced.

@@ -20,6 +20,9 @@ namespace DungeonTavern.Tavern25D
         [SerializeField] private Transform rightHinge;
         [SerializeField] private float leftOpenAngle = 100f;
         [SerializeField] private float rightOpenAngle = -100f;
+        [SerializeField] private Vector3 leftOpenEuler;
+        [SerializeField] private Vector3 rightOpenEuler;
+        [SerializeField] private bool useOpenEuler;
         [SerializeField, Min(0f)] private float transitionDuration = 0.22f;
 
         private Coroutine transition;
@@ -70,7 +73,27 @@ namespace DungeonTavern.Tavern25D
             blockingCollider = passageBlocker;
             leftOpenAngle = leftAngle;
             rightOpenAngle = rightAngle;
+            useOpenEuler = false;
             isOpen = initiallyOpen;
+            ApplyState();
+        }
+
+        public void ConfigureUpwardHinged(
+            Transform hinge,
+            Collider passageBlocker,
+            Vector3 openEuler,
+            bool initiallyOpen)
+        {
+            closedVisual = null;
+            openVisual = null;
+            leftHinge = hinge;
+            rightHinge = null;
+            blockingCollider = passageBlocker;
+            leftOpenEuler = openEuler;
+            rightOpenEuler = Vector3.zero;
+            useOpenEuler = true;
+            isOpen = initiallyOpen;
+            CacheMovingLeafColliders();
             ApplyState();
         }
 
@@ -133,8 +156,12 @@ namespace DungeonTavern.Tavern25D
 
             Quaternion leftStart = leftHinge != null ? leftHinge.localRotation : Quaternion.identity;
             Quaternion rightStart = rightHinge != null ? rightHinge.localRotation : Quaternion.identity;
-            Quaternion leftTarget = Quaternion.Euler(0f, isOpen ? leftOpenAngle : 0f, 0f);
-            Quaternion rightTarget = Quaternion.Euler(0f, isOpen ? rightOpenAngle : 0f, 0f);
+            Quaternion leftTarget = Quaternion.Euler(isOpen
+                ? (useOpenEuler ? leftOpenEuler : new Vector3(0f, leftOpenAngle, 0f))
+                : Vector3.zero);
+            Quaternion rightTarget = Quaternion.Euler(isOpen
+                ? (useOpenEuler ? rightOpenEuler : new Vector3(0f, rightOpenAngle, 0f))
+                : Vector3.zero);
             float elapsed = 0f;
 
             while (elapsed < transitionDuration)
@@ -167,15 +194,13 @@ namespace DungeonTavern.Tavern25D
             SetPassageCollision(!isOpen);
 
             if (leftHinge != null)
-                leftHinge.localRotation = Quaternion.Euler(
-                    0f,
-                    isOpen ? leftOpenAngle : 0f,
-                    0f);
+                leftHinge.localRotation = Quaternion.Euler(isOpen
+                    ? (useOpenEuler ? leftOpenEuler : new Vector3(0f, leftOpenAngle, 0f))
+                    : Vector3.zero);
             if (rightHinge != null)
-                rightHinge.localRotation = Quaternion.Euler(
-                    0f,
-                    isOpen ? rightOpenAngle : 0f,
-                    0f);
+                rightHinge.localRotation = Quaternion.Euler(isOpen
+                    ? (useOpenEuler ? rightOpenEuler : new Vector3(0f, rightOpenAngle, 0f))
+                    : Vector3.zero);
         }
 
         private void CacheMovingLeafColliders()

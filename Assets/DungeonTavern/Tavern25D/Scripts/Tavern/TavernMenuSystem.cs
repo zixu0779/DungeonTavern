@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DungeonTavern.Gameplay.Interaction
 {
@@ -15,44 +16,37 @@ namespace DungeonTavern.Gameplay.Interaction
         }
 
         private readonly List<Order> orders = new();
-        private PlayerHands activeHands;
         private GUIStyle titleStyle;
+        private GUIStyle panelStyle;
+        private GUIStyle headerStyle;
         private GUIStyle rowStyle;
-        private GUIStyle smallStyle;
         private bool isOpen;
 
         [SerializeField, Min(0)] private int startingMoney = 500;
         public int Balance { get; private set; }
         public int PendingOrderCount => orders.Count;
-        public bool IsOpen => isOpen;
+        public event Action Changed;
 
         private void Awake() => Balance = startingMoney;
 
-        public bool Toggle(PlayerHands hands)
+        private void Update()
         {
-            if (hands == null)
-                return false;
-            activeHands = hands;
-            isOpen = !isOpen;
-            return true;
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard?.mKey.wasPressedThisFrame == true)
+                Toggle();
+            if (isOpen && keyboard?.escapeKey.wasPressedThisFrame == true)
+                isOpen = false;
         }
+
+        public void Toggle() => isOpen = !isOpen;
 
         public bool RegisterOrder(CustomerServicePoint customer, HeldItem item)
         {
             if (customer == null || item == HeldItem.None || orders.Any(order => order.Customer == customer))
                 return false;
             orders.Add(new Order { Customer = customer, Item = item });
+            Changed?.Invoke();
             return true;
-        }
-
-        public bool TryPrepare(HeldItem item, PlayerHands hands)
-        {
-            if (hands == null || hands.CurrentItem != HeldItem.None || !orders.Any(order => order.Item == item))
-                return false;
-            bool held = hands.TryHold(item);
-            if (held)
-                isOpen = false;
-            return held;
         }
 
         public bool TryServe(CustomerServicePoint customer, HeldItem item)
@@ -61,10 +55,17 @@ namespace DungeonTavern.Gameplay.Interaction
             if (order == null)
                 return false;
             orders.Remove(order);
+            Changed?.Invoke();
             return true;
         }
 
         public int Count(HeldItem item) => orders.Count(order => order.Item == item);
+
+        public IReadOnlyList<CustomerServicePoint> GetCustomers(HeldItem item) => orders
+            .Where(order => order.Item == item)
+            .Select(order => order.Customer)
+            .Where(customer => customer != null)
+            .ToArray();
 
         public void CompleteSale(HeldItem item) => Balance += GetPrice(item);
 
@@ -78,64 +79,50 @@ namespace DungeonTavern.Gameplay.Interaction
             if (!isOpen)
                 return;
 
-            float width = Mathf.Min(860f, Screen.width - 56f);
-            float height = Mathf.Min(560f, Screen.height - 80f);
-            Rect panel = new((Screen.width - width) * 0.5f, (Screen.height - height) * 0.5f, width, height);
-            GUI.Box(panel, GUIContent.none);
-            GUI.Label(new Rect(panel.x + 32f, panel.y + 22f, panel.width - 64f, 58f), "酒馆菜单 · 当前订单", titleStyle);
-            DrawItemRow(panel, HeldItem.TestDrink, 104f);
-            GUI.Label(new Rect(panel.x + 32f, panel.yMax - 68f, panel.width - 64f, 42f), "F 关闭菜单 · 点击菜品即可制作一份", smallStyle);
-        }
-
-        private void DrawItemRow(Rect panel, HeldItem item, float offsetY)
-        {
-            int count = Count(item);
-            Rect row = new(panel.x + 32f, panel.y + offsetY, panel.width - 64f, 126f);
-            GUI.Box(row, GUIContent.none);
-            GUI.Label(new Rect(row.x + 24f, row.y + 16f, 280f, 46f), GetLabel(item), rowStyle);
-            GUI.Label(new Rect(row.x + 310f, row.y + 16f, 150f, 46f), $"{GetPrice(item)} G", rowStyle);
-            GUI.Label(new Rect(row.x + 470f, row.y + 16f, 180f, 46f), $"待制作 × {count}", rowStyle);
-
-            float avatarX = row.x + 24f;
-            foreach (Order order in orders.Where(order => order.Item == item))
-            {
-                DrawAvatar(new Rect(avatarX, row.y + 70f, 42f, 42f), order.Customer);
-                avatarX += 50f;
-            }
-
-            GUI.enabled = count > 0 && activeHands != null && activeHands.CurrentItem == HeldItem.None;
-            if (GUI.Button(new Rect(row.xMax - 160f, row.y + 68f, 136f, 44f), "制作") && TryPrepare(item, activeHands))
-                Debug.Log($"Order prepared from menu: {GetLabel(item)}.", this);
-            GUI.enabled = true;
-        }
-
-        private static void DrawAvatar(Rect rect, CustomerServicePoint customer)
-        {
-            SpriteRenderer renderer = customer == null ? null : customer.GetComponentInChildren<SpriteRenderer>();
-            if (renderer != null && renderer.sprite != null)
-            {
-                Sprite sprite = renderer.sprite;
-                Rect textureRect = sprite.textureRect;
-                Rect uv = new(
-                    textureRect.x / sprite.texture.width,
-                    textureRect.y / sprite.texture.height,
-                    textureRect.width / sprite.texture.width,
-                    textureRect.height / sprite.texture.height);
-                Color previous = GUI.color;
-                GUI.color = renderer.color;
-                GUI.DrawTextureWithTexCoords(rect, sprite.texture, uv, true);
-                GUI.color = previous;
-                return;
-            }
-            GUI.Box(rect, customer == null ? "?" : customer.CustomerName[..1]);
+            float width = Mathf.Min(920f, Screen.width - 56f);
+            Rect panel = new((Screen.width - width) * 0.5f, 92f, width, Mathf.Min(360f, Screen.height - 130f));
+            GUI.Box(panel, GUIContent.none, panelStyle);
+            GUI.Label(new Rect(panel.x + 28f, panel.y + 18f, width - 56f, 48f), "酒馆菜单", headerStyle);
+            float y = panel.y + 82f;
+            float inner = width - 56f;
+            GUI.Label(new Rect(panel.x + 28f, y, inner * 0.34f, 42f), "菜名", rowStyle);
+            GUI.Label(new Rect(panel.x + 28f + inner * 0.34f, y, inner * 0.18f, 42f), "金额", rowStyle);
+            GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 42f), "点单人数", rowStyle);
+            GUI.Label(new Rect(panel.x + 28f + inner * 0.72f, y, inner * 0.28f, 42f), "点单人", rowStyle);
+            y += 56f;
+            GUI.Label(new Rect(panel.x + 28f, y, inner * 0.34f, 56f), GetLabel(HeldItem.TestDrink), rowStyle);
+            GUI.Label(new Rect(panel.x + 28f + inner * 0.34f, y, inner * 0.18f, 56f), $"{GetPrice(HeldItem.TestDrink)} G", rowStyle);
+            GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 56f), Count(HeldItem.TestDrink).ToString(), rowStyle);
+            DrawCustomerPortraits(new Rect(panel.x + 28f + inner * 0.72f, y, inner * 0.28f, 56f), GetCustomers(HeldItem.TestDrink));
         }
 
         private void EnsureStyles()
         {
             int fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f));
             titleStyle ??= new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleCenter, fontSize = fontSize };
+            panelStyle ??= new GUIStyle(GUI.skin.box) { padding = new RectOffset(24, 24, 18, 18) };
+            headerStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = fontSize + 6, fontStyle = FontStyle.Bold };
             rowStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontSize = fontSize };
-            smallStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = Mathf.Max(22, fontSize - 6) };
+        }
+
+        private void DrawCustomerPortraits(Rect area, IReadOnlyList<CustomerServicePoint> customers)
+        {
+            float size = Mathf.Min(50f, area.height);
+            for (int index = 0; index < customers.Count; index++)
+            {
+                SpriteRenderer renderer = customers[index] == null ? null : customers[index].GetComponentInChildren<SpriteRenderer>();
+                Rect target = new(area.x + index * (size + 8f), area.y + (area.height - size) * 0.5f, size, size);
+                if (renderer?.sprite?.texture != null)
+                {
+                    Sprite sprite = renderer.sprite;
+                    Rect textureRect = sprite.textureRect;
+                    Rect uv = new(textureRect.x / sprite.texture.width, textureRect.y / sprite.texture.height,
+                        textureRect.width / sprite.texture.width, textureRect.height / sprite.texture.height);
+                    GUI.DrawTextureWithTexCoords(target, sprite.texture, uv, true);
+                }
+                else
+                    GUI.Label(target, "◇", rowStyle);
+            }
         }
     }
 }
