@@ -2,9 +2,10 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Keeps new Dungeon Tavern Ground PNGs on the project's pixel-art import contract.
-/// This is intentionally limited to the Ground folder so unrelated art keeps its
-/// existing importer settings.
+/// Keeps new Dungeon Tavern Ground PNGs on the project's oblique 2.5D import
+/// contract. Ground sprites use bilinear sampling to avoid nearest-neighbour
+/// shimmer while the camera moves. Mip maps stay disabled because these sources
+/// are tightly packed multi-sprite atlases without mip-safe padding.
 /// </summary>
 internal sealed class DungeonTavernGroundTextureDefaults : AssetPostprocessor
 {
@@ -26,7 +27,7 @@ internal sealed class DungeonTavernGroundTextureDefaults : AssetPostprocessor
         importer.textureType = TextureImporterType.Sprite;
         importer.spriteImportMode = SpriteImportMode.Multiple;
         importer.spritePixelsPerUnit = 32;
-        importer.filterMode = FilterMode.Point;
+        importer.filterMode = FilterMode.Bilinear;
         importer.mipmapEnabled = false;
         importer.textureCompression = TextureImporterCompression.Uncompressed;
         importer.crunchedCompression = false;
