@@ -65,10 +65,9 @@ Initial review questions to answer from the asset itself:
   change to the project's long-term `32 PPU` environment target.
 - Detailed slot ordering and asset rules are recorded in
   `Docs/Art/WallsDiagonalLayout.md`.
-- The 60 Sprite slices have 60 matching legacy semantic Tile assets under
-  `Assets/DungeonTavern/Archive/Legacy2D/TileAssets/Dungeon_Walls`. They are installed in the archived Wall
-  Palette at X `42..51`, using Y `7/6`, `4/3`, and `1/0` for Up/Down slope pairs.
-  The obsolete 42-piece connector kit has been removed. Scenes remain unchanged.
+- The 60 Sprite slices remain available to the active 2.5D art workflow. Their
+  former legacy semantic Tile wrappers and archived Wall Palette were retired;
+  the obsolete 42-piece connector kit remains removed.
 
 ### Vertical wall and orthogonal connector status
 
@@ -103,8 +102,8 @@ Initial review questions to answer from the asset itself:
   Tile supplies the rest of the wall face.
 - The kit uses `16 PPU`, Point filtering, no mipmaps, and no compression to
   match the current `Walls_interior` and `Walls_Diagonal` compatibility grid.
-- All 55 matching legacy Tile assets are under
-  `Assets/DungeonTavern/Archive/Legacy2D/TileAssets/Dungeon_Walls`.
+- The 55 Sprite slices remain in the active source atlas; their former matching
+  legacy Tile assets were retired with the 2D Tilemap workflow.
 - `Walls_HV_RightToDown_04_Special` is placed at Wall Palette cell `(68,16)`,
   immediately right of the managed `RightToDown` row. Its pixels occupy
   top-left rect `x=56, y=274, 16×47`; its Unity
@@ -124,8 +123,7 @@ Initial review questions to answer from the asset itself:
 
 The approved aged wooden-floor atlases are retained under
 `Assets/DungeonTavern/Art/Environment/Ground` and are used by the authoritative 2.5D
-scene. Their legacy Tile wrappers are archived under
-`Assets/DungeonTavern/Archive/Legacy2D/TileAssets`.
+scene. Their former legacy Tile wrappers have been retired.
 
 ## Ground status — do not reopen implicitly
 

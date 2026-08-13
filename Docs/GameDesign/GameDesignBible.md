@@ -112,11 +112,12 @@ The following are not design commitments:
 - The approved presentation uses an orthographic camera pitched 45 degrees, with
   camera-relative cardinal headings at 45, 135, 225, and 315 degrees.
 - WASD moves the player and Q/E rotates the view by 90 degrees.
-- `Assets/Scenes/Backup/Legacy2D/Tavern_Main_2D_Backup.unity` preserves the former
-  2D Tilemap scene as a read-only fallback.
-- Runtime 2.5D assets live under `Assets/DungeonTavern/Tavern25D`.
-- Legacy 2D Palettes and Tile assets are archived under
-  `Assets/DungeonTavern/Archive/Legacy2D`.
+- Active runtime assets live directly under `Assets/DungeonTavern`, organized as
+  `Art`, `Gameplay`, `Narrative`, `Rendering`, and `Scripts`; the redundant
+  `Tavern25D` compatibility layer is retired.
+- The retired 2D scene, Palettes, and Tile wrappers are no longer retained in the
+  active project. Their former Archive and scene-backup folders must not become
+  dependencies of the 2.5D workflow.
 - Exact internal geometry, circulation, furniture arrangement, and gameplay systems
   remain pending review in the authoritative 2.5D scene.
 
@@ -171,6 +172,9 @@ Stable marker names for future integrations:
 - 2026-07-28: Approved the 2.5D orthographic presentation, promoted it to
   `Tavern_Main`, preserved the former 2D scene as `Tavern_Main_2D_Backup`, and
   archived 2D-only Palette and Tile authoring assets.
+- 2026-09-06: Retired the former 2D scene, Palettes, Tile wrappers, and their
+  Archive/Backup folders after confirming that the authoritative 2.5D scenes no
+  longer depended on them.
 - 2026-08-28: Confirmed the sealed deeper-route background and the Chapter 1 narrative premise: after waking with sealing-incident memories missing, the owner reopens the tavern to investigate through returning guests and surviving evidence.
 - 2026-08-29: Confirmed the three-form 2.5D narrative presentation contract:
   opening/memory voice-over cinematics, in-world head bubbles, and close owner/NPC
@@ -230,3 +234,6 @@ Stable marker names for future integrations:
   player's recent movement is directed toward the counter, including diagonal
   approaches; its later animation should show a one-handed plant and vault when
   the character action system is introduced.
+- 2026-09-06: Retired the redundant `Assets/DungeonTavern/Tavern25D` directory
+  layer after the legacy 2D workflow was removed. Active runtime resources are
+  grouped directly beneath `Assets/DungeonTavern` by responsibility.

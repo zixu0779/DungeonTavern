@@ -64,14 +64,13 @@ This document records the project workflow for Sprite slicing, Tile assets, Pale
 The authoritative work scene is the 2.5D
 `Assets/Scenes/Tavern/Tavern_Main.unity`.
 
-- The former 2D Tilemap scene is preserved at
-  `Assets/Scenes/Backup/Legacy2D/Tavern_Main_2D_Backup.unity`.
-- Legacy Palettes and Tile assets are preserved under
-  `Assets/DungeonTavern/Archive/Legacy2D`.
 - The 2.5D scene consumes source Sprites, wall Prefabs, materials, and meshes rather
-  than painting its final environment through the legacy Tile Palette.
-- Do not delete source atlases that are shared by the 2D backup and 2.5D scene.
-- Restore the archived Tilemap workflow only when explicitly requested.
+  than painting its final environment through a Tile Palette.
+- The former 2D scene, Palettes, and Tile wrappers have been retired. The source
+  atlases that remain in active art folders are retained because the 2.5D scene
+  and Prefabs still consume them directly.
+- Restore a Tilemap workflow only when explicitly requested; do not treat the old
+  Archive or scene-backup paths as available sources.
 
 ## Validation before handoff
 
