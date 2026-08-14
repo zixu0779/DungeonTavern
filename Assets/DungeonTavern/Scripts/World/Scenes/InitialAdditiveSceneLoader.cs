@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace DungeonTavern.Tavern25D
 {
+    [DefaultExecutionOrder(-10000)]
     public sealed class InitialAdditiveSceneLoader : MonoBehaviour
     {
         [SerializeField] private string sceneName = "SealRoom_B1";
@@ -12,6 +13,8 @@ namespace DungeonTavern.Tavern25D
         [SerializeField] private Vector3 destinationPosition = new(81f, 0f, 20f);
         [SerializeField] private Vector3 destinationEulerAngles = new(0f, -90f, 0f);
         [SerializeField, Min(0f)] private float fadeDuration = 0.25f;
+
+        private float startupOverlayAlpha = 1f;
 
         public void Configure(string targetScene, Vector3 position, Vector3 eulerAngles, float duration = 0.25f)
         {
@@ -23,7 +26,6 @@ namespace DungeonTavern.Tavern25D
 
         private IEnumerator Start()
         {
-            yield return null;
             if (!SceneManager.GetSceneByName(sceneName).isLoaded)
             {
                 AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
@@ -43,6 +45,28 @@ namespace DungeonTavern.Tavern25D
             player.transform.SetPositionAndRotation(destinationPosition, Quaternion.Euler(destinationEulerAngles));
             Physics.SyncTransforms();
             if (controller != null) controller.enabled = true;
+
+            float elapsed = 0f;
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                startupOverlayAlpha = 1f - Mathf.Clamp01(elapsed / fadeDuration);
+                yield return null;
+            }
+
+            startupOverlayAlpha = 0f;
+        }
+
+        private void OnGUI()
+        {
+            if (startupOverlayAlpha <= 0f)
+                return;
+
+            Color previous = GUI.color;
+            GUI.depth = -10000;
+            GUI.color = new Color(0f, 0f, 0f, startupOverlayAlpha);
+            GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture);
+            GUI.color = previous;
         }
     }
 }

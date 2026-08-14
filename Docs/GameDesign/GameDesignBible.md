@@ -107,6 +107,11 @@ The following are not design commitments:
 ## Current scene status and contract
 
 - The B1 seal room is authored as `Assets/Scenes/SealRoom/SealRoom_B1.unity`, a separate additive content scene roughly one third the footprint of the tavern. The player is authored in B1 and becomes persistent at runtime before B1 is unloaded; `Tavern_Main` retains the camera, business systems, and narrative state. Stair travel uses a short fade.
+- The current formal build enters through `Tavern_Main`, which keeps the screen
+  black until the initial B1 content and player placement are ready, then fades
+  in. In the Unity Editor only, playing directly from `SealRoom_B1` temporarily
+  loads the `Tavern_Main` camera and persistent systems additively for preview;
+  this editor convenience path is excluded from player builds.
 
 - `Assets/Scenes/Tavern/Tavern_Main.unity` is the authoritative 2.5D work scene.
 - The approved presentation uses an orthographic camera pitched 45 degrees, with

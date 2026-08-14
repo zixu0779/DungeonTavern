@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: deb7336de86dd41e09879860a58d9416
+guid: 49c257d8f960d4c9fa1111433fcb6e01
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8845677724827537241
-    second: SealControlCore_Albedo_0
+      213: -8389689124069621663
+    second: SealControlCore_Emission_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SealControlCore_Albedo_0
+      name: SealControlCore_Emission_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 95f4ee9360922ca70800000000000000
-      internalID: 8845677724827537241
+      spriteID: 1604fdf2136d19b80800000000000000
+      internalID: -8389689124069621663
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SealControlCore_Albedo_0: 8845677724827537241
+      SealControlCore_Emission_0: -8389689124069621663
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
