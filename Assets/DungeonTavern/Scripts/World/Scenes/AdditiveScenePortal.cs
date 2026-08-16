@@ -26,21 +26,19 @@ namespace DungeonTavern.Tavern25D
     {
         [SerializeField] private string sceneToLoad;
         [SerializeField] private string sceneToUnload;
-        [SerializeField] private Vector3 destinationPosition;
-        [SerializeField] private Vector3 destinationEulerAngles;
+        [SerializeField, Tooltip("Hierarchy path of the arrival Transform in the target scene, including its root object.")]
+        private string destinationPath;
         [SerializeField, Min(0f)] private float fadeDuration = 0.25f;
 
         public void Configure(
             string loadScene,
             string unloadScene,
-            Vector3 position,
-            Vector3 eulerAngles,
+            string arrivalPath,
             float duration = 0.25f)
         {
             sceneToLoad = loadScene;
             sceneToUnload = unloadScene;
-            destinationPosition = position;
-            destinationEulerAngles = eulerAngles;
+            destinationPath = arrivalPath;
             fadeDuration = Mathf.Max(0f, duration);
         }
 
@@ -54,8 +52,7 @@ namespace DungeonTavern.Tavern25D
                 player,
                 sceneToLoad,
                 sceneToUnload,
-                destinationPosition,
-                Quaternion.Euler(destinationEulerAngles),
+                destinationPath,
                 fadeDuration);
         }
     }
@@ -72,19 +69,26 @@ namespace DungeonTavern.Tavern25D
             PrototypePlayerMover player,
             string sceneToLoad,
             string sceneToUnload,
-            Vector3 destination,
-            Quaternion rotation,
+            string destinationPath,
             float fadeDuration)
         {
             if (player == null || transitioning || Time.unscaledTime < nextAllowedTime)
                 return;
 
+            Scene target = SceneManager.GetSceneByName(sceneToLoad);
+            if (string.IsNullOrWhiteSpace(destinationPath) || string.IsNullOrWhiteSpace(sceneToLoad)
+                || sceneToLoad == sceneToUnload
+                || (!target.isLoaded && !Application.CanStreamedLevelBeLoaded(sceneToLoad)))
+            {
+                Debug.LogError($"Scene transition cancelled: invalid target '{sceneToLoad}/{destinationPath}'.");
+                return;
+            }
+
             EnsureInstance().StartCoroutine(instance.RunTransition(
                 player,
                 sceneToLoad,
                 sceneToUnload,
-                destination,
-                rotation,
+                destinationPath,
                 fadeDuration));
         }
 
@@ -103,12 +107,10 @@ namespace DungeonTavern.Tavern25D
             PrototypePlayerMover player,
             string sceneToLoad,
             string sceneToUnload,
-            Vector3 destination,
-            Quaternion rotation,
+            string destinationPath,
             float fadeDuration)
         {
             transitioning = true;
-            PlayerAreaTransition.RaiseStarted(sceneToLoad, sceneToUnload);
             yield return Fade(0f, 1f, fadeDuration);
 
             if (!string.IsNullOrWhiteSpace(sceneToLoad))
@@ -133,13 +135,24 @@ namespace DungeonTavern.Tavern25D
                     Destroy(players[index].gameObject);
             }
 
+            Transform destination = FindDestination(SceneManager.GetSceneByName(sceneToLoad), destinationPath);
+            if (destination == null)
+            {
+                Debug.LogError($"Scene transition cancelled: arrival '{destinationPath}' was not found in '{sceneToLoad}'.", this);
+                yield return Fade(1f, 0f, fadeDuration);
+                transitioning = false;
+                yield break;
+            }
+
+            PlayerAreaTransition.RaiseStarted(sceneToLoad, sceneToUnload);
             CharacterController controller = player.GetComponent<CharacterController>();
+            bool controllerWasEnabled = controller != null && controller.enabled;
             if (controller != null)
                 controller.enabled = false;
-            player.transform.SetPositionAndRotation(destination, rotation);
+            player.transform.SetPositionAndRotation(destination.position, destination.rotation);
             Physics.SyncTransforms();
             if (controller != null)
-                controller.enabled = true;
+                controller.enabled = controllerWasEnabled;
 
             if (!string.IsNullOrWhiteSpace(sceneToUnload))
             {
@@ -156,6 +169,21 @@ namespace DungeonTavern.Tavern25D
             PlayerAreaTransition.RaiseCompleted(sceneToLoad, sceneToUnload);
             nextAllowedTime = Time.unscaledTime + 0.15f;
             transitioning = false;
+        }
+
+        internal static Transform FindDestination(Scene scene, string path)
+        {
+            if (!scene.IsValid() || !scene.isLoaded || string.IsNullOrWhiteSpace(path))
+                return null;
+
+            int separator = path.IndexOf('/');
+            string rootName = separator < 0 ? path : path.Substring(0, separator);
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                if (root.name == rootName)
+                    return separator < 0 ? root.transform : root.transform.Find(path.Substring(separator + 1));
+            }
+            return null;
         }
 
         private IEnumerator Fade(float from, float to, float duration)

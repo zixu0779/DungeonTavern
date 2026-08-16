@@ -112,6 +112,11 @@ The following are not design commitments:
   in. In the Unity Editor only, playing directly from `SealRoom_B1` temporarily
   loads the `Tavern_Main` camera and persistent systems additively for preview;
   this editor convenience path is excluded from player builds.
+- Initial loading preserves the player position and rotation authored in B1;
+  it must not overwrite them with fixed coordinates. Stair travel resolves an
+  arrival Transform in the destination scene after loading and uses its current
+  world position and rotation. Moving an arrival object updates travel without
+  editing code; renaming or reparenting it requires updating the portal's path.
 
 - `Assets/Scenes/Tavern/Tavern_Main.unity` is the authoritative 2.5D work scene.
 - The approved presentation uses an orthographic camera pitched 45 degrees, with
