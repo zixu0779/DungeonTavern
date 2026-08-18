@@ -9,6 +9,7 @@ namespace DungeonTavern.Tavern25D
     public sealed class InitialAdditiveSceneLoader : MonoBehaviour
     {
         [SerializeField] private string sceneName = "SealRoom_B1";
+        [SerializeField] private GameObject[] hostContentRoots;
         [SerializeField, Min(0f)] private float fadeDuration = 0.25f;
 
         private float startupOverlayAlpha = 1f;
@@ -36,6 +37,8 @@ namespace DungeonTavern.Tavern25D
             }
 
             // The content scene owns the player's starting position and rotation.
+            if (!SetHostContentVisible(false))
+                yield break;
 
             float elapsed = 0f;
             while (elapsed < fadeDuration)
@@ -46,6 +49,30 @@ namespace DungeonTavern.Tavern25D
             }
 
             startupOverlayAlpha = 0f;
+        }
+
+        internal string HostSceneName => gameObject.scene.name;
+
+        internal bool SetHostContentVisible(bool visible)
+        {
+            if (hostContentRoots == null || hostContentRoots.Length == 0)
+            {
+                Debug.LogError("Initial scene loader requires host content roots.", this);
+                return false;
+            }
+
+            for (int index = 0; index < hostContentRoots.Length; index++)
+            {
+                if (hostContentRoots[index] == null)
+                {
+                    Debug.LogError($"Initial scene loader host content root {index} is missing.", this);
+                    return false;
+                }
+            }
+
+            for (int index = 0; index < hostContentRoots.Length; index++)
+                hostContentRoots[index].SetActive(visible);
+            return true;
         }
 
         private void OnGUI()

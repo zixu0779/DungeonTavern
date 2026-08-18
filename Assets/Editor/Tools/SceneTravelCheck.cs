@@ -22,12 +22,23 @@ internal static class SceneTravelCheck
         if (!Application.isPlaying || !SceneManager.GetSceneByName("SealRoom_B1").isLoaded)
             throw new InvalidOperationException("Start Tavern_Main and finish the opening in B1 first.");
         var player = UnityEngine.Object.FindAnyObjectByType<PrototypePlayerMover>();
+        var playerRenderer = player.GetComponentInChildren<Renderer>();
+        if (playerRenderer == null || !playerRenderer.enabled || !playerRenderer.gameObject.activeInHierarchy)
+            throw new InvalidOperationException("The B1 player renderer is inactive.");
         player.StartCoroutine(Check(player));
     }
 
     private static IEnumerator Check(PrototypePlayerMover player)
     {
         var portals = UnityEngine.Object.FindObjectsByType<AdditiveScenePortal>(FindObjectsInactive.Include);
+        var loader = UnityEngine.Object.FindAnyObjectByType<InitialAdditiveSceneLoader>();
+        var loaderData = new SerializedObject(loader);
+        var rootsProperty = loaderData.FindProperty("hostContentRoots");
+        var hostRoots = Enumerable.Range(0, rootsProperty.arraySize)
+            .Select(index => (GameObject)rootsProperty.GetArrayElementAtIndex(index).objectReferenceValue)
+            .ToArray();
+        Require(hostRoots.Length > 0 && hostRoots.All(root => root != null && !root.activeSelf),
+            "Host content was not hidden for B1.");
         var outward = new SerializedObject(portals.Single(p => p.gameObject.scene.name == "SealRoom_B1"));
         var inward = new SerializedObject(portals.Single(p => p.gameObject.scene.name == "Tavern_Main"));
         string host = outward.FindProperty("sceneToLoad").stringValue;
@@ -49,10 +60,12 @@ internal static class SceneTravelCheck
             marker.SetPositionAndRotation(originalPosition + Vector3.right * 0.3f,
                 originalRotation * Quaternion.Euler(0f, 17f, 0f));
             yield return TravelAndCheck(player, host, content, hostPath);
+            Require(hostRoots.All(root => root.activeSelf), "Host content was not shown in the tavern.");
             Require(!SceneManager.GetSceneByName(content).isLoaded, "B1 was not unloaded.");
             marker.SetPositionAndRotation(originalPosition, originalRotation);
             yield return new WaitForSecondsRealtime(0.2f);
             yield return TravelAndCheck(player, content, "", contentPath);
+            Require(hostRoots.All(root => !root.activeSelf), "Host content was not hidden after returning to B1.");
             Require(UnityEngine.Object.FindObjectsByType<PrototypePlayerMover>(FindObjectsInactive.Include).Length == 1,
                 "Returning to B1 created a duplicate player.");
             Debug.Log("SceneTravelCheck PASS: moved/rotated arrival, B1 unload/reload, round trip, missing path and single persistent player.");

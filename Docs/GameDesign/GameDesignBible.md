@@ -112,6 +112,9 @@ The following are not design commitments:
   in. In the Unity Editor only, playing directly from `SealRoom_B1` temporarily
   loads the `Tavern_Main` camera and persistent systems additively for preview;
   this editor convenience path is excluded from player builds.
+- While B1 is active, the additive `Tavern_Main` host keeps only its persistent
+  systems and camera active; its environment, characters, and gameplay content
+  are hidden. Those content roots are restored when the player enters the tavern.
 - Initial loading preserves the player position and rotation authored in B1;
   it must not overwrite them with fixed coordinates. Stair travel resolves an
   arrival Transform in the destination scene after loading and uses its current

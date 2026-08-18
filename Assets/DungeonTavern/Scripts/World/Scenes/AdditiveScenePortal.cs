@@ -144,6 +144,15 @@ namespace DungeonTavern.Tavern25D
                 yield break;
             }
 
+            InitialAdditiveSceneLoader loader = FindAnyObjectByType<InitialAdditiveSceneLoader>();
+            if (loader == null || !loader.SetHostContentVisible(sceneToLoad == loader.HostSceneName))
+            {
+                Debug.LogError("Scene transition cancelled: host content visibility could not be updated.", this);
+                yield return Fade(1f, 0f, fadeDuration);
+                transitioning = false;
+                yield break;
+            }
+
             PlayerAreaTransition.RaiseStarted(sceneToLoad, sceneToUnload);
             CharacterController controller = player.GetComponent<CharacterController>();
             bool controllerWasEnabled = controller != null && controller.enabled;
