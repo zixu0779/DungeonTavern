@@ -106,6 +106,10 @@ The following are not design commitments:
 
 ## Current scene status and contract
 
+- The generated L-shaped bar, its two staff gate leaves, and fixed hinge posts
+  form one reusable bar Prefab. Staff gates swing around vertical hinges and
+  retain independent automatic opening and closing; they no longer lift upward.
+
 - The B1 seal room is authored as `Assets/Scenes/SealRoom/SealRoom_B1.unity`, a separate additive content scene roughly one third the footprint of the tavern. The player is authored in B1 and becomes persistent at runtime before B1 is unloaded; `Tavern_Main` retains the camera, business systems, and narrative state. Stair travel uses a short fade.
 - The current formal build enters through `Tavern_Main`, which keeps the screen
   black until the initial B1 content and player placement are ready, then fades

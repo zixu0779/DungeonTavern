@@ -75,6 +75,7 @@ namespace DungeonTavern.Tavern25D
             rightOpenAngle = rightAngle;
             useOpenEuler = false;
             isOpen = initiallyOpen;
+            CacheMovingLeafColliders();
             ApplyState();
         }
 
