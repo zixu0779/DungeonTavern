@@ -109,6 +109,8 @@ The following are not design commitments:
 - The generated L-shaped bar, its two staff gate leaves, and fixed hinge posts
   form one reusable bar Prefab. Staff gates swing around vertical hinges and
   retain independent automatic opening and closing; they no longer lift upward.
+  `Tavern_Main` uses `Assets/DungeonTavern/Art/Models/Bar/Bar.prefab`; the old
+  `Bar_Unified` placeholder Prefab and its dedicated material have been removed.
 
 - The B1 seal room is authored as `Assets/Scenes/SealRoom/SealRoom_B1.unity`, a separate additive content scene roughly one third the footprint of the tavern. The player is authored in B1 and becomes persistent at runtime before B1 is unloaded; `Tavern_Main` retains the camera, business systems, and narrative state. Stair travel uses a short fade.
 - The current formal build enters through `Tavern_Main`, which keeps the screen
