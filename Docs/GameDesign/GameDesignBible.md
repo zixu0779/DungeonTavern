@@ -112,6 +112,19 @@ The following are not design commitments:
   `Tavern_Main` uses `Assets/DungeonTavern/Art/Models/Bar/Bar.prefab`; the old
   `Bar_Unified` placeholder Prefab and its dedicated material have been removed.
 
+- Hierarchy cleanup: the bar sits directly under `Tavern_Main/Environment/Bar`;
+  automatic kitchen/storage door triggers belong under `Environment/Walls/Doors`,
+  and the walkable floor collider belongs under `Environment/Floor`.
+  `Gameplay` is a child of `Tavern_Main`; live host services are named `Runtime`.
+  The obsolete greybox table, foundation group, legacy marker, inactive test
+  customer, unused storage-entry marker, and unused closing marker are removed.
+- Storage stair travel is temporarily disconnected while the new
+  `Stair_Stone_Storage_Descending` placement is being authored. The old access
+  steps, `StorageStairArrival`, and `StorageToSealRoom` are removed. B1's return
+  portal is inactive with its old destination cleared; `Day1NarrativeController`
+  is disabled with its old arrival reference cleared. Reconnect both and
+  re-enable the narrative when the replacement stair arrival is confirmed.
+
 - The B1 seal room is authored as `Assets/Scenes/SealRoom/SealRoom_B1.unity`, a separate additive content scene roughly one third the footprint of the tavern. The player is authored in B1 and becomes persistent at runtime before B1 is unloaded; `Tavern_Main` retains the camera, business systems, and narrative state. Stair travel uses a short fade.
 - The current formal build enters through `Tavern_Main`, which keeps the screen
   black until the initial B1 content and player placement are ready, then fades

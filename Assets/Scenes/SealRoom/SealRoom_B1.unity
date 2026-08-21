@@ -20360,7 +20360,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1776436555
 Transform:
   m_ObjectHideFlags: 0
@@ -20390,7 +20390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.AdditiveScenePortal
   sceneToLoad: Tavern_Main
   sceneToUnload: SealRoom_B1
-  destinationPath: Tavern_Main/Environment/Stage40_Foundation/StorageStairArrival
+  destinationPath: 
   fadeDuration: 0.25
 --- !u!54 &1776436557
 Rigidbody:
