@@ -106,6 +106,10 @@ The following are not design commitments:
 
 ## Current scene status and contract
 
+- The chest lid opens around its rear hinge. The tavern sign has two stable
+  states and independently authored opening and closing animations; its sliding
+  motion is currently an editable draft, pending the final slot trajectory.
+
 - The generated L-shaped bar, its two staff gate leaves, and fixed hinge posts
   form one reusable bar Prefab. Staff gates swing around vertical hinges and
   retain independent automatic opening and closing; they no longer lift upward.
