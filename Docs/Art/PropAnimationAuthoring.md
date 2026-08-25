@@ -47,3 +47,27 @@ Opening 当前 1.25 秒，Closing 当前 1.1 秒，各自记录 BoardPivot 的�
 菜单 `Tools > Dungeon Tavern > Props > Check Chest And Sign Animations` 检查
 当前 25° / 180° 示范端点、端点连续性、固定件不动，以及 Animator 双向状态切换。
 角度设计改变后，应同步调整检查中的预期角度。
+
+## TavernSign Closing 润色（2026-09-16）
+
+保留用户的新起终点：BoardPivot 从 Y=0.261、X 旋转=180°，到 Y=0.89、
+X 旋转=28°；总时长仍为 1.1 秒。轴沿固定深度连续上提，约 0.748 秒到顶后
+保持位置，牌板越过终点约 13°，反向回摆约 3°后停稳。中间曲线使用
+Clamped Auto 连续切线，避免每个关键帧都停住；首尾速度为零。
+
+FixedFrame 已移回 TavernSign 根节点，保持原起始姿态的外框位置，避免跟随
+BoardPivot 运动。Open、Closed、Opening 动画未修改；Opening 仍需用户单独完成。
+
+用菜单 `Tools > Dungeon Tavern > Props > Check Tavern Sign Closing` 可单独检查
+当前 Closing 的端点、轴的单调上提和外框固定。前面的整套检查仍面向早期
+示范动画，不能作为目前尚未完成的 Opening 的通过结论。
+
+## Closing 第二次润色（2026-09-17）
+
+基于用户加快后的前段关键帧进行平滑，保留原关键时刻和姿态；额外增加
+26.6° → 28.5° → 28° 的小幅衰减振荡，总时长延长为 1.52 秒。
+位置与旋转用连续速度、连续加速度的插值进行 120 Hz 曲线烘焙，因此
+Animation 窗口中的关键帧会更密。Open、Closed、Opening 均未修改。
+
+本次还将脱离 BoardPivot 的活动牌板重新挂回，保持重挂前的静态摆放姿态。
+动画检查现在会检查活动牌板确实位于 BoardPivot 下，避免只驱动空轴。
