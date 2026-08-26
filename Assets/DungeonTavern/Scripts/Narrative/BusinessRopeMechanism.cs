@@ -6,18 +6,16 @@ namespace DungeonTavern.Tavern25D.Narrative
     public sealed class BusinessRopeMechanism : MonoBehaviour
     {
         [SerializeField] private Transform ropeVisual;
-        [SerializeField] private GameObject openSign;
-        [SerializeField] private GameObject closedSign;
+        [SerializeField] private TwoStateProp statusSign;
         [SerializeField, Min(0.05f)] private float pullDistance = 0.22f;
         [SerializeField, Min(0.05f)] private float pullDuration = 0.18f;
 
         private Coroutine animationRoutine;
 
-        public void Configure(Transform rope, GameObject open, GameObject closed)
+        public void Configure(Transform rope, TwoStateProp sign)
         {
             ropeVisual = rope;
-            openSign = open;
-            closedSign = closed;
+            statusSign = sign;
             ApplySign(false);
         }
 
@@ -32,10 +30,8 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void ApplySign(bool open)
         {
-            if (openSign != null)
-                openSign.SetActive(open);
-            if (closedSign != null)
-                closedSign.SetActive(!open);
+            if (statusSign != null)
+                statusSign.SetOpen(open);
         }
 
         private IEnumerator AnimatePull()
