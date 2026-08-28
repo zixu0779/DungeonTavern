@@ -8,13 +8,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
     public sealed class PrototypeCameraOrbit : MonoBehaviour
     {
         [SerializeField] private Transform followTarget;
-        [SerializeField, Min(0.05f)] private float rotationDuration = 0.22f;
-        [SerializeField, Range(0f, 90f)] private float cardinalYawOffset = 45f;
+        [SerializeField, Min(1f)] private float keyboardRotationSpeed = 90f;
+        [SerializeField, Min(0.01f)] private float mouseRotationSensitivity = 0.18f;
 
-        private float startYaw;
         private float targetYaw;
-        private float rotationElapsed;
-        private bool rotating;
         private bool dialogueFraming;
         private Transform dialogueLeft;
         private Transform dialogueRight;
@@ -38,7 +35,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Awake()
         {
-            targetYaw = SnapCardinalYaw(transform.eulerAngles.y);
+            targetYaw = transform.eulerAngles.y;
             transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
             ApplyIsometricProjection();
             gameCamera = GetComponentInChildren<Camera>();
@@ -54,7 +51,6 @@ namespace DungeonTavern.Prototypes.Rotation25D
             var camera = GetComponentInChildren<Camera>(true);
             if (camera == null || camera.transform.parent != transform)
                 throw new System.InvalidOperationException("Isometric camera must be a direct child of the orbit rig.");
-            cardinalYawOffset = 45f;
             var position = camera.transform.localPosition;
             var forward = camera.transform.localRotation * Vector3.forward;
             var target = Mathf.Abs(forward.y) > .0001f
@@ -64,7 +60,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             camera.orthographic = true;
             camera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
             camera.transform.localPosition = target - camera.transform.localRotation * Vector3.forward * distance;
-            transform.rotation = Quaternion.Euler(0, SnapCardinalYaw(transform.eulerAngles.y), 0);
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
         }
 
         private void Update()
@@ -75,15 +71,15 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 UpdateDialogueFraming();
                 return;
             }
-            if (keyboard != null)
-            {
-                if (keyboard.qKey.wasPressedThisFrame)
-                    RotateLeft();
-                else if (keyboard.eKey.wasPressedThisFrame)
-                    RotateRight();
-            }
-
-            UpdateRotation();
+            if (Time.timeScale <= 0f) return;
+            bool left = keyboard != null && keyboard.qKey.isPressed;
+            bool right = keyboard != null && keyboard.eKey.isPressed;
+            if (left || right)
+                RotateBy(((right ? 1f : 0f) - (left ? 1f : 0f)) * keyboardRotationSpeed * Time.deltaTime);
+            else if (Mouse.current != null && Mouse.current.rightButton.isPressed &&
+                (UnityEngine.EventSystems.EventSystem.current == null ||
+                 !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()))
+                RotateBy(Mouse.current.delta.ReadValue().x * mouseRotationSensitivity);
         }
 
         private void LateUpdate()
@@ -106,12 +102,12 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         public void RotateLeft()
         {
-            BeginRotation(targetYaw - 90f);
+            RotateBy(-keyboardRotationSpeed * Time.deltaTime);
         }
 
         public void RotateRight()
         {
-            BeginRotation(targetYaw + 90f);
+            RotateBy(keyboardRotationSpeed * Time.deltaTime);
         }
 
         public void BeginDialogueFraming(Transform leftCharacter, Transform rightCharacter)
@@ -130,7 +126,6 @@ namespace DungeonTavern.Prototypes.Rotation25D
             dialogueTargetYaw = ChooseDialogueYaw(leftCharacter, rightCharacter);
             nextOcclusionCheck = 0f;
             dialogueFraming = true;
-            rotating = false;
         }
 
         public void EndDialogueFraming()
@@ -145,7 +140,6 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 gameCamera.orthographicSize = preDialogueSize;
             transform.SetPositionAndRotation(preDialoguePosition, preDialogueRotation);
             targetYaw = preDialogueTargetYaw;
-            rotating = false;
             occlusionFader?.RestoreAll();
         }
 
@@ -266,36 +260,11 @@ namespace DungeonTavern.Prototypes.Rotation25D
             return character.position + Vector3.up * 1.2f;
         }
 
-        private void BeginRotation(float newTargetYaw)
+        public void RotateBy(float deltaDegrees)
         {
-            startYaw = transform.eulerAngles.y;
-            targetYaw = SnapCardinalYaw(newTargetYaw);
-            rotationElapsed = 0f;
-            rotating = true;
-        }
-
-        private float SnapCardinalYaw(float yaw)
-        {
-            return Mathf.Round((yaw - cardinalYawOffset) / 90f) * 90f +
-                   cardinalYawOffset;
-        }
-
-        private void UpdateRotation()
-        {
-            if (!rotating)
-                return;
-
-            rotationElapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(rotationElapsed / rotationDuration);
-            float eased = t * t * (3f - 2f * t);
-            float yaw = Mathf.LerpAngle(startYaw, targetYaw, eased);
-            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
-
-            if (t < 1f)
-                return;
-
+            if (dialogueFraming) return;
+            targetYaw = Mathf.Repeat(targetYaw + deltaDegrees, 360f);
             transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
-            rotating = false;
         }
     }
 }
