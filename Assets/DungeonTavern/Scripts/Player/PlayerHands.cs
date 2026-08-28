@@ -6,7 +6,9 @@ namespace DungeonTavern.Gameplay.Interaction
     public enum HeldItem
     {
         None,
-        TestDrink
+        TestDrink,
+        MainDish,
+        SideDish
     }
 
     public sealed class PlayerHands : MonoBehaviour

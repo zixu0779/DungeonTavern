@@ -207,14 +207,15 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
         }
 
-        private void OnSettlementRequested(CustomerServicePoint customer)
+        private bool OnSettlementRequested(CustomerServicePoint customer)
         {
             if (State != Day1FlowState.ServingBran || customer != bran)
-                return;
+                return false;
 
             customer.GetComponent<WorldSpeechBubble>()?.Hide();
             BeginCloseDialogue(customer.transform);
             SelectExternalGate();
+            return true;
         }
 
         private void BeginCloseDialogue(Transform speaker)

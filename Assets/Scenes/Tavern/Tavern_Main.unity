@@ -37456,14 +37456,13 @@ MonoBehaviour:
     type: 3}
   guestEntry: {fileID: 823637247}
   seatRegistry: {fileID: 1130337457}
-  settlementPoint: {fileID: 1928328538}
   autoStart: 0
   customers:
   - displayName: Bran
     arrivalTime: 0.5
     orderItem: 1
     tint: {r: 1, g: 0.78, b: 0.62, a: 1}
-    requiresSettlement: 1
+    orderItems: []
 --- !u!114 &546942405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37514,6 +37513,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6cfe486a4024cc7a46f4026e3ba030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.TavernMenuSystem
+  dishes:
+  - item: 1
+    label: "\u9EA6\u82BD\u996E\u6599"
+    price: 8
+    eatingSeconds: 3
   startingMoney: 500
 --- !u!1 &548418939
 GameObject:
@@ -58118,7 +58122,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 834216148}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
+  m_LocalRotation: {x: -0, y: 0.38268346, z: -0, w: 0.9238795}
   m_LocalPosition: {x: 5.5, y: 0, z: 7.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -107175,8 +107179,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1564043543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268346, y: 0, z: 0, w: 0.9238795}
-  m_LocalPosition: {x: 0, y: 8, z: -8}
+  m_LocalRotation: {x: 0.30290544, y: 0, z: 0, w: 0.95302063}
+  m_LocalPosition: {x: 0, y: 6.5319724, z: -9.237606}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

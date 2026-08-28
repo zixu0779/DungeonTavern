@@ -145,7 +145,7 @@ The following are not design commitments:
   editing code; renaming or reparenting it requires updating the portal's path.
 
 - `Assets/Scenes/Tavern/Tavern_Main.unity` is the authoritative 2.5D work scene.
-- The approved presentation uses an orthographic camera pitched 45 degrees, with
+- The approved presentation uses an orthographic camera pitched approximately 35.264 degrees for true isometric projection, with
   camera-relative cardinal headings at 45, 135, 225, and 315 degrees.
 - WASD moves the player and Q/E rotates the view by 90 degrees.
 - Active runtime assets live directly under `Assets/DungeonTavern`, organized as
@@ -273,3 +273,10 @@ Stable marker names for future integrations:
 - 2026-09-06: Retired the redundant `Assets/DungeonTavern/Tavern25D` directory
   layer after the legacy 2D workflow was removed. Active runtime resources are
   grouped directly beneath `Assets/DungeonTavern` by responsibility.
+
+## Confirmed customer service flow (2026-09-17)
+
+- Customers join a queue at the menu before ordering. Only the customer at the front who has reached the ordering position may place an order.
+- After confirming the order, customers move to their assigned seat, wait for food, eat, wait for settlement in place, then leave after payment. They do not join a separate checkout queue.
+- An order can contain multiple dishes and quantities. Food can arrive in portions; customers may eat delivered food while waiting for remaining portions. Settlement becomes available only after the entire order has been delivered and consumed.
+- Seat reservation and physical seating are separate: a reservation may be held before arrival at the table to prevent competing customers from taking it.

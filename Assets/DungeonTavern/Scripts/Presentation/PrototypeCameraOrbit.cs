@@ -40,12 +40,31 @@ namespace DungeonTavern.Prototypes.Rotation25D
         {
             targetYaw = SnapCardinalYaw(transform.eulerAngles.y);
             transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
+            ApplyIsometricProjection();
             gameCamera = GetComponentInChildren<Camera>();
             occlusionFader = GetComponent<DialogueOcclusionFader>();
             if (occlusionFader == null)
                 occlusionFader = gameObject.AddComponent<DialogueOcclusionFader>();
             if (gameCamera != null)
                 explorationSize = gameCamera.orthographicSize;
+        }
+
+        public void ApplyIsometricProjection()
+        {
+            var camera = GetComponentInChildren<Camera>(true);
+            if (camera == null || camera.transform.parent != transform)
+                throw new System.InvalidOperationException("Isometric camera must be a direct child of the orbit rig.");
+            cardinalYawOffset = 45f;
+            var position = camera.transform.localPosition;
+            var forward = camera.transform.localRotation * Vector3.forward;
+            var target = Mathf.Abs(forward.y) > .0001f
+                ? position + forward * (-position.y / forward.y) : Vector3.zero;
+            float distance = Vector3.Distance(position, target);
+            float pitch = Mathf.Atan(1f / Mathf.Sqrt(2f)) * Mathf.Rad2Deg;
+            camera.orthographic = true;
+            camera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
+            camera.transform.localPosition = target - camera.transform.localRotation * Vector3.forward * distance;
+            transform.rotation = Quaternion.Euler(0, SnapCardinalYaw(transform.eulerAngles.y), 0);
         }
 
         private void Update()
@@ -164,14 +183,14 @@ namespace DungeonTavern.Prototypes.Rotation25D
             float preferred = leftToRight.sqrMagnitude > 0.01f
                 ? Mathf.Atan2(leftToRight.x, leftToRight.z) * Mathf.Rad2Deg - 90f
                 : transform.eulerAngles.y;
-            float[] offsets = { 0f, -45f, 45f, -90f, 90f, 180f };
+            float[] headings = { 45f, 135f, 225f, 315f };
             float bestYaw = preferred;
             float bestScore = float.PositiveInfinity;
-            for (int index = 0; index < offsets.Length; index++)
+            for (int index = 0; index < headings.Length; index++)
             {
-                float candidate = preferred + offsets[index];
+                float candidate = headings[index];
                 int blockers = CountCandidateBlockers(candidate, leftCharacter, rightCharacter);
-                float score = blockers * 1000f + Mathf.Abs(offsets[index]);
+                float score = blockers * 1000f + Mathf.Abs(Mathf.DeltaAngle(preferred, candidate));
                 if (score < bestScore)
                 {
                     bestScore = score;

@@ -18,26 +18,25 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField, Min(0f)] private float arrivalTime;
         [SerializeField] private HeldItem orderItem = HeldItem.TestDrink;
         [SerializeField] private Color tint = Color.white;
-        [SerializeField] private bool requiresSettlement;
+        [SerializeField] private List<OrderRequest> orderItems = new();
+        public IEnumerable<OrderRequest> OrderItems => orderItems.Count > 0
+            ? orderItems : new[] { new OrderRequest { item = orderItem } };
 
         public string DisplayName => displayName;
         public float ArrivalTime => arrivalTime;
-        public HeldItem OrderItem => orderItem;
         public Color Tint => tint;
-        public bool RequiresSettlement => requiresSettlement;
 
         public void Configure(
             string name,
             float time,
             HeldItem item,
-            Color customerTint,
-            bool settlement)
+            Color customerTint)
         {
             displayName = name;
             arrivalTime = Mathf.Max(0f, time);
             orderItem = item;
             tint = customerTint;
-            requiresSettlement = settlement;
+            orderItems.Clear();
         }
     }
 
@@ -47,7 +46,6 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField] private GameObject customerPrefab;
         [SerializeField] private Transform guestEntry;
         [SerializeField] private SeatRegistry seatRegistry;
-        [SerializeField] private Transform settlementPoint;
         [SerializeField] private bool autoStart = true;
 
         [Header("Authored Schedule")]
@@ -57,7 +55,6 @@ namespace DungeonTavern.Gameplay.Interaction
         private readonly List<CustomerServicePoint> activeCustomers = new();
         private float elapsedTime;
         private int nextCustomerIndex;
-        private SettlementQueue settlementQueue;
 
         public BusinessDayState State { get; private set; } = BusinessDayState.Preparing;
         public int TotalCustomers => customers.Count;
@@ -87,9 +84,6 @@ namespace DungeonTavern.Gameplay.Interaction
                 return false;
 
             pendingCustomers.Clear();
-            if (settlementPoint != null)
-                settlementQueue = settlementPoint.GetComponent<SettlementQueue>()
-                    ?? settlementPoint.gameObject.AddComponent<SettlementQueue>();
             pendingCustomers.AddRange(customers);
             pendingCustomers.Sort((left, right) => left.ArrivalTime.CompareTo(right.ArrivalTime));
             elapsedTime = 0f;
@@ -101,13 +95,12 @@ namespace DungeonTavern.Gameplay.Interaction
             return true;
         }
 
-        public void ConfigureDayOne(Transform billSettlementPoint)
+        public void ConfigureDayOne()
         {
             autoStart = false;
-            settlementPoint = billSettlementPoint;
             customers.Clear();
             CustomerScheduleEntry bran = new();
-            bran.Configure("Bran", 0.5f, HeldItem.TestDrink, new Color(1f, 0.78f, 0.62f), true);
+            bran.Configure("Bran", 0.5f, HeldItem.TestDrink, new Color(1f, 0.78f, 0.62f));
             customers.Add(bran);
         }
 
@@ -146,15 +139,20 @@ namespace DungeonTavern.Gameplay.Interaction
                 return false;
             }
 
+            try
+            {
+                customer.Initialize(entry.DisplayName, entry.OrderItems, guestEntry, seatRegistry, entry.Tint, seat);
+            }
+            catch (Exception exception)
+            {
+                seatRegistry.Release(customer);
+                Destroy(instance);
+                Debug.LogException(exception, this);
+                enabled = false;
+                return false;
+            }
             activeCustomers.Add(customer);
             customer.Finished += OnCustomerFinished;
-            customer.Initialize(
-                entry.DisplayName,
-                entry.OrderItem,
-                guestEntry,
-                seat,
-                entry.Tint,
-                entry.RequiresSettlement ? settlementQueue : null);
             Debug.Log($"Customer spawned: {entry.DisplayName}; active {ActiveCustomers}, pending {WaitingCustomers}.", this);
             CustomerSpawned?.Invoke(customer);
             ProgressChanged?.Invoke();
@@ -199,6 +197,22 @@ namespace DungeonTavern.Gameplay.Interaction
             if (customers.Count == 0)
             {
                 Debug.LogError("Business day requires at least one scheduled customer.", this);
+                return false;
+            }
+
+            var menu = FindAnyObjectByType<TavernMenuSystem>();
+            if (menu == null || FindAnyObjectByType<ServiceOrderQueue>() == null || GameObject.Find("MenuApproach") == null)
+            {
+                Debug.LogError("Business day requires a menu, ordering queue and MenuApproach.", this);
+                return false;
+            }
+            try
+            {
+                foreach (var entry in customers) _ = new CustomerOrder(entry.OrderItems, menu.FindDish);
+            }
+            catch (ArgumentException exception)
+            {
+                Debug.LogError($"Invalid customer menu configuration: {exception.Message}", this);
                 return false;
             }
 

@@ -6,6 +6,8 @@ namespace DungeonTavern.Gameplay.Interaction
     public sealed class ServiceOrderQueue : MonoBehaviour
     {
         [SerializeField] private List<Transform> queuePoints = new();
+        private Transform menuAnchor;
+        public void BindMenu(Transform anchor) => menuAnchor = anchor;
         private readonly List<CustomerServicePoint> customers = new();
 
         public void Configure(IEnumerable<Transform> points)
@@ -32,10 +34,22 @@ namespace DungeonTavern.Gameplay.Interaction
         public Vector3 GetPosition(CustomerServicePoint customer)
         {
             RemoveMissing();
+            queuePoints.RemoveAll(point => point == null);
             int index = Mathf.Max(0, customers.IndexOf(customer));
+            Vector3 anchor = menuAnchor == null ? transform.position : menuAnchor.position;
             if (queuePoints.Count == 0)
-                return transform.position;
-            return queuePoints[Mathf.Min(index, queuePoints.Count - 1)].position;
+                return anchor - (menuAnchor == null ? transform.forward : menuAnchor.forward) * index;
+            int authored = Mathf.Min(index, queuePoints.Count - 1);
+            Vector3 position = anchor + queuePoints[authored].position - queuePoints[0].position;
+            if (index >= queuePoints.Count)
+            {
+                Vector3 direction = queuePoints.Count > 1
+                    ? (queuePoints[^1].position - queuePoints[^2].position).normalized
+                    : -(menuAnchor == null ? transform.forward : menuAnchor.forward);
+                if (direction.sqrMagnitude < .01f) direction = Vector3.back;
+                position += direction * (index - queuePoints.Count + 1);
+            }
+            return position;
         }
 
         private void RemoveMissing() => customers.RemoveAll(customer => customer == null);

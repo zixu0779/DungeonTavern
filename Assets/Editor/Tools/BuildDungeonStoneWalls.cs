@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 internal static class BuildDungeonStoneWalls {
- const string Root="Assets/DungeonTavern/Art/Environment/Architecture/Walls/石墙/";
+ const string Root="Assets/DungeonTavern/Art/Environment/Architecture/Walls/StoneWall/Legacy/";
  const string Output="ArtSource/Previews/DungeonStoneWalls/";
  static Mesh Prism(string name,Vector2[] outline,float height,int[] topTriangles,float uOffset=0){var vertices=new List<Vector3>();var normals=new List<Vector3>();var uv=new List<Vector2>();var sides=new List<int>();var caps=new List<int>();float distance=0;
  for(int i=0;i<outline.Length;i++){var a=outline[i];var b=outline[(i+1)%outline.Length];float length=Vector2.Distance(a,b);var normal=new Vector3(b.y-a.y,0,a.x-b.x).normalized;int index=vertices.Count;vertices.AddRange(new[]{new Vector3(a.x,0,a.y),new Vector3(b.x,0,b.y),new Vector3(b.x,height,b.y),new Vector3(a.x,height,a.y)});normals.AddRange(Enumerable.Repeat(normal,4));float start=(i==0||i==2)?uOffset:distance/2;uv.AddRange(new[]{new Vector2(start,0),new Vector2(start+length/2,0),new Vector2(start+length/2,1),new Vector2(start,1)});sides.AddRange(new[]{index,index+2,index+1,index,index+3,index+2});distance+=length;}

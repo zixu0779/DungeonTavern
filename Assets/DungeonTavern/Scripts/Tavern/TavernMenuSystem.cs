@@ -9,13 +9,10 @@ namespace DungeonTavern.Gameplay.Interaction
     [DisallowMultipleComponent]
     public sealed class TavernMenuSystem : MonoBehaviour
     {
-        private sealed class Order
-        {
-            public CustomerServicePoint Customer;
-            public HeldItem Item;
-        }
-
-        private readonly List<Order> orders = new();
+        [SerializeField] private List<DishDefinition> dishes = new() { new DishDefinition() };
+        private readonly Dictionary<CustomerServicePoint, CustomerOrder> orders = new();
+        public IReadOnlyList<DishDefinition> Dishes => dishes;
+        public DishDefinition FindDish(HeldItem item) => dishes.FirstOrDefault(d => d.item == item);
         private GUIStyle titleStyle;
         private GUIStyle panelStyle;
         private GUIStyle headerStyle;
@@ -24,7 +21,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         [SerializeField, Min(0)] private int startingMoney = 500;
         public int Balance { get; private set; }
-        public int PendingOrderCount => orders.Count;
+        public int PendingOrderCount => orders.Values.Sum(o => o.Portions.Count(p => !p.Delivered));
         public event Action Changed;
 
         private void Awake() => Balance = startingMoney;
@@ -40,37 +37,43 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public void Toggle() => isOpen = !isOpen;
 
-        public bool RegisterOrder(CustomerServicePoint customer, HeldItem item)
+        public bool RegisterOrder(CustomerServicePoint customer, CustomerOrder order)
         {
-            if (customer == null || item == HeldItem.None || orders.Any(order => order.Customer == customer))
-                return false;
-            orders.Add(new Order { Customer = customer, Item = item });
+            if (customer == null || order == null || orders.ContainsKey(customer)) return false;
+            orders.Add(customer, order);
             Changed?.Invoke();
             return true;
         }
 
         public bool TryServe(CustomerServicePoint customer, HeldItem item)
         {
-            Order order = orders.FirstOrDefault(candidate => candidate.Customer == customer && candidate.Item == item);
-            if (order == null)
-                return false;
-            orders.Remove(order);
+            if (!orders.TryGetValue(customer, out var order) || !order.TryDeliver(item)) return false;
             Changed?.Invoke();
             return true;
         }
 
-        public int Count(HeldItem item) => orders.Count(order => order.Item == item);
+        public void CancelOrder(CustomerServicePoint customer)
+        {
+            if (orders.Remove(customer)) Changed?.Invoke();
+        }
 
+        public int Count(HeldItem item) => orders.Values.Sum(o => o.Portions.Count(p => p.Item == item && !p.Delivered));
         public IReadOnlyList<CustomerServicePoint> GetCustomers(HeldItem item) => orders
-            .Where(order => order.Item == item)
-            .Select(order => order.Customer)
-            .Where(customer => customer != null)
-            .ToArray();
+            .Where(pair => pair.Key != null && pair.Value.Needs(item)).Select(pair => pair.Key).ToArray();
 
-        public void CompleteSale(HeldItem item) => Balance += GetPrice(item);
+        public bool CompleteSale(CustomerServicePoint customer)
+        {
+            if (!orders.TryGetValue(customer, out var order) || !order.TryPay()) return false;
+            Balance += order.Total;
+            orders.Remove(customer);
+            Changed?.Invoke();
+            return true;
+        }
 
-        public static int GetPrice(HeldItem item) => item == HeldItem.TestDrink ? 8 : 0;
-        public static string GetLabel(HeldItem item) => item == HeldItem.TestDrink ? "麦芽饮料" : item.ToString();
+        public static string GetLabel(HeldItem item) => item switch
+        {
+            HeldItem.TestDrink => "麦芽饮料", HeldItem.MainDish => "主菜", HeldItem.SideDish => "配菜", _ => item.ToString()
+        };
 
         private void OnGUI()
         {
@@ -80,20 +83,24 @@ namespace DungeonTavern.Gameplay.Interaction
                 return;
 
             float width = Mathf.Min(920f, Screen.width - 56f);
-            Rect panel = new((Screen.width - width) * 0.5f, 92f, width, Mathf.Min(360f, Screen.height - 130f));
+            Rect panel = new((Screen.width - width) * 0.5f, 92f, width, Mathf.Min(180f + dishes.Count * 60f, Screen.height - 130f));
             GUI.Box(panel, GUIContent.none, panelStyle);
             GUI.Label(new Rect(panel.x + 28f, panel.y + 18f, width - 56f, 48f), "酒馆菜单", headerStyle);
             float y = panel.y + 82f;
             float inner = width - 56f;
             GUI.Label(new Rect(panel.x + 28f, y, inner * 0.34f, 42f), "菜名", rowStyle);
             GUI.Label(new Rect(panel.x + 28f + inner * 0.34f, y, inner * 0.18f, 42f), "金额", rowStyle);
-            GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 42f), "点单人数", rowStyle);
+            GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 42f), "待上份数", rowStyle);
             GUI.Label(new Rect(panel.x + 28f + inner * 0.72f, y, inner * 0.28f, 42f), "点单人", rowStyle);
             y += 56f;
-            GUI.Label(new Rect(panel.x + 28f, y, inner * 0.34f, 56f), GetLabel(HeldItem.TestDrink), rowStyle);
-            GUI.Label(new Rect(panel.x + 28f + inner * 0.34f, y, inner * 0.18f, 56f), $"{GetPrice(HeldItem.TestDrink)} G", rowStyle);
-            GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 56f), Count(HeldItem.TestDrink).ToString(), rowStyle);
-            DrawCustomerPortraits(new Rect(panel.x + 28f + inner * 0.72f, y, inner * 0.28f, 56f), GetCustomers(HeldItem.TestDrink));
+            foreach (var dish in dishes)
+            {
+                GUI.Label(new Rect(panel.x + 28f, y, inner * 0.34f, 56f), dish.label, rowStyle);
+                GUI.Label(new Rect(panel.x + 28f + inner * 0.34f, y, inner * 0.18f, 56f), $"{dish.price} G", rowStyle);
+                GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 56f), Count(dish.item).ToString(), rowStyle);
+                DrawCustomerPortraits(new Rect(panel.x + 28f + inner * 0.72f, y, inner * 0.28f, 56f), GetCustomers(dish.item));
+                y += 60f;
+            }
         }
 
         private void EnsureStyles()

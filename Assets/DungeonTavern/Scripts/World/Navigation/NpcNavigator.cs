@@ -106,8 +106,8 @@ namespace DungeonTavern.Tavern25D
 
         private void EnsureAgent()
         {
-            if (agent == null)
-                agent = GetComponent<NavMeshAgent>() ?? gameObject.AddComponent<NavMeshAgent>();
+            if (agent == null) agent = GetComponent<NavMeshAgent>();
+            if (agent == null) agent = gameObject.AddComponent<NavMeshAgent>();
         }
 
         private bool EnsureOnNavMesh()

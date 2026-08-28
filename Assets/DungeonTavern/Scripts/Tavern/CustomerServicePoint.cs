@@ -8,56 +8,37 @@ namespace DungeonTavern.Gameplay.Interaction
 {
     public enum CustomerOrderState
     {
-        Inactive,
-        Entering,
-        ApproachingMenu,
-        Ordering,
-        QueueingForOrder,
-        WaitingForDrink,
-        Served,
-        ApproachingSettlement,
-        QueueingForSettlement,
-        AwaitingSettlement,
-        Leaving,
-        Finished
+        Inactive, Entering, QueueingForOrder, Ordering, FindingSeat,
+        MovingToSeat, WaitingForFood, Eating, AwaitingSettlement, Leaving, Finished
     }
 
     public sealed class CustomerServicePoint : InteractionPoint
     {
         [SerializeField, Min(0.1f)] private float moveSpeed = 4.25f;
         [SerializeField, Min(0f)] private float orderingDuration = 1.25f;
-        [SerializeField, Min(0f)] private float servedPauseDuration = 1f;
-        [SerializeField, Min(0.1f)] private float arrivalTolerance = 0.75f;
-
+        [SerializeField, Min(0.1f)] private float arrivalTolerance = 0.25f;
         private Renderer[] customerRenderers;
         private Transform guestEntry;
         private SeatPoint assignedSeat;
+        private SeatRegistry seatRegistry;
         private float stateTimer;
         private string customerName = "Customer";
-        private HeldItem requiredItem = HeldItem.TestDrink;
         private bool isInitialized;
-        private SettlementQueue settlementQueue;
-        private ServiceOrderQueue serviceQueue;
-        private TavernMenuSystem menuSystem;
-        private Transform menuPoint;
+        private bool settlementPending;
+        [SerializeField] private ServiceOrderQueue serviceQueue;
+        [SerializeField] private TavernMenuSystem menuSystem;
+        [SerializeField] private Transform menuPoint;
         private CharacterController movementController;
         private NpcNavigator navigator;
         private WorldSpeechBubble bubble;
-
         public CustomerOrderState State { get; private set; }
-
         public string CustomerName => customerName;
-
-        public HeldItem RequiredItem => requiredItem;
-
-        public bool IsServed => State is CustomerOrderState.Served
-            or CustomerOrderState.Leaving
-            or CustomerOrderState.Finished;
-
+        public CustomerOrder Order { get; private set; }
+        public bool IsServed => Order != null && Order.AllDelivered;
         public event Action<CustomerOrderState> StateChanged;
-
         public event Action<CustomerServicePoint> Finished;
-        public event Action<CustomerServicePoint> SettlementRequested;
+        // Return true only when a narrative actually takes ownership of settlement.
+        public event Func<CustomerServicePoint, bool> SettlementRequested;
 
         private void Awake()
         {
@@ -87,234 +68,173 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void Update()
         {
-            if (!isInitialized)
-                return;
+            if (!isInitialized) return;
+            bool arrived = false;
+            if (State is CustomerOrderState.Entering or CustomerOrderState.QueueingForOrder)
+                arrived = MoveTowards(serviceQueue.GetPosition(this));
+            else if (State == CustomerOrderState.MovingToSeat)
+                arrived = MoveTowards(assignedSeat.Position);
+            else if (State == CustomerOrderState.Leaving)
+                arrived = MoveTowards(guestEntry.position);
+            Tick(Time.deltaTime, arrived);
+        }
 
+        // Movement reports arrival; this method owns the service flow, independent of pathfinding.
+        internal void Tick(float seconds, bool arrived)
+        {
+            if (!isInitialized) return;
             switch (State)
             {
                 case CustomerOrderState.Entering:
-                case CustomerOrderState.ApproachingMenu:
-                    if (MoveTowards(menuPoint == null ? assignedSeat.Position : menuPoint.position))
-                        ChangeState(CustomerOrderState.Ordering);
+                    ChangeState(CustomerOrderState.QueueingForOrder);
                     break;
-
-                case CustomerOrderState.Ordering:
-                    if (TickTimer())
-                    {
-                        menuSystem?.RegisterOrder(this, requiredItem);
-                        serviceQueue?.Enqueue(this);
-                        ChangeState(CustomerOrderState.QueueingForOrder);
-                    }
-                    break;
-
                 case CustomerOrderState.QueueingForOrder:
-                    if (serviceQueue == null || MoveTowards(serviceQueue.GetPosition(this)))
-                        ChangeState(CustomerOrderState.WaitingForDrink);
+                    if (arrived && serviceQueue.IsFirst(this)) ChangeState(CustomerOrderState.Ordering);
                     break;
-
-                case CustomerOrderState.Served:
-                    if (TickTimer())
+                case CustomerOrderState.Ordering:
+                    stateTimer -= seconds;
+                    if (stateTimer <= 0 && menuSystem.RegisterOrder(this, Order))
                     {
-                        if (settlementQueue != null)
-                            settlementQueue.Enqueue(this);
-                        ChangeState(settlementQueue == null
-                            ? CustomerOrderState.Leaving
-                            : CustomerOrderState.ApproachingSettlement);
+                        serviceQueue.Remove(this);
+                        ChangeState(CustomerOrderState.FindingSeat);
                     }
                     break;
-
-                case CustomerOrderState.ApproachingSettlement:
-                case CustomerOrderState.QueueingForSettlement:
-                    if (MoveTowards(settlementQueue.GetPosition(this)))
-                        ChangeState(settlementQueue.IsFirst(this)
-                            ? CustomerOrderState.AwaitingSettlement
-                            : CustomerOrderState.QueueingForSettlement);
+                case CustomerOrderState.FindingSeat:
+                    if (assignedSeat != null || seatRegistry.TryReserve(this, out assignedSeat))
+                        ChangeState(CustomerOrderState.MovingToSeat);
                     break;
-
+                case CustomerOrderState.MovingToSeat:
+                    if (arrived)
+                    {
+                        transform.rotation = assignedSeat.transform.rotation;
+                        ChangeState(CustomerOrderState.WaitingForFood);
+                    }
+                    break;
+                case CustomerOrderState.Eating:
+                    Order.Eat(seconds);
+                    if (Order.AllConsumed) ChangeState(CustomerOrderState.AwaitingSettlement);
+                    else if (!Order.HasFood) ChangeState(CustomerOrderState.WaitingForFood);
+                    break;
                 case CustomerOrderState.Leaving:
-                    if (MoveTowards(guestEntry.position))
+                    if (arrived)
                     {
                         ChangeState(CustomerOrderState.Finished);
                         SetCustomerVisible(false);
-                        Debug.Log($"Customer complete: {customerName} exited the tavern.", this);
                         Finished?.Invoke(this);
                     }
                     break;
             }
         }
 
-        public void Initialize(
-            string displayName,
-            HeldItem orderItem,
-            Transform entry,
-            SeatPoint seat,
-            Color tint,
-            SettlementQueue billSettlementQueue = null)
+        public void Initialize(string displayName, System.Collections.Generic.IEnumerable<OrderRequest> requests,
+            Transform entry, SeatRegistry seats, Color tint, SeatPoint reservedSeat = null)
         {
-            if (isInitialized)
-                throw new InvalidOperationException($"{name} has already been initialized.");
-
-            if (entry == null)
-                throw new ArgumentNullException(nameof(entry));
-
-            if (seat == null)
-                throw new ArgumentNullException(nameof(seat));
-
+            if (isInitialized) throw new InvalidOperationException("Customer already initialized.");
+            if (entry == null || seats == null) throw new ArgumentException("Entry and seat registry are required.");
+            if (menuSystem == null) menuSystem = FindAnyObjectByType<TavernMenuSystem>();
+            if (serviceQueue == null) serviceQueue = FindAnyObjectByType<ServiceOrderQueue>();
+            if (menuPoint == null) menuPoint = GameObject.Find("MenuApproach")?.transform;
+            if (menuSystem == null || serviceQueue == null || menuPoint == null)
+                throw new InvalidOperationException("Customer needs TavernMenuSystem, ServiceOrderQueue and MenuApproach.");
+            Order = new CustomerOrder(requests, menuSystem.FindDish);
             customerName = string.IsNullOrWhiteSpace(displayName) ? "Customer" : displayName;
-            requiredItem = orderItem;
             guestEntry = entry;
-            assignedSeat = seat;
-            settlementQueue = billSettlementQueue;
-            menuSystem = FindAnyObjectByType<TavernMenuSystem>();
-            serviceQueue = FindAnyObjectByType<ServiceOrderQueue>();
-            menuPoint = GameObject.Find("MenuApproach")?.transform;
+            seatRegistry = seats;
+            assignedSeat = reservedSeat;
+            serviceQueue.BindMenu(menuPoint);
             gameObject.name = $"Customer_{customerName}";
             ApplyTint(tint);
-
-            transform.position = guestEntry.position;
+            transform.position = entry.position;
+            serviceQueue.Enqueue(this);
             SetCustomerVisible(true);
             isInitialized = true;
             ChangeState(CustomerOrderState.Entering, true);
         }
 
+        private bool CanAcceptFood => State is CustomerOrderState.WaitingForFood or CustomerOrderState.Eating;
         public override string GetPrompt(PlayerHands hands)
         {
             if (State == CustomerOrderState.AwaitingSettlement)
-                return $"F：和{customerName}结账";
-
-            if (State != CustomerOrderState.WaitingForDrink)
-                return string.Empty;
-
+                return settlementPending ? "正在结账对话中" : $"F：和{customerName}结账";
+            if (!CanAcceptFood) return string.Empty;
             if (hands == null || hands.CurrentItem == HeldItem.None)
-                return $"{customerName}正在等待：{GetItemLabel(RequiredItem)}";
-
-            return hands.CurrentItem == RequiredItem
-                ? $"F：送上{GetItemLabel(RequiredItem)}"
-                : "这不是这位客人的订单";
+                return Order.AllDelivered ? $"{customerName}正在用餐" : $"{customerName}正在等待上菜";
+            return Order.Needs(hands.CurrentItem)
+                ? $"F：送上{menuSystem.FindDish(hands.CurrentItem).label}" : "这不是这位客人待上的菜品";
         }
 
         public override bool Interact(PlayerHands hands)
         {
             if (State == CustomerOrderState.AwaitingSettlement)
             {
-                SettlementRequested?.Invoke(this);
-                return true;
+                if (settlementPending) return false;
+                if (SettlementRequested != null)
+                    foreach (Func<CustomerServicePoint, bool> handler in SettlementRequested.GetInvocationList())
+                        if (handler(this)) { settlementPending = true; return true; }
+                return CompleteSettlement();
             }
-
-            if (State != CustomerOrderState.WaitingForDrink
-                || hands == null
-                || hands.CurrentItem != RequiredItem
-                || menuSystem == null
-                || !menuSystem.TryServe(this, RequiredItem))
-            {
-                return false;
-            }
-
+            if (!CanAcceptFood || hands == null || !menuSystem.TryServe(this, hands.CurrentItem)) return false;
             hands.Clear();
-            serviceQueue?.Remove(this);
-            ChangeState(CustomerOrderState.Served);
-            Debug.Log($"Order served: {customerName} received {GetItemLabel(RequiredItem)}.", this);
+            ChangeState(CustomerOrderState.Eating);
             return true;
         }
 
         public bool CompleteSettlement()
         {
-            if (State != CustomerOrderState.AwaitingSettlement)
-                return false;
-
-            settlementQueue?.Remove(this);
-            menuSystem?.CompleteSale(requiredItem);
+            if (State != CustomerOrderState.AwaitingSettlement || !menuSystem.CompleteSale(this)) return false;
+            settlementPending = false;
+            assignedSeat?.Release(this);
             ChangeState(CustomerOrderState.Leaving);
             return true;
         }
 
-        private bool MoveTowards(Vector3 destination)
-        {
-            navigator.MoveTo(destination, arrivalTolerance);
-            return navigator.HasArrived(arrivalTolerance);
-        }
-
-        private bool TickTimer()
-        {
-            stateTimer -= Time.deltaTime;
-            return stateTimer <= 0f;
-        }
+        private bool MoveTowards(Vector3 destination) => navigator.MoveTo(destination, arrivalTolerance)
+            && navigator.HasArrived(arrivalTolerance);
 
         private void ChangeState(CustomerOrderState nextState, bool force = false)
         {
-            if (!force && State == nextState)
-                return;
-
+            if (!force && State == nextState) return;
             State = nextState;
-            stateTimer = nextState switch
-            {
-                CustomerOrderState.Ordering => orderingDuration,
-                CustomerOrderState.Served => servedPauseDuration,
-                _ => 0f
-            };
-
+            if (nextState == CustomerOrderState.Ordering) stateTimer = orderingDuration;
+            if (nextState is CustomerOrderState.Ordering or CustomerOrderState.WaitingForFood
+                or CustomerOrderState.Eating or CustomerOrderState.AwaitingSettlement) navigator.Stop();
             UpdateBubble(nextState);
-
-            Debug.Log($"Customer {customerName} state: {State}", this);
             StateChanged?.Invoke(State);
+        }
+
+        private void OnDestroy()
+        {
+            serviceQueue?.Remove(this);
+            assignedSeat?.Release(this);
+            if (seatRegistry != null) seatRegistry.Release(this);
+            if (menuSystem != null) menuSystem.CancelOrder(this);
         }
 
         private void ApplyTint(Color tint)
         {
-            for (int index = 0; index < customerRenderers.Length; index++)
-            {
-                if (customerRenderers[index] is SpriteRenderer spriteRenderer)
-                    spriteRenderer.color = tint;
-            }
-        }
-
-        private static string GetItemLabel(HeldItem item)
-        {
-            return item switch
-            {
-                HeldItem.TestDrink => "麦芽饮料",
-                _ => item.ToString()
-            };
+            foreach (var renderer in customerRenderers)
+                if (renderer is SpriteRenderer sprite) sprite.color = tint;
         }
 
         private void UpdateBubble(CustomerOrderState state)
         {
-            if (bubble == null)
-                return;
-            switch (state)
+            if (bubble == null) return;
+            string message = state switch
             {
-                case CustomerOrderState.Entering:
-                case CustomerOrderState.ApproachingMenu:
-                    bubble.Show(customerName == "Bran"
-                        ? "门口的牌子终于翻回来了。我还以为你不会再开门。"
-                        : "先看看今天的菜单。");
-                    break;
-                case CustomerOrderState.Ordering:
-                    bubble.Show("老板，我想要一杯麦芽饮料。");
-                    break;
-                case CustomerOrderState.QueueingForOrder:
-                case CustomerOrderState.WaitingForDrink:
-                    bubble.Show("一杯麦芽饮料，谢谢。");
-                    break;
-                case CustomerOrderState.Served:
-                    bubble.Show("味道不错。");
-                    break;
-                case CustomerOrderState.ApproachingSettlement:
-                case CustomerOrderState.QueueingForSettlement:
-                case CustomerOrderState.AwaitingSettlement:
-                    bubble.Show("老板，结账。");
-                    break;
-                case CustomerOrderState.Leaving:
-                case CustomerOrderState.Finished:
-                    bubble.Hide();
-                    break;
-            }
+                CustomerOrderState.Entering => "先去菜单前排队。",
+                CustomerOrderState.QueueingForOrder => "等前面的客人点完单。",
+                CustomerOrderState.Ordering => "老板，我要点单。",
+                CustomerOrderState.FindingSeat => "找个位置。",
+                CustomerOrderState.WaitingForFood => "等菜上齐。",
+                CustomerOrderState.Eating => "味道不错。",
+                CustomerOrderState.AwaitingSettlement => "老板，结账。",
+                _ => null
+            };
+            if (message == null) bubble.Hide(); else bubble.Show(message);
         }
-
         private void SetCustomerVisible(bool visible)
         {
-            for (int index = 0; index < customerRenderers.Length; index++)
-                customerRenderers[index].enabled = visible;
+            foreach (var renderer in customerRenderers) renderer.enabled = visible;
         }
     }
 }

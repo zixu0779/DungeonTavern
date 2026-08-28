@@ -5,7 +5,8 @@ This document defines the stable visual language for environment art. It supplem
 ## View and perspective
 
 - The game uses a 2.5D pixel-art presentation with an orthographic camera pitched
-  45 degrees and cardinal view headings offset by 45 degrees.
+  approximately 35.264 degrees (atan(1/sqrt(2))) for true isometric projection,
+  with cardinal view headings offset by 45 degrees.
 - The view rotates in 90-degree steps through headings 45, 135, 225, and 315 degrees.
 - Floors are seen mostly from above, while walls must expose a readable vertical face and a sense of height.
 - Wall tops, wall faces, corners, pillars, arches, and door openings are distinct construction pieces. A sprite being stored under `Walls` does not mean it can be repeated in every direction.
