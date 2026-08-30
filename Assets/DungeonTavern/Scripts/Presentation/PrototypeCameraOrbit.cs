@@ -9,7 +9,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
     {
         [SerializeField] private Transform followTarget;
         [SerializeField, Min(1f)] private float keyboardRotationSpeed = 90f;
-        [SerializeField, Min(0.01f)] private float mouseRotationSensitivity = 0.18f;
+
+        [SerializeField, Min(1f), Tooltip("Minimum orthographic camera distance; moving back preserves framing while preventing nearby tall walls from crossing the near plane.")]
+        private float minimumCameraDistance = 40f;
 
         private float targetYaw;
         private bool dialogueFraming;
@@ -55,8 +57,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
             var forward = camera.transform.localRotation * Vector3.forward;
             var target = Mathf.Abs(forward.y) > .0001f
                 ? position + forward * (-position.y / forward.y) : Vector3.zero;
-            float distance = Vector3.Distance(position, target);
-            float pitch = Mathf.Atan(1f / Mathf.Sqrt(2f)) * Mathf.Rad2Deg;
+            float distance = Mathf.Max(minimumCameraDistance, Vector3.Distance(position, target));
+            float pitch = 45f;
             camera.orthographic = true;
             camera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
             camera.transform.localPosition = target - camera.transform.localRotation * Vector3.forward * distance;
@@ -76,10 +78,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             bool right = keyboard != null && keyboard.eKey.isPressed;
             if (left || right)
                 RotateBy(((right ? 1f : 0f) - (left ? 1f : 0f)) * keyboardRotationSpeed * Time.deltaTime);
-            else if (Mouse.current != null && Mouse.current.rightButton.isPressed &&
-                (UnityEngine.EventSystems.EventSystem.current == null ||
-                 !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()))
-                RotateBy(Mouse.current.delta.ReadValue().x * mouseRotationSensitivity);
+
         }
 
         private void LateUpdate()

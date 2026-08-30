@@ -395,6 +395,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &10022017 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1385623228795998024, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &10022022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10022017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: bb176b36144e84a6998d902a9ce971e6, type: 2}
+  height: 2.3
 --- !u!1 &11592180
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +571,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &14773171 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 752938827760792941, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &14773176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14773171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: acb918e338acb4cc1a270e39b53acf2b, type: 2}
+  height: 2.3
 --- !u!1 &16582535
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +623,105 @@ Transform:
   - {fileID: 438180964}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &24029457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 24029458}
+  - component: {fileID: 24029461}
+  - component: {fileID: 24029460}
+  - component: {fileID: 24029459}
+  m_Layer: 0
+  m_Name: TeleportTriggerWall_ToMain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &24029458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24029457}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.00000018426303, y: 0.0021197791, z: -0.000000004483876,
+    w: 0.9999978}
+  m_LocalPosition: {x: 32.044, y: 1.61, z: 22.743}
+  m_LocalScale: {x: 0.94304204, y: 0.9967918, z: 18.92381}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 873163709}
+  m_LocalEulerAnglesHint: {x: 0, y: 0.243, z: 0}
+--- !u!114 &24029459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24029457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea528a40a514f4a00b47830329f9ecb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.AdditiveScenePortal
+  sceneToLoad: Tavern_Main
+  sceneToUnload: SealRoom_B1
+  destinationPath: B1Return_StoneStairArrival
+  fadeDuration: 0.25
+--- !u!54 &24029460
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24029457}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &24029461
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24029457}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 3, z: 0.3}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &24326915
 GameObject:
   m_ObjectHideFlags: 0
@@ -2410,6 +2549,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &114967602 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9109497360654549761, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &114967607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114967602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 0fafb1979e2314ffcafe40447a003d33, type: 2}
+  height: 2.3
 --- !u!1 &118031186
 GameObject:
   m_ObjectHideFlags: 0
@@ -2534,6 +2693,26 @@ Transform:
   - {fileID: 1410190833}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &123491993 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 752938827760792941, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &123491998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123491993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: acb918e338acb4cc1a270e39b53acf2b, type: 2}
+  height: 2.3
 --- !u!1 &131415063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3158,6 +3337,26 @@ Transform:
   - {fileID: 1770978323}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &167901135 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5067820238412015634, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &167901140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167901135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: c1b15c1ec45e34854a929bf7251b8ce3, type: 2}
+  height: 2.3
 --- !u!1 &168823194
 GameObject:
   m_ObjectHideFlags: 0
@@ -3726,10 +3925,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1370848055}
     m_Modifications:
+    - target: {fileID: 291834206456489223, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1201507943848671913, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1271932351463385712, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1621652046419259691, guid: 5f8420a1491b74208b5775aa15f95b34,
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.49235198
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739189327992735098, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2876163722044594044, guid: 5f8420a1491b74208b5775aa15f95b34,
         type: 3}
@@ -3781,15 +4000,139 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3349675776365140211, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3775195460240754488, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4372697662235691230, guid: 5f8420a1491b74208b5775aa15f95b34,
         type: 3}
       propertyPath: m_Name
       value: StoneGate_01
       objectReference: {fileID: 0}
+    - target: {fileID: 6136610023113073401, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6333186735091770763, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397980890952697908, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6641556818862353107, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716092215990369429, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7395797947920262303, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145946563795247124, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8824029507078533137, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8982444170088001882, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9181405561513088372, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9180178197235639487, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1731678189}
+    - targetCorrespondingSourceObject: {fileID: 9109497360654549761, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 114967607}
+    - targetCorrespondingSourceObject: {fileID: 7001360722078011399, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 973129633}
+    - targetCorrespondingSourceObject: {fileID: 5067820238412015634, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 834113263}
+    - targetCorrespondingSourceObject: {fileID: 630411600031658621, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1085552395}
+    - targetCorrespondingSourceObject: {fileID: 1062661170312834598, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 754057873}
+    - targetCorrespondingSourceObject: {fileID: 752938827760792941, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 14773176}
+    - targetCorrespondingSourceObject: {fileID: 5758394302703132390, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 690686782}
+    - targetCorrespondingSourceObject: {fileID: 3252462261135871026, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 528382627}
+    - targetCorrespondingSourceObject: {fileID: 5330459309405411617, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1867022074}
+    - targetCorrespondingSourceObject: {fileID: 3756213276193013153, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1066585646}
+    - targetCorrespondingSourceObject: {fileID: 1085347362306143448, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2024397150}
+    - targetCorrespondingSourceObject: {fileID: 4904345774506812848, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 293353314}
+    - targetCorrespondingSourceObject: {fileID: 982248240523608962, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1092760840}
+    - targetCorrespondingSourceObject: {fileID: 1385623228795998024, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 10022022}
+    - targetCorrespondingSourceObject: {fileID: 4140084458008108877, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1068364930}
   m_SourcePrefab: {fileID: 100100000, guid: 5f8420a1491b74208b5775aa15f95b34, type: 3}
 --- !u!4 &212884701 stripped
 Transform:
@@ -4171,7 +4514,7 @@ PrefabInstance:
     - target: {fileID: 6081472526572964546, guid: 6131e3791672e42ab8ad112bfa5fdbfa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.27
+      value: 22.630001
       objectReference: {fileID: 0}
     - target: {fileID: 6081472526572964546, guid: 6131e3791672e42ab8ad112bfa5fdbfa,
         type: 3}
@@ -4221,7 +4564,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6858537643829727352, guid: 6131e3791672e42ab8ad112bfa5fdbfa,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 971781081}
   m_SourcePrefab: {fileID: 100100000, guid: 6131e3791672e42ab8ad112bfa5fdbfa, type: 3}
 --- !u!1 &231036116
 GameObject:
@@ -4997,6 +5344,26 @@ Transform:
   - {fileID: 2128516480}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &293353309 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4904345774506812848, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &293353314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293353309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 74b2ac05b428d47119e1cc8b103afe33, type: 2}
+  height: 2.3
 --- !u!1 &293704496
 GameObject:
   m_ObjectHideFlags: 0
@@ -8086,6 +8453,26 @@ Transform:
   - {fileID: 1884530798}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &528382622 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3252462261135871026, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &528382627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528382622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: c4d378ecb050e401780db5f66408165f, type: 2}
+  height: 2.3
 --- !u!1 &529538483
 GameObject:
   m_ObjectHideFlags: 0
@@ -9853,7 +10240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 645853750}
   m_Layer: 0
-  m_Name: BlackFog_ToPlace
+  m_Name: BlackFog_ToMain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9868,8 +10255,8 @@ Transform:
   m_GameObject: {fileID: 645853749}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.123705745, z: -0.00000023841858, w: 0.992319}
-  m_LocalPosition: {x: 38, y: 1.7, z: 23}
-  m_LocalScale: {x: 1.2785003, y: 0.90496194, z: 1.0000002}
+  m_LocalPosition: {x: 32.82, y: 0.5, z: 23.24}
+  m_LocalScale: {x: 1.2785003, y: 1.6084794, z: 1.0045881}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 707892817}
@@ -10630,6 +11017,46 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689775955}
   m_Mesh: {fileID: 4300000, guid: 80ad1f5d9f7e74caeb6b643eb9392580, type: 2}
+--- !u!1 &690686777 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5758394302703132390, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &690686782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690686777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 89f098809a17b41348644b048870ec71, type: 2}
+  height: 2.3
+--- !u!1 &693492524 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3252462261135871026, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &693492529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693492524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: c4d378ecb050e401780db5f66408165f, type: 2}
+  height: 2.3
 --- !u!1 &696201004
 GameObject:
   m_ObjectHideFlags: 0
@@ -10690,7 +11117,7 @@ Transform:
   m_GameObject: {fileID: 696602664}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.002, y: 3.05, z: 23.555}
+  m_LocalPosition: {x: 31.002, y: 3.05, z: 23.836}
   m_LocalScale: {x: 0.5, y: 6.1, z: 3.6391048}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11576,6 +12003,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &731576112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5758394302703132390, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &731576117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731576112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 89f098809a17b41348644b048870ec71, type: 2}
+  height: 2.3
 --- !u!1 &736219311
 GameObject:
   m_ObjectHideFlags: 0
@@ -11916,6 +12363,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &754057868 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1062661170312834598, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &754057873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754057868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 15a3ef1e77ae44e9e87d56445491d40b, type: 2}
+  height: 2.3
 --- !u!1 &756329478
 GameObject:
   m_ObjectHideFlags: 0
@@ -12413,6 +12880,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &769040582 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 982248240523608962, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &769040587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769040582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 82bcef1fab1d64f2eb889cfd14a6f494, type: 2}
+  height: 2.3
 --- !u!1 &769939804
 GameObject:
   m_ObjectHideFlags: 0
@@ -13487,6 +13974,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &831818945 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9180178197235639487, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &831818950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831818945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 94aa82287899d4399a0d0124bae33b6d, type: 2}
+  height: 2.3
 --- !u!1 &833149575
 GameObject:
   m_ObjectHideFlags: 0
@@ -13551,6 +14058,26 @@ Transform:
   - {fileID: 503461331}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &834113258 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5067820238412015634, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &834113263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834113258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: c1b15c1ec45e34854a929bf7251b8ce3, type: 2}
+  height: 2.3
 --- !u!1 &837347813
 GameObject:
   m_ObjectHideFlags: 0
@@ -13583,6 +14110,26 @@ Transform:
   - {fileID: 2140741336}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &841161587 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9109497360654549761, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &841161592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841161587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 0fafb1979e2314ffcafe40447a003d33, type: 2}
+  height: 2.3
 --- !u!1 &844332461
 GameObject:
   m_ObjectHideFlags: 0
@@ -14239,6 +14786,8 @@ Transform:
   - {fileID: 1513058413}
   - {fileID: 1391011780}
   - {fileID: 645853750}
+  - {fileID: 24029458}
+  - {fileID: 1388165938}
   m_Father: {fileID: 763273022}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &873534658
@@ -15630,12 +16179,80 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &971781077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6858537643829727352, guid: 6131e3791672e42ab8ad112bfa5fdbfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 230897392}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &971781080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6081472526572964546, guid: 6131e3791672e42ab8ad112bfa5fdbfa,
     type: 3}
   m_PrefabInstance: {fileID: 230897392}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &971781081
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971781077}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5668984478841134232, guid: c0179a2726a754553874bb452bc20c15, type: 3}
+--- !u!1 &973129628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7001360722078011399, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &973129633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973129628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 678cbfd25207244b9a84e44340cfd59c, type: 2}
+  height: 2.3
+--- !u!1 &973540893 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1385623228795998024, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &973540898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973540893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: bb176b36144e84a6998d902a9ce971e6, type: 2}
+  height: 2.3
 --- !u!1 &980015877
 GameObject:
   m_ObjectHideFlags: 0
@@ -16877,6 +17494,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1063823536 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7712536529832725208, guid: c97d85b0fd3dd4c5194151d4d357ad98,
+    type: 3}
+  m_PrefabInstance: {fileID: 653132532429896384}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1063823540
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063823536}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5668984478841134232, guid: cba7528d793b84591b81dd0ab58b34c9, type: 3}
 --- !u!1 &1064892854
 GameObject:
   m_ObjectHideFlags: 0
@@ -16941,6 +17586,46 @@ Transform:
   - {fileID: 1977213475}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1066585641 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3756213276193013153, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1066585646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066585641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 1d3749a3b0f1f4cf7974394e34d88394, type: 2}
+  height: 2.3
+--- !u!1 &1068364926 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4140084458008108877, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1068364930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068364926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 96ba9960a8eeb43d48e1b6926b823e50, type: 2}
+  height: 2.3
 --- !u!1 &1073236788
 GameObject:
   m_ObjectHideFlags: 0
@@ -17189,6 +17874,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1085552390 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 630411600031658621, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1085552395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085552390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 39f041255f9c54e64a666d0d63dc8f2e, type: 2}
+  height: 2.3
 --- !u!1 &1086578382
 GameObject:
   m_ObjectHideFlags: 0
@@ -17403,6 +18108,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1091356491}
   m_Mesh: {fileID: 4300000, guid: 86922389f130440e681bceb1b94b71c6, type: 2}
+--- !u!1 &1092760835 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 982248240523608962, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1092760840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092760835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 82bcef1fab1d64f2eb889cfd14a6f494, type: 2}
+  height: 2.3
 --- !u!1 &1097966449
 GameObject:
   m_ObjectHideFlags: 0
@@ -18964,7 +19689,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.15, y: 2.8000002, z: 2.5999947}
   m_Center: {x: 0, y: 0, z: 0}
@@ -19156,6 +19881,26 @@ Transform:
   - {fileID: 1892447792}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1196827953 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5330459309405411617, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1196827958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196827953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 8a0ccf77724bf4e75bd9218a9c10dd7f, type: 2}
+  height: 2.3
 --- !u!1 &1203036828
 GameObject:
   m_ObjectHideFlags: 0
@@ -20309,10 +21054,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1370848055}
     m_Modifications:
+    - target: {fileID: 291834206456489223, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1201507943848671913, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1271932351463385712, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1621652046419259691, guid: 5f8420a1491b74208b5775aa15f95b34,
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.488992
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739189327992735098, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2876163722044594044, guid: 5f8420a1491b74208b5775aa15f95b34,
         type: 3}
@@ -20364,15 +21129,139 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3349675776365140211, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3775195460240754488, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4372697662235691230, guid: 5f8420a1491b74208b5775aa15f95b34,
         type: 3}
       propertyPath: m_Name
       value: StoneGate_02
       objectReference: {fileID: 0}
+    - target: {fileID: 6136610023113073401, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6333186735091770763, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397980890952697908, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6641556818862353107, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716092215990369429, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7395797947920262303, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145946563795247124, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8824029507078533137, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8982444170088001882, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9181405561513088372, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9180178197235639487, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 831818950}
+    - targetCorrespondingSourceObject: {fileID: 9109497360654549761, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 841161592}
+    - targetCorrespondingSourceObject: {fileID: 7001360722078011399, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1871478925}
+    - targetCorrespondingSourceObject: {fileID: 5067820238412015634, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 167901140}
+    - targetCorrespondingSourceObject: {fileID: 630411600031658621, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1985916232}
+    - targetCorrespondingSourceObject: {fileID: 1062661170312834598, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1909822707}
+    - targetCorrespondingSourceObject: {fileID: 752938827760792941, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 123491998}
+    - targetCorrespondingSourceObject: {fileID: 5758394302703132390, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 731576117}
+    - targetCorrespondingSourceObject: {fileID: 3252462261135871026, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 693492529}
+    - targetCorrespondingSourceObject: {fileID: 5330459309405411617, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1196827958}
+    - targetCorrespondingSourceObject: {fileID: 3756213276193013153, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1595833993}
+    - targetCorrespondingSourceObject: {fileID: 1085347362306143448, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1575740615}
+    - targetCorrespondingSourceObject: {fileID: 4904345774506812848, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2100460529}
+    - targetCorrespondingSourceObject: {fileID: 982248240523608962, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 769040587}
+    - targetCorrespondingSourceObject: {fileID: 1385623228795998024, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 973540898}
+    - targetCorrespondingSourceObject: {fileID: 4140084458008108877, guid: 5f8420a1491b74208b5775aa15f95b34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1298381566}
   m_SourcePrefab: {fileID: 100100000, guid: 5f8420a1491b74208b5775aa15f95b34, type: 3}
 --- !u!4 &1269485010 stripped
 Transform:
@@ -20688,6 +21577,26 @@ Transform:
   - {fileID: 150282628}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1298381562 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4140084458008108877, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1298381566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298381562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 96ba9960a8eeb43d48e1b6926b823e50, type: 2}
+  height: 2.3
 --- !u!1 &1306040953
 GameObject:
   m_ObjectHideFlags: 0
@@ -21675,96 +22584,6 @@ Transform:
   - {fileID: 1269485010}
   m_Father: {fileID: 873163709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1374566822
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1374566823}
-  - component: {fileID: 1374566825}
-  - component: {fileID: 1374566824}
-  m_Layer: 0
-  m_Name: RockBackdrop
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1374566823
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374566822}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1513058413}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &1374566824
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374566822}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 39f1cd6ac0a434da583e41d56d9b94ab, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1374566825
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374566822}
-  m_Mesh: {fileID: 4300000, guid: e208d05cdaef44aa68c744af24306a31, type: 2}
 --- !u!1 &1376034371
 GameObject:
   m_ObjectHideFlags: 0
@@ -21921,6 +22740,59 @@ Transform:
   - {fileID: 1496590812}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1388165937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1388165938}
+  - component: {fileID: 1388165939}
+  m_Layer: 0
+  m_Name: B1WalkableFloor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1388165938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388165937}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 42.04287, y: -0.25, z: 18.64963}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 873163709}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1388165939
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388165937}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.5, y: 0.5, z: 14}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1391011779
 GameObject:
   m_ObjectHideFlags: 0
@@ -24172,7 +25044,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1556199457}
-  - {fileID: 1374566823}
   m_Father: {fileID: 873163709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1515905033
@@ -24692,7 +25563,7 @@ PrefabInstance:
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.232151
+      value: 0.984839
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
@@ -24707,37 +25578,37 @@ PrefabInstance:
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 33.72
+      value: 31.88
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.17
+      value: -1.02
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 23.45
+      value: 21.91
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
@@ -24747,7 +25618,7 @@ PrefabInstance:
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 7629586427598941406, guid: bc3a4c76ebbf345a7a90a983ff04fd1a,
         type: 3}
@@ -25081,6 +25952,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1575740610 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1085347362306143448, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1575740615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575740610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 53fb44fe4249d49d28ee432c71627b95, type: 2}
+  height: 2.3
 --- !u!1 &1578760941
 GameObject:
   m_ObjectHideFlags: 0
@@ -25453,6 +26344,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1595833988 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3756213276193013153, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1595833993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595833988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 1d3749a3b0f1f4cf7974394e34d88394, type: 2}
+  height: 2.3
 --- !u!1 &1604324332
 GameObject:
   m_ObjectHideFlags: 0
@@ -26061,7 +26972,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 2fef474af23f94668ad4982c665e1508, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 761a000bb1fae446c9ada26aebea7f41, type: 2}
 --- !u!23 &1618375437
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -26118,7 +27029,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1618375434}
-  m_Mesh: {fileID: 4300000, guid: 2fef474af23f94668ad4982c665e1508, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 761a000bb1fae446c9ada26aebea7f41, type: 2}
 --- !u!1 &1619843600
 GameObject:
   m_ObjectHideFlags: 0
@@ -28468,6 +29379,26 @@ Transform:
   - {fileID: 730169066}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1731678184 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9180178197235639487, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1731678189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731678184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 94aa82287899d4399a0d0124bae33b6d, type: 2}
+  height: 2.3
 --- !u!1 &1733503142
 GameObject:
   m_ObjectHideFlags: 0
@@ -28496,7 +29427,7 @@ Transform:
   m_GameObject: {fileID: 1733503142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.146, y: 3.05, z: 25.62}
+  m_LocalPosition: {x: 31.9, y: 3.05, z: 25.9}
   m_LocalScale: {x: 2.788, y: 6.1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28570,8 +29501,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.91135746, y: 1.0000002, z: 1}
+  m_Center: {x: 0.043914497, y: 0, z: 0}
 --- !u!33 &1733503146
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -28579,7 +29510,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733503142}
-  m_Mesh: {fileID: 4300000, guid: 233a6f72ef9a44f1ea7d9a5f12e68b43, type: 2}
+  m_Mesh: {fileID: 4300000, guid: cec7c9bbaac5b4ea9be5e6fef07deb13, type: 2}
 --- !u!1 &1736246115
 GameObject:
   m_ObjectHideFlags: 0
@@ -30692,6 +31623,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1867022069 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5330459309405411617, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1867022074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867022069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 8a0ccf77724bf4e75bd9218a9c10dd7f, type: 2}
+  height: 2.3
 --- !u!1 &1869520147
 GameObject:
   m_ObjectHideFlags: 0
@@ -30724,6 +31675,26 @@ Transform:
   - {fileID: 396583705}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1871478920 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7001360722078011399, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1871478925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871478920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 678cbfd25207244b9a84e44340cfd59c, type: 2}
+  height: 2.3
 --- !u!1 &1880992532
 GameObject:
   m_ObjectHideFlags: 0
@@ -31344,6 +32315,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1909822702 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1062661170312834598, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1909822707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909822702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 15a3ef1e77ae44e9e87d56445491d40b, type: 2}
+  height: 2.3
 --- !u!1 &1911039869
 GameObject:
   m_ObjectHideFlags: 0
@@ -32327,6 +33318,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979629545}
   m_Mesh: {fileID: 4300000, guid: 48e9d7122266d41338e04fba341dd36a, type: 2}
+--- !u!1 &1985916227 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 630411600031658621, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1985916232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985916227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 39f041255f9c54e64a666d0d63dc8f2e, type: 2}
+  height: 2.3
 --- !u!1 &1988450903
 GameObject:
   m_ObjectHideFlags: 0
@@ -32355,7 +33366,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.01, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1312366735}
@@ -32681,6 +33692,26 @@ Transform:
   - {fileID: 399943598}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2024397145 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1085347362306143448, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 212884700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2024397150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024397145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 53fb44fe4249d49d28ee432c71627b95, type: 2}
+  height: 2.3
 --- !u!1 &2032924048
 GameObject:
   m_ObjectHideFlags: 0
@@ -33788,6 +34819,26 @@ Transform:
   - {fileID: 58080878}
   m_Father: {fileID: 2048732061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2100460524 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4904345774506812848, guid: 5f8420a1491b74208b5775aa15f95b34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269485009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2100460529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100460524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bf544a884f64cf492dad2a5a8999b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Prototypes.Rotation25D.WallTopMeshCutaway
+  source: {fileID: 4300000, guid: 74b2ac05b428d47119e1cc8b103afe33, type: 2}
+  height: 2.3
 --- !u!1 &2114585595
 GameObject:
   m_ObjectHideFlags: 0
@@ -34944,6 +35995,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5281709422372708748, guid: c97d85b0fd3dd4c5194151d4d357ad98,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6513127023286994862, guid: c97d85b0fd3dd4c5194151d4d357ad98,
         type: 3}
       propertyPath: m_Name
@@ -34962,7 +36018,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7712536529832725208, guid: c97d85b0fd3dd4c5194151d4d357ad98,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1063823540}
   m_SourcePrefab: {fileID: 100100000, guid: c97d85b0fd3dd4c5194151d4d357ad98, type: 3}
 --- !u!1001 &717521881991714937
 PrefabInstance:

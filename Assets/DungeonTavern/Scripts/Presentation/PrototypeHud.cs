@@ -22,7 +22,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             string yaw = orbit == null ? "?" : $"{orbit.CurrentCardinalYaw:0}°";
             GUI.Box(
                 new Rect(14f, 14f, Mathf.Min(680f, Screen.width - 28f), 150f),
-                $"DUNGEON TAVERN 2.5D\nWASD: move   Hold Q / E: rotate   RMB drag: orbit   SPACE: vault counter   Facing: {yaw}\nMain 2.5D scene — debug controls enabled.",
+                $"DUNGEON TAVERN 2.5D\nWASD: move   Hold Q / E: rotate   SPACE: vault counter   Facing: {yaw}\nMain 2.5D scene — debug controls enabled.",
                 style);
         }
     }
