@@ -672,7 +672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.AdditiveScenePortal
   sceneToLoad: Tavern_Main
   sceneToUnload: SealRoom_B1
-  destinationPath: B1Return_StoneStairArrival
+  destinationPath: Tavern_Main/Environment/Stairs/Stair_Stone_Storage_Descending/B1Return_StoneStairArrival
   fadeDuration: 0.25
 --- !u!54 &24029460
 Rigidbody:
@@ -9453,8 +9453,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 581046923}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 76.8, y: 0, z: 20}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+  m_LocalPosition: {x: 34.4, y: 2.15, z: 24.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30272,7 +30272,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776436554}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea528a40a514f4a00b47830329f9ecb7, type: 3}
   m_Name: 
@@ -30325,7 +30325,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.8, y: 1.6, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
