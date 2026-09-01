@@ -6,7 +6,7 @@ This document defines the stable visual language for environment art. It supplem
 
 - The game uses a 2.5D pixel-art presentation with an orthographic camera pitched
   45 degrees, restored from the earlier camera configuration after visual review.
-- Hold Q/E for continuous yaw rotation; mouse orbit is disabled. Existing billboard characters remain in use. A minimum 40-unit camera distance prevents near-plane clipping without changing orthographic framing. Camera size is 4.5; the player visual is 80% of its former scale, with feet position preserved.
+- Press Q/E to switch between the four fixed diagonal headings (45, 135, 225, 315 degrees), using the original 0.22-second smoothstep transition; mouse orbit is disabled. Existing billboard characters remain in use. A minimum 40-unit camera distance prevents near-plane clipping without changing orthographic framing. Camera size is 4.5; the player visual is 80% of its former scale, with feet position preserved.
 - B1 uses a cutaway dungeon presentation: ordinary perimeter walls are about 2.3 units high, with tall masonry retained around the stair arch and lifting-gate chambers. A single broad, flat stone backdrop at ordinary wall-top height (Y=2.3), with openings for the excavated room and passages represents unexcavated dungeon space; it has no collision or box volume. Reserved exits use short passages and fog. The staircase platform behind the arch is enclosed by matching stone side walls and an end wall.
 - Floors are seen mostly from above, while walls must expose a readable vertical face and a sense of height.
 - Wall tops, wall faces, corners, pillars, arches, and door openings are distinct construction pieces. A sprite being stored under `Walls` does not mean it can be repeated in every direction.

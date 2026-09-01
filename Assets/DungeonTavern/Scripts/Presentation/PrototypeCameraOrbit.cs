@@ -8,11 +8,13 @@ namespace DungeonTavern.Prototypes.Rotation25D
     public sealed class PrototypeCameraOrbit : MonoBehaviour
     {
         [SerializeField] private Transform followTarget;
-        [SerializeField, Min(1f)] private float keyboardRotationSpeed = 90f;
 
         [SerializeField, Min(1f), Tooltip("Minimum orthographic camera distance; moving back preserves framing while preventing nearby tall walls from crossing the near plane.")]
         private float minimumCameraDistance = 40f;
 
+        [SerializeField, Min(.05f)] private float rotationDuration = .22f;
+        private float startYaw, rotationElapsed;
+        private bool rotating;
         private float targetYaw;
         private bool dialogueFraming;
         private Transform dialogueLeft;
@@ -37,7 +39,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Awake()
         {
-            targetYaw = transform.eulerAngles.y;
+            targetYaw = SnapYaw(transform.eulerAngles.y);
             transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
             ApplyIsometricProjection();
             gameCamera = GetComponentInChildren<Camera>();
@@ -74,10 +76,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 return;
             }
             if (Time.timeScale <= 0f) return;
-            bool left = keyboard != null && keyboard.qKey.isPressed;
-            bool right = keyboard != null && keyboard.eKey.isPressed;
-            if (left || right)
-                RotateBy(((right ? 1f : 0f) - (left ? 1f : 0f)) * keyboardRotationSpeed * Time.deltaTime);
+            if (keyboard?.qKey.wasPressedThisFrame == true) RotateLeft();
+            else if (keyboard?.eKey.wasPressedThisFrame == true) RotateRight();
+            UpdateRotation();
 
         }
 
@@ -101,12 +102,12 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         public void RotateLeft()
         {
-            RotateBy(-keyboardRotationSpeed * Time.deltaTime);
+            RotateBy(-90f);
         }
 
         public void RotateRight()
         {
-            RotateBy(keyboardRotationSpeed * Time.deltaTime);
+            RotateBy(90f);
         }
 
         public void BeginDialogueFraming(Transform leftCharacter, Transform rightCharacter)
@@ -120,6 +121,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 preDialogueTargetYaw = targetYaw;
                 preDialogueSize = gameCamera != null ? gameCamera.orthographicSize : explorationSize;
             }
+            rotating = false;
             dialogueLeft = leftCharacter;
             dialogueRight = rightCharacter;
             dialogueTargetYaw = ChooseDialogueYaw(leftCharacter, rightCharacter);
@@ -259,11 +261,24 @@ namespace DungeonTavern.Prototypes.Rotation25D
             return character.position + Vector3.up * 1.2f;
         }
 
+        private static float SnapYaw(float yaw) => Mathf.Repeat(45f + Mathf.Round((yaw - 45f) / 90f) * 90f, 360f);
+
         public void RotateBy(float deltaDegrees)
         {
             if (dialogueFraming) return;
-            targetYaw = Mathf.Repeat(targetYaw + deltaDegrees, 360f);
-            transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
+            startYaw = transform.eulerAngles.y;
+            targetYaw = SnapYaw(targetYaw + deltaDegrees);
+            rotationElapsed = 0f;
+            rotating = true;
+        }
+        private void UpdateRotation()
+        {
+            if (!rotating) return;
+            rotationElapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(rotationElapsed / rotationDuration);
+            float eased = t * t * (3f - 2f * t);
+            transform.rotation = Quaternion.Euler(0, Mathf.LerpAngle(startYaw, targetYaw, eased), 0);
+            if (t >= 1f) rotating = false;
         }
     }
 }

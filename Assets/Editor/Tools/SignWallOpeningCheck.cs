@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using DungeonTavern.Tavern25D;
-using DungeonTavern.Tavern25D.Narrative;
+using DungeonTavern.Gameplay.Interaction;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -23,7 +23,7 @@ internal static class SignWallOpeningCheck
             throw new Exception("Wall render and collision meshes differ.");
         if (objects.Any(t => t.name == "BusinessStatusSign" || t.name == "Sign_OPEN" || t.name == "Sign_CLOSED"))
             throw new Exception("Placeholder sign remains.");
-        var mechanism = objects.Single(t => t.name == "BusinessSwitch").GetComponent<BusinessRopeMechanism>();
+        var mechanism = objects.Single(t => t.name == "FloorLever").GetComponent<FloorLeverPoint>();
         if (new SerializedObject(mechanism).FindProperty("statusSign").objectReferenceValue != sign.GetComponent<TwoStateProp>())
             throw new Exception("Business switch is not linked to the model.");
         // Sample the fitted opening in both directions, then check solid wall above and below it.
@@ -47,14 +47,16 @@ internal static class SignWallOpeningCheck
             SceneManager.MoveGameObjectToScene(clone, preview);
             var control = new GameObject("State check");
             SceneManager.MoveGameObjectToScene(control, preview);
-            var testMechanism = control.AddComponent<BusinessRopeMechanism>();
+            var testMechanism = control.AddComponent<FloorLeverPoint>();
             var prop = clone.GetComponent<TwoStateProp>();
             // Preview scenes do not run MonoBehaviour lifecycle; initialize the same OnEnable used in Play Mode.
             typeof(TwoStateProp).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(prop, null);
-            testMechanism.Configure(null, prop);
+            var settings = new SerializedObject(testMechanism);
+            settings.FindProperty("statusSign").objectReferenceValue = prop;
+            settings.ApplyModifiedPropertiesWithoutUndo();
             foreach (bool open in new[] { true, false })
             {
-                testMechanism.PullAndSetOpen(open);
+                testMechanism.Interact(null);
                 if (prop.IsOpen != open || clone.GetComponent<Animator>().GetBool("Open") != open)
                     throw new Exception("Model does not receive business state.");
             }

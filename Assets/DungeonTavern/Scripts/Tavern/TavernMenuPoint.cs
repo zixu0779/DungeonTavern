@@ -2,7 +2,7 @@ namespace DungeonTavern.Gameplay.Interaction
 {
     public sealed class TavernMenuPoint : InteractionPoint
     {
-        public override string GetPrompt(PlayerHands hands) => "F：查看酒馆菜单（也可按 M）";
+        public override string GetPrompt(PlayerHands hands) => "F：查看订单";
 
         public override bool Interact(PlayerHands hands)
         {

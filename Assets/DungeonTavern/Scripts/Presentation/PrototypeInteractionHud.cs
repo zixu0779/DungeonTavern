@@ -46,7 +46,7 @@ namespace DungeonTavern.Gameplay.Interaction
             {
                 GUI.Box(
                     new Rect(Screen.width - 430f, Screen.height - 96f, 416f, 76f),
-                    "手持：麦芽饮料",
+                    "手持：" + TavernMenuSystem.GetLabel(interactionController.CurrentItem),
                     heldItemStyle);
             }
 

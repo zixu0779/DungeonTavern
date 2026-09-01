@@ -36,6 +36,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public bool TryInteract()
         {
+            currentTarget = FindClosestTarget();
             return currentTarget != null && currentTarget.Interact(hands);
         }
 
@@ -50,10 +51,13 @@ namespace DungeonTavern.Gameplay.Interaction
             for (int index = 0; index < points.Count; index++)
             {
                 InteractionPoint point = points[index];
-                if (point == null || !point.isActiveAndEnabled)
+                if (point == null || !point.isActiveAndEnabled || string.IsNullOrEmpty(point.GetPrompt(hands)))
                     continue;
 
-                float distanceSquared = (point.transform.position - origin).sqrMagnitude;
+                Vector3 offset = point.transform.position - origin;
+                if (Mathf.Abs(offset.y) > 2f) continue;
+                offset.y = 0f;
+                float distanceSquared = offset.sqrMagnitude;
                 if (distanceSquared > closestDistanceSquared)
                     continue;
 

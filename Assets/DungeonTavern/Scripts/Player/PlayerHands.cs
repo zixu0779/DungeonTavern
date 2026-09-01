@@ -8,7 +8,8 @@ namespace DungeonTavern.Gameplay.Interaction
         None,
         TestDrink,
         MainDish,
-        SideDish
+        SideDish,
+        EmptyCup
     }
 
     public sealed class PlayerHands : MonoBehaviour
@@ -23,6 +24,14 @@ namespace DungeonTavern.Gameplay.Interaction
                 return false;
 
             CurrentItem = item;
+            ItemChanged?.Invoke(CurrentItem);
+            return true;
+        }
+
+        public bool TryFillCup()
+        {
+            if (CurrentItem != HeldItem.EmptyCup) return false;
+            CurrentItem = HeldItem.TestDrink;
             ItemChanged?.Invoke(CurrentItem);
             return true;
         }

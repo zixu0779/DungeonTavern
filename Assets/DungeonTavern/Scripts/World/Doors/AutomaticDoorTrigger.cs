@@ -20,6 +20,31 @@ namespace DungeonTavern.Tavern25D
             closeDelay = Mathf.Max(0f, delay);
         }
 
+        private Collider trigger;
+        private void Awake() => trigger = GetComponent<Collider>();
+
+        private void FixedUpdate()
+        {
+            // Disabling or teleporting a CharacterController may omit OnTriggerExit.
+            if (occupants.Count > 0 && occupants.RemoveWhere(HasLeftTrigger) > 0
+                && occupants.Count == 0 && delayedClose == null)
+                delayedClose = StartCoroutine(CloseAfterDelay());
+        }
+
+        private bool HasLeftTrigger(GameObject agent)
+        {
+            if (agent == null || !agent.activeInHierarchy) return true;
+            var body = agent.GetComponent<Collider>() ?? agent.GetComponentInChildren<Collider>();
+            return body == null || !body.enabled || !trigger.bounds.Intersects(body.bounds);
+        }
+
+        private void OnDisable()
+        {
+            if (delayedClose != null) StopCoroutine(delayedClose);
+            delayedClose = null;
+            occupants.Clear();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             GameObject agent = ResolveAgent(other);

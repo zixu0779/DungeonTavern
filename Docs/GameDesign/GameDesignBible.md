@@ -30,9 +30,13 @@ This document is the durable source of truth for confirmed game and world design
 - The lightweight service loop includes an explicit order cycle: a seated
   customer states an order in a head bubble, the player records it, prepares the
   matching item at its service point, delivers it, and later handles settlement.
-- Day 1 uses a mechanical hanging rope on the wall at `(35.5, 0, 22)` as the
-  open/close control. Eve walks to the adjacent guide position before presenting
-  its bubble, and pulling the rope automatically changes the public-entrance sign.
+- Day 1 uses the placed FloorLever model as the open/close control, replacing
+  the hanging-rope placeholder. Eve walks to the adjacent guide position before
+  presenting its bubble; operating the lever changes the public-entrance sign.
+- The cup dispenser activates on the first interaction and presents a floating
+  wooden cup; the next interaction takes the empty cup and deactivates the dispenser.
+  The barrel fills only a held empty cup. Chests offer an action matching their
+  current state and close automatically when the player moves away.
 - The tavern treats all creatures equally, including adventurers and native dungeon creatures.
 - There is one shared public entrance, one shared bar, and mixed seating. Public areas are never segregated by species or faction.
 - The owner created the tavern and its peace rules after a long first-floor conflict between adventurers and dungeon residents. All conventional routes to deeper floors are sealed; the sole controlled route is beneath the tavern. The route is open to any species that meets its peace conditions, although deep residents use it most often.

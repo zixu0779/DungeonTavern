@@ -1,0 +1,48 @@
+using UnityEngine;
+
+namespace DungeonTavern.Gameplay.Interaction
+{
+    [RequireComponent(typeof(PlayerHands))]
+    public sealed class HeldCupVisual : MonoBehaviour
+    {
+        [SerializeField] private Transform handAnchor;
+        [SerializeField] private GameObject cupPrefab;
+        [SerializeField, Min(.05f)] private float cupHeight = .23f;
+        private PlayerHands hands;
+        private GameObject cup;
+        public GameObject Cup => cup;
+        private void OnEnable()
+        {
+            hands = GetComponent<PlayerHands>();
+            hands.ItemChanged += ShowItem;
+            ShowItem(hands.CurrentItem);
+        }
+        private void ShowItem(HeldItem item)
+        {
+            bool holdingCup = item == HeldItem.EmptyCup || item == HeldItem.TestDrink;
+            if (!holdingCup) { if (cup) cup.SetActive(false); return; }
+            if (!handAnchor || !cupPrefab) return;
+            if (!cup)
+            {
+                cup = Instantiate(cupPrefab, handAnchor, false);
+                cup.name = "HeldWoodenCup";
+                foreach (var collider in cup.GetComponentsInChildren<Collider>()) collider.enabled = false;
+                var renderers = cup.GetComponentsInChildren<Renderer>();
+                if (renderers.Length > 0)
+                {
+                    var bounds = renderers[0].bounds;
+                    foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+                    float ratio = cupHeight / Mathf.Max(.001f, bounds.size.y);
+                    cup.transform.localScale *= ratio;
+                    cup.transform.position -= (bounds.center - handAnchor.position) * ratio;
+                }
+            }
+            cup.SetActive(true);
+        }
+        private void OnDisable()
+        {
+            if (hands) hands.ItemChanged -= ShowItem;
+            if (cup) Destroy(cup);
+        }
+    }
+}

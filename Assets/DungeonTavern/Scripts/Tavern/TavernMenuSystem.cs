@@ -72,7 +72,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public static string GetLabel(HeldItem item) => item switch
         {
-            HeldItem.TestDrink => "麦芽饮料", HeldItem.MainDish => "主菜", HeldItem.SideDish => "配菜", _ => item.ToString()
+            HeldItem.EmptyCup => "空酒杯", HeldItem.TestDrink => "麦芽饮料", HeldItem.MainDish => "主菜", HeldItem.SideDish => "配菜", _ => item.ToString()
         };
 
         private void OnGUI()

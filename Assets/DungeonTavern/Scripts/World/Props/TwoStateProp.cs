@@ -11,6 +11,16 @@ namespace DungeonTavern.Tavern25D
         private static readonly int OpenParameter = Animator.StringToHash("Open");
 
         public bool IsOpen => open;
+        public bool IsTransitioning
+        {
+            get
+            {
+                if (animator == null || animator.runtimeAnimatorController == null) return false;
+                var state = animator.GetCurrentAnimatorStateInfo(0);
+                return animator.IsInTransition(0) || state.IsName("Opening") || state.IsName("Closing")
+                    || (open && state.IsName("Closed")) || (!open && state.IsName("Open"));
+            }
+        }
 
         private void OnEnable()
         {
