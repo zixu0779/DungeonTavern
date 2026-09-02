@@ -1,0 +1,6 @@
+Universal Animation Library — Standard
+Author: Quaternius
+License: CC0 1.0 (see LICENSE)
+Official pack: https://quaternius.com/packs/universalanimationlibrary.html
+Distribution mirror: https://github.com/J-Ponzo/gltf-universal-animation-library
+Files: AnimationLibrary_Godot_Standard.gltf and its .bin buffer.

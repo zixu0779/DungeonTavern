@@ -176,8 +176,10 @@ The following are not design commitments:
 - The serialized output resolution is 1920x1080. Exploration orthographic size
   is 4.5; dialogue has its own closer framing. Ordinary 3D scene materials use
   Unlit to retain authored colors. A future softly lit setup is proposed only.
-- Characters currently remain billboard sprites. The protagonist's 3D model,
-  skeleton and expanded action library have not yet been produced.
+- Scene characters currently remain billboard sprites. The protagonist has a
+  separate 3D rig candidate with a valid Unity Humanoid Avatar and Idle, Walk,
+  Reach and RigCheck clips. Movement and cloak deformation await visual review;
+  this candidate is not yet connected to the playable character or story actions.
 - Only Day 1 is wired to the current narrative controller. Days 2 and 3 exist
   in Ink and are not yet complete playable scene flows. The opening cinematic
   is a placeholder; prone-to-standing animation is still planned.
