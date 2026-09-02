@@ -56,6 +56,11 @@ This document is the durable source of truth for confirmed game and world design
 
 ## Confirmed character identities
 
+- The protagonist went out to investigate the truth and was ambushed. Their
+  opening appearance, waking prone in the seal chamber, retains damaged travel
+  clothing and a torn black cloak, not tavern workwear. The hood is completely
+  destroyed, with at most cloth remnants remaining, exposing the head and face.
+  The departure memory may still show the intact cloak concealing their face.
 - Eve is a female elf.
 - Mira is a female tiefling and an appraiser. Her former adventuring party
   subjected her to racial prejudice while relying on her expertise. Her refusal
