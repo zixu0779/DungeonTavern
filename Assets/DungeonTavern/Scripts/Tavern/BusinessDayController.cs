@@ -68,12 +68,6 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void Start()
         {
-            if (!ValidateConfiguration())
-            {
-                enabled = false;
-                return;
-            }
-
             if (autoStart)
                 BeginDay();
         }
@@ -81,6 +75,11 @@ namespace DungeonTavern.Gameplay.Interaction
         public bool BeginDay()
         {
             if (State != BusinessDayState.Preparing || !enabled)
+                return false;
+
+            // The tavern content is hidden during the opening in B1.
+            // Validate its active service points when business actually begins.
+            if (!ValidateConfiguration())
                 return false;
 
             pendingCustomers.Clear();

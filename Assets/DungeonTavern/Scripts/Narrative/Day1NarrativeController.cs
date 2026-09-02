@@ -130,6 +130,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         private void Update()
         {
             if (State == Day1FlowState.AwaitingStorageReturn
+                && storageArrival.gameObject.activeInHierarchy
                 && (player.transform.position - storageArrival.position).sqrMagnitude
                     <= storageArrivalRadius * storageArrivalRadius)
             {
@@ -278,8 +279,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                 showingCinematic = false;
                 State = Day1FlowState.AwaitingStorageReturn;
             }
-            else if (gate.Contains("营业按钮", StringComparison.Ordinal)
-                     || gate.Contains("营业吊绳", StringComparison.Ordinal))
+            else if (gate.Contains("营业拉杆", StringComparison.Ordinal))
                 State = Day1FlowState.AwaitingOpeningSwitch;
             else if (gate.Contains("完成第一日营业", StringComparison.Ordinal))
             {

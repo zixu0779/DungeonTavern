@@ -1,13 +1,11 @@
 # DungeonTavern project guidance
 
 Before changing gameplay, scenes, narrative, or art direction, read
-`Docs/GameDesign/GameDesignBible.md`.
+`Docs/GameDesign/GameDesignNote.md`.
 
-Before changing environment art, sprites, palettes, tilemaps, or scene presentation,
-also read `Docs/Art/ArtDirection.md` and `Docs/Art/TileAuthoringGuide.md`.
-
-Before starting or continuing the current environment-art production tasks, also read
-`Docs/Art/EnvironmentArtHandoff.md` for task priority, current asset state, and review gates.
+Before changing environment art or scene presentation, also read
+`Docs/Art/ArtDirection.md`. For character work, read
+`Docs/Characters/CharacterActionPlan.md`.
 
 ## Stable constraints
 
@@ -19,11 +17,11 @@ Before starting or continuing the current environment-art production tasks, also
 - Initially available areas are the hall, bar, mixed seating, kitchen, and storage.
 - Performance, lodging, and quiet private-room areas unlock later through story or achievements.
 - Do not introduce a conventional building-upgrade system.
-- The core gameplay loop, RPG systems, event structure, and detailed narrative systems remain undecided. Never promote a provisional idea into implementation without explicit user confirmation.
+- The current lightweight service loop and Chapter 1 premise are confirmed; broader RPG systems and later progression remain undecided. Never promote a provisional idea into implementation without explicit user confirmation.
 
 ## Maintenance
 
-- Record newly confirmed design truths in `Docs/GameDesign/GameDesignBible.md`.
+- Record newly confirmed design truths in `Docs/GameDesign/GameDesignNote.md`.
 - Keep this file concise; only copy rules here when they must constrain every future task.
 - Preserve existing user assets and project changes unless deletion or replacement is explicitly requested.
 - Treat `Assets/Scenes/Tavern/Tavern_Main.unity` as the authoritative 2.5D work scene.

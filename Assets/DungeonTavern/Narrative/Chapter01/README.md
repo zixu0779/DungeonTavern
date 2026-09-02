@@ -3,12 +3,15 @@
 Open `Chapter01.ink` in Inky. It is the only entry file; the three day files
 and `_Variables.ink` are included automatically.
 
-## Unity resume points
+## Ink entry and continuation points
 
 - `start`: chapter opening.
-- `day01_after_service`: call after Day 1 customer service completes.
+- `day01_after_service`: Day 1 settlement conversation with Bran.
 - `day02_mira_settlement`: call after Day 2 service for Mira completes.
 - `day03_after_service`: call after Day 3 service completes.
+
+The current Unity controller connects Day 1. Days 2 and 3 are available in Ink
+for preview; their complete scene flows are not yet connected.
 
 Unity owns scene movement, camera, interaction triggers, customer scheduling,
 and service-state transitions. The Ink files contain dialogue, choices,
@@ -39,10 +42,10 @@ through the chapter.
 
 Memory counters stop after two viewings. Optional question counters stop after
 three answers and control the repeat-question wording. Bran's question facts
-unlock his corresponding Day 3 fragments. Mira's team-answer counter combined
-with her relic-memory counter unlocks her Day 3 fragment. Nox's transaction
-records are now guaranteed by the main flow; the optional material-trace check
-independently preserves an additional investigation clue.
+unlock his corresponding Day 3 fragments. Mira's relic-memory counter contributes to the Day 3 deduction branches; her
+team-answer counter controls repeated questions about her departure. Nox's
+transaction records belong to the main flow; the optional material-trace check
+preserves an additional investigation clue.
 `fragment_custody` preserves whether Mira or the tavern holds the black fragment
 for a later branch. Nox's trace pressure remembers whether the crate inspection
 followed two or three source answers, while the accusation flag makes the

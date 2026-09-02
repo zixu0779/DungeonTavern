@@ -38020,7 +38020,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546942400}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f023e7af3431411d8e5497c1815079c, type: 3}
   m_Name: 
@@ -38028,7 +38028,7 @@ MonoBehaviour:
   chapterOne: {fileID: 6231892579173505729, guid: 518521f8ce43144f9b54c8898bc6a25b,
     type: 3}
   player: {fileID: 0}
-  storageArrival: {fileID: 0}
+  storageArrival: {fileID: 987468100}
   businessDay: {fileID: 546942404}
   eve: {fileID: 382319723}
   eveOpeningGuidePoint: {fileID: 200772943}
