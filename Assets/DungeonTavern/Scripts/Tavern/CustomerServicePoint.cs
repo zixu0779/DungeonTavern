@@ -9,13 +9,14 @@ namespace DungeonTavern.Gameplay.Interaction
     public enum CustomerOrderState
     {
         Inactive, Entering, QueueingForOrder, Ordering, FindingSeat,
-        MovingToSeat, WaitingForFood, Eating, AwaitingSettlement, Leaving, Finished
+        MovingToSeat, WaitingForFood, Eating, AwaitingSettlement, Leaving, Finished, ShowingOrder
     }
 
     public sealed class CustomerServicePoint : InteractionPoint
     {
         [SerializeField, Min(0.1f)] private float moveSpeed = 4.25f;
-        [SerializeField, Min(0f)] private float orderingDuration = 1.25f;
+        [SerializeField, Min(.1f)] private float orderingDuration = 3f;
+        [SerializeField, Min(.1f)] private float orderDisplayDuration = 1.5f;
         [SerializeField, Min(0.1f)] private float arrivalTolerance = 0.25f;
         private Renderer[] customerRenderers;
         private Transform guestEntry;
@@ -95,6 +96,13 @@ namespace DungeonTavern.Gameplay.Interaction
                     stateTimer -= seconds;
                     if (stateTimer <= 0 && menuSystem.RegisterOrder(this, Order))
                     {
+                        ChangeState(CustomerOrderState.ShowingOrder);
+                    }
+                    break;
+                case CustomerOrderState.ShowingOrder:
+                    stateTimer -= seconds;
+                    if (stateTimer <= 0)
+                    {
                         serviceQueue.Remove(this);
                         ChangeState(CustomerOrderState.FindingSeat);
                     }
@@ -133,6 +141,7 @@ namespace DungeonTavern.Gameplay.Interaction
             if (entry == null || seats == null) throw new ArgumentException("Entry and seat registry are required.");
             if (menuSystem == null) menuSystem = FindAnyObjectByType<TavernMenuSystem>();
             if (serviceQueue == null) serviceQueue = FindAnyObjectByType<ServiceOrderQueue>();
+            if (menuPoint == null) menuPoint = serviceQueue != null ? serviceQueue.MenuAnchor : null;
             if (menuPoint == null) menuPoint = GameObject.Find("MenuApproach")?.transform;
             if (menuSystem == null || serviceQueue == null || menuPoint == null)
                 throw new InvalidOperationException("Customer needs TavernMenuSystem, ServiceOrderQueue and MenuApproach.");
@@ -196,7 +205,8 @@ namespace DungeonTavern.Gameplay.Interaction
             if (!force && State == nextState) return;
             State = nextState;
             if (nextState == CustomerOrderState.Ordering) stateTimer = orderingDuration;
-            if (nextState is CustomerOrderState.Ordering or CustomerOrderState.WaitingForFood
+            if (nextState == CustomerOrderState.ShowingOrder) stateTimer = orderDisplayDuration;
+            if (nextState is CustomerOrderState.Ordering or CustomerOrderState.ShowingOrder or CustomerOrderState.WaitingForFood
                 or CustomerOrderState.Eating or CustomerOrderState.AwaitingSettlement) navigator.Stop();
             UpdateBubble(nextState);
             StateChanged?.Invoke(State);
@@ -219,19 +229,17 @@ namespace DungeonTavern.Gameplay.Interaction
         private void UpdateBubble(CustomerOrderState state)
         {
             if (bubble == null) return;
-            string message = state switch
+            if (state is CustomerOrderState.ShowingOrder or CustomerOrderState.FindingSeat
+                or CustomerOrderState.MovingToSeat or CustomerOrderState.WaitingForFood or CustomerOrderState.Eating)
             {
-                CustomerOrderState.Entering => "先去菜单前排队。",
-                CustomerOrderState.QueueingForOrder => "等前面的客人点完单。",
-                CustomerOrderState.Ordering => "老板，我要点单。",
-                CustomerOrderState.FindingSeat => "找个位置。",
-                CustomerOrderState.WaitingForFood => "等菜上齐。",
-                CustomerOrderState.Eating => "味道不错。",
-                CustomerOrderState.AwaitingSettlement => "老板，结账。",
-                _ => null
-            };
-            if (message == null) bubble.Hide(); else bubble.Show(message);
+                bubble.ShowOrder(Order, state == CustomerOrderState.Eating);
+                return;
+            }
+            if (state == CustomerOrderState.Ordering) bubble.Show("...");
+            else if (state == CustomerOrderState.AwaitingSettlement) bubble.Show("结账");
+            else bubble.Hide();
         }
+
         private void SetCustomerVisible(bool visible)
         {
             foreach (var renderer in customerRenderers) renderer.enabled = visible;

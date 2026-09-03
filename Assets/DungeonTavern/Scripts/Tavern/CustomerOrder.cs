@@ -19,11 +19,13 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             public HeldItem Item { get; }
             public int Price { get; }
+            private readonly float eatingSeconds;
+            public float RemainingFraction => SecondsRemaining / eatingSeconds;
             public float SecondsRemaining { get; private set; }
             public bool Delivered { get; private set; }
             public bool Consumed => Delivered && SecondsRemaining <= 0;
             public Portion(HeldItem item, int price, float seconds)
-            { Item = item; Price = price; SecondsRemaining = Mathf.Max(.01f, seconds); }
+            { Item = item; Price = price; eatingSeconds = Mathf.Max(.01f, seconds); SecondsRemaining = eatingSeconds; }
             internal void Deliver() => Delivered = true;
             internal void Eat(float seconds) => SecondsRemaining = Mathf.Max(0, SecondsRemaining - seconds);
         }

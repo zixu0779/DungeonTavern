@@ -6,7 +6,9 @@ namespace DungeonTavern.Gameplay.Interaction
     public sealed class ServiceOrderQueue : MonoBehaviour
     {
         [SerializeField] private List<Transform> queuePoints = new();
-        private Transform menuAnchor;
+        [SerializeField] private Transform menuAnchor;
+        public Transform MenuAnchor => menuAnchor;
+        public int Count { get { RemoveMissing(); return customers.Count; } }
         public void BindMenu(Transform anchor) => menuAnchor = anchor;
         private readonly List<CustomerServicePoint> customers = new();
 
@@ -14,6 +16,7 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             queuePoints.Clear();
             queuePoints.AddRange(points);
+            queuePoints.RemoveAll(point => point == null);
         }
 
         public void Enqueue(CustomerServicePoint customer)
@@ -40,7 +43,9 @@ namespace DungeonTavern.Gameplay.Interaction
             if (queuePoints.Count == 0)
                 return anchor - (menuAnchor == null ? transform.forward : menuAnchor.forward) * index;
             int authored = Mathf.Min(index, queuePoints.Count - 1);
-            Vector3 position = anchor + queuePoints[authored].position - queuePoints[0].position;
+            // Queue markers are authored in world space; only the head is the menu anchor.
+            // Never translate a second time when the menu or its anchor moves.
+            Vector3 position = index == 0 ? anchor : queuePoints[authored].position;
             if (index >= queuePoints.Count)
             {
                 Vector3 direction = queuePoints.Count > 1

@@ -244,3 +244,9 @@ from old layouts. F1 narrative arrival currently references the authored
   New character source work belongs under `ArtSource/Characters`.
 - Proposed animation work is tracked in `Docs/Characters/CharacterActionPlan.md`;
   it is not evidence that those animations already exist.
+
+## Customer ordering presentation (2026-09-18)
+
+- Customers physically reach the queue in front of the placed menu. Only the queue head thinks and orders; thinking is shown as `...`.
+- The customer then visibly displays the ordered item icon and quantity before leaving the menu queue for their seat. The order remains visible while travelling and waiting for service.
+- After delivery, eating is communicated without descriptive text using the item icon and decreasing progress. After eating finishes, the bubble reads `结账`; after payment the customer leaves.

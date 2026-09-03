@@ -152,5 +152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.CustomerServicePoint
   moveSpeed: 2.2
-  orderingDuration: 1.25
-  servedPauseDuration: 1
+  orderingDuration: 3
+  orderDisplayDuration: 1.5
+  arrivalTolerance: 0.25
+  serviceQueue: {fileID: 0}
+  menuSystem: {fileID: 0}
+  menuPoint: {fileID: 0}
