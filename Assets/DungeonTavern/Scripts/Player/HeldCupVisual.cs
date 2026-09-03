@@ -7,9 +7,11 @@ namespace DungeonTavern.Gameplay.Interaction
     {
         [SerializeField] private Transform handAnchor;
         [SerializeField] private GameObject cupPrefab;
+        [SerializeField] private bool keepCupUpright;
         [SerializeField, Min(.05f)] private float cupHeight = .23f;
         private PlayerHands hands;
         private GameObject cup;
+        private Vector3 cupCenter;
         public GameObject Cup => cup;
         private void OnEnable()
         {
@@ -26,6 +28,7 @@ namespace DungeonTavern.Gameplay.Interaction
             {
                 cup = Instantiate(cupPrefab, handAnchor, false);
                 cup.name = "HeldWoodenCup";
+                if (keepCupUpright) cup.transform.rotation = transform.rotation * cupPrefab.transform.localRotation;
                 foreach (var collider in cup.GetComponentsInChildren<Collider>()) collider.enabled = false;
                 var renderers = cup.GetComponentsInChildren<Renderer>();
                 if (renderers.Length > 0)
@@ -34,10 +37,18 @@ namespace DungeonTavern.Gameplay.Interaction
                     foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
                     float ratio = cupHeight / Mathf.Max(.001f, bounds.size.y);
                     cup.transform.localScale *= ratio;
-                    cup.transform.position -= (bounds.center - handAnchor.position) * ratio;
+                    bounds = renderers[0].bounds;
+                    foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+                    cupCenter = cup.transform.InverseTransformPoint(bounds.center);
                 }
             }
             cup.SetActive(true);
+        }
+        private void LateUpdate()
+        {
+            if (!cup || !cup.activeSelf) return;
+            if (keepCupUpright) cup.transform.rotation = transform.rotation * cupPrefab.transform.localRotation;
+            cup.transform.position += handAnchor.position + (keepCupUpright ? transform.forward * .06f : Vector3.zero) - cup.transform.TransformPoint(cupCenter);
         }
         private void OnDisable()
         {

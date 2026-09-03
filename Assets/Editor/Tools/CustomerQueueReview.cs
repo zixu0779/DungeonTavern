@@ -67,5 +67,29 @@ internal static class CustomerQueueReview
         File.WriteAllText(Output+"alignment.txt",$"Menu {board.position}; ordering head {head.position}; {points.Length} queue markers spaced 1.2m; thinking 3s; order display 1.5s; drink 8s. Models unchanged. Backup {backup}");
         Selection.activeGameObject=queue.gameObject;
     }
+    [MenuItem("Tools/Dungeon Tavern/Align Existing Customer Seat Markers")]
+    static void AlignSeats()
+    {
+        if(EditorApplication.isPlaying)throw new Exception("Exit Play Mode first.");
+        var scene=SceneManager.GetSceneByPath("Assets/Scenes/Tavern/Tavern_Main.unity");
+        var all=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Transform>(true)).ToArray();
+        var table=all.Single(t=>t.name=="TableSet_Rectangular_Long_4");
+        var seats=all.Select(t=>t.GetComponent<SeatPoint>()).Where(c=>c!=null).OrderBy(c=>c.name).ToArray();
+        if(seats.Length!=3)throw new Exception("Expected exactly three existing seat markers.");
+        var preserved=table.GetComponentsInChildren<Transform>(true).ToDictionary(t=>t,t=>t.localToWorldMatrix);
+        var report=new StringBuilder();
+        for(int i=0;i<seats.Length;i++)
+        {
+            var stool=table.Find("Stool_Wood_Round_"+(i+4));
+            var away=stool.position-table.position;away.y=0;away.Normalize();
+            var position=stool.position+away*.65f;position.y=0;
+            Undo.RecordObject(seats[i].transform,"Align customer arrival with stool");
+            seats[i].transform.SetPositionAndRotation(position,Quaternion.LookRotation(-away));
+            report.AppendLine(seats[i].name+" -> "+stool.name+" arrival "+position);
+        }
+        foreach(var pair in preserved)if(pair.Key.localToWorldMatrix!=pair.Value)throw new Exception("Furniture moved");
+        EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
+        File.WriteAllText(Output+"seatmarkers.txt",report.ToString());
+    }
     static string PathOf(Transform t)=>t.parent==null?t.name:PathOf(t.parent)+"/"+t.name;
 }

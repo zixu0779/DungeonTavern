@@ -1239,6 +1239,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &12776352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 12776354}
+  - component: {fileID: 12776353}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &12776353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12776352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 323524948}
+  chair: {fileID: 1962232853}
+  standing: 0
+  neighbours: []
+--- !u!4 &12776354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12776352}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.69879967, z: -0, w: 0.7153175}
+  m_LocalPosition: {x: -2.789822, y: 0.010999978, z: -0.065182686}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 323524947}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &13771319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,6 +1413,56 @@ Transform:
   m_Children:
   - {fileID: 1581847635}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &18766768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 18766770}
+  - component: {fileID: 18766769}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &18766769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18766768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 630248147}
+  chair: {fileID: 71468057}
+  standing: 0
+  neighbours:
+  - {fileID: 440544734}
+  - {fileID: 1616711368}
+--- !u!4 &18766770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18766768}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.36403364, z: -0, w: 0.9313858}
+  m_LocalPosition: {x: 2.110773, y: 0.027, z: -2.2877233}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 630248146}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &20532282
 GameObject:
@@ -2760,6 +2858,56 @@ Transform:
   - {fileID: 882356769}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &36919084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 36919086}
+  - component: {fileID: 36919085}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &36919085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36919084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 593670530}
+  chair: {fileID: 1452305062}
+  standing: 0
+  neighbours:
+  - {fileID: 578276142}
+  - {fileID: 2026957813}
+--- !u!4 &36919086
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36919084}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.36403364, z: -0, w: 0.9313858}
+  m_LocalPosition: {x: 2.110773, y: 0.027, z: -2.2877235}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 593670529}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &37168159
 GameObject:
   m_ObjectHideFlags: 0
@@ -3317,6 +3465,54 @@ Transform:
   - {fileID: 1320090140}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &49118311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 49118312}
+  - component: {fileID: 49118313}
+  m_Layer: 0
+  m_Name: Stand_06
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &49118312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49118311}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 30, y: 0, z: 11}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &49118313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49118311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
 --- !u!1 &49579565
 GameObject:
   m_ObjectHideFlags: 0
@@ -13380,6 +13576,54 @@ Transform:
   - {fileID: 1072561940}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &188447250
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 188447252}
+  - component: {fileID: 188447251}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &188447251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188447250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1383579118}
+  chair: {fileID: 613498950}
+  standing: 0
+  neighbours: []
+--- !u!4 &188447252
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188447250}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9999045, z: -0, w: -0.0138208}
+  m_LocalPosition: {x: 0.07796478, y: 0.010999978, z: 2.8197517}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1383579117}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &188794094
 GameObject:
   m_ObjectHideFlags: 0
@@ -16314,6 +16558,102 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &233818287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 233818288}
+  - component: {fileID: 233818289}
+  m_Layer: 0
+  m_Name: Stand_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &233818288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233818287}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 30, y: 0, z: 8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &233818289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233818287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
+--- !u!1 &234621902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 234621903}
+  - component: {fileID: 234621904}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &234621903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234621902}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.70551956, z: -0, w: 0.70869046}
+  m_LocalPosition: {x: 2.8799934, y: 0.010999978, z: -0.012914658}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1383579117}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &234621904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234621902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1383579118}
+  chair: {fileID: 1013717951}
+  standing: 0
+  neighbours: []
 --- !u!1 &234850859
 GameObject:
   m_ObjectHideFlags: 0
@@ -22014,6 +22354,57 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &308362093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 308362095}
+  - component: {fileID: 308362094}
+  m_Layer: 0
+  m_Name: Seat_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &308362094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308362093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 630248147}
+  chair: {fileID: 1413696889}
+  standing: 0
+  neighbours:
+  - {fileID: 440544734}
+  - {fileID: 1400254420}
+  - {fileID: 1616711368}
+--- !u!4 &308362095
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308362093}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.999688, z: -0, w: -0.024976648}
+  m_LocalPosition: {x: 0.12245941, y: 0.027, z: 2.4491887}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 630248146}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &308418891
 GameObject:
   m_ObjectHideFlags: 0
@@ -23185,6 +23576,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 323524947}
+  - component: {fileID: 323524948}
   m_Layer: 0
   m_Name: TableSet_Round_Large_4
   m_TagString: Untagged
@@ -23210,8 +23602,30 @@ Transform:
   - {fileID: 1001123079}
   - {fileID: 262116641}
   - {fileID: 535666818}
+  - {fileID: 12776354}
+  - {fileID: 1945298359}
+  - {fileID: 1750270339}
+  - {fileID: 1668605176}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &323524948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323524946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 2
+  seats:
+  - {fileID: 12776353}
+  - {fileID: 1945298358}
+  - {fileID: 1750270338}
+  - {fileID: 1668605177}
 --- !u!1001 &324241615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24597,6 +25011,54 @@ Transform:
   m_Children:
   - {fileID: 1838786264}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &351756609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 351756611}
+  - component: {fileID: 351756610}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &351756610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351756609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1901260623}
+  chair: {fileID: 1698331427}
+  standing: 0
+  neighbours: []
+--- !u!4 &351756611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351756609}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9998393, z: -0, w: -0.017928548}
+  m_LocalPosition: {x: 0.10330391, y: 0.010999978, z: 2.8795824}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1901260622}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &352168449
 GameObject:
@@ -26712,6 +27174,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 761516303}
+  - {fileID: 669679927}
   m_Father: {fileID: 2089950311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &384755087
@@ -30180,6 +30643,56 @@ Transform:
   - {fileID: 385478172}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &420007035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 420007037}
+  - component: {fileID: 420007036}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &420007036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420007035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 593670530}
+  chair: {fileID: 761837485}
+  standing: 0
+  neighbours:
+  - {fileID: 578276142}
+  - {fileID: 477531831}
+--- !u!4 &420007037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420007035}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.35249448, z: -0, w: 0.9358139}
+  m_LocalPosition: {x: -2.01783, y: 0.027, z: -2.298472}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 593670529}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420184142
 GameObject:
   m_ObjectHideFlags: 0
@@ -31579,6 +32092,57 @@ Transform:
   m_Children:
   - {fileID: 1481972178}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &440544733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 440544735}
+  - component: {fileID: 440544734}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &440544734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440544733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 630248147}
+  chair: {fileID: 1481476541}
+  standing: 0
+  neighbours:
+  - {fileID: 1423505056}
+  - {fileID: 18766769}
+  - {fileID: 308362094}
+--- !u!4 &440544735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440544733}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.024838908, z: -0, w: 0.9996915}
+  m_LocalPosition: {x: 0.12228012, y: 0.027, z: -2.4591978}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 630248146}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &441095584
 GameObject:
@@ -33750,6 +34314,56 @@ Transform:
   m_Children:
   - {fileID: 61533765}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &477531830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 477531832}
+  - component: {fileID: 477531831}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &477531831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477531830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 593670530}
+  chair: {fileID: 441984889}
+  standing: 0
+  neighbours:
+  - {fileID: 420007036}
+  - {fileID: 1560753124}
+--- !u!4 &477531832
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477531830}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9353288, z: -0, w: 0.35377982}
+  m_LocalPosition: {x: -2.0191708, y: 0.027, z: 2.2872915}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 593670529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &477615920
 GameObject:
@@ -37527,6 +38141,54 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 535666817}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &536122266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 536122268}
+  - component: {fileID: 536122267}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &536122267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536122266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1901260623}
+  chair: {fileID: 341266499}
+  standing: 0
+  neighbours: []
+--- !u!4 &536122268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536122266}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7121153, z: -0, w: 0.70206255}
+  m_LocalPosition: {x: -2.7599335, y: 0.010999978, z: 0.039240837}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1901260622}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &537886006
 GameObject:
   m_ObjectHideFlags: 0
@@ -38013,6 +38675,10 @@ MonoBehaviour:
     orderItem: 1
     tint: {r: 1, g: 0.78, b: 0.62, a: 1}
     orderItems: []
+    arrivalKind: 0
+  ordinaryArrivals: 0
+  ordinaryArrivalInterval: 12
+  arrivalWeights: {x: 6, y: 3, z: 1}
 --- !u!114 &546942405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40001,6 +40667,56 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &574081480
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 574081481}
+  - component: {fileID: 574081482}
+  m_Layer: 0
+  m_Name: Seat_06
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &574081481
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574081480}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9329501, z: -0, w: -0.36000577}
+  m_LocalPosition: {x: 2.041628, y: 0.027, z: 2.251514}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571977880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &574081482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574081480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1571977881}
+  chair: {fileID: 269686064}
+  standing: 0
+  neighbours:
+  - {fileID: 1200737670}
+  - {fileID: 1673298622}
 --- !u!1 &574539475
 GameObject:
   m_ObjectHideFlags: 0
@@ -40445,6 +41161,57 @@ Transform:
   m_Children:
   - {fileID: 1732317742}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &578276141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 578276143}
+  - component: {fileID: 578276142}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &578276142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578276141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 593670530}
+  chair: {fileID: 1481829643}
+  standing: 0
+  neighbours:
+  - {fileID: 420007036}
+  - {fileID: 36919085}
+  - {fileID: 1560753124}
+--- !u!4 &578276143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578276141}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.024838908, z: -0, w: 0.9996915}
+  m_LocalPosition: {x: 0.12228012, y: 0.027, z: -2.459198}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 593670529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &578692303
 GameObject:
@@ -41792,6 +42559,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 593670529}
+  - component: {fileID: 593670530}
   m_Layer: 0
   m_Name: TableSet_Rectangular_Long_4
   m_TagString: Untagged
@@ -41819,8 +42587,34 @@ Transform:
   - {fileID: 441984889}
   - {fileID: 557485747}
   - {fileID: 600154429}
+  - {fileID: 420007037}
+  - {fileID: 578276143}
+  - {fileID: 36919086}
+  - {fileID: 477531832}
+  - {fileID: 1560753125}
+  - {fileID: 2026957812}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &593670530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593670528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 0
+  seats:
+  - {fileID: 420007036}
+  - {fileID: 578276142}
+  - {fileID: 36919085}
+  - {fileID: 477531831}
+  - {fileID: 1560753124}
+  - {fileID: 2026957813}
 --- !u!1001 &594699570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42591,6 +43385,57 @@ Transform:
   - {fileID: 1754931262}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &602033331
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 602033333}
+  - component: {fileID: 602033332}
+  m_Layer: 0
+  m_Name: Seat_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &602033332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602033331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 991097239}
+  chair: {fileID: 591445940}
+  standing: 0
+  neighbours:
+  - {fileID: 1246031988}
+  - {fileID: 1389778739}
+  - {fileID: 706247396}
+--- !u!4 &602033333
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602033331}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.99986887, z: -0, w: -0.016194634}
+  m_LocalPosition: {x: 0.079050064, y: 0.027, z: 2.439659}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 991097238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &604374794
 GameObject:
   m_ObjectHideFlags: 0
@@ -43068,6 +43913,54 @@ Transform:
   m_Children:
   - {fileID: 828268558}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &610925239
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 610925241}
+  - component: {fileID: 610925240}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &610925240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610925239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1383579118}
+  chair: {fileID: 306502213}
+  standing: 0
+  neighbours: []
+--- !u!4 &610925241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610925239}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.013694652, z: -0, w: 0.99990624}
+  m_LocalPosition: {x: 0.07780075, y: 0.010999978, z: -2.839756}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1383579117}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &611661541
 PrefabInstance:
@@ -44496,6 +45389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 630248146}
+  - component: {fileID: 630248147}
   m_Layer: 0
   m_Name: TableSet_Rectangular_Long_1
   m_TagString: Untagged
@@ -44523,8 +45417,34 @@ Transform:
   - {fileID: 1142532815}
   - {fileID: 1413696889}
   - {fileID: 1512099443}
+  - {fileID: 1423505057}
+  - {fileID: 440544735}
+  - {fileID: 18766770}
+  - {fileID: 1400254421}
+  - {fileID: 308362095}
+  - {fileID: 1616711367}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &630248147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630248145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 0
+  seats:
+  - {fileID: 1423505056}
+  - {fileID: 440544734}
+  - {fileID: 18766769}
+  - {fileID: 1400254420}
+  - {fileID: 308362094}
+  - {fileID: 1616711368}
 --- !u!1 &631138012
 GameObject:
   m_ObjectHideFlags: 0
@@ -45989,6 +46909,54 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 767253723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &654054226
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 654054227}
+  - component: {fileID: 654054228}
+  m_Layer: 0
+  m_Name: Stand_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &654054227
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654054226}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 28, y: 0, z: 8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &654054228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654054226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
 --- !u!1 &654237144
 GameObject:
   m_ObjectHideFlags: 0
@@ -46933,6 +47901,120 @@ Transform:
   - {fileID: 266518744}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &669679926
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 382319725}
+    m_Modifications:
+    - target: {fileID: 3907744737996921938, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_Name
+      value: CharacterModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5936887
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5936887
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5936887
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3907744737996921938, guid: 978aa28f1d5be476caa3cf33d53a7835,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 669679929}
+  m_SourcePrefab: {fileID: 100100000, guid: 978aa28f1d5be476caa3cf33d53a7835, type: 3}
+--- !u!4 &669679927 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
+    type: 3}
+  m_PrefabInstance: {fileID: 669679926}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &669679928 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3907744737996921938, guid: 978aa28f1d5be476caa3cf33d53a7835,
+    type: 3}
+  m_PrefabInstance: {fileID: 669679926}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &669679929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669679928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b480f4abe12e46e39f12a2392503e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.CharacterModelMotion
+  motionRoot: {fileID: 382319725}
+  handIk: 0
+  cupHandPosition: {x: 0.22, y: 0.96, z: 0.3}
 --- !u!1 &669821106
 GameObject:
   m_ObjectHideFlags: 0
@@ -49504,6 +50586,56 @@ Transform:
   - {fileID: 523307796}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &706247394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 706247395}
+  - component: {fileID: 706247396}
+  m_Layer: 0
+  m_Name: Seat_06
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &706247395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706247394}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.93213075, z: -0, w: -0.36212185}
+  m_LocalPosition: {x: 2.076808, y: 0.027, z: 2.2695274}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 991097238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &706247396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706247394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 991097239}
+  chair: {fileID: 1984968351}
+  standing: 0
+  neighbours:
+  - {fileID: 1110997371}
+  - {fileID: 602033332}
 --- !u!1 &708359104
 GameObject:
   m_ObjectHideFlags: 0
@@ -52740,6 +53872,54 @@ Transform:
   - {fileID: 1680609557}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &752339387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 752339388}
+  - component: {fileID: 752339389}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &752339388
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752339387}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7149185, z: -0, w: 0.69920784}
+  m_LocalPosition: {x: 2.8998375, y: 0.010999978, z: 0.06444073}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1901260622}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &752339389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752339387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1901260623}
+  chair: {fileID: 969030189}
+  standing: 0
+  neighbours: []
 --- !u!1 &755052457
 GameObject:
   m_ObjectHideFlags: 0
@@ -53374,7 +54554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &761516303
 Transform:
   m_ObjectHideFlags: 0
@@ -53397,7 +54577,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761516302}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ccfabf0de4da4622a37d3c84742f8d9, type: 3}
   m_Name: 
@@ -57575,6 +58755,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &812142764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 812142766}
+  - component: {fileID: 812142765}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &812142765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812142764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1383579118}
+  chair: {fileID: 183157206}
+  standing: 0
+  neighbours: []
+--- !u!4 &812142766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812142764}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7021099, z: -0, w: 0.7120686}
+  m_LocalPosition: {x: -2.7799358, y: 0.010999978, z: -0.039154053}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1383579117}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &812787971
 GameObject:
   m_ObjectHideFlags: 0
@@ -62993,6 +64221,54 @@ Transform:
   - {fileID: 950486022}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &888844817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 888844819}
+  - component: {fileID: 888844818}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &888844818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888844817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1064979705}
+  chair: {fileID: 1974186188}
+  standing: 0
+  neighbours: []
+--- !u!4 &888844819
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888844817}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.01545772, z: -0, w: 0.99988055}
+  m_LocalPosition: {x: 0.08855915, y: 0.010999978, z: -2.8635235}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1064979704}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &892129826
 GameObject:
   m_ObjectHideFlags: 0
@@ -64372,6 +65648,56 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 248490214}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &917168687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 917168689}
+  - component: {fileID: 917168688}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &917168688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917168687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 991097239}
+  chair: {fileID: 1426097584}
+  standing: 0
+  neighbours:
+  - {fileID: 1246031988}
+  - {fileID: 1389778739}
+--- !u!4 &917168689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917168687}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.35584238, z: -0, w: 0.934546}
+  m_LocalPosition: {x: -2.053317, y: 0.027, z: -2.305389}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 991097238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &917443660
 GameObject:
   m_ObjectHideFlags: 0
@@ -69691,6 +71017,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 991097238}
+  - component: {fileID: 991097239}
   m_Layer: 0
   m_Name: TableSet_Rectangular_Long_3
   m_TagString: Untagged
@@ -69718,8 +71045,34 @@ Transform:
   - {fileID: 1823812717}
   - {fileID: 591445940}
   - {fileID: 1984968351}
+  - {fileID: 917168689}
+  - {fileID: 1246031989}
+  - {fileID: 1110997372}
+  - {fileID: 1389778740}
+  - {fileID: 602033333}
+  - {fileID: 706247395}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &991097239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991097237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 0
+  seats:
+  - {fileID: 917168688}
+  - {fileID: 1246031988}
+  - {fileID: 1110997371}
+  - {fileID: 1389778739}
+  - {fileID: 602033332}
+  - {fileID: 706247396}
 --- !u!1 &992122158
 GameObject:
   m_ObjectHideFlags: 0
@@ -74913,6 +76266,54 @@ Transform:
   - {fileID: 1789340814}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1055918588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1055918590}
+  - component: {fileID: 1055918589}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1055918589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055918588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1766990107}
+  chair: {fileID: 1574058701}
+  standing: 0
+  neighbours: []
+--- !u!4 &1055918590
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055918588}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.6996376, z: -0, w: 0.71449786}
+  m_LocalPosition: {x: 2.2198563, y: -0.00000029230984, z: -0.04665947}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1766990106}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1056940712
 GameObject:
   m_ObjectHideFlags: 0
@@ -75813,6 +77214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1064979704}
+  - component: {fileID: 1064979705}
   m_Layer: 0
   m_Name: TableSet_Round_Large_3
   m_TagString: Untagged
@@ -75838,8 +77240,30 @@ Transform:
   - {fileID: 294432934}
   - {fileID: 1974186188}
   - {fileID: 116261796}
+  - {fileID: 1191809087}
+  - {fileID: 1354839672}
+  - {fileID: 888844819}
+  - {fileID: 1146481684}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1064979705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064979703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 2
+  seats:
+  - {fileID: 1191809086}
+  - {fileID: 1354839671}
+  - {fileID: 888844818}
+  - {fileID: 1146481685}
 --- !u!1 &1067375519
 GameObject:
   m_ObjectHideFlags: 0
@@ -76940,6 +78364,54 @@ Transform:
   - {fileID: 1714916691}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1076716210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1076716211}
+  - component: {fileID: 1076716212}
+  m_Layer: 0
+  m_Name: Stand_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1076716211
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076716210}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 28, y: 0, z: 11}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1076716212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076716210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
 --- !u!1 &1076777494
 GameObject:
   m_ObjectHideFlags: 0
@@ -77447,7 +78919,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1081122821}
-  - component: {fileID: 1081122822}
   m_Layer: 0
   m_Name: Seat_03
   m_TagString: Untagged
@@ -77463,25 +78934,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1081122820}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.5, y: 0, z: 10.26}
+  m_LocalRotation: {x: -0, y: 0.9308823, z: -0, w: -0.36531937}
+  m_LocalPosition: {x: 23.35209, y: 0, z: 10.906505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130337456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1081122822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081122820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
 --- !u!1 &1081603992
 GameObject:
   m_ObjectHideFlags: 0
@@ -79540,6 +80999,56 @@ Transform:
   - {fileID: 1928115436}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1110997370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1110997372}
+  - component: {fileID: 1110997371}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1110997371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110997370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 991097239}
+  chair: {fileID: 67642242}
+  standing: 0
+  neighbours:
+  - {fileID: 1246031988}
+  - {fileID: 706247396}
+--- !u!4 &1110997372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110997370}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.35826373, z: -0, w: 0.93362045}
+  m_LocalPosition: {x: 2.0728264, y: 0.027, z: -2.303141}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 991097238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1111015992
 GameObject:
   m_ObjectHideFlags: 0
@@ -81355,6 +82864,7 @@ Transform:
   - {fileID: 1855221217}
   - {fileID: 1202105095}
   - {fileID: 1081122821}
+  - {fileID: 1844545796}
   m_Father: {fileID: 923320284}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1130337457
@@ -81369,6 +82879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bb8c82f731b4bf0a45973bd0c9fa56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatRegistry
+  tableRoot: {fileID: 86129914}
 --- !u!1 &1130582901
 GameObject:
   m_ObjectHideFlags: 0
@@ -82287,6 +83798,54 @@ Transform:
   - {fileID: 582094506}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1146481683
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1146481684}
+  - component: {fileID: 1146481685}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1146481684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146481683}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.70428365, z: -0, w: 0.7099187}
+  m_LocalPosition: {x: 2.872119, y: 0.010999978, z: -0.022888184}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1064979704}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1146481685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146481683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1064979705}
+  chair: {fileID: 116261796}
+  standing: 0
+  neighbours: []
 --- !u!1 &1147023882
 GameObject:
   m_ObjectHideFlags: 0
@@ -84558,6 +86117,54 @@ Transform:
   - {fileID: 1352016073}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1191809085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1191809087}
+  - component: {fileID: 1191809086}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1191809086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191809085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1064979705}
+  chair: {fileID: 1338493805}
+  standing: 0
+  neighbours: []
+--- !u!4 &1191809087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191809085}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.6953996, z: -0, w: 0.71862334}
+  m_LocalPosition: {x: -2.787241, y: 0.010999978, z: -0.09157944}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1064979704}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1192854018
 GameObject:
   m_ObjectHideFlags: 0
@@ -84963,6 +86570,56 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1200737669
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1200737671}
+  - component: {fileID: 1200737670}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1200737670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200737669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1571977881}
+  chair: {fileID: 788806956}
+  standing: 0
+  neighbours:
+  - {fileID: 2144955656}
+  - {fileID: 574081482}
+--- !u!4 &1200737671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200737669}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.35100517, z: -0, w: 0.93637353}
+  m_LocalPosition: {x: 2.0322723, y: 0.027, z: -2.329834}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571977880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1201772550
 GameObject:
   m_ObjectHideFlags: 0
@@ -85004,7 +86661,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1202105095}
-  - component: {fileID: 1202105096}
   m_Layer: 0
   m_Name: Seat_02
   m_TagString: Untagged
@@ -85020,25 +86676,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1202105094}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.98, y: 0, z: 11.46}
+  m_LocalRotation: {x: -0, y: 0.999688, z: -0, w: -0.024976643}
+  m_LocalPosition: {x: 21.36246, y: 0, z: 11.079189}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130337456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1202105096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1202105094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
 --- !u!1 &1203611063
 GameObject:
   m_ObjectHideFlags: 0
@@ -87929,6 +89573,57 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1246031987
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1246031989}
+  - component: {fileID: 1246031988}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1246031988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246031987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 991097239}
+  chair: {fileID: 1931149657}
+  standing: 0
+  neighbours:
+  - {fileID: 917168688}
+  - {fileID: 1110997371}
+  - {fileID: 602033332}
+--- !u!4 &1246031989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246031987}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.015927894, z: -0, w: 0.99987316}
+  m_LocalPosition: {x: 0.07870293, y: 0.027, z: -2.46967}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 991097238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1246632522
 GameObject:
   m_ObjectHideFlags: 0
@@ -92012,6 +93707,54 @@ Transform:
   - {fileID: 1004289558}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1302923862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1302923863}
+  - component: {fileID: 1302923864}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1302923863
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302923862}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.00000029230984, z: -2.2199998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1766990106}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1302923864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302923862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1766990107}
+  chair: {fileID: 1983491082}
+  standing: 0
+  neighbours: []
 --- !u!1 &1303739412
 GameObject:
   m_ObjectHideFlags: 0
@@ -92352,6 +94095,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1306303498
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1306303500}
+  - component: {fileID: 1306303499}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1306303499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306303498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1901260623}
+  chair: {fileID: 289929272}
+  standing: 0
+  neighbours: []
+--- !u!4 &1306303500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306303498}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.01876941, z: -0, w: 0.99982387}
+  m_LocalPosition: {x: 0.10439491, y: 0.010999978, z: -2.779541}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1901260622}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1306535668
 GameObject:
   m_ObjectHideFlags: 0
@@ -93930,6 +95721,56 @@ Transform:
   - {fileID: 1712178971}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1327329941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1327329943}
+  - component: {fileID: 1327329942}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1327329942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327329941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1571977881}
+  chair: {fileID: 1676963321}
+  standing: 0
+  neighbours:
+  - {fileID: 2144955656}
+  - {fileID: 2116757522}
+--- !u!4 &1327329943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327329941}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.35798317, z: -0, w: 0.93372804}
+  m_LocalPosition: {x: -2.0885353, y: 0.027, z: -2.3234026}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571977880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1327945435
 GameObject:
   m_ObjectHideFlags: 0
@@ -95330,6 +97171,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1354839670
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1354839672}
+  - component: {fileID: 1354839671}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1354839671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354839670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1064979705}
+  chair: {fileID: 294432934}
+  standing: 0
+  neighbours: []
+--- !u!4 &1354839672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354839670}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.99996495, z: -0, w: -0.008372496}
+  m_LocalPosition: {x: 0.0468235, y: 0.010999978, z: 2.79595}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1064979704}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1355837481
 GameObject:
   m_ObjectHideFlags: 0
@@ -97152,6 +99041,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1383579117}
+  - component: {fileID: 1383579118}
   m_Layer: 0
   m_Name: TableSet_Round_Large_1
   m_TagString: Untagged
@@ -97177,8 +99067,30 @@ Transform:
   - {fileID: 613498950}
   - {fileID: 306502213}
   - {fileID: 1013717951}
+  - {fileID: 812142766}
+  - {fileID: 188447252}
+  - {fileID: 610925241}
+  - {fileID: 234621903}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1383579118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383579116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 2
+  seats:
+  - {fileID: 812142765}
+  - {fileID: 188447251}
+  - {fileID: 610925240}
+  - {fileID: 234621904}
 --- !u!1 &1384203699
 GameObject:
   m_ObjectHideFlags: 0
@@ -97698,6 +99610,56 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1389778738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1389778740}
+  - component: {fileID: 1389778739}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1389778739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389778738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 991097239}
+  chair: {fileID: 1823812717}
+  standing: 0
+  neighbours:
+  - {fileID: 917168688}
+  - {fileID: 602033332}
+--- !u!4 &1389778740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389778738}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9330679, z: -0, w: 0.35970026}
+  m_LocalPosition: {x: -2.057313, y: 0.027, z: 2.2718}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 991097238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1390230894
 GameObject:
   m_ObjectHideFlags: 0
@@ -98562,6 +100524,56 @@ Transform:
   m_Children:
   - {fileID: 2147085661}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1400254419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1400254421}
+  - component: {fileID: 1400254420}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1400254420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400254419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 630248147}
+  chair: {fileID: 1142532815}
+  standing: 0
+  neighbours:
+  - {fileID: 1423505056}
+  - {fileID: 308362094}
+--- !u!4 &1400254421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400254419}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9353287, z: -0, w: 0.35377985}
+  m_LocalPosition: {x: -2.0191708, y: 0.027, z: 2.2872915}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 630248146}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1401207032
 GameObject:
@@ -99531,6 +101543,56 @@ Transform:
   m_Children:
   - {fileID: 1309243141}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1423505055
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1423505057}
+  - component: {fileID: 1423505056}
+  m_Layer: 0
+  m_Name: Seat_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1423505056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423505055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 630248147}
+  chair: {fileID: 380315457}
+  standing: 0
+  neighbours:
+  - {fileID: 440544734}
+  - {fileID: 1400254420}
+--- !u!4 &1423505057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423505055}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.35249448, z: -0, w: 0.9358139}
+  m_LocalPosition: {x: -2.01783, y: 0.027, z: -2.298472}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 630248146}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1424307799
 GameObject:
@@ -108949,6 +111011,57 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5668984478841134232, guid: 9f23dabcbe7384f999ea9cd032a17165, type: 3}
+--- !u!1 &1560753123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1560753125}
+  - component: {fileID: 1560753124}
+  m_Layer: 0
+  m_Name: Seat_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1560753124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560753123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 593670530}
+  chair: {fileID: 557485747}
+  standing: 0
+  neighbours:
+  - {fileID: 578276142}
+  - {fileID: 477531831}
+  - {fileID: 2026957813}
+--- !u!4 &1560753125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560753123}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.999688, z: -0, w: -0.024976643}
+  m_LocalPosition: {x: 0.12245941, y: 0.027, z: 2.4491892}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 593670529}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1561207181
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109574,6 +111687,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1571977880}
+  - component: {fileID: 1571977881}
   m_Layer: 0
   m_Name: TableSet_Rectangular_Long_2
   m_TagString: Untagged
@@ -109601,8 +111715,34 @@ Transform:
   - {fileID: 2121855671}
   - {fileID: 1430403208}
   - {fileID: 269686064}
+  - {fileID: 1327329943}
+  - {fileID: 2144955657}
+  - {fileID: 1200737671}
+  - {fileID: 2116757523}
+  - {fileID: 1673298623}
+  - {fileID: 574081481}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1571977881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571977879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 0
+  seats:
+  - {fileID: 1327329942}
+  - {fileID: 2144955656}
+  - {fileID: 1200737670}
+  - {fileID: 2116757522}
+  - {fileID: 1673298622}
+  - {fileID: 574081482}
 --- !u!1 &1572471754
 GameObject:
   m_ObjectHideFlags: 0
@@ -112593,6 +114733,56 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1616711366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1616711367}
+  - component: {fileID: 1616711368}
+  m_Layer: 0
+  m_Name: Seat_06
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1616711367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616711366}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9308822, z: -0, w: -0.36531943}
+  m_LocalPosition: {x: 2.112091, y: 0.027, z: 2.276504}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 630248146}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1616711368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616711366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 630248147}
+  chair: {fileID: 1512099443}
+  standing: 0
+  neighbours:
+  - {fileID: 18766769}
+  - {fileID: 308362094}
 --- !u!1 &1617032632
 GameObject:
   m_ObjectHideFlags: 0
@@ -115718,6 +117908,54 @@ Transform:
   - {fileID: 2110864093}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1668605175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1668605176}
+  - component: {fileID: 1668605177}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1668605176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668605175}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.70231336, z: -0, w: 0.711868}
+  m_LocalPosition: {x: 2.8699408, y: 0.010999978, z: -0.038783073}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 323524947}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1668605177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668605175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 323524948}
+  chair: {fileID: 535666818}
+  standing: 0
+  neighbours: []
 --- !u!1 &1668900247
 GameObject:
   m_ObjectHideFlags: 0
@@ -116320,6 +118558,57 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1673298621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1673298623}
+  - component: {fileID: 1673298622}
+  m_Layer: 0
+  m_Name: Seat_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1673298622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673298621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1571977881}
+  chair: {fileID: 1430403208}
+  standing: 0
+  neighbours:
+  - {fileID: 2144955656}
+  - {fileID: 2116757522}
+  - {fileID: 574081482}
+--- !u!4 &1673298623
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673298621}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9999751, z: -0, w: -0.007061511}
+  m_LocalPosition: {x: 0.034179688, y: 0.027, z: 2.4199352}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571977880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1673409682
 GameObject:
   m_ObjectHideFlags: 0
@@ -116936,6 +119225,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1678282253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678282254}
+  - component: {fileID: 1678282255}
+  m_Layer: 0
+  m_Name: Stand_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1678282254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678282253}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 28, y: 0, z: 9.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1678282255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678282253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
 --- !u!1 &1678442922
 GameObject:
   m_ObjectHideFlags: 0
@@ -120607,6 +122944,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1719525156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1719525157}
+  - component: {fileID: 1719525158}
+  m_Layer: 0
+  m_Name: Stand_07
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1719525157
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719525156}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 28, y: 0, z: 12.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1719525158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719525156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
 --- !u!1 &1720635021
 GameObject:
   m_ObjectHideFlags: 0
@@ -122274,6 +124659,54 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ccba2018e885427b85cde7a9d4c6fb1, type: 3}
+--- !u!1 &1750270337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1750270339}
+  - component: {fileID: 1750270338}
+  m_Layer: 0
+  m_Name: Seat_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1750270338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750270337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 323524948}
+  chair: {fileID: 262116641}
+  standing: 0
+  neighbours: []
+--- !u!4 &1750270339
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750270337}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.011310089, z: -0, w: 0.99993604}
+  m_LocalPosition: {x: 0.06470251, y: 0.010999978, z: -2.8598337}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 323524947}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1751082876
 GameObject:
   m_ObjectHideFlags: 0
@@ -123599,6 +126032,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1766990106}
+  - component: {fileID: 1766990107}
   m_Layer: 0
   m_Name: TableSet_Round_Pedestal
   m_TagString: Untagged
@@ -123622,8 +126056,26 @@ Transform:
   - {fileID: 2131227641}
   - {fileID: 1574058701}
   - {fileID: 1983491082}
+  - {fileID: 1055918590}
+  - {fileID: 1302923863}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1766990107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766990105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 1
+  seats:
+  - {fileID: 1055918589}
+  - {fileID: 1302923864}
 --- !u!1001 &1769210002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126442,6 +128894,54 @@ Transform:
   - {fileID: 1183549513}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1820653638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1820653639}
+  - component: {fileID: 1820653640}
+  m_Layer: 0
+  m_Name: Stand_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1820653639
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820653638}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 30, y: 0, z: 9.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1820653640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820653638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
 --- !u!1 &1821457938
 GameObject:
   m_ObjectHideFlags: 0
@@ -128379,6 +130879,45 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1844545795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1844545796}
+  m_Layer: 0
+  m_Name: StandingArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1844545796
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844545795}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 654054227}
+  - {fileID: 233818288}
+  - {fileID: 1678282254}
+  - {fileID: 1820653639}
+  - {fileID: 1076716211}
+  - {fileID: 49118312}
+  - {fileID: 1719525157}
+  - {fileID: 2109351911}
+  m_Father: {fileID: 1130337456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1845055335
 GameObject:
   m_ObjectHideFlags: 0
@@ -128987,7 +131526,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1855221217}
-  - component: {fileID: 1855221218}
   m_Layer: 0
   m_Name: BranDay1Seat
   m_TagString: Untagged
@@ -129003,25 +131541,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855221216}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.98, y: 0, z: 9.06}
+  m_LocalRotation: {x: -0, y: 0.9353288, z: -0, w: 0.35377982}
+  m_LocalPosition: {x: 19.220829, y: 0, z: 10.917292}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130337456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1855221218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855221216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
 --- !u!1 &1855943740
 GameObject:
   m_ObjectHideFlags: 0
@@ -132148,6 +134674,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1901260622}
+  - component: {fileID: 1901260623}
   m_Layer: 0
   m_Name: TableSet_Round_Large_2
   m_TagString: Untagged
@@ -132173,8 +134700,30 @@ Transform:
   - {fileID: 1698331427}
   - {fileID: 289929272}
   - {fileID: 969030189}
+  - {fileID: 536122268}
+  - {fileID: 351756611}
+  - {fileID: 1306303500}
+  - {fileID: 752339388}
   m_Father: {fileID: 86129914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1901260623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901260621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c325c2eeedc244109bdb2984d5cdc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatingTable
+  tableType: 2
+  seats:
+  - {fileID: 536122267}
+  - {fileID: 351756610}
+  - {fileID: 1306303499}
+  - {fileID: 752339389}
 --- !u!1 &1901573936
 GameObject:
   m_ObjectHideFlags: 0
@@ -135296,6 +137845,54 @@ Transform:
   m_Children:
   - {fileID: 1296120936}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1945298357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1945298359}
+  - component: {fileID: 1945298358}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1945298358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945298357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 323524948}
+  chair: {fileID: 1001123079}
+  standing: 0
+  neighbours: []
+--- !u!4 &1945298359
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945298357}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9999324, z: -0, w: -0.011625592}
+  m_LocalPosition: {x: 0.06511259, y: 0.010999978, z: 2.7998247}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 323524947}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1945618329
 GameObject:
@@ -142021,6 +144618,56 @@ Transform:
   - {fileID: 1102695131}
   m_Father: {fileID: 414719496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2026957811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2026957812}
+  - component: {fileID: 2026957813}
+  m_Layer: 0
+  m_Name: Seat_06
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2026957812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026957811}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9308823, z: -0, w: -0.36531937}
+  m_LocalPosition: {x: 2.112091, y: 0.027, z: 2.2765045}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 593670529}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2026957813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 593670530}
+  chair: {fileID: 600154429}
+  standing: 0
+  neighbours:
+  - {fileID: 36919085}
+  - {fileID: 1560753124}
 --- !u!1 &2027858970
 GameObject:
   m_ObjectHideFlags: 0
@@ -147228,6 +149875,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &2109351910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2109351911}
+  - component: {fileID: 2109351912}
+  m_Layer: 0
+  m_Name: Stand_08
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2109351911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109351910}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 30, y: 0, z: 12.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844545796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2109351912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109351910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 0}
+  chair: {fileID: 0}
+  standing: 1
+  neighbours: []
 --- !u!1 &2109387205
 GameObject:
   m_ObjectHideFlags: 0
@@ -147943,6 +150638,56 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &2116757521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2116757523}
+  - component: {fileID: 2116757522}
+  m_Layer: 0
+  m_Name: Seat_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2116757522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116757521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1571977881}
+  chair: {fileID: 2121855671}
+  standing: 0
+  neighbours:
+  - {fileID: 1327329942}
+  - {fileID: 1673298622}
+--- !u!4 &2116757523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116757521}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9302267, z: -0, w: 0.36698544}
+  m_LocalPosition: {x: -2.0977936, y: 0.027, z: 2.2449179}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571977880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2116912272
 GameObject:
   m_ObjectHideFlags: 0
@@ -150562,6 +153307,57 @@ Transform:
   m_Children:
   - {fileID: 119739297}
   m_Father: {fileID: 414719496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2144955655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2144955657}
+  - component: {fileID: 2144955656}
+  m_Layer: 0
+  m_Name: Seat_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2144955656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144955655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d08f07e55884f8db9915e5577c81d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.SeatPoint
+  table: {fileID: 1571977881}
+  chair: {fileID: 666304394}
+  standing: 0
+  neighbours:
+  - {fileID: 1327329942}
+  - {fileID: 1200737670}
+  - {fileID: 1673298622}
+--- !u!4 &2144955657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144955655}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.006792905, z: -0, w: 0.99997693}
+  m_LocalPosition: {x: 0.033830643, y: 0.027, z: -2.48994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571977880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2146003080
 GameObject:

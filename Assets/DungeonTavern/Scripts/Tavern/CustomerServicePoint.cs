@@ -34,6 +34,14 @@ namespace DungeonTavern.Gameplay.Interaction
         private WorldSpeechBubble bubble;
         public CustomerOrderState State { get; private set; }
         public string CustomerName => customerName;
+        public CustomerSeatingKind SeatingKind { get; private set; }
+        public int PartyId { get; private set; }
+        public SeatPoint AssignedSeat => assignedSeat;
+        public void ConfigureSeating(CustomerSeatingKind kind, int partyId = 0)
+        {
+            if (isInitialized) throw new InvalidOperationException("Configure seating before initialization.");
+            SeatingKind = kind; PartyId = partyId;
+        }
         public CustomerOrder Order { get; private set; }
         public bool IsServed => Order != null && Order.AllDelivered;
         public event Action<CustomerOrderState> StateChanged;
@@ -204,7 +212,11 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             if (!force && State == nextState) return;
             State = nextState;
-            if (nextState == CustomerOrderState.Ordering) stateTimer = orderingDuration;
+            if (nextState == CustomerOrderState.Ordering)
+            {
+                stateTimer = orderingDuration;
+                transform.rotation = menuPoint.rotation;
+            }
             if (nextState == CustomerOrderState.ShowingOrder) stateTimer = orderDisplayDuration;
             if (nextState is CustomerOrderState.Ordering or CustomerOrderState.ShowingOrder or CustomerOrderState.WaitingForFood
                 or CustomerOrderState.Eating or CustomerOrderState.AwaitingSettlement) navigator.Stop();

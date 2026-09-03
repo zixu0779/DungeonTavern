@@ -176,10 +176,10 @@ The following are not design commitments:
 - The serialized output resolution is 1920x1080. Exploration orthographic size
   is 4.5; dialogue has its own closer framing. Ordinary 3D scene materials use
   Unlit to retain authored colors. A future softly lit setup is proposed only.
-- Scene characters currently remain billboard sprites. The protagonist has a
-  separate 3D rig candidate with a valid Unity Humanoid Avatar and Idle, Walk,
-  Reach and RigCheck clips. Movement and cloak deformation await visual review;
-  this candidate is not yet connected to the playable character or story actions.
+- The playable protagonist uses the 3D Humanoid rig with movement-driven Idle
+  and Walk, plus a right-arm pickup/holding layer and a right-hand cup anchor.
+  Eve and customers share a temporary KayKit Rogue model with Idle and Walk;
+  their final appearances and seated/story-specific animations remain pending.
 - Only Day 1 is wired to the current narrative controller. Days 2 and 3 exist
   in Ink and are not yet complete playable scene flows. The opening cinematic
   is a placeholder; prone-to-standing animation is still planned.
@@ -250,3 +250,24 @@ from old layouts. F1 narrative arrival currently references the authored
 - Customers physically reach the queue in front of the placed menu. Only the queue head thinks and orders; thinking is shown as `...`.
 - The customer then visibly displays the ordered item icon and quantity before leaving the menu queue for their seat. The order remains visible while travelling and waiting for service.
 - After delivery, eating is communicated without descriptive text using the item icon and decreasing progress. After eating finishes, the bubble reads `结账`; after payment the customer leaves.
+
+## Customer seating (2026-09-18)
+
+- Solitary solo guests prefer an empty long table, then an empty small round
+  table, then a shared long-table seat whose immediate neighbours and opposite
+  seat are empty, then another available long-table seat, then an empty large
+  round table. If none qualify, they use a reserved standing position in the hall.
+- Sociable solo guests use the same table priorities, but do not rank personal
+  space within an occupied long table. Solo guests never join occupied round tables.
+- Parties contain 2–4 people, randomly chosen, and exclusively reserve one empty
+  large round table. Unused stools remain unavailable to other parties and solo
+  guests until the last reserved member releases their seat. Reservations count
+  while customers are still in the menu queue.
+- Ordinary arrivals favour solitary guests over sociable guests, and sociable
+  guests over parties. Party arrivals are excluded when no eligible large round
+  table is empty. Inspector weights are tunable; their initial 6:3:1 values are
+  implementation defaults, not a locked design ratio.
+- Each guest still queues, orders, receives food and settles individually. Party
+  table reservation does not introduce shared orders or shared payment.
+- The first-day authored Bran arrival stays a single customer. Additional ordinary
+  arrivals are configured separately from the story schedule.

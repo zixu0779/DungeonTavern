@@ -20,8 +20,9 @@ presentation and asset organization, not future feature commitments.
   wood, with enough contrast to see masonry, silhouettes and interactions.
 - B1 uses cutaway walls and a flat stone backdrop at wall-top height. Preserve
   authored stair/gate geometry, travel triggers and collision support.
-- Current characters are billboard sprites. 3D skeletal characters are planned;
-  do not describe concept art or an unrigged mesh as an animated game character.
+- The playable protagonist uses a 3D Humanoid model with idle, walk and cup
+  interaction animation. Eve and customers share a KayKit Rogue placeholder.
+  Original sprite children are inactive for rollback.
 
 ## Source and runtime assets
 
@@ -29,7 +30,7 @@ presentation and asset organization, not future feature commitments.
   and stairs as well as furniture.
 - `ArtSource/Props/AIGenerated`: original generated object models and textures.
 - `ArtSource/Characters/Concepts`: new character reference designs.
-- `ArtSource/Characters/AIGenerated`: future generated character meshes/textures.
+- `ArtSource/Characters/AIGenerated`: generated character meshes, textures and rigged sources.
 - Unity-ready runtime assets live under `Assets/DungeonTavern`; moving external
   source folders does not require moving those imported assets.
 - Keep each character's design separate. For rigging candidates, prefer neutral

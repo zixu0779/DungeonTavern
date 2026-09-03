@@ -11,6 +11,8 @@ namespace DungeonTavern.Gameplay.Interaction
         Completed
     }
 
+    public enum CustomerArrivalKind { Solitary, Sociable, Party, Random }
+
     [Serializable]
     public sealed class CustomerScheduleEntry
     {
@@ -19,6 +21,9 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField] private HeldItem orderItem = HeldItem.TestDrink;
         [SerializeField] private Color tint = Color.white;
         [SerializeField] private List<OrderRequest> orderItems = new();
+        [SerializeField] private CustomerArrivalKind arrivalKind;
+        public CustomerArrivalKind ArrivalKind => arrivalKind;
+        public void SetArrivalKind(CustomerArrivalKind kind) => arrivalKind = kind;
         public IEnumerable<OrderRequest> OrderItems => orderItems.Count > 0
             ? orderItems : new[] { new OrderRequest { item = orderItem } };
 
@@ -51,16 +56,23 @@ namespace DungeonTavern.Gameplay.Interaction
         [Header("Authored Schedule")]
         [SerializeField] private List<CustomerScheduleEntry> customers = new();
 
+        [Header("Ordinary customers (in addition to the authored story schedule)")]
+        [SerializeField, Min(0)] private int ordinaryArrivals;
+        [SerializeField, Min(1)] private float ordinaryArrivalInterval = 12f;
+        [Tooltip("Relative weights. Party weight is excluded when no empty large round table is available.")]
+        [SerializeField] private Vector3 arrivalWeights = new(6, 3, 1);
+        private int additionalPartyMembers;
+        private int nextPartyId;
         private readonly List<CustomerScheduleEntry> pendingCustomers = new();
         private readonly List<CustomerServicePoint> activeCustomers = new();
         private float elapsedTime;
         private int nextCustomerIndex;
 
         public BusinessDayState State { get; private set; } = BusinessDayState.Preparing;
-        public int TotalCustomers => customers.Count;
+        public int TotalCustomers => (State == BusinessDayState.Preparing ? customers.Count + ordinaryArrivals : pendingCustomers.Count) + additionalPartyMembers;
         public int CompletedCustomers { get; private set; }
         public int ActiveCustomers => activeCustomers.Count;
-        public int WaitingCustomers => TotalCustomers - nextCustomerIndex;
+        public int WaitingCustomers => pendingCustomers.Count - nextCustomerIndex;
 
         public event Action ProgressChanged;
         public event Action DayCompleted;
@@ -84,6 +96,15 @@ namespace DungeonTavern.Gameplay.Interaction
 
             pendingCustomers.Clear();
             pendingCustomers.AddRange(customers);
+            for (int i = 0; i < ordinaryArrivals; i++)
+            {
+                var guest = new CustomerScheduleEntry();
+                guest.Configure($"Guest_{i + 1}", (i + 1) * ordinaryArrivalInterval, HeldItem.TestDrink, Color.white);
+                guest.SetArrivalKind(CustomerArrivalKind.Random);
+                pendingCustomers.Add(guest);
+            }
+            additionalPartyMembers = 0;
+            nextPartyId = 0;
             pendingCustomers.Sort((left, right) => left.ArrivalTime.CompareTo(right.ArrivalTime));
             elapsedTime = 0f;
             nextCustomerIndex = 0;
@@ -122,38 +143,75 @@ namespace DungeonTavern.Gameplay.Interaction
             TryCompleteDay();
         }
 
+        public CustomerSeatingKind ChooseOrdinaryKind(float roll)
+        {
+            float solitary = Mathf.Max(0, arrivalWeights.x), sociable = Mathf.Max(0, arrivalWeights.y);
+            float party = seatRegistry.CanSeatParty(2) ? Mathf.Max(0, arrivalWeights.z) : 0;
+            float total = solitary + sociable + party;
+            if (total <= 0) return CustomerSeatingKind.Solitary;
+            float value = Mathf.Clamp(roll, 0, .999999f) * total;
+            return value < solitary ? CustomerSeatingKind.Solitary
+                : value < solitary + sociable ? CustomerSeatingKind.Sociable : CustomerSeatingKind.Party;
+        }
+
         private bool TrySpawn(CustomerScheduleEntry entry)
         {
-            if (!seatRegistry.HasAvailableSeat)
-                return false;
-
-            GameObject instance = Instantiate(customerPrefab, guestEntry.position, Quaternion.identity);
-            CustomerServicePoint customer = instance.GetComponent<CustomerServicePoint>();
-            if (customer == null)
-                customer = instance.AddComponent<CustomerServicePoint>();
-
-            if (!seatRegistry.TryReserve(customer, out SeatPoint seat))
+            if (!seatRegistry.HasAvailableSeat) return false;
+            var kind = entry.ArrivalKind == CustomerArrivalKind.Random ? ChooseOrdinaryKind(UnityEngine.Random.value)
+                : (CustomerSeatingKind)entry.ArrivalKind;
+            int count = 1;
+            if (kind == CustomerSeatingKind.Party)
             {
-                Destroy(instance);
-                return false;
+                int capacity = 4;
+                while (capacity >= 2 && !seatRegistry.CanSeatParty(capacity)) capacity--;
+                if (capacity < 2) return false;
+                count = UnityEngine.Random.Range(2, capacity + 1);
             }
-
+            var group = new List<CustomerServicePoint>();
+            SeatPoint[] reserved = null;
             try
             {
-                customer.Initialize(entry.DisplayName, entry.OrderItems, guestEntry, seatRegistry, entry.Tint, seat);
+                int partyId = count > 1 ? ++nextPartyId : 0;
+                for (int i = 0; i < count; i++)
+                {
+                    var instance = Instantiate(customerPrefab, guestEntry.position, Quaternion.identity);
+                    var customer = instance.GetComponent<CustomerServicePoint>();
+                    if (customer == null) customer = instance.AddComponent<CustomerServicePoint>();
+                    customer.ConfigureSeating(kind, partyId);
+                    group.Add(customer);
+                }
+                if (count > 1)
+                {
+                    if (!seatRegistry.TryReserveParty(group, out reserved)) return false;
+                }
+                else
+                {
+                    if (!seatRegistry.TryReserve(group[0], out var seat)) return false;
+                    reserved = new[] { seat };
+                }
+                for (int i = 0; i < count; i++)
+                    group[i].Initialize(count > 1 ? $"{entry.DisplayName}_{i + 1}" : entry.DisplayName,
+                        entry.OrderItems, guestEntry, seatRegistry, entry.Tint, reserved[i]);
             }
             catch (Exception exception)
             {
-                seatRegistry.Release(customer);
-                Destroy(instance);
                 Debug.LogException(exception, this);
                 enabled = false;
+                reserved = null;
                 return false;
             }
-            activeCustomers.Add(customer);
-            customer.Finished += OnCustomerFinished;
-            Debug.Log($"Customer spawned: {entry.DisplayName}; active {ActiveCustomers}, pending {WaitingCustomers}.", this);
-            CustomerSpawned?.Invoke(customer);
+            finally
+            {
+                if (reserved == null)
+                    foreach (var customer in group) { seatRegistry.Release(customer); Destroy(customer.gameObject); }
+            }
+            additionalPartyMembers += count - 1;
+            foreach (var customer in group)
+            {
+                activeCustomers.Add(customer);
+                customer.Finished += OnCustomerFinished;
+                CustomerSpawned?.Invoke(customer);
+            }
             ProgressChanged?.Invoke();
             return true;
         }
@@ -193,7 +251,7 @@ namespace DungeonTavern.Gameplay.Interaction
                 return false;
             }
 
-            if (customers.Count == 0)
+            if (customers.Count == 0 && ordinaryArrivals == 0)
             {
                 Debug.LogError("Business day requires at least one scheduled customer.", this);
                 return false;
