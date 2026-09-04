@@ -178,8 +178,11 @@ The following are not design commitments:
   Unlit to retain authored colors. A future softly lit setup is proposed only.
 - The playable protagonist uses the 3D Humanoid rig with movement-driven Idle
   and Walk, plus a right-arm pickup/holding layer and a right-hand cup anchor.
-  Eve and customers share a temporary KayKit Rogue model with Idle and Walk;
-  their final appearances and seated/story-specific animations remain pending.
+  Eve and customers share a temporary KayKit Rogue model with Idle and Walk.
+  Customers use SitDown, SeatedIdle and StandUp at seated service positions.
+  The protagonist also has seating clips and a callable drink presentation;
+  player chair interactions and drink consumption rules are not introduced.
+  Final NPC appearances and story-specific animations remain pending.
 - Only Day 1 is wired to the current narrative controller. Days 2 and 3 exist
   in Ink and are not yet complete playable scene flows. The opening cinematic
   is a placeholder; prone-to-standing animation is still planned.

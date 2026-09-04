@@ -76,6 +76,8 @@ internal static class SeatingPlayCheck
         }
         if(state==CustomerOrderState.ShowingOrder){if(elapsed<2.8f)throw new Exception("Thinking too short");orders++;}
         if(state==CustomerOrderState.FindingSeat&&elapsed<1.4f)throw new Exception("Order bubble skipped");
+        if(state==CustomerOrderState.WaitingForFood && Vector3.Distance(c.transform.position,c.AssignedSeat.Position)>.6f)
+            throw new Exception("Customer stopped too far from assigned seat");
         if(state==CustomerOrderState.Finished)finished++;
     }
     static void Update()
@@ -116,6 +118,15 @@ internal static class SeatingPlayCheck
                 Set(day,"customers",schedule);
                 day.CustomerSpawned+=c=>
                 {
+                    // Exercise the three tight long-table middle approaches explicitly; rule selection is checked separately.
+                    int tightTable = c.CustomerName == "SeatTest_1" ? 1 : c.CustomerName == "SeatTest_2" ? 2 : c.CustomerName == "SeatTest_5" ? 3 : 0;
+                    if (tightTable > 0)
+                    {
+                        var tightSeat = registry.Seats.Single(s => s.Table != null && s.Table.name == "TableSet_Rectangular_Long_" + tightTable && s.name == "Seat_02");
+                        registry.Release(c);
+                        if (!tightSeat.TryReserve(c)) throw new Exception("Tight-seat reservation failed");
+                        Set(c, "assignedSeat", tightSeat);
+                    }
                     spawnOrder.Add(c);changed[c]=Time.time;c.StateChanged+=state=>OnState(c,state);
                     Log($"Spawn {c.CustomerName}: {c.SeatingKind}, party={c.PartyId}, seat={c.AssignedSeat.transform.parent.name}/{c.AssignedSeat.name}");
                 };
@@ -124,6 +135,7 @@ internal static class SeatingPlayCheck
                 focus.position=queue.MenuAnchor.position+Vector3.right*1.2f;camera.FollowTarget=focus;
                 EditorApplication.ExecuteMenuItem("Window/General/Game");
                 if(!day.BeginDay())throw new Exception("Cannot start test business day");
+                Time.timeScale=2f;
                 configured=true;return;
             }
             var customers=UnityEngine.Object.FindObjectsByType<CustomerServicePoint>();

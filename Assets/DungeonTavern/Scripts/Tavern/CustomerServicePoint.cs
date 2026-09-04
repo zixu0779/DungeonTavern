@@ -31,6 +31,7 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField] private Transform menuPoint;
         private CharacterController movementController;
         private NpcNavigator navigator;
+        private CharacterModelMotion modelMotion;
         private WorldSpeechBubble bubble;
         public CustomerOrderState State { get; private set; }
         public string CustomerName => customerName;
@@ -52,6 +53,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private void Awake()
         {
             customerRenderers = GetComponentsInChildren<Renderer>(true);
+            modelMotion = GetComponentInChildren<CharacterModelMotion>(true);
             PrototypePlayerMover player = FindAnyObjectByType<PrototypePlayerMover>();
             float playerSpeed = player == null ? 3.25f : player.MoveSpeed;
             moveSpeed = Mathf.Max(6.5f, playerSpeed * 1.25f);
@@ -83,7 +85,7 @@ namespace DungeonTavern.Gameplay.Interaction
                 arrived = MoveTowards(serviceQueue.GetPosition(this));
             else if (State == CustomerOrderState.MovingToSeat)
                 arrived = MoveTowards(assignedSeat.Position);
-            else if (State == CustomerOrderState.Leaving)
+            else if (State == CustomerOrderState.Leaving && (modelMotion == null || !modelMotion.IsStandingUp))
                 arrived = MoveTowards(guestEntry.position);
             Tick(Time.deltaTime, arrived);
         }

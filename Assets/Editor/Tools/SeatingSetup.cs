@@ -12,6 +12,26 @@ using UnityEngine.AI;
 internal static class SeatingSetup
 {
     public const string Output = "ArtSource/Previews/Seating/";
+    [MenuItem("Tools/Dungeon Tavern/Seating/Keep Wall Seat Inside Hall")]
+    static void KeepInside()
+    {
+        if (EditorApplication.isPlaying) throw new Exception("Exit Play Mode first.");
+        var registry = UnityEngine.Object.FindAnyObjectByType<SeatRegistry>(); registry.RefreshSeats();
+        var seat = registry.Seats.Single(s => s.Table != null && s.Table.name == "TableSet_Round_Large_1" && s.name == "Seat_02");
+        var chair = seat.Chair.position;
+        var toward = seat.Table.transform.position - chair; toward.y = 0;
+        var target = chair + toward.normalized * .1f; target.y = 0;
+        var menu = UnityEngine.Object.FindAnyObjectByType<ServiceOrderQueue>().MenuAnchor;
+        if (!NavMesh.SamplePosition(target, out var hit, .3f, NavMesh.AllAreas)
+            || !NavMesh.SamplePosition(menu.position, out var start, .5f, NavMesh.AllAreas)) throw new Exception("No nearby interior NavMesh");
+        var path = new NavMeshPath();
+        if (!NavMesh.CalculatePath(start.position, hit.position, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete) throw new Exception("Interior point unreachable");
+        var before = seat.Position;
+        Undo.RecordObject(seat.transform, "Keep wall seat inside hall"); seat.transform.position = hit.position;
+        seat.transform.rotation = Quaternion.LookRotation(toward);
+        EditorSceneManager.MarkSceneDirty(registry.gameObject.scene); EditorSceneManager.SaveScene(registry.gameObject.scene);
+        File.AppendAllText(Output + "navigation.txt", $"Interior correction: {before} -> {hit.position}; chair={chair}\n");
+    }
     [MenuItem("Tools/Dungeon Tavern/Seating/Audit All Seat Navigation")]
     static void AuditNavigation()
     {

@@ -22,7 +22,8 @@ presentation and asset organization, not future feature commitments.
   authored stair/gate geometry, travel triggers and collision support.
 - The playable protagonist uses a 3D Humanoid model with idle, walk and cup
   interaction animation. Eve and customers share a KayKit Rogue placeholder.
-  Original sprite children are inactive for rollback.
+  Original sprite children are inactive for rollback. Seating uses three imported
+  clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
 
 ## Source and runtime assets
 
@@ -52,6 +53,7 @@ presentation and asset organization, not future feature commitments.
 
 ## Retained editor tools
 
+- `CharacterActionCheck`: repeatable Play Mode drinking/seating checks and close-ups.
 - `ScenePortalGizmos`: visible bounds for placing teleport trigger walls.
 - `PrototypeFloorEdgeClipperWindow`: apply/restore selected floor-edge cuts.
 - `DungeonTavernGroundTextureDefaults`: active Ground PNG import policy.

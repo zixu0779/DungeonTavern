@@ -13,6 +13,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private GameObject cup;
         private Vector3 cupCenter;
         public GameObject Cup => cup;
+        public float DrinkTilt { get; set; }
         private void OnEnable()
         {
             hands = GetComponent<PlayerHands>();
@@ -28,7 +29,7 @@ namespace DungeonTavern.Gameplay.Interaction
             {
                 cup = Instantiate(cupPrefab, handAnchor, false);
                 cup.name = "HeldWoodenCup";
-                if (keepCupUpright) cup.transform.rotation = transform.rotation * cupPrefab.transform.localRotation;
+                if (keepCupUpright) cup.transform.rotation = transform.rotation * Quaternion.Euler(-55f * Mathf.Clamp01(DrinkTilt), 0, 0) * cupPrefab.transform.localRotation;
                 foreach (var collider in cup.GetComponentsInChildren<Collider>()) collider.enabled = false;
                 var renderers = cup.GetComponentsInChildren<Renderer>();
                 if (renderers.Length > 0)
@@ -47,7 +48,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private void LateUpdate()
         {
             if (!cup || !cup.activeSelf) return;
-            if (keepCupUpright) cup.transform.rotation = transform.rotation * cupPrefab.transform.localRotation;
+            if (keepCupUpright) cup.transform.rotation = transform.rotation * Quaternion.Euler(-55f * Mathf.Clamp01(DrinkTilt), 0, 0) * cupPrefab.transform.localRotation;
             cup.transform.position += handAnchor.position + (keepCupUpright ? transform.forward * .06f : Vector3.zero) - cup.transform.TransformPoint(cupCenter);
         }
         private void OnDisable()
