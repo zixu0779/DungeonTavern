@@ -28,6 +28,7 @@ This document is the durable source of truth for confirmed game and world design
   direct movement toward a target. An NPC-initiated conversation requires both
   a complete reachable route within conversation range and an unobstructed
   line between the speakers, so walls cannot trigger dialogue through them.
+- Tableware disappears automatically after settlement; manual tableware collection is not part of the current demo.
 - The lightweight service loop is menu queue, order confirmation, reserved
   seating, preparation and delivery, eating, and settlement. An order may have
   multiple dishes and quantities; delivered portions can be eaten while the
@@ -176,16 +177,19 @@ The following are not design commitments:
 - The serialized output resolution is 1920x1080. Exploration orthographic size
   is 4.5; dialogue has its own closer framing. Ordinary 3D scene materials use
   Unlit to retain authored colors. A future softly lit setup is proposed only.
-- The playable protagonist uses the 3D Humanoid rig with movement-driven Idle
+- The playable protagonist temporarily uses the KayKit Mage Humanoid rig with movement-driven Idle
   and Walk, plus a right-arm pickup/holding layer and a right-hand cup anchor.
-  Eve and customers share a temporary KayKit Rogue model with Idle and Walk.
+  Eve uses the KayKit Rogue and customers use the KayKit Barbarian. The previous protagonist model remains locally available.
+  Models are uniformly scaled so protagonist/customer shoulders sit above the counter.
   Customers use SitDown, SeatedIdle and StandUp at seated service positions.
   The protagonist also has seating clips and a callable drink presentation;
   player chair interactions and drink consumption rules are not introduced.
   Final NPC appearances and story-specific animations remain pending.
 - Only Day 1 is wired to the current narrative controller. Days 2 and 3 exist
   in Ink and are not yet complete playable scene flows. The opening cinematic
-  is a placeholder; prone-to-standing animation is still planned.
+  is a placeholder; after it ends, movement input starts the floor-to-standing animation.
+  Movement and F interaction stay locked until standing. Space vaulting drives
+  a full-body animation with hand contact alongside the collision-controlled arc.
 - F1/B1 stair travel is connected; the unfinished F2 entrance is temporarily
   blocked by collision. The existing cup, barrel, lever and chest interactions
   use F and state-dependent prompts.
@@ -274,3 +278,17 @@ from old layouts. F1 narrative arrival currently references the authored
   table reservation does not introduce shared orders or shared payment.
 - The first-day authored Bran arrival stays a single customer. Additional ordinary
   arrivals are configured separately from the story schedule.
+
+### One-day demo arrivals (2026-09-18)
+
+- The first day contains Bran's authored teaching visit followed by six ordinary
+  arrival batches. At least one batch must be a 2–4-person party; one randomly
+  selected batch is explicitly reserved for that type, and other batches remain
+  weighted random arrivals.
+- Ordinary service begins 30 seconds after the teaching guest leaves. Subsequent
+  batches are 30 seconds apart; at most five customers may be active at once.
+  Capacity-blocked batches retry after 30 seconds without being discarded or
+  spawning a catch-up burst. A guaranteed party waits for an empty large round
+  table and sufficient room for all members.
+- Eve's closing reminder and permission to close wait until all scheduled guests
+  have left. Party orders and bills remain individual.

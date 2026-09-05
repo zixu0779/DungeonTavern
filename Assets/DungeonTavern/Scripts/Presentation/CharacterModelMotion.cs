@@ -1,3 +1,4 @@
+using System.Collections;
 using DungeonTavern.Gameplay.Interaction;
 using UnityEngine;
 
@@ -10,11 +11,17 @@ namespace DungeonTavern.Tavern25D
         [SerializeField] private Transform motionRoot;
         [SerializeField] private bool handIk;
         [SerializeField] private Vector3 cupHandPosition = new Vector3(.22f, .96f, .3f);
+        [SerializeField] private Vector3 mouthOffset = new Vector3(0, .025f, .07f);
         [SerializeField, HideInInspector] private float drinkBlend;
         private Animator animator;
         private CustomerServicePoint customer;
         private HeldCupVisual cupVisual;
         private bool seated;
+        private bool fullBodyAction;
+        private bool vaultPose;
+        private float vaultClipLength = 1;
+        private Vector3 vaultHandPoint;
+        public bool IsFullBodyAction => fullBodyAction;
         private float standUntil;
         public bool IsStandingUp => !seated && (Time.time < standUntil ||
             animator.GetCurrentAnimatorStateInfo(0).IsName("SitDown") ||
@@ -36,6 +43,8 @@ namespace DungeonTavern.Tavern25D
             cupVisual = motionRoot.GetComponent<HeldCupVisual>();
             customer = motionRoot.GetComponent<CustomerServicePoint>();
             animator.applyRootMotion = false;
+            foreach (var clip in animator.runtimeAnimatorController.animationClips)
+                if (clip.name == "Vault") vaultClipLength = clip.length;
         }
         private void OnEnable()
         {
@@ -94,14 +103,58 @@ namespace DungeonTavern.Tavern25D
             SetSeated(customer.AssignedSeat && !customer.AssignedSeat.IsStanding &&
                 (state == CustomerOrderState.WaitingForFood || state == CustomerOrderState.Eating || state == CustomerOrderState.AwaitingSettlement));
         }
+        public void BeginProne()
+        {
+            fullBodyAction = true;
+            animator.SetLayerWeight(1, 0);
+            animator.Play("Prone", 0, 0);
+        }
+        public IEnumerator WakeAndStand()
+        {
+            fullBodyAction = true;
+            animator.CrossFadeInFixedTime("WakeUp", .12f, 0);
+            yield return null;
+            // Wait for the actual state chain, not a second independent duration.
+            while (animator && (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || animator.IsInTransition(0)))
+                yield return null;
+            EndFullBodyAction();
+        }
+        public void BeginVaultPose(Vector3 handPoint, float seconds)
+        {
+            fullBodyAction = vaultPose = true;
+            vaultHandPoint = handPoint;
+            animator.SetLayerWeight(1, 0);
+            animator.SetFloat("VaultSpeed", vaultClipLength / seconds);
+            animator.Play("Vault", 0, 0);
+        }
+        public void EndFullBodyAction()
+        {
+            fullBodyAction = vaultPose = false;
+            animator.SetLayerWeight(1, 1);
+            animator.CrossFadeInFixedTime("Idle", .12f, 0);
+        }
         private void OnAnimatorIK(int layerIndex)
         {
-            if (!handIk || !animator.isHuman || layerIndex != animator.layerCount - 1) return;
+            if (!handIk || !animator.isHuman) return;
+            if (fullBodyAction)
+            {
+                if (!vaultPose || layerIndex != 0) return;
+                float t = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                float w = Mathf.SmoothStep(0, 1, Mathf.Clamp01(t / .12f)) * (1 - Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.32f, .56f, t)));
+                for (int hand = 0; hand < 2; hand++)
+                {
+                    var side = hand == 0 ? AvatarIKGoal.LeftHand : AvatarIKGoal.RightHand;
+                    animator.SetIKPositionWeight(side, w);
+                    animator.SetIKPosition(side, vaultHandPoint + motionRoot.right * (side == AvatarIKGoal.LeftHand ? -.23f : .23f));
+                }
+                return;
+            }
+            if (layerIndex != animator.layerCount - 1) return;
             animator.SetIKPositionWeight(AvatarIKGoal.RightHand, gripWeight);
             var head = animator.GetBoneTransform(HumanBodyBones.Head);
             Vector3 rest = motionRoot.TransformPoint(cupHandPosition);
             if (seated) rest.y = head.position.y - .35f;
-            Vector3 mouth = head.position + motionRoot.forward * .07f + Vector3.up * .025f;
+            Vector3 mouth = head.position + motionRoot.TransformDirection(mouthOffset);
             animator.SetIKPosition(AvatarIKGoal.RightHand, Vector3.Lerp(rest, mouth, drinkBlend));
             animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0f);
         }

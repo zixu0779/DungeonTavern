@@ -38676,8 +38676,9 @@ MonoBehaviour:
     tint: {r: 1, g: 0.78, b: 0.62, a: 1}
     orderItems: []
     arrivalKind: 0
-  ordinaryArrivals: 0
-  ordinaryArrivalInterval: 12
+  ordinaryArrivals: 6
+  ordinaryArrivalInterval: 30
+  maxConcurrentCustomers: 5
   arrivalWeights: {x: 6, y: 3, z: 1}
 --- !u!114 &546942405
 MonoBehaviour:
@@ -47917,17 +47918,17 @@ PrefabInstance:
     - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5936887
+      value: 1.1160297
       objectReference: {fileID: 0}
     - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5936887
+      value: 1.1160297
       objectReference: {fileID: 0}
     - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5936887
+      value: 1.1160297
       objectReference: {fileID: 0}
     - target: {fileID: 4427260045688112872, guid: 978aa28f1d5be476caa3cf33d53a7835,
         type: 3}
@@ -48015,6 +48016,8 @@ MonoBehaviour:
   motionRoot: {fileID: 382319725}
   handIk: 0
   cupHandPosition: {x: 0.22, y: 0.96, z: 0.3}
+  mouthOffset: {x: 0, y: 0.025, z: 0.07}
+  drinkBlend: 0
 --- !u!1 &669821106
 GameObject:
   m_ObjectHideFlags: 0

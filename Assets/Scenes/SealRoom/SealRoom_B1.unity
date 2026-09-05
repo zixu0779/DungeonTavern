@@ -13518,140 +13518,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!1001 &811405018
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1312366735}
-    m_Modifications:
-    - target: {fileID: 518776710424082571, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: babee470af91042caa634aea493f4b6b, type: 2}
-    - target: {fileID: 518776710424082571, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_CullingMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.70790464
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.70790464
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.70790464
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6528228052892072011, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      propertyPath: m_Name
-      value: CharacterModel
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6577784773752234582, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1249425668}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6528228052892072011, guid: 859c245482e0b412a9caf974e1d48523,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 811405022}
-  m_SourcePrefab: {fileID: 100100000, guid: 859c245482e0b412a9caf974e1d48523, type: 3}
---- !u!4 &811405019 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6577784773752234582, guid: 859c245482e0b412a9caf974e1d48523,
-    type: 3}
-  m_PrefabInstance: {fileID: 811405018}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &811405020 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5896122857140740849, guid: 859c245482e0b412a9caf974e1d48523,
-    type: 3}
-  m_PrefabInstance: {fileID: 811405018}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &811405021 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6528228052892072011, guid: 859c245482e0b412a9caf974e1d48523,
-    type: 3}
-  m_PrefabInstance: {fileID: 811405018}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &811405022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811405021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b480f4abe12e46e39f12a2392503e18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.CharacterModelMotion
-  motionRoot: {fileID: 1312366735}
-  handIk: 1
-  cupHandPosition: {x: 0.22, y: 0.96, z: 0.3}
 --- !u!1 &814771147
 GameObject:
   m_ObjectHideFlags: 0
@@ -17536,6 +17402,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1056869147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1056869148}
+  m_Layer: 0
+  m_Name: CupGrip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1056869148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056869147}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1225712593}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1061250704
 GameObject:
   m_ObjectHideFlags: 0
@@ -20130,6 +20027,117 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1988450904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1225712592
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1312366735}
+    m_Modifications:
+    - target: {fileID: 2697793377604599923, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_Name
+      value: CharacterModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.17638646
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 197326002589003863, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1056869148}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2697793377604599923, guid: 63797e71bd2d24182b6b436ca1cdc138,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1225712596}
+  m_SourcePrefab: {fileID: 100100000, guid: 63797e71bd2d24182b6b436ca1cdc138, type: 3}
+--- !u!4 &1225712593 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 197326002589003863, guid: 63797e71bd2d24182b6b436ca1cdc138,
+    type: 3}
+  m_PrefabInstance: {fileID: 1225712592}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1225712594 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3331445895256758985, guid: 63797e71bd2d24182b6b436ca1cdc138,
+    type: 3}
+  m_PrefabInstance: {fileID: 1225712592}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1225712595 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2697793377604599923, guid: 63797e71bd2d24182b6b436ca1cdc138,
+    type: 3}
+  m_PrefabInstance: {fileID: 1225712592}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1225712596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225712595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b480f4abe12e46e39f12a2392503e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Tavern25D.CharacterModelMotion
+  motionRoot: {fileID: 1312366735}
+  handIk: 1
+  cupHandPosition: {x: 0.3, y: 1.2, z: 0.4}
+  mouthOffset: {x: 0, y: 0.12, z: 0.5}
+  drinkBlend: 0
 --- !u!1 &1228169137
 GameObject:
   m_ObjectHideFlags: 0
@@ -20898,37 +20906,6 @@ Transform:
   m_Children:
   - {fileID: 1021359113}
   m_Father: {fileID: 2048732061}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1249425667
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1249425668}
-  m_Layer: 0
-  m_Name: CupGrip
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1249425668
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1249425667}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811405019}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1252676083
 GameObject:
@@ -21861,7 +21838,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1988450904}
-  - {fileID: 811405020}
+  - {fileID: 1225712594}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1312366736
@@ -21957,11 +21934,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaff3d261efbe454d85e6e19c1da4d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DungeonTavern.Gameplay.Interaction.HeldCupVisual
-  handAnchor: {fileID: 1249425668}
+  handAnchor: {fileID: 1056869148}
   cupPrefab: {fileID: 6792596969924516157, guid: bb0f05b7433c6418b8f428748d41d673,
     type: 3}
   keepCupUpright: 1
-  cupHeight: 0.19
+  gripOffset: {x: 0, y: 0, z: 0.14}
+  cupHeight: 0.28
 --- !u!1 &1312791695
 GameObject:
   m_ObjectHideFlags: 0

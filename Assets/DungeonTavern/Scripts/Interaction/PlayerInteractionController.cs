@@ -36,6 +36,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public bool TryInteract()
         {
+            if (GetComponentInChildren<DungeonTavern.Tavern25D.CharacterModelMotion>() is { IsFullBodyAction: true }) return false;
             currentTarget = FindClosestTarget();
             return currentTarget != null && currentTarget.Interact(hands);
         }

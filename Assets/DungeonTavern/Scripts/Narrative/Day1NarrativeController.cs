@@ -19,7 +19,8 @@ namespace DungeonTavern.Tavern25D.Narrative
         AwaitingOpeningSwitch,
         ServingBran,
         AwaitingClosingSwitch,
-        Completed
+        Completed,
+        Awakening
     }
 
     public sealed class Day1NarrativeController : MonoBehaviour
@@ -59,6 +60,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         private int renderedHistoryCount = -1;
         private int renderedChoiceCount = -1;
         private string pendingBranBubble;
+        private string pendingClosingBubble;
 
         public Day1FlowState State { get; private set; }
         public bool CanOpenTavern => State == Day1FlowState.AwaitingOpeningSwitch
@@ -111,16 +113,36 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
 
             businessDay.CustomerSpawned += OnCustomerSpawned;
+            businessDay.DayCompleted += OnBusinessDayCompleted;
             eve.ConversationRequested += OnEveConversationRequested;
+            player.GetComponentInChildren<CharacterModelMotion>()?.BeginProne();
             story = new Story(chapterOne.storyJson);
             story.ChoosePathString("prologue");
             ShowNextContent();
         }
 
+        private IEnumerator AwakenPlayer()
+        {
+            var motion = player.GetComponentInChildren<CharacterModelMotion>();
+            player.MovementInputEnabled = false;
+            if (motion)
+            {
+                motion.BeginProne();
+                while (Keyboard.current == null || !(Keyboard.current.wKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed))
+                    yield return null;
+                yield return motion.WakeAndStand();
+            }
+            player.MovementInputEnabled = true;
+            State = Day1FlowState.AwaitingStorageReturn;
+        }
+
         private void OnDestroy()
         {
             if (businessDay != null)
+            {
                 businessDay.CustomerSpawned -= OnCustomerSpawned;
+                businessDay.DayCompleted -= OnBusinessDayCompleted;
+            }
             if (bran != null)
                 bran.SettlementRequested -= OnSettlementRequested;
             if (eve != null)
@@ -181,6 +203,13 @@ namespace DungeonTavern.Tavern25D.Narrative
             else
                 Choose(chooseLastChoice ? choices.Count - 1 : 0);
             return true;
+        }
+
+        private void OnBusinessDayCompleted()
+        {
+            if (string.IsNullOrEmpty(pendingClosingBubble)) return;
+            eve.ShowBubble(pendingClosingBubble);
+            pendingClosingBubble = null;
         }
 
         private void OnCustomerSpawned(CustomerServicePoint customer)
@@ -277,7 +306,8 @@ namespace DungeonTavern.Tavern25D.Narrative
             {
                 openingCinematic = false;
                 showingCinematic = false;
-                State = Day1FlowState.AwaitingStorageReturn;
+                State = Day1FlowState.Awakening;
+                StartCoroutine(AwakenPlayer());
             }
             else if (gate.Contains("营业拉杆", StringComparison.Ordinal))
                 State = Day1FlowState.AwaitingOpeningSwitch;
@@ -317,7 +347,8 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
             if (line.Contains("今天差不多了，就到这里吧", StringComparison.Ordinal))
             {
-                eve.ShowBubble(ExtractBubbleText(line));
+                if (businessDay.State == BusinessDayState.Completed) eve.ShowBubble(ExtractBubbleText(line));
+                else pendingClosingBubble = ExtractBubbleText(line);
                 return true;
             }
             return false;

@@ -21,7 +21,9 @@ presentation and asset organization, not future feature commitments.
 - B1 uses cutaway walls and a flat stone backdrop at wall-top height. Preserve
   authored stair/gate geometry, travel triggers and collision support.
 - The playable protagonist uses a 3D Humanoid model with idle, walk and cup
-  interaction animation. Eve and customers share a KayKit Rogue placeholder.
+  interaction animation. The protagonist uses KayKit Mage, Eve uses Rogue, and customers use Barbarian.
+  The previous protagonist sources and a pre-replacement prefab remain local.
+  Protagonist/customer scale is uniform, calibrated to shoulders above the counter.
   Original sprite children are inactive for rollback. Seating uses three imported
   clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
 
@@ -53,6 +55,7 @@ presentation and asset organization, not future feature commitments.
 
 ## Retained editor tools
 
+- `OpeningVaultCheck`: Play Mode opening input-lock and Bar Prefab vault checks.
 - `CharacterActionCheck`: repeatable Play Mode drinking/seating checks and close-ups.
 - `ScenePortalGizmos`: visible bounds for placing teleport trigger walls.
 - `PrototypeFloorEdgeClipperWindow`: apply/restore selected floor-edge cuts.

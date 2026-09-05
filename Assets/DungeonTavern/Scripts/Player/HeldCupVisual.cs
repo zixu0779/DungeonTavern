@@ -8,6 +8,7 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField] private Transform handAnchor;
         [SerializeField] private GameObject cupPrefab;
         [SerializeField] private bool keepCupUpright;
+        [SerializeField] private Vector3 gripOffset = new Vector3(0, 0, .06f);
         [SerializeField, Min(.05f)] private float cupHeight = .23f;
         private PlayerHands hands;
         private GameObject cup;
@@ -49,7 +50,7 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             if (!cup || !cup.activeSelf) return;
             if (keepCupUpright) cup.transform.rotation = transform.rotation * Quaternion.Euler(-55f * Mathf.Clamp01(DrinkTilt), 0, 0) * cupPrefab.transform.localRotation;
-            cup.transform.position += handAnchor.position + (keepCupUpright ? transform.forward * .06f : Vector3.zero) - cup.transform.TransformPoint(cupCenter);
+            cup.transform.position += handAnchor.position + (keepCupUpright ? transform.TransformDirection(gripOffset) : Vector3.zero) - cup.transform.TransformPoint(cupCenter);
         }
         private void OnDisable()
         {

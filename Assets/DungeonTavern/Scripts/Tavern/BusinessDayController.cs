@@ -23,6 +23,10 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField] private List<OrderRequest> orderItems = new();
         [SerializeField] private CustomerArrivalKind arrivalKind;
         public CustomerArrivalKind ArrivalKind => arrivalKind;
+        internal CustomerSeatingKind? SelectedKind;
+        private int partySize;
+        internal int PartySize => partySize == 0 ? partySize = UnityEngine.Random.Range(2, 5) : partySize;
+        internal void SetArrivalTime(float time) => arrivalTime = time;
         public void SetArrivalKind(CustomerArrivalKind kind) => arrivalKind = kind;
         public IEnumerable<OrderRequest> OrderItems => orderItems.Count > 0
             ? orderItems : new[] { new OrderRequest { item = orderItem } };
@@ -58,11 +62,14 @@ namespace DungeonTavern.Gameplay.Interaction
 
         [Header("Ordinary customers (in addition to the authored story schedule)")]
         [SerializeField, Min(0)] private int ordinaryArrivals;
-        [SerializeField, Min(1)] private float ordinaryArrivalInterval = 12f;
+        [SerializeField, Min(1)] private float ordinaryArrivalInterval = 30f;
+        [SerializeField, Min(4)] private int maxConcurrentCustomers = 5;
         [Tooltip("Relative weights. Party weight is excluded when no empty large round table is available.")]
         [SerializeField] private Vector3 arrivalWeights = new(6, 3, 1);
         private int additionalPartyMembers;
         private int nextPartyId;
+        private int authoredCustomerCount;
+        private bool ordinaryStarted;
         private readonly List<CustomerScheduleEntry> pendingCustomers = new();
         private readonly List<CustomerServicePoint> activeCustomers = new();
         private float elapsedTime;
@@ -96,16 +103,19 @@ namespace DungeonTavern.Gameplay.Interaction
 
             pendingCustomers.Clear();
             pendingCustomers.AddRange(customers);
+            pendingCustomers.Sort((left, right) => left.ArrivalTime.CompareTo(right.ArrivalTime));
+            authoredCustomerCount = customers.Count;
+            ordinaryStarted = ordinaryArrivals == 0;
+            int guaranteedPartyBatch = ordinaryArrivals > 0 ? UnityEngine.Random.Range(0, ordinaryArrivals) : -1;
             for (int i = 0; i < ordinaryArrivals; i++)
             {
                 var guest = new CustomerScheduleEntry();
-                guest.Configure($"Guest_{i + 1}", (i + 1) * ordinaryArrivalInterval, HeldItem.TestDrink, Color.white);
-                guest.SetArrivalKind(CustomerArrivalKind.Random);
+                guest.Configure($"Guest_{i + 1}", float.PositiveInfinity, HeldItem.TestDrink, Color.white);
+                guest.SetArrivalKind(i == guaranteedPartyBatch ? CustomerArrivalKind.Party : CustomerArrivalKind.Random);
                 pendingCustomers.Add(guest);
             }
             additionalPartyMembers = 0;
             nextPartyId = 0;
-            pendingCustomers.Sort((left, right) => left.ArrivalTime.CompareTo(right.ArrivalTime));
             elapsedTime = 0f;
             nextCustomerIndex = 0;
             CompletedCustomers = 0;
@@ -130,14 +140,29 @@ namespace DungeonTavern.Gameplay.Interaction
                 return;
 
             elapsedTime += Time.deltaTime;
+            // Let the authored teaching visit finish before ordinary service begins.
+            if (!ordinaryStarted && nextCustomerIndex >= authoredCustomerCount && activeCustomers.Count == 0)
+            {
+                ordinaryStarted = true;
+                pendingCustomers[nextCustomerIndex].SetArrivalTime(elapsedTime + ordinaryArrivalInterval);
+            }
 
             while (nextCustomerIndex < pendingCustomers.Count
                    && pendingCustomers[nextCustomerIndex].ArrivalTime <= elapsedTime)
             {
+                bool ordinary = nextCustomerIndex >= authoredCustomerCount;
                 if (!TrySpawn(pendingCustomers[nextCustomerIndex]))
+                {
+                    if (ordinary) pendingCustomers[nextCustomerIndex].SetArrivalTime(elapsedTime + ordinaryArrivalInterval);
                     break;
-
+                }
                 nextCustomerIndex++;
+                if (ordinary)
+                {
+                    if (nextCustomerIndex < pendingCustomers.Count)
+                        pendingCustomers[nextCustomerIndex].SetArrivalTime(elapsedTime + ordinaryArrivalInterval);
+                    break; // Never catch up multiple delayed ordinary arrivals in one frame.
+                }
             }
 
             TryCompleteDay();
@@ -156,17 +181,17 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private bool TrySpawn(CustomerScheduleEntry entry)
         {
-            if (!seatRegistry.HasAvailableSeat) return false;
-            var kind = entry.ArrivalKind == CustomerArrivalKind.Random ? ChooseOrdinaryKind(UnityEngine.Random.value)
-                : (CustomerSeatingKind)entry.ArrivalKind;
+            if (activeCustomers.Count >= maxConcurrentCustomers || !seatRegistry.HasAvailableSeat) return false;
+            var kind = entry.SelectedKind ?? (entry.ArrivalKind == CustomerArrivalKind.Random ? ChooseOrdinaryKind(UnityEngine.Random.value)
+                : (CustomerSeatingKind)entry.ArrivalKind);
+            entry.SelectedKind = kind;
             int count = 1;
             if (kind == CustomerSeatingKind.Party)
             {
-                int capacity = 4;
-                while (capacity >= 2 && !seatRegistry.CanSeatParty(capacity)) capacity--;
-                if (capacity < 2) return false;
-                count = UnityEngine.Random.Range(2, capacity + 1);
+                count = entry.PartySize;
+                if (!seatRegistry.CanSeatParty(count)) return false;
             }
+            if (activeCustomers.Count + count > maxConcurrentCustomers) return false;
             var group = new List<CustomerServicePoint>();
             SeatPoint[] reserved = null;
             try
