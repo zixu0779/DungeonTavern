@@ -11,6 +11,8 @@ namespace DungeonTavern.Tavern25D
         [SerializeField] private DoorStateController door;
         [SerializeField, Min(0f)] private float closeDelay = 0.45f;
 
+        public DoorStateController TargetDoor => door;
+
         private readonly HashSet<GameObject> occupants = new();
         private Coroutine delayedClose;
 
@@ -58,6 +60,8 @@ namespace DungeonTavern.Tavern25D
             }
             door?.Open();
         }
+
+        private void OnTriggerStay(Collider other) => OnTriggerEnter(other);
 
         private void OnTriggerExit(Collider other)
         {

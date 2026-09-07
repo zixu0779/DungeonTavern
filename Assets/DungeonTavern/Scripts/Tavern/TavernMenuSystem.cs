@@ -23,6 +23,7 @@ namespace DungeonTavern.Gameplay.Interaction
         public int Balance { get; private set; }
         public int PendingOrderCount => orders.Values.Sum(o => o.Portions.Count(p => !p.Delivered));
         public event Action Changed;
+        public event Action OrderRegistered;
 
         private void Awake() => Balance = startingMoney;
 
@@ -41,6 +42,7 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             if (customer == null || order == null || orders.ContainsKey(customer)) return false;
             orders.Add(customer, order);
+            OrderRegistered?.Invoke();
             Changed?.Invoke();
             return true;
         }

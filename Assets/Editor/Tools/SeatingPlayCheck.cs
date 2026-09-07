@@ -31,6 +31,7 @@ internal static class SeatingPlayCheck
     static int maxWaiting;
     static readonly List<CustomerServicePoint> spawnOrder = new();
     static SeatRegistry registry;
+    static DungeonTavern.Tavern25D.Narrative.Day1EveActor eve;
     static readonly Dictionary<CustomerServicePoint,float> changed=new();
     static readonly HashSet<string> captures=new();
     static SeatingPlayCheck(){EditorApplication.playModeStateChanged+=Mode;}
@@ -91,6 +92,8 @@ internal static class SeatingPlayCheck
                 if(Time.time<2)return;
                 var loader=UnityEngine.Object.FindAnyObjectByType<InitialAdditiveSceneLoader>();
                 if(loader!=null)typeof(InitialAdditiveSceneLoader).GetMethod("SetHostContentVisible",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(loader,new object[]{true});
+                var basement=UnityEngine.SceneManagement.SceneManager.GetSceneByName("SealRoom_B1");
+                if(basement.isLoaded)UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(basement);
                 // Disable only the opening overlay in this temporary test run; production narrative is unchanged.
                 foreach(var narrative in UnityEngine.Object.FindObjectsByType<DungeonTavern.Tavern25D.Narrative.Day1NarrativeController>()) narrative.enabled=false;
                 UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>()?.EndDialogueFraming();
@@ -103,7 +106,7 @@ internal static class SeatingPlayCheck
                     entry.SetArrivalKind(i==2||i==3 ? CustomerArrivalKind.Party : i==1 ? CustomerArrivalKind.Sociable : CustomerArrivalKind.Solitary);
                     schedule.Add(entry);
                 }
-                Set(day,"ordinaryArrivals",0);
+                Set(day,"ordinaryArrivals",0); Set(day,"demoService",true);
                 registry=UnityEngine.Object.FindAnyObjectByType<SeatRegistry>();registry.RefreshSeats();
                 if(registry.SeatCount!=42||registry.Tables.Count!=9)throw new Exception("Scene seats not bound");
                 var path=new NavMeshPath();
@@ -135,6 +138,14 @@ internal static class SeatingPlayCheck
                 focus.position=queue.MenuAnchor.position+Vector3.right*1.2f;camera.FollowTarget=focus;
                 EditorApplication.ExecuteMenuItem("Window/General/Game");
                 if(!day.BeginDay())throw new Exception("Cannot start test business day");
+                eve=UnityEngine.Object.FindObjectsByType<DungeonTavern.Tavern25D.Narrative.Day1EveActor>(FindObjectsInactive.Include).Single();
+                eve.gameObject.SetActive(true);
+                var eveStart=new Vector3(40,0,20);
+                eve.GetComponent<NavMeshAgent>().Warp(eveStart);eve.transform.position=eveStart;
+                var player=UnityEngine.Object.FindAnyObjectByType<PrototypePlayerMover>();
+                player.MovementInputEnabled=false;player.GetComponentInChildren<CharacterModelMotion>().EndFullBodyAction();
+                var playerBody=player.GetComponent<CharacterController>();playerBody.enabled=false;player.transform.position=new Vector3(37,0,20);playerBody.enabled=true;
+                eve.BeginOpeningSwitchGuidance(GameObject.Find("EveOpeningSwitchGuide").transform,"去拉杆旁边。");
                 Time.timeScale=2f;
                 configured=true;return;
             }
@@ -158,6 +169,13 @@ internal static class SeatingPlayCheck
                     Capture("ThinkingAndQueue");
                 }
                 if(c.State==CustomerOrderState.ShowingOrder&&elapsed>.4f)Capture("OrderConfirmed");
+                if(c.State==CustomerOrderState.WaitingForFood&&elapsed>1.5f&&!c.AssignedSeat.IsStanding)
+                {
+                    var animator=c.GetComponentInChildren<Animator>();
+                    var hips=animator.GetBoneTransform(HumanBodyBones.Hips).position;
+                    var target=c.AssignedSeat.SittingSurface+Vector3.up*.12f;
+                    if(Vector3.Distance(hips,target)>.045f)throw new Exception($"Seating misses stool: {c.CustomerName} hips={hips} surface={target}");
+                }
                 if(c.State==CustomerOrderState.WaitingForFood&&elapsed>2)
                 {
                     var portion=c.Order.Portions.FirstOrDefault(p=>!p.Delivered);
@@ -177,7 +195,9 @@ internal static class SeatingPlayCheck
             if(day.State==BusinessDayState.Completed)
             {
                 if(orders!=spawnOrder.Count||finished!=spawnOrder.Count||maxWaiting<2||spawnOrder.Count<8)throw new Exception($"Insufficient coverage: orders={orders} exits={finished} queued={maxWaiting}");
+                if(!eve.IsOpeningGuidanceReady)throw new Exception($"Eve did not reach lever: pos={eve.transform.position}, path={eve.GetComponent<NavMeshAgent>().pathStatus}, remaining={eve.GetComponent<NavMeshAgent>().remainingDistance}");
                 if(registry.Seats.Any(s=>!s.IsAvailable))throw new Exception("Reservation leak after completion");
+                Log("PASS Eve reached the lever from storage with the player occupying the direct doorway.");
                 Stop($"PASS: 42 seats + 8 standing points reachable; {orders} orders in FIFO sequence, {finished} exits, peak {maxWaiting} waiting. Thinking and order-display duration verified; only one menu owner; full service completed.");
             }
         }

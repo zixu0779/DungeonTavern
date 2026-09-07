@@ -55,6 +55,9 @@ presentation and asset organization, not future feature commitments.
 
 ## Retained editor tools
 
+- `DemoServiceCheck`: Play Mode six-wave arrivals, automatic cup activation and NPC facing checks.
+- `NpcPlacementCheck`: seat-route audits and Eve doorway traversal checks.
+- `TavernNavigationBake`: bake current physical obstacles with NPC body clearance.
 - `OpeningVaultCheck`: Play Mode opening input-lock and Bar Prefab vault checks.
 - `CharacterActionCheck`: repeatable Play Mode drinking/seating checks and close-ups.
 - `ScenePortalGizmos`: visible bounds for placing teleport trigger walls.

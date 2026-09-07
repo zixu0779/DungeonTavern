@@ -29,6 +29,16 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
+            var obstacle = GetComponent<UnityEngine.AI.NavMeshObstacle>();
+            if (obstacle == null) obstacle = gameObject.AddComponent<UnityEngine.AI.NavMeshObstacle>();
+            obstacle.shape = UnityEngine.AI.NavMeshObstacleShape.Capsule;
+            obstacle.center = controller.center;
+            obstacle.radius = controller.radius + .05f;
+            obstacle.height = controller.height;
+            obstacle.carving = true;
+            obstacle.carveOnlyStationary = true;
+            obstacle.carvingMoveThreshold = .1f;
+            obstacle.carvingTimeToStationary = .25f;
             if (GetComponent<CounterVaultController>() == null)
                 gameObject.AddComponent<CounterVaultController>();
         }

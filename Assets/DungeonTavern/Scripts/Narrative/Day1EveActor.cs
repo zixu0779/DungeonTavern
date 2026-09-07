@@ -29,6 +29,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         private bool openingGuidanceReady;
         private Transform openingGuidePoint;
         private string openingGuidanceLine;
+        private bool turningToOpeningSwitch;
 
         public bool IsOpeningGuidanceReady => openingGuidanceReady;
 
@@ -207,6 +208,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         public void BeginOpeningSwitchGuidance(Transform guidePoint, string text)
         {
+            turningToOpeningSwitch = false;
             openingGuidePoint = guidePoint;
             openingGuidanceLine = text;
             openingGuidanceReady = false;
@@ -233,9 +235,22 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             if (openingGuidePoint == null)
                 return;
-            navigator.MoveTo(openingGuidePoint.position, 0.15f);
-            if (!navigator.HasArrived(0.2f))
-                return;
+            if (!turningToOpeningSwitch)
+            {
+                navigator.MoveTo(openingGuidePoint.position, 0.15f);
+                if (!navigator.HasArrived(0.2f)) return;
+                navigator.Stop(true);
+                turningToOpeningSwitch = true;
+            }
+            var lever = FindAnyObjectByType<FloorLeverPoint>();
+            var direction = lever != null ? lever.transform.position - transform.position : openingGuidePoint.forward;
+            direction.y = 0;
+            if (direction.sqrMagnitude > .001f)
+            {
+                var target = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, target, 180f * Time.deltaTime);
+                if (Quaternion.Angle(transform.rotation, target) > 1f) return;
+            }
             guidingToOpeningSwitch = false;
             openingGuidanceReady = true;
             navigator.Stop(true);

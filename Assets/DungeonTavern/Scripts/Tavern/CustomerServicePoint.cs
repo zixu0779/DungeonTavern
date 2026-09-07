@@ -86,8 +86,20 @@ namespace DungeonTavern.Gameplay.Interaction
             else if (State == CustomerOrderState.MovingToSeat)
                 arrived = MoveTowards(assignedSeat.Position);
             else if (State == CustomerOrderState.Leaving && (modelMotion == null || !modelMotion.IsStandingUp))
+            {
+                assignedSeat?.Release(this);
                 arrived = MoveTowards(guestEntry.position);
+            }
             Tick(Time.deltaTime, arrived);
+        }
+
+        private void LateUpdate()
+        {
+            if (assignedSeat?.Table == null || State is not (CustomerOrderState.WaitingForFood
+                or CustomerOrderState.Eating or CustomerOrderState.AwaitingSettlement)) return;
+            var facing = assignedSeat.Table.transform.position - transform.position;
+            facing.y = 0;
+            if (facing.sqrMagnitude > .001f) transform.rotation = Quaternion.LookRotation(facing);
         }
 
         // Movement reports arrival; this method owns the service flow, independent of pathfinding.
@@ -124,7 +136,11 @@ namespace DungeonTavern.Gameplay.Interaction
                 case CustomerOrderState.MovingToSeat:
                     if (arrived)
                     {
-                        transform.rotation = assignedSeat.transform.rotation;
+                        var facing = assignedSeat.Table != null
+                            ? assignedSeat.Table.transform.position - transform.position
+                            : assignedSeat.transform.forward;
+                        facing.y = 0f;
+                        if (facing.sqrMagnitude > .001f) transform.rotation = Quaternion.LookRotation(facing);
                         ChangeState(CustomerOrderState.WaitingForFood);
                     }
                     break;
@@ -202,7 +218,6 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             if (State != CustomerOrderState.AwaitingSettlement || !menuSystem.CompleteSale(this)) return false;
             settlementPending = false;
-            assignedSeat?.Release(this);
             ChangeState(CustomerOrderState.Leaving);
             return true;
         }

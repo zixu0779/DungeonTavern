@@ -21938,7 +21938,7 @@ MonoBehaviour:
   cupPrefab: {fileID: 6792596969924516157, guid: bb0f05b7433c6418b8f428748d41d673,
     type: 3}
   keepCupUpright: 1
-  gripOffset: {x: 0, y: 0, z: 0.14}
+  gripOffset: {x: 0, y: 0, z: 0.19}
   cupHeight: 0.28
 --- !u!1 &1312791695
 GameObject:

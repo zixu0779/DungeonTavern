@@ -87,6 +87,8 @@ internal static class CustomerQueuePlayCheck
                 if(Time.time<2)return;
                 var loader=UnityEngine.Object.FindAnyObjectByType<InitialAdditiveSceneLoader>();
                 if(loader!=null)typeof(InitialAdditiveSceneLoader).GetMethod("SetHostContentVisible",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(loader,new object[]{true});
+                var basement=UnityEngine.SceneManagement.SceneManager.GetSceneByName("SealRoom_B1");
+                if(basement.isLoaded)UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(basement);
                 // Disable only the opening overlay in this temporary test run; production narrative is unchanged.
                 foreach(var narrative in UnityEngine.Object.FindObjectsByType<DungeonTavern.Tavern25D.Narrative.Day1NarrativeController>()) narrative.enabled=false;
                 UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>()?.EndDialogueFraming();
@@ -95,6 +97,7 @@ internal static class CustomerQueuePlayCheck
                 var schedule=new List<CustomerScheduleEntry>();
                 for(int i=0;i<6;i++){var entry=new CustomerScheduleEntry();entry.Configure("QueueTest_"+(i+1),.5f+i*.6f,HeldItem.TestDrink,Color.white);schedule.Add(entry);}
                 Set(day,"customers",schedule);
+                Set(day,"demoService",false); Set(day,"ordinaryArrivals",0); Set(day,"maxConcurrentCustomers",6);
                 day.CustomerSpawned+=c=>{changed[c]=Time.time;c.StateChanged+=state=>OnState(c,state);};
                 hands=new GameObject("QueueTestHands").AddComponent<PlayerHands>();
                 camera=UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>();focus=new GameObject("QueueTestCameraFocus").transform;

@@ -17,6 +17,9 @@ namespace DungeonTavern.Tavern25D
         private CustomerServicePoint customer;
         private HeldCupVisual cupVisual;
         private bool seated;
+        private Vector3 modelRestPosition;
+        private float seatBlend;
+        private NpcNavigator navigator;
         private bool fullBodyAction;
         private bool vaultPose;
         private float vaultClipLength = 1;
@@ -38,10 +41,12 @@ namespace DungeonTavern.Tavern25D
         private void Awake()
         {
             animator = GetComponent<Animator>();
+            modelRestPosition = transform.localPosition;
             if (!motionRoot) motionRoot = transform.parent ? transform.parent : transform;
             hands = motionRoot.GetComponent<PlayerHands>();
             cupVisual = motionRoot.GetComponent<HeldCupVisual>();
             customer = motionRoot.GetComponent<CustomerServicePoint>();
+            navigator = motionRoot.GetComponent<NpcNavigator>();
             animator.applyRootMotion = false;
             foreach (var clip in animator.runtimeAnimatorController.animationClips)
                 if (clip.name == "Vault") vaultClipLength = clip.length;
@@ -72,6 +77,23 @@ namespace DungeonTavern.Tavern25D
             bool holding = hands && IsCup(hands.CurrentItem);
             gripWeight = Mathf.MoveTowards(gripWeight, holding ? 1f : 0f, Time.deltaTime * 3f);
         }
+        private void LateUpdate()
+        {
+            if (!customer || !animator.isHuman || customer.AssignedSeat == null || customer.AssignedSeat.IsStanding) return;
+            seatBlend = Mathf.MoveTowards(seatBlend, seated ? 1f : 0f, Time.deltaTime / .65f);
+            transform.localPosition = modelRestPosition;
+            if (seatBlend > 0 || IsStandingUp)
+            {
+                var hips = animator.GetBoneTransform(HumanBodyBones.Hips);
+                var head = animator.GetBoneTransform(HumanBodyBones.Head);
+                var target = customer.AssignedSeat.SittingSurface + Vector3.up * .12f;
+                transform.position += (target - hips.position) * Mathf.SmoothStep(0, 1, seatBlend);
+                // The approach marker stays on the NavMesh; the visible body and collider sit on the stool.
+                navigator?.SetSeatedBody(hips.position, head.position);
+            }
+            else navigator?.ResumeStandingBody();
+        }
+
         private static bool IsCup(HeldItem item) => item == HeldItem.EmptyCup || item == HeldItem.TestDrink;
         private void UpdateHeldState(HeldItem item) => animator.SetBool(HoldingCup, IsCup(item));
         private void OnItemChanged(HeldItem item)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace DungeonTavern.Gameplay.Interaction
 {
@@ -69,7 +70,10 @@ namespace DungeonTavern.Gameplay.Interaction
         private int additionalPartyMembers;
         private int nextPartyId;
         private int authoredCustomerCount;
-        private bool ordinaryStarted;
+        [UnityEngine.Serialization.FormerlySerializedAs("continuousDemo")]
+        [SerializeField] private bool demoService;
+        private int ordinaryWave;
+        public bool DemoService => demoService;
         private readonly List<CustomerScheduleEntry> pendingCustomers = new();
         private readonly List<CustomerServicePoint> activeCustomers = new();
         private float elapsedTime;
@@ -105,15 +109,9 @@ namespace DungeonTavern.Gameplay.Interaction
             pendingCustomers.AddRange(customers);
             pendingCustomers.Sort((left, right) => left.ArrivalTime.CompareTo(right.ArrivalTime));
             authoredCustomerCount = customers.Count;
-            ordinaryStarted = ordinaryArrivals == 0;
-            int guaranteedPartyBatch = ordinaryArrivals > 0 ? UnityEngine.Random.Range(0, ordinaryArrivals) : -1;
+            ordinaryWave = 0;
             for (int i = 0; i < ordinaryArrivals; i++)
-            {
-                var guest = new CustomerScheduleEntry();
-                guest.Configure($"Guest_{i + 1}", float.PositiveInfinity, HeldItem.TestDrink, Color.white);
-                guest.SetArrivalKind(i == guaranteedPartyBatch ? CustomerArrivalKind.Party : CustomerArrivalKind.Random);
-                pendingCustomers.Add(guest);
-            }
+                ScheduleOrdinary((i + 1) * ordinaryArrivalInterval);
             additionalPartyMembers = 0;
             nextPartyId = 0;
             elapsedTime = 0f;
@@ -140,13 +138,6 @@ namespace DungeonTavern.Gameplay.Interaction
                 return;
 
             elapsedTime += Time.deltaTime;
-            // Let the authored teaching visit finish before ordinary service begins.
-            if (!ordinaryStarted && nextCustomerIndex >= authoredCustomerCount && activeCustomers.Count == 0)
-            {
-                ordinaryStarted = true;
-                pendingCustomers[nextCustomerIndex].SetArrivalTime(elapsedTime + ordinaryArrivalInterval);
-            }
-
             while (nextCustomerIndex < pendingCustomers.Count
                    && pendingCustomers[nextCustomerIndex].ArrivalTime <= elapsedTime)
             {
@@ -168,6 +159,26 @@ namespace DungeonTavern.Gameplay.Interaction
             TryCompleteDay();
         }
 
+        private void ScheduleOrdinary(float time)
+        {
+            var guest = new CustomerScheduleEntry();
+            guest.Configure($"Guest_{++ordinaryWave}", time, HeldItem.TestDrink, Color.white);
+            guest.SetArrivalKind(ordinaryWave switch
+            {
+                1 => CustomerArrivalKind.Party,
+                2 => CustomerArrivalKind.Sociable,
+                3 => CustomerArrivalKind.Solitary,
+                _ => CustomerArrivalKind.Random
+            });
+            pendingCustomers.Add(guest);
+        }
+
+        public void StopAcceptingCustomers()
+        {
+            pendingCustomers.RemoveRange(nextCustomerIndex, pendingCustomers.Count - nextCustomerIndex);
+            TryCompleteDay();
+        }
+
         public CustomerSeatingKind ChooseOrdinaryKind(float roll)
         {
             float solitary = Mathf.Max(0, arrivalWeights.x), sociable = Mathf.Max(0, arrivalWeights.y);
@@ -181,7 +192,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private bool TrySpawn(CustomerScheduleEntry entry)
         {
-            if (activeCustomers.Count >= maxConcurrentCustomers || !seatRegistry.HasAvailableSeat) return false;
+            if ((!demoService && activeCustomers.Count >= maxConcurrentCustomers) || !seatRegistry.HasAvailableSeat) return false;
             var kind = entry.SelectedKind ?? (entry.ArrivalKind == CustomerArrivalKind.Random ? ChooseOrdinaryKind(UnityEngine.Random.value)
                 : (CustomerSeatingKind)entry.ArrivalKind);
             entry.SelectedKind = kind;
@@ -191,7 +202,8 @@ namespace DungeonTavern.Gameplay.Interaction
                 count = entry.PartySize;
                 if (!seatRegistry.CanSeatParty(count)) return false;
             }
-            if (activeCustomers.Count + count > maxConcurrentCustomers) return false;
+            if (!demoService && activeCustomers.Count + count > maxConcurrentCustomers) return false;
+            if (!TryFindArrivalPositions(count, out var positions)) return false;
             var group = new List<CustomerServicePoint>();
             SeatPoint[] reserved = null;
             try
@@ -199,7 +211,7 @@ namespace DungeonTavern.Gameplay.Interaction
                 int partyId = count > 1 ? ++nextPartyId : 0;
                 for (int i = 0; i < count; i++)
                 {
-                    var instance = Instantiate(customerPrefab, guestEntry.position, Quaternion.identity);
+                    var instance = Instantiate(customerPrefab, positions[i], Quaternion.identity);
                     var customer = instance.GetComponent<CustomerServicePoint>();
                     if (customer == null) customer = instance.AddComponent<CustomerServicePoint>();
                     customer.ConfigureSeating(kind, partyId);
@@ -215,8 +227,12 @@ namespace DungeonTavern.Gameplay.Interaction
                     reserved = new[] { seat };
                 }
                 for (int i = 0; i < count; i++)
+                {
                     group[i].Initialize(count > 1 ? $"{entry.DisplayName}_{i + 1}" : entry.DisplayName,
                         entry.OrderItems, guestEntry, seatRegistry, entry.Tint, reserved[i]);
+                    group[i].GetComponent<NavMeshAgent>().Warp(positions[i]);
+                    group[i].transform.position = positions[i];
+                }
             }
             catch (Exception exception)
             {
@@ -239,6 +255,23 @@ namespace DungeonTavern.Gameplay.Interaction
             }
             ProgressChanged?.Invoke();
             return true;
+        }
+
+        private bool TryFindArrivalPositions(int count, out List<Vector3> positions)
+        {
+            positions = new List<Vector3>();
+            for (int ring = 0; ring <= 3; ring++)
+                for (int angle = 0; angle < (ring == 0 ? 1 : 12); angle++)
+                {
+                    var offset = new Vector3(Mathf.Cos(angle * Mathf.PI / 6), 0, Mathf.Sin(angle * Mathf.PI / 6)) * (ring * .7f);
+                    if (!NavMesh.SamplePosition(guestEntry.position + offset, out var hit, .35f, NavMesh.AllAreas)) continue;
+                    var p = hit.position;
+                    if (positions.Exists(other => Vector3.Distance(other, p) < .65f)) continue;
+                    if (Physics.CheckCapsule(p + Vector3.up * .35f, p + Vector3.up * 1.2f, .29f, ~0, QueryTriggerInteraction.Ignore)) continue;
+                    positions.Add(p);
+                    if (positions.Count == count) return true;
+                }
+            return false;
         }
 
         private void OnCustomerFinished(CustomerServicePoint customer)

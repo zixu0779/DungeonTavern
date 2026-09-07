@@ -10,6 +10,7 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField, Min(0)] private float bobHeight = .06f;
         private Vector3 restPosition;
         private bool cupReady;
+        private TavernMenuSystem menu;
         public bool CupReady => cupReady;
 
         private void Awake()
@@ -19,17 +20,35 @@ namespace DungeonTavern.Gameplay.Interaction
             activation.SetActivated(false);
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            menu = FindAnyObjectByType<TavernMenuSystem>();
+            if (menu != null) menu.OrderRegistered += Activate;
+        }
+
+        protected override void OnDisable()
+        {
+            if (menu != null) menu.OrderRegistered -= Activate;
+            base.OnDisable();
+        }
+
+        private void Activate() => SetReady(true);
+
+        private void SetReady(bool value)
+        {
+            cupReady = value;
+            cupVisual.gameObject.SetActive(value);
+            activation.SetActivated(value);
+        }
+
         public override string GetPrompt(PlayerHands hands) =>
-            hands != null && hands.CurrentItem == HeldItem.None
-                ? (cupReady ? "F：取杯" : "F：启动取杯器") : string.Empty;
+            cupReady && hands != null && hands.CurrentItem == HeldItem.None ? "F：取杯" : string.Empty;
 
         public override bool Interact(PlayerHands hands)
         {
-            if (hands == null || hands.CurrentItem != HeldItem.None) return false;
-            if (cupReady && !hands.TryHold(HeldItem.EmptyCup)) return false;
-            cupReady = !cupReady;
-            cupVisual.gameObject.SetActive(cupReady);
-            activation.SetActivated(cupReady);
+            if (!cupReady || hands == null || !hands.TryHold(HeldItem.EmptyCup)) return false;
+            SetReady(false);
             return true;
         }
 

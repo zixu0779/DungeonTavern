@@ -11,9 +11,11 @@ namespace DungeonTavern.Tavern25D
         [SerializeField, Min(0.1f)] private float navMeshSampleRadius = 1.5f;
 
         private NavMeshAgent agent;
+        private CharacterController body;
         private Vector3 lastDestination;
         private float nextRepathTime;
         private bool hasDestination;
+        private bool seatedBody;
 
         public bool HasCompletePath => agent != null
             && agent.enabled
@@ -42,7 +44,9 @@ namespace DungeonTavern.Tavern25D
             agent.speed = Mathf.Max(0.1f, speed);
             agent.acceleration = Mathf.Max(80f, agent.speed * 12f);
             agent.angularSpeed = 1440f;
-            agent.radius = 0.28f;
+            agent.radius = 0.34f;
+            agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            agent.updatePosition = false;
             agent.height = 1.5f;
             agent.baseOffset = 0f;
             agent.stoppingDistance = Mathf.Max(0f, stoppingDistance);
@@ -79,6 +83,7 @@ namespace DungeonTavern.Tavern25D
                 nextRepathTime = Time.time + repathInterval;
             }
 
+            agent.updateRotation = true;
             agent.isStopped = false;
             return true;
         }
@@ -97,6 +102,7 @@ namespace DungeonTavern.Tavern25D
             if (agent == null || !agent.enabled || !agent.isOnNavMesh)
                 return;
             agent.isStopped = true;
+            agent.updateRotation = false;
             if (clearPath)
             {
                 agent.ResetPath();
@@ -120,28 +126,53 @@ namespace DungeonTavern.Tavern25D
             return agent.Warp(hit.position);
         }
 
+        private void Update()
+        {
+            if (agent == null || !agent.enabled || !agent.isOnNavMesh || body == null || !body.enabled) return;
+            // Navigation chooses the route; the controller enforces actual physical clearance.
+            var step = agent.nextPosition - transform.position;
+            step.y = -2f * Time.deltaTime;
+            body.Move(step);
+            agent.nextPosition = transform.position;
+        }
+
+        public void SetSeatedBody(Vector3 hips, Vector3 head)
+        {
+            if (!seatedBody)
+            {
+                Stop(true);
+                agent.enabled = false;
+                seatedBody = true;
+            }
+            body.height = Mathf.Max(body.radius * 2, head.y - hips.y + .55f);
+            body.center = transform.InverseTransformPoint((hips + head) * .5f);
+        }
+
+        public void ResumeStandingBody()
+        {
+            if (!seatedBody) return;
+            body.height = 1.5f;
+            body.center = Vector3.up * .75f;
+            seatedBody = false;
+            agent.enabled = true;
+            agent.Warp(transform.position);
+        }
+
         private void ConfigurePhysicsBody()
         {
-            CharacterController legacyController = GetComponent<CharacterController>();
-            if (legacyController != null)
-                legacyController.enabled = false;
-
-            CapsuleCollider bodyCollider = GetComponent<CapsuleCollider>();
-            if (bodyCollider == null)
-                bodyCollider = gameObject.AddComponent<CapsuleCollider>();
-            bodyCollider.radius = 0.28f;
-            bodyCollider.height = 1.5f;
-            bodyCollider.center = new Vector3(0f, 0.75f, 0f);
-            bodyCollider.direction = 1;
-            bodyCollider.isTrigger = false;
-
-            Rigidbody physicsBody = GetComponent<Rigidbody>();
-            if (physicsBody == null)
-                physicsBody = gameObject.AddComponent<Rigidbody>();
-            physicsBody.isKinematic = true;
-            physicsBody.useGravity = false;
-            physicsBody.interpolation = RigidbodyInterpolation.Interpolate;
-            physicsBody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            body = GetComponent<CharacterController>();
+            if (body == null) body = gameObject.AddComponent<CharacterController>();
+            body.radius = .28f;
+            body.height = 1.5f;
+            body.center = Vector3.up * .75f;
+            body.skinWidth = .02f;
+            body.stepOffset = .25f;
+            body.enabled = true;
+            agent.updatePosition = false;
+            var oldCollider = GetComponent<CapsuleCollider>();
+            if (oldCollider != null) oldCollider.enabled = false;
+            var oldBody = GetComponent<Rigidbody>();
+            if (oldBody != null) Destroy(oldBody);
         }
     }
 }

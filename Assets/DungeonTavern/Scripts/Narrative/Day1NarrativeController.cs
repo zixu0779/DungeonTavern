@@ -68,7 +68,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             && eve.IsOpeningGuidanceReady;
         public bool CanCloseTavern => State == Day1FlowState.AwaitingClosingSwitch
             && businessDay != null
-            && businessDay.State == BusinessDayState.Completed;
+            && (businessDay.DemoService || businessDay.State == BusinessDayState.Completed);
         public int CurrentChoiceCount => choices.Count;
 
         public void Configure(
@@ -184,6 +184,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
             if (CanCloseTavern)
             {
+                businessDay.StopAcceptingCustomers();
                 SelectExternalGate();
                 State = Day1FlowState.Completed;
                 SetDialogueActive(false);
@@ -347,7 +348,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
             if (line.Contains("今天差不多了，就到这里吧", StringComparison.Ordinal))
             {
-                if (businessDay.State == BusinessDayState.Completed) eve.ShowBubble(ExtractBubbleText(line));
+                if (businessDay.DemoService || businessDay.State == BusinessDayState.Completed) eve.ShowBubble(ExtractBubbleText(line));
                 else pendingClosingBubble = ExtractBubbleText(line);
                 return true;
             }

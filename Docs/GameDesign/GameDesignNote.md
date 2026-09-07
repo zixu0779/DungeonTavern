@@ -16,8 +16,8 @@ This document is the durable source of truth for confirmed game and world design
   each hub has a separately motivated progression choice, and meaningful choices
   either converge intentionally or persist a later consequence.
 - NPC-initiated conversations use active approach: the NPC follows the player
-  until entering a broad 1-1.5 tile trigger range, keeps at least roughly half a
-  tile of personal space, then stops player movement and begins the close view.
+  until entering a 2.2 metre trigger range, keeps at least 1.1 metres
+  of personal space, then stops player movement and begins the close view.
 - The close dialogue camera frames the owner on the left and the NPC on the
   right. World head bubbles persist until replaced by another bubble or closed
   by the start of a formal dialogue.
@@ -28,6 +28,8 @@ This document is the durable source of truth for confirmed game and world design
   direct movement toward a target. An NPC-initiated conversation requires both
   a complete reachable route within conversation range and an unobstructed
   line between the speakers, so walls cannot trigger dialogue through them.
+- Seated customers occupy the actual stool surface. Navigation approach points
+  are separate from sitting poses; seated bodies leave the approach aisle clear.
 - Tableware disappears automatically after settlement; manual tableware collection is not part of the current demo.
 - The lightweight service loop is menu queue, order confirmation, reserved
   seating, preparation and delivery, eating, and settlement. An order may have
@@ -37,8 +39,9 @@ This document is the durable source of truth for confirmed game and world design
 - Day 1 uses the placed FloorLever model as the open/close control, replacing
   the hanging-rope placeholder. Eve walks to the adjacent guide position before
   presenting its bubble; operating the lever changes the public-entrance sign.
-- The cup dispenser activates on the first interaction and presents a floating
-  wooden cup; the next interaction takes the empty cup and deactivates the dispenser.
+- The cup dispenser activates automatically when a new customer order is registered
+  and presents a floating wooden cup. F takes the empty cup and deactivates the dispenser;
+  another new order activates it again.
   The barrel fills only a held empty cup. Chests offer an action matching their
   current state and close automatically when the player moves away.
 - The tavern treats all creatures equally, including adventurers and native dungeon creatures.
@@ -279,16 +282,14 @@ from old layouts. F1 narrative arrival currently references the authored
 - The first-day authored Bran arrival stays a single customer. Additional ordinary
   arrivals are configured separately from the story schedule.
 
-### One-day demo arrivals (2026-09-18)
+### One-day demo arrivals
 
-- The first day contains Bran's authored teaching visit followed by six ordinary
-  arrival batches. At least one batch must be a 2–4-person party; one randomly
-  selected batch is explicitly reserved for that type, and other batches remain
-  weighted random arrivals.
-- Ordinary service begins 30 seconds after the teaching guest leaves. Subsequent
-  batches are 30 seconds apart; at most five customers may be active at once.
-  Capacity-blocked batches retry after 30 seconds without being discarded or
-  spawning a catch-up burst. A guaranteed party waits for an empty large round
-  table and sufficient room for all members.
-- Eve's closing reminder and permission to close wait until all scheduled guests
-  have left. Party orders and bills remain individual.
+- Bran and ordinary guests may enter during the same service period. Ordinary
+  guests arrive in exactly six waves, in addition to Bran. Waves attempt admission
+  every six seconds; no seventh ordinary wave is generated.
+- The first three ordinary waves are a party, a sociable guest, and a solitary
+  guest. Later waves use the configured weights. A full seating area or obstructed
+  entrance defers the wave until space is available; there is no five-person cap.
+- After Bran's story conversation, the lever may close admissions. Existing guests
+  retain their orders and can finish service and leave. Party orders and bills
+  remain individual.
