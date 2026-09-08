@@ -9,6 +9,7 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField] private Transform menuAnchor;
         public Transform MenuAnchor => menuAnchor;
         public int Count { get { RemoveMissing(); return customers.Count; } }
+        public CustomerServicePoint FirstCustomer { get { RemoveMissing(); return customers.Count == 0 ? null : customers[0]; } }
         public void BindMenu(Transform anchor) => menuAnchor = anchor;
         private readonly List<CustomerServicePoint> customers = new();
 

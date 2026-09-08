@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using DungeonTavern.Gameplay.Interaction;
 
 namespace DungeonTavern.Prototypes.Rotation25D
 {
@@ -13,6 +14,11 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private float minimumCameraDistance = 40f;
 
         [SerializeField, Min(.05f)] private float rotationDuration = .22f;
+        [SerializeField, Min(.05f), Tooltip("Seconds to pan between the player and a customer when pressing C.")]
+        private float customerTransitionDuration = .65f;
+        private bool transitioningFollow;
+        private Vector3 followTransitionStart;
+        private float followTransitionElapsed;
         private float startYaw, rotationElapsed;
         private bool rotating;
         private float targetYaw;
@@ -28,11 +34,16 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private float dialogueTargetYaw;
         private DialogueOcclusionFader occlusionFader;
         private float nextOcclusionCheck;
+        private bool followingCustomer;
+        private CustomerServicePoint followedCustomer;
+        private Transform returnTarget;
+        private Animator customerAnimator;
+        private float seatedHold;
 
         public Transform FollowTarget
         {
             get => followTarget;
-            set => followTarget = value;
+            set { StopCustomerFollow(); transitioningFollow = false; followTarget = value; }
         }
 
         public float CurrentCardinalYaw => Mathf.Repeat(targetYaw, 360f);
@@ -76,6 +87,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 return;
             }
             if (Time.timeScale <= 0f) return;
+            if (keyboard?.cKey.wasPressedThisFrame == true) ToggleCustomerFollow();
+            UpdateCustomerFollow(Time.deltaTime);
             if (keyboard?.qKey.wasPressedThisFrame == true) RotateLeft();
             else if (keyboard?.eKey.wasPressedThisFrame == true) RotateRight();
             UpdateRotation();
@@ -97,12 +110,86 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
             Vector3 desired = followTarget.position;
             desired.y = 0f;
-            transform.position = desired;
+            UpdateFollowPosition(desired, Time.deltaTime);
+        }
+
+        private void BeginFollowTransition()
+        {
+            followTransitionStart = transform.position;
+            followTransitionElapsed = 0f;
+            transitioningFollow = true;
+        }
+
+        private void UpdateFollowPosition(Vector3 desired, float seconds)
+        {
+            if (!transitioningFollow) { transform.position = desired; return; }
+            followTransitionElapsed += seconds;
+            float t = Mathf.Clamp01(followTransitionElapsed / Mathf.Max(.05f, customerTransitionDuration));
+            transform.position = Vector3.Lerp(followTransitionStart, desired, t * t * (3f - 2f * t));
+            if (t >= 1f) transitioningFollow = false;
         }
 
         public void RotateLeft()
         {
             RotateBy(-90f);
+        }
+
+        // Presentation-only shortcut: keep the same customer after they leave the queue.
+        public void ToggleCustomerFollow()
+        {
+            if (followingCustomer) { StopCustomerFollow(); return; }
+            if (dialogueFraming) return;
+            var queue = FindAnyObjectByType<ServiceOrderQueue>();
+            BeginCustomerFollow(queue == null ? null : queue.FirstCustomer);
+        }
+
+        private void BeginCustomerFollow(CustomerServicePoint customer)
+        {
+            if (customer == null || !customer.isActiveAndEnabled || customer.State is not
+                (CustomerOrderState.Entering or CustomerOrderState.QueueingForOrder
+                or CustomerOrderState.Ordering or CustomerOrderState.ShowingOrder)) return;
+            returnTarget = followTarget;
+            followedCustomer = customer;
+            customerAnimator = customer.GetComponentInChildren<Animator>();
+            seatedHold = 0f;
+            followingCustomer = true;
+            followTarget = customer.transform;
+            BeginFollowTransition();
+        }
+
+        private void UpdateCustomerFollow(float seconds)
+        {
+            if (!followingCustomer) return;
+            if (followedCustomer == null || !followedCustomer.isActiveAndEnabled ||
+                followedCustomer.State is CustomerOrderState.Inactive or CustomerOrderState.Leaving or CustomerOrderState.Finished)
+            { StopCustomerFollow(); return; }
+            if (followedCustomer.State is not (CustomerOrderState.WaitingForFood
+                or CustomerOrderState.Eating or CustomerOrderState.AwaitingSettlement)) return;
+            // WaitingForFood starts before SitDown finishes. Wait for the visible seated pose.
+            bool seated = customerAnimator == null || !customerAnimator.isActiveAndEnabled ||
+                customerAnimator.runtimeAnimatorController == null || followedCustomer.AssignedSeat?.IsStanding == true ||
+                (!customerAnimator.IsInTransition(0) && customerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SeatedIdle"));
+            if (!seated) { seatedHold = 0f; return; }
+            seatedHold += seconds;
+            if (seatedHold >= 1f) StopCustomerFollow();
+        }
+
+        private void StopCustomerFollow()
+        {
+            if (!followingCustomer) return;
+            followTarget = returnTarget;
+            BeginFollowTransition();
+            followingCustomer = false;
+            followedCustomer = null;
+            returnTarget = null;
+            customerAnimator = null;
+            seatedHold = 0f;
+        }
+
+        private void OnDisable()
+        {
+            StopCustomerFollow();
+            transitioningFollow = false;
         }
 
         public void RotateRight()
@@ -114,6 +201,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
         {
             if (leftCharacter == null || rightCharacter == null)
                 return;
+            StopCustomerFollow();
+            transitioningFollow = false;
             if (!dialogueFraming)
             {
                 preDialoguePosition = transform.position;

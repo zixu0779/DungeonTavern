@@ -177,6 +177,13 @@ The following are not design commitments:
 - The current camera is orthographic, pitched 45 degrees, with four fixed yaw
   headings (45, 135, 225, 315). Q/E rotates 90 degrees with a 0.22-second eased
   transition. Mouse orbit is disabled. WASD moves the player.
+- Demo camera shortcut: C follows the current menu-queue head through ordering
+  and travel to its seat, then returns to the previous player follow target one
+  second after the seated animation reaches SeatedIdle. C again cancels; an empty
+  queue leaves the camera unchanged. Dialogue or loss of the customer restores
+  the previous target. This changes presentation only, not customer behavior.
+  Switching to the customer and returning use a 0.65-second eased camera pan;
+  cancelling mid-pan starts the return from the current camera position.
 - The serialized output resolution is 1920x1080. Exploration orthographic size
   is 4.5; dialogue has its own closer framing. Ordinary 3D scene materials use
   Unlit to retain authored colors. A future softly lit setup is proposed only.
