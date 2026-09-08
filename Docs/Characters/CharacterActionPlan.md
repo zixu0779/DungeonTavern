@@ -28,10 +28,10 @@
 
 ### 动作验证入口
 
-开场过场结束后首次 WASD 会触发起身，站稳之前禁止移动和 F 交互；
+当前 Demo 跳过开头文字小剧场，进入后首次 WASD 会触发起身，站稳之前禁止移动和 F 交互；
 靠近可翻越柜台并朝它移动时，按 Space 触发翻越。
 `Tools > Characters > Check Opening and Vault` 在新启动的 Play Mode 中检查开场输入锁和真实 Bar Prefab 的翻越落地。
-该检查会推进开场剧情；退出并重新进入 Play Mode 可重新体验正式开场。
+该检查会推进起身流程；退出并重新进入 Play Mode 可重新体验伏地起身。
 
 
 Play Mode 等主角加载后，运行 `Tools > Characters > Check Drink and Seating`。

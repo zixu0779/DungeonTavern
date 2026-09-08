@@ -26,6 +26,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private string customerName = "Customer";
         private bool isInitialized;
         private bool settlementPending;
+        private bool queueArrived;
         [SerializeField] private ServiceOrderQueue serviceQueue;
         [SerializeField] private TavernMenuSystem menuSystem;
         [SerializeField] private Transform menuPoint;
@@ -82,7 +83,14 @@ namespace DungeonTavern.Gameplay.Interaction
             if (!isInitialized) return;
             bool arrived = false;
             if (State is CustomerOrderState.Entering or CustomerOrderState.QueueingForOrder)
-                arrived = MoveTowards(serviceQueue.GetPosition(this));
+            {
+                var destination = serviceQueue.GetPosition(this);
+                var offset = destination - transform.position;
+                offset.y = 0;
+                queueArrived = arrived = offset.sqrMagnitude <= arrivalTolerance * arrivalTolerance;
+                if (arrived) navigator.Stop();
+                else queueArrived = arrived = MoveTowards(destination);
+            }
             else if (State == CustomerOrderState.MovingToSeat)
                 arrived = MoveTowards(assignedSeat.Position);
             else if (State == CustomerOrderState.Leaving && (modelMotion == null || !modelMotion.IsStandingUp))
@@ -95,6 +103,13 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void LateUpdate()
         {
+            if (State is CustomerOrderState.Ordering or CustomerOrderState.ShowingOrder
+                || (State == CustomerOrderState.QueueingForOrder && queueArrived))
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation,
+                    Quaternion.LookRotation(serviceQueue.GetFacing(this)), 540f * Time.deltaTime);
+                return;
+            }
             if (assignedSeat?.Table == null || State is not (CustomerOrderState.WaitingForFood
                 or CustomerOrderState.Eating or CustomerOrderState.AwaitingSettlement)) return;
             var facing = assignedSeat.Table.transform.position - transform.position;

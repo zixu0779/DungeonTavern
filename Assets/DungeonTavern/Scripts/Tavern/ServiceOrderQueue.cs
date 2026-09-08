@@ -58,6 +58,15 @@ namespace DungeonTavern.Gameplay.Interaction
             return position;
         }
 
+        public Vector3 GetFacing(CustomerServicePoint customer)
+        {
+            int index = customers.IndexOf(customer);
+            Vector3 direction = index > 0 ? GetPosition(customers[index - 1]) - GetPosition(customer)
+                : (menuAnchor == null ? transform.forward : menuAnchor.forward);
+            direction.y = 0;
+            return direction.sqrMagnitude > .001f ? direction.normalized : transform.forward;
+        }
+
         private void RemoveMissing() => customers.RemoveAll(customer => customer == null);
     }
 }

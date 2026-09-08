@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using DungeonTavern.Gameplay.Interaction;
@@ -23,6 +24,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private bool rotating;
         private float targetYaw;
         private bool dialogueFraming;
+        private bool entranceFraming;
+        private Quaternion preEntranceRotation;
+        private float preEntranceSize, preEntranceYaw;
+        public bool EntranceFraming => entranceFraming;
         private Transform dialogueLeft;
         private Transform dialogueRight;
         private float explorationSize;
@@ -80,6 +85,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Update()
         {
+            if (entranceFraming) return;
             Keyboard keyboard = Keyboard.current;
             if (dialogueFraming)
             {
@@ -97,7 +103,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void LateUpdate()
         {
-            if (dialogueFraming)
+            if (dialogueFraming || entranceFraming)
                 return;
             if (followTarget == null)
             {
@@ -129,6 +135,52 @@ namespace DungeonTavern.Prototypes.Rotation25D
             if (t >= 1f) transitioningFollow = false;
         }
 
+        public IEnumerator FrameEntrance(Transform view, float size, float seconds)
+        {
+            if (dialogueFraming) EndDialogueFraming();
+            preEntranceRotation = Quaternion.Euler(0, targetYaw, 0);
+            preEntranceYaw = targetYaw;
+            preEntranceSize = gameCamera.orthographicSize;
+            entranceFraming = true;
+            rotating = false;
+            yield return PanTo(view.position, view.rotation, size, seconds);
+        }
+
+        public IEnumerator ReturnFromEntrance(float seconds)
+        {
+            Vector3 target = followTarget == null ? transform.position : followTarget.position;
+            target.y = 0;
+            yield return PanTo(target, preEntranceRotation, preEntranceSize, seconds);
+            CancelEntranceFraming();
+        }
+
+        public void CancelEntranceFraming()
+        {
+            if (!entranceFraming) return;
+            entranceFraming = false;
+            targetYaw = preEntranceYaw;
+            transform.rotation = preEntranceRotation;
+            gameCamera.orthographicSize = preEntranceSize;
+            if (followTarget != null)
+                transform.position = new Vector3(followTarget.position.x, 0, followTarget.position.z);
+        }
+
+        private IEnumerator PanTo(Vector3 position, Quaternion rotation, float size, float seconds)
+        {
+            var startPosition = transform.position;
+            var startRotation = transform.rotation;
+            float startSize = gameCamera.orthographicSize;
+            for (float elapsed = 0; elapsed < seconds; elapsed += Time.deltaTime)
+            {
+                float t = Mathf.SmoothStep(0, 1, elapsed / seconds);
+                transform.SetPositionAndRotation(Vector3.Lerp(startPosition, position, t), Quaternion.Slerp(startRotation, rotation, t));
+                gameCamera.orthographicSize = Mathf.Lerp(startSize, size, t);
+                yield return null;
+            }
+            transform.SetPositionAndRotation(position, rotation);
+            gameCamera.orthographicSize = size;
+        }
+
         public void RotateLeft()
         {
             RotateBy(-90f);
@@ -138,7 +190,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
         public void ToggleCustomerFollow()
         {
             if (followingCustomer) { StopCustomerFollow(); return; }
-            if (dialogueFraming) return;
+            if (dialogueFraming || entranceFraming) return;
             var queue = FindAnyObjectByType<ServiceOrderQueue>();
             BeginCustomerFollow(queue == null ? null : queue.FirstCustomer);
         }
@@ -354,7 +406,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         public void RotateBy(float deltaDegrees)
         {
-            if (dialogueFraming) return;
+            if (dialogueFraming || entranceFraming) return;
             startYaw = transform.eulerAngles.y;
             targetYaw = SnapYaw(targetYaw + deltaDegrees);
             rotationElapsed = 0f;

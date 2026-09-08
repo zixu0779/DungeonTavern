@@ -53,10 +53,10 @@ namespace DungeonTavern.Gameplay.Interaction
             if (businessDay != null)
             {
                 GUI.Box(
-                    new Rect(Screen.width - 500f, 88f, 486f, 76f),
+                    new Rect(Screen.width - 254f, 88f, 240f, 76f),
                     businessDay.State == BusinessDayState.Completed
                         ? $"Day complete: {businessDay.CompletedCustomers} / {businessDay.TotalCustomers}"
-                        : $"Customers: {businessDay.CompletedCustomers} / {businessDay.TotalCustomers}  Active: {businessDay.ActiveCustomers}",
+                        : $"活跃顾客: {businessDay.ActiveCustomers}",
                     heldItemStyle);
             }
         }

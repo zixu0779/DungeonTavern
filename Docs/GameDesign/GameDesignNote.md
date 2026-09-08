@@ -38,10 +38,15 @@ This document is the durable source of truth for confirmed game and world design
   and consumed. Seat reservation and physical arrival are separate.
 - Day 1 uses the placed FloorLever model as the open/close control, replacing
   the hanging-rope placeholder. Eve walks to the adjacent guide position before
-  presenting its bubble; operating the lever changes the public-entrance sign.
-- The cup dispenser activates automatically when a new customer order is registered
-  and presents a floating wooden cup. F takes the empty cup and deactivates the dispenser;
-  another new order activates it again.
+  presenting its bubble. Operating the lever temporarily locks player control,
+  pans the camera to the public entrance, opens/closes the door, plays the full
+  corresponding sign animation, then pans back and restores control. Closing stops
+  new admissions immediately; opening starts service after the camera returns.
+- The cup dispenser tracks missing cups for current drink orders rather than new-order
+  events. Delivered cups cover delivered portions until settlement; a held empty/full
+  cup covers one unserved drink. While a deficit remains, the halo stays active and
+  each collected cup is replaced by another floating cup. It powers down only when
+  the deficit reaches zero. Food-only orders do not request cups.
   The barrel fills only a held empty cup. Chests offer an action matching their
   current state and close automatically when the player moves away.
 - The tavern treats all creatures equally, including adventurers and native dungeon creatures.
@@ -166,7 +171,10 @@ The following are not design commitments:
   this editor convenience path is excluded from player builds.
 - While B1 is active, the additive `Tavern_Main` host keeps only its persistent
   systems and camera active; its environment, characters, and gameplay content
-  are hidden. Those content roots are restored when the player enters the tavern.
+  are hidden. Runtime customers belong beneath the tavern CustomerPoints content
+  root, so they hide and pause with it. Arrival scheduling pauses while the tavern
+  content is inactive; returning restores customers with their orders and seat
+  reservations intact. Those content roots are restored when the player enters the tavern.
 - Initial loading preserves the player position and rotation authored in B1;
   it must not overwrite them with fixed coordinates. Stair travel resolves an
   arrival Transform in the destination scene after loading and uses its current
@@ -196,8 +204,9 @@ The following are not design commitments:
   player chair interactions and drink consumption rules are not introduced.
   Final NPC appearances and story-specific animations remain pending.
 - Only Day 1 is wired to the current narrative controller. Days 2 and 3 exist
-  in Ink and are not yet complete playable scene flows. The opening cinematic
-  is a placeholder; after it ends, movement input starts the floor-to-standing animation.
+  in Ink and are not yet complete playable scene flows. The current Demo skips the
+  opening cinematic text and starts with the prone player; movement input starts
+  the floor-to-standing animation. The later Eve narrative remains enabled.
   Movement and F interaction stay locked until standing. Space vaulting drives
   a full-body animation with hand contact alongside the collision-controlled arc.
 - F1/B1 stair travel is connected; the unfinished F2 entrance is temporarily
@@ -264,7 +273,7 @@ from old layouts. F1 narrative arrival currently references the authored
 
 ## Customer ordering presentation (2026-09-18)
 
-- Customers physically reach the queue in front of the placed menu. Only the queue head thinks and orders; thinking is shown as `...`.
+- Customers physically reach the queue in front of the placed menu and face toward the preceding queue position when stopped; the head faces the menu. Only the queue head thinks and orders; thinking is shown as `...`.
 - The customer then visibly displays the ordered item icon and quantity before leaving the menu queue for their seat. The order remains visible while travelling and waiting for service.
 - After delivery, eating is communicated without descriptive text using the item icon and decreasing progress. After eating finishes, the bubble reads `结账`; after payment the customer leaves.
 

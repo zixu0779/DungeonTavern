@@ -34,6 +34,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         [Header("Narrative")]
         [SerializeField] private InkFile chapterOne;
+        [SerializeField] private bool skipOpeningCinematic = true;
 
         [Header("Scene References")]
         [SerializeField] private PrototypePlayerMover player;
@@ -117,7 +118,8 @@ namespace DungeonTavern.Tavern25D.Narrative
             eve.ConversationRequested += OnEveConversationRequested;
             player.GetComponentInChildren<CharacterModelMotion>()?.BeginProne();
             story = new Story(chapterOne.storyJson);
-            story.ChoosePathString("prologue");
+            openingCinematic = !skipOpeningCinematic;
+            story.ChoosePathString(skipOpeningCinematic ? "day01_open" : "prologue");
             ShowNextContent();
         }
 
@@ -269,6 +271,11 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (story.canContinue)
             {
                 currentLine = story.Continue().Trim();
+                if (currentLine.Length == 0)
+                {
+                    ShowNextContent();
+                    return;
+                }
                 if (TryPresentAsBubble(currentLine))
                 {
                     ShowNextContent();
@@ -518,7 +525,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                 contentY += choiceHeight + 8f;
             }
             if (choices.Count == 0)
-                GUI.Label(new Rect(0f, contentY, contentWidth, 36f), "Enter / Space ▶", choiceStyle);
+                GUI.Label(new Rect(0f, contentY, contentWidth, 36f), "", choiceStyle);
             GUI.EndScrollView();
 
             if (contentChanged)
@@ -564,7 +571,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                 normal = { textColor = new Color(0.94f, 0.88f, 0.75f) }
             };
             GUI.color = Color.white;
-            GUI.Label(new Rect(Screen.width * 0.16f, Screen.height * 0.82f, Screen.width * 0.68f, Screen.height * 0.12f), currentLine + "\nEnter / Space ▶", cinematicStyle);
+            GUI.Label(new Rect(Screen.width * 0.16f, Screen.height * 0.82f, Screen.width * 0.68f, Screen.height * 0.12f), currentLine, cinematicStyle);
             GUI.color = old;
         }
     }

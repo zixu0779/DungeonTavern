@@ -82,11 +82,11 @@ static class DemoServiceCheck
         if(!EditorApplication.isPlaying){EditorApplication.update-=Update;return;}
         try
         {
-            if(orders>0&&!cupChecked)
+            if(orders>0&&!cupChecked&&dispenser.CupReady)
             {
                 Assert(dispenser.CupReady,"New order did not activate dispenser");
-                Assert(dispenser.Interact(hands)&&hands.CurrentItem==HeldItem.EmptyCup&&!dispenser.CupReady,"Take cup/deactivate");
-                hands.Clear();cupChecked=true;Log("PASS order activates; take cup preserves inventory and deactivates");
+                Assert(dispenser.Interact(hands)&&hands.CurrentItem==HeldItem.EmptyCup&&!dispenser.CupReady,"Take cup starts replacement/shutdown according to deficit");
+                hands.Clear();cupChecked=true;Log("PASS drink demand activates; take cup preserves inventory");
             }
             if(cupChecked&&orders>1&&dispenser.CupReady)reactivated=true;
             foreach(var c in guests.Where(c=>c!=null))

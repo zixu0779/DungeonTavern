@@ -134,7 +134,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void Update()
         {
-            if (State != BusinessDayState.Serving)
+            if (State != BusinessDayState.Serving || seatRegistry == null || !seatRegistry.gameObject.activeInHierarchy)
                 return;
 
             elapsedTime += Time.deltaTime;
@@ -211,7 +211,7 @@ namespace DungeonTavern.Gameplay.Interaction
                 int partyId = count > 1 ? ++nextPartyId : 0;
                 for (int i = 0; i < count; i++)
                 {
-                    var instance = Instantiate(customerPrefab, positions[i], Quaternion.identity);
+                    var instance = Instantiate(customerPrefab, positions[i], Quaternion.identity, seatRegistry.transform);
                     var customer = instance.GetComponent<CustomerServicePoint>();
                     if (customer == null) customer = instance.AddComponent<CustomerServicePoint>();
                     customer.ConfigureSeating(kind, partyId);
