@@ -31,6 +31,15 @@ This document is the durable source of truth for confirmed game and world design
 - Seated customers occupy the actual stool surface. Navigation approach points
   are separate from sitting poses; seated bodies leave the approach aisle clear.
 - Tableware disappears automatically after settlement; manual tableware collection is not part of the current demo.
+- The owner may close at any point during service. With guests present, an
+  exclamation bubble announces temporary closure, all guests start leaving
+  together with randomized symbol complaints, and the entrance closes only after
+  they leave. This uses the player view, cancels unpaid orders without revenue,
+  and preserves unspawned waves for reopening; it does not complete Bran's story.
+- The pause menu freezes simulation and input, offers disabled save/load entries,
+  current control instructions, and an exit confirmation. The tavern menu has
+  a dish-summary tab with pending quantities and customer counts and an orders
+  tab whose detailed content is not implemented yet.
 - The lightweight service loop is menu queue, order confirmation, reserved
   seating, preparation and delivery, eating, and settlement. An order may have
   multiple dishes and quantities; delivered portions can be eaten while the
@@ -38,10 +47,13 @@ This document is the durable source of truth for confirmed game and world design
   and consumed. Seat reservation and physical arrival are separate.
 - Day 1 uses the placed FloorLever model as the open/close control, replacing
   the hanging-rope placeholder. Eve walks to the adjacent guide position before
-  presenting its bubble. Operating the lever temporarily locks player control,
+  presenting its bubble. Normal opening and empty-tavern closing temporarily lock player control,
   pans the camera to the public entrance, opens/closes the door, plays the full
   corresponding sign animation, then pans back and restores control. Closing stops
-  new admissions immediately; opening starts service after the camera returns.
+  new admissions immediately; opening starts service after the mechanism finishes.
+  W/A/S/D or Q/E during the entrance shot returns the camera to the player early;
+  the door and sign finish their sequence. Occupied-tavern closing follows the
+  temporary-closure flow above without an entrance shot.
 - The cup dispenser tracks missing cups for current drink orders rather than new-order
   events. Delivered cups cover delivered portions until settlement; a held empty/full
   cup covers one unserved drink. While a deficit remains, the halo stays active and
@@ -306,6 +318,5 @@ from old layouts. F1 narrative arrival currently references the authored
 - The first three ordinary waves are a party, a sociable guest, and a solitary
   guest. Later waves use the configured weights. A full seating area or obstructed
   entrance defers the wave until space is available; there is no five-person cap.
-- After Bran's story conversation, the lever may close admissions. Existing guests
-  retain their orders and can finish service and leave. Party orders and bills
-  remain individual.
+- The lever can interrupt service at any time using the temporary-closure flow
+  above. Party orders and bills remain individual during normal service.

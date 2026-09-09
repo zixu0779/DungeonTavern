@@ -11,6 +11,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         private string line;
         private CustomerOrder order;
         private bool eating;
+        private float hideAt = -1;
         private GUIStyle style;
         private Renderer[] characterRenderers;
 
@@ -26,12 +27,16 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             order = null;
             line = text;
+            hideAt = visibleSeconds > 0 ? Time.time + visibleSeconds : -1;
         }
+
+        private void Update() { if (hideAt > 0 && Time.time >= hideAt) Hide(); }
 
         public void Hide()
         {
             order = null;
             line = string.Empty;
+            hideAt = -1;
         }
 
         public void ShowOrder(CustomerOrder customerOrder, bool isEating)
@@ -39,6 +44,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             order = customerOrder;
             eating = isEating;
             line = string.Empty;
+            hideAt = -1;
         }
 
         private void OnGUI()
@@ -106,7 +112,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                 float remaining = active ? group.Where(p => p.Delivered).Average(p => p.RemainingFraction) : 1f;
                 Rect icon = new(panel.x + 12 * scale, panel.y + i * row + 7 * scale, 28 * scale, 28 * scale);
                 var matrix = GUI.matrix;
-                if (active) GUIUtility.RotateAroundPivot(-8f + Mathf.Sin(Time.unscaledTime * 3f) * 8f, icon.center);
+                if (active) GUIUtility.RotateAroundPivot(-8f + Mathf.Sin(Time.time * 3f) * 8f, icon.center);
                 DrawFoodIcon(icon, group.Key, remaining);
                 GUI.matrix = matrix;
                 GUI.Label(new Rect(panel.x + 45 * scale, panel.y + i * row, 60 * scale, row), "×" + group.Count(), style);

@@ -30,6 +30,8 @@ static class DemoFlowPlayCheck
     static void Assert(bool value,string message){if(!value)throw new Exception(message);}
     static void Log(string text)=>File.AppendAllText(Output,text+"\n");
     static DemoFlowPlayCheck(){EditorApplication.playModeStateChanged+=Mode;}
+    [MenuItem("Tools/Demo Flow/Test Interaction Polish")]
+    static void RunPolish(){SessionState.SetBool(Key+"Polish",true);Run();}
     [MenuItem("Tools/Demo Flow/Test Demo Flow")]
     static void Run()
     {
@@ -37,6 +39,7 @@ static class DemoFlowPlayCheck
         EditorSceneManager.SaveOpenScenes();
         SessionState.SetBool(Key,true);File.WriteAllText(Output,"Demo flow runtime regression\n");
         EditorSceneManager.OpenScene("Assets/Scenes/Tavern/Tavern_Main.unity");
+        DemoPolishPlayCheck.CacheLeverGrip();
         EditorApplication.isPlaying=true;
     }
     static void Mode(PlayModeStateChange state)
@@ -87,9 +90,16 @@ static class DemoFlowPlayCheck
         activation=dispenser.GetComponent<CupDispenserActivation>();
         if(activation==null)activation=(CupDispenserActivation)Get(dispenser,"activation");
         orbit=UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>();orbit.FollowTarget=player.transform;
+        if(SessionState.GetBool(Key+"Polish",false))
+        {
+            SessionState.SetBool(Key+"Polish",false);
+            yield return DemoPolishPlayCheck.Run(player);
+            yield break;
+        }
         yield return CheckCups();
         yield return CheckQueue();
         yield return CheckLever();
+        yield return DemoPolishPlayCheck.Run(player);
         for(int x=-1;x<=4;x++)for(int z=2;z<=6;z++)
         {
             if(x==4&&z==2)continue;
@@ -189,13 +199,23 @@ static class DemoFlowPlayCheck
             bool opening=cycle==0;
             if(!opening)
             {
+                var day = UnityEngine.Object.FindAnyObjectByType<BusinessDayController>();
+                day.DismissCustomers();
+                float departureDeadline = Time.time + 40;
+                while(day.ActiveCustomers > 0 && Time.time < departureDeadline) yield return null;
+                if(day.ActiveCustomers>0)foreach(var c in UnityEngine.Object.FindObjectsByType<CustomerServicePoint>())
+                {
+                    var a=c.GetComponent<NavMeshAgent>();var motion=c.GetComponentInChildren<CharacterModelMotion>();
+                    Log($"STUCK {c.name} state={c.State} pos={c.transform.position} remaining={c.GetComponent<NpcNavigator>().RemainingDistance} agent={a.enabled}/{a.isOnNavMesh} vel={a.velocity} destination={a.destination} standing={motion.IsStandingUp} collider={c.GetComponent<CharacterController>().bounds}");
+                }
+                Assert(day.ActiveCustomers == 0, "Guests did not leave before normal closing check");
                 story.ChoosePathString("day01_close");
                 typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
                 for(int i=0;i<100&&narrative.State==Day1FlowState.Dialogue;i++)narrative.AdvanceForValidation();
                 Assert(narrative.CanCloseTavern,"Closing Ink gate not ready");
             }
             Assert(lever.Interact(hands),"Lever interaction rejected");
-            if(!opening)Assert(UnityEngine.Object.FindAnyObjectByType<BusinessDayController>().WaitingCustomers==0,"Admissions continued during closing shot");
+            if(!opening)Assert(UnityEngine.Object.FindAnyObjectByType<BusinessDayController>().AdmissionsPaused,"Admissions continued during closing shot");
             Assert(lever.IsSwitching&&!player.MovementInputEnabled&&!lever.Interact(hands),"Switch not locked");
             yield return new WaitForSeconds(.65f);
             Assert(door.IsOpen!=opening&&sign.IsOpen!=opening,"Door/sign changed before camera arrived");

@@ -14,10 +14,11 @@ namespace DungeonTavern.Gameplay.Interaction
         public IReadOnlyList<DishDefinition> Dishes => dishes;
         public DishDefinition FindDish(HeldItem item) => dishes.FirstOrDefault(d => d.item == item);
         private GUIStyle titleStyle;
-        private GUIStyle panelStyle;
         private GUIStyle headerStyle;
         private GUIStyle rowStyle;
         private bool isOpen;
+        private int selectedTab;
+        private Vector2 menuScroll;
 
         [SerializeField, Min(0)] private int startingMoney = 500;
         public int Balance { get; private set; }
@@ -29,6 +30,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void Update()
         {
+            if (GamePauseMenu.IsPaused) return;
             Keyboard keyboard = Keyboard.current;
             if (keyboard?.mKey.wasPressedThisFrame == true)
                 Toggle();
@@ -79,59 +81,53 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void OnGUI()
         {
+            if (GamePauseMenu.IsPaused) return;
+            GUI.depth = -4500;
             EnsureStyles();
             GUI.Box(new Rect(Screen.width - 286f, 14f, 272f, 64f), $"存款  {Balance} G", titleStyle);
-            if (!isOpen)
+            if (!isOpen) return;
+            float scale = Mathf.Clamp(Screen.height / 900f, .6f, 1.4f);
+            float width = Mathf.Min(940f * scale, Screen.width - 40f);
+            float height = Mathf.Min(540f * scale, Screen.height - 100f);
+            Rect panel = new((Screen.width - width) * .5f, (Screen.height - height) * .5f, width, height);
+            Color previous = GUI.color;
+            GUI.color = new Color(.13f, .11f, .09f, .98f); GUI.DrawTexture(panel, Texture2D.whiteTexture); GUI.color = previous;
+            GUI.Label(new Rect(panel.x + 24 * scale, panel.y + 18 * scale, width - 100 * scale, 48 * scale), "酒馆菜单", headerStyle);
+            var buttons = new GUIStyle(GUI.skin.button) { fontSize = Mathf.RoundToInt(24 * scale) };
+            if (GUI.Button(new Rect(panel.xMax - 65 * scale, panel.y + 18 * scale, 45 * scale, 42 * scale), "×", buttons)) isOpen = false;
+            selectedTab = GUI.Toolbar(new Rect(panel.x + 24 * scale, panel.y + 82 * scale, width - 48 * scale, 48 * scale), selectedTab, new[] { "菜品总览", "具体订单" }, buttons);
+            Rect content = new(panel.x + 28 * scale, panel.y + 150 * scale, width - 56 * scale, height - 180 * scale);
+            if (selectedTab == 1)
+            {
+                GUI.Label(content, "具体订单\n\n此页将在后续版本中显示逐笔订单。", rowStyle);
                 return;
-
-            float width = Mathf.Min(920f, Screen.width - 56f);
-            Rect panel = new((Screen.width - width) * 0.5f, 92f, width, Mathf.Min(180f + dishes.Count * 60f, Screen.height - 130f));
-            GUI.Box(panel, GUIContent.none, panelStyle);
-            GUI.Label(new Rect(panel.x + 28f, panel.y + 18f, width - 56f, 48f), "酒馆菜单", headerStyle);
-            float y = panel.y + 82f;
-            float inner = width - 56f;
-            GUI.Label(new Rect(panel.x + 28f, y, inner * 0.34f, 42f), "菜名", rowStyle);
-            GUI.Label(new Rect(panel.x + 28f + inner * 0.34f, y, inner * 0.18f, 42f), "金额", rowStyle);
-            GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 42f), "待上份数", rowStyle);
-            GUI.Label(new Rect(panel.x + 28f + inner * 0.72f, y, inner * 0.28f, 42f), "点单人", rowStyle);
-            y += 56f;
+            }
+            float inner = content.width - 20 * scale;
+            string[] headers = { "菜品", "单价", "待上份数", "点单人数" };
+            float[] columns = { 0, .4f, .58f, .8f };
+            for (int i = 0; i < headers.Length; i++)
+                GUI.Label(new Rect(content.x + inner * columns[i], content.y, inner * (i == 0 ? .4f : .2f), 42 * scale), headers[i], rowStyle);
+            Rect viewport = new(content.x, content.y + 54 * scale, content.width, content.height - 54 * scale);
+            menuScroll = GUI.BeginScrollView(viewport, menuScroll, new Rect(0, 0, inner, Mathf.Max(viewport.height, dishes.Count * 60 * scale)));
+            float y = 0;
             foreach (var dish in dishes)
             {
-                GUI.Label(new Rect(panel.x + 28f, y, inner * 0.34f, 56f), dish.label, rowStyle);
-                GUI.Label(new Rect(panel.x + 28f + inner * 0.34f, y, inner * 0.18f, 56f), $"{dish.price} G", rowStyle);
-                GUI.Label(new Rect(panel.x + 28f + inner * 0.52f, y, inner * 0.20f, 56f), Count(dish.item).ToString(), rowStyle);
-                DrawCustomerPortraits(new Rect(panel.x + 28f + inner * 0.72f, y, inner * 0.28f, 56f), GetCustomers(dish.item));
-                y += 60f;
+                string[] values = { dish.label, $"{dish.price} G", Count(dish.item).ToString(), GetCustomers(dish.item).Count.ToString() };
+                for (int i = 0; i < values.Length; i++)
+                    GUI.Label(new Rect(inner * columns[i], y, inner * (i == 0 ? .4f : .2f), 56 * scale), values[i], rowStyle);
+                y += 60 * scale;
             }
+            GUI.EndScrollView();
         }
 
         private void EnsureStyles()
         {
-            int fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f));
-            titleStyle ??= new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleCenter, fontSize = fontSize };
-            panelStyle ??= new GUIStyle(GUI.skin.box) { padding = new RectOffset(24, 24, 18, 18) };
-            headerStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = fontSize + 6, fontStyle = FontStyle.Bold };
-            rowStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontSize = fontSize };
-        }
-
-        private void DrawCustomerPortraits(Rect area, IReadOnlyList<CustomerServicePoint> customers)
-        {
-            float size = Mathf.Min(50f, area.height);
-            for (int index = 0; index < customers.Count; index++)
-            {
-                SpriteRenderer renderer = customers[index] == null ? null : customers[index].GetComponentInChildren<SpriteRenderer>();
-                Rect target = new(area.x + index * (size + 8f), area.y + (area.height - size) * 0.5f, size, size);
-                if (renderer?.sprite?.texture != null)
-                {
-                    Sprite sprite = renderer.sprite;
-                    Rect textureRect = sprite.textureRect;
-                    Rect uv = new(textureRect.x / sprite.texture.width, textureRect.y / sprite.texture.height,
-                        textureRect.width / sprite.texture.width, textureRect.height / sprite.texture.height);
-                    GUI.DrawTextureWithTexCoords(target, sprite.texture, uv, true);
-                }
-                else
-                    GUI.Label(target, "◇", rowStyle);
-            }
+            int fontSize = Mathf.Clamp(Mathf.RoundToInt(Screen.height / 36f), 18, 32);
+            titleStyle ??= new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleCenter };
+            headerStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold };
+            rowStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft };
+            titleStyle.fontSize = rowStyle.fontSize = fontSize;
+            headerStyle.fontSize = fontSize + 4;
         }
     }
 }

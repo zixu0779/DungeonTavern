@@ -20,12 +20,14 @@ namespace DungeonTavern.Gameplay.Interaction
         private Quaternion restingRotation;
         private PrototypeCameraOrbit orbit;
         private PrototypePlayerMover player;
-        private bool previousMovement, previousInteraction;
+        private bool previousMovement, previousInteraction, hasOpened;
+        private bool temporaryClosing, inputRestored;
+        private BusinessDayController day;
         private PlayerInteractionController interaction;
         public bool IsOn { get; private set; }
         public bool IsSwitching { get; private set; }
-        private bool CanSwitch => !IsSwitching && (narrative == null || !narrative.isActiveAndEnabled
-            || (IsOn ? narrative.CanCloseTavern : narrative.CanOpenTavern));
+        private bool CanSwitch => !IsSwitching && Time.timeScale > 0 && (IsOn || hasOpened
+            || narrative == null || !narrative.isActiveAndEnabled || narrative.CanOpenTavern);
         private void Awake() => restingRotation = handlePivot.localRotation;
         public override string GetPrompt(PlayerHands hands) => !CanSwitch ? string.Empty : IsOn ? "F：结束营业" : "F：开始营业";
         public override bool Interact(PlayerHands hands)
@@ -37,36 +39,61 @@ namespace DungeonTavern.Gameplay.Interaction
                 return false;
             }
             IsOn = !IsOn;
-            if (!IsOn) FindAnyObjectByType<BusinessDayController>()?.StopAcceptingCustomers();
+            day = FindAnyObjectByType<BusinessDayController>();
+            temporaryClosing = !IsOn && day != null && day.ActiveCustomers > 0;
+            if (!IsOn) day?.PauseAdmissions();
             StartCoroutine(SwitchBusiness());
             return true;
         }
         private IEnumerator SwitchBusiness()
         {
             IsSwitching = true;
+            inputRestored = false;
             player = FindAnyObjectByType<PrototypePlayerMover>();
             orbit = FindAnyObjectByType<PrototypeCameraOrbit>();
             if (player != null) { previousMovement = player.MovementInputEnabled; player.MovementInputEnabled = false; }
             interaction = player == null ? null : player.GetComponent<PlayerInteractionController>();
             if (interaction != null) { previousInteraction = interaction.enabled; interaction.enabled = false; }
-            if (orbit != null) yield return orbit.FrameEntrance(entranceView, entranceViewSize, cameraPanDuration);
+            if (temporaryClosing)
+            {
+                var bubble = player.GetComponent<WorldSpeechBubble>();
+                if (bubble == null) bubble = player.gameObject.AddComponent<WorldSpeechBubble>();
+                bubble.Show("酒馆要临时关闭了，请各位先离开！", 3f);
+                yield return new WaitForSeconds(1f);
+                day.DismissCustomers();
+                while (day.ActiveCustomers > 0) yield return null;
+            }
+            else if (orbit != null) yield return orbit.FrameEntrance(entranceView, entranceViewSize, cameraPanDuration);
             entranceDoor.SetOpen(IsOn);
             yield return null;
             while (entranceDoor.IsTransitioning) yield return null;
             statusSign.SetOpen(IsOn);
             yield return null;
             while (statusSign.IsTransitioning) yield return null;
-            if (orbit != null) yield return orbit.ReturnFromEntrance(cameraPanDuration);
+            if (!temporaryClosing && orbit != null) yield return orbit.ReturnFromEntrance(cameraPanDuration);
             RestoreControl();
-            if (narrative != null && narrative.isActiveAndEnabled) narrative.TryUseBusinessSwitch();
+            if (IsOn)
+            {
+                if (!hasOpened && narrative != null && narrative.isActiveAndEnabled) narrative.TryUseBusinessSwitch();
+                day?.ResumeAdmissions();
+                hasOpened = true;
+            }
+            else if (!temporaryClosing && narrative != null && narrative.isActiveAndEnabled && narrative.CanCloseTavern)
+                narrative.TryUseBusinessSwitch();
         }
         private void RestoreControl()
         {
             if (!IsSwitching) return;
             orbit?.CancelEntranceFraming();
+            RestorePlayerInput();
+            IsSwitching = false;
+        }
+        private void RestorePlayerInput()
+        {
+            if (inputRestored) return;
+            inputRestored = true;
             if (player != null) player.MovementInputEnabled = previousMovement;
             if (interaction != null) interaction.enabled = previousInteraction;
-            IsSwitching = false;
         }
         protected override void OnDisable()
         {
@@ -76,6 +103,8 @@ namespace DungeonTavern.Gameplay.Interaction
         }
         private void Update()
         {
+            if (IsSwitching && !temporaryClosing && orbit != null && orbit.EntranceWasCanceled && !orbit.EntranceFraming)
+                RestorePlayerInput();
             var target = restingRotation * Quaternion.Euler(IsOn ? switchAngle : 0, 0, 0);
             handlePivot.localRotation = Quaternion.RotateTowards(handlePivot.localRotation, target, degreesPerSecond * Time.deltaTime);
         }

@@ -132,11 +132,21 @@ namespace DungeonTavern.Gameplay.Interaction
             customers.Add(bran);
         }
 
+        public bool AdmissionsPaused { get; private set; }
+        public void PauseAdmissions() => AdmissionsPaused = true;
+        public void ResumeAdmissions() => AdmissionsPaused = false;
+        public void DismissCustomers()
+        {
+            PauseAdmissions();
+            foreach (var customer in activeCustomers.ToArray()) customer.DismissWithoutPayment();
+        }
+
         private void Update()
         {
             if (State != BusinessDayState.Serving || seatRegistry == null || !seatRegistry.gameObject.activeInHierarchy)
                 return;
 
+            if (AdmissionsPaused) { TryCompleteDay(); return; }
             elapsedTime += Time.deltaTime;
             while (nextCustomerIndex < pendingCustomers.Count
                    && pendingCustomers[nextCustomerIndex].ArrivalTime <= elapsedTime)

@@ -96,7 +96,8 @@ namespace DungeonTavern.Gameplay.Interaction
             else if (State == CustomerOrderState.Leaving && (modelMotion == null || !modelMotion.IsStandingUp))
             {
                 assignedSeat?.Release(this);
-                arrived = MoveTowards(guestEntry.position);
+                // The doorway is an area, not one shared point that every solid NPC must occupy.
+                arrived = navigator.MoveTo(guestEntry.position, .7f) && navigator.HasArrived(.7f);
             }
             Tick(Time.deltaTime, arrived);
         }
@@ -227,6 +228,19 @@ namespace DungeonTavern.Gameplay.Interaction
             hands.Clear();
             ChangeState(CustomerOrderState.Eating);
             return true;
+        }
+
+        public void DismissWithoutPayment()
+        {
+            if (State is CustomerOrderState.Inactive or CustomerOrderState.Finished) return;
+            serviceQueue?.Remove(this);
+            menuSystem?.CancelOrder(this);
+            settlementPending = false;
+            ChangeState(CustomerOrderState.Leaving);
+            const string symbols = "@#$%&*!?";
+            var complaint = new char[UnityEngine.Random.Range(5, 9)];
+            for (int i = 0; i < complaint.Length; i++) complaint[i] = symbols[UnityEngine.Random.Range(0, symbols.Length)];
+            bubble?.Show(new string(complaint));
         }
 
         public bool CompleteSettlement()

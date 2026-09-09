@@ -25,6 +25,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private float targetYaw;
         private bool dialogueFraming;
         private bool entranceFraming;
+        private bool entrancePanning, entranceReturning;
+        public bool EntranceWasCanceled { get; private set; }
         private Quaternion preEntranceRotation;
         private float preEntranceSize, preEntranceYaw;
         public bool EntranceFraming => entranceFraming;
@@ -85,7 +87,14 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Update()
         {
-            if (entranceFraming) return;
+            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused) return;
+            if (entranceFraming)
+            {
+                var keys = Keyboard.current;
+                if (keys != null && (keys.wKey.isPressed || keys.aKey.isPressed || keys.sKey.isPressed || keys.dKey.isPressed
+                    || keys.qKey.isPressed || keys.eKey.isPressed)) RequestEntranceReturn();
+                return;
+            }
             Keyboard keyboard = Keyboard.current;
             if (dialogueFraming)
             {
@@ -142,12 +151,31 @@ namespace DungeonTavern.Prototypes.Rotation25D
             preEntranceYaw = targetYaw;
             preEntranceSize = gameCamera.orthographicSize;
             entranceFraming = true;
+            EntranceWasCanceled = false;
+            entranceReturning = false;
             rotating = false;
+            entrancePanning = true;
             yield return PanTo(view.position, view.rotation, size, seconds);
+            entrancePanning = false;
+            if (EntranceWasCanceled) yield return ReturnFromEntrance(.35f);
+        }
+
+        public void RequestEntranceReturn()
+        {
+            if (!entranceFraming || EntranceWasCanceled || entranceReturning) return;
+            EntranceWasCanceled = true;
+            if (!entrancePanning) StartCoroutine(ReturnFromEntrance(.35f));
         }
 
         public IEnumerator ReturnFromEntrance(float seconds)
         {
+            if (!entranceFraming) yield break;
+            if (entranceReturning)
+            {
+                while (entranceFraming) yield return null;
+                yield break;
+            }
+            entranceReturning = true;
             Vector3 target = followTarget == null ? transform.position : followTarget.position;
             target.y = 0;
             yield return PanTo(target, preEntranceRotation, preEntranceSize, seconds);
@@ -172,6 +200,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             float startSize = gameCamera.orthographicSize;
             for (float elapsed = 0; elapsed < seconds; elapsed += Time.deltaTime)
             {
+                if (EntranceWasCanceled && !entranceReturning) yield break;
                 float t = Mathf.SmoothStep(0, 1, elapsed / seconds);
                 transform.SetPositionAndRotation(Vector3.Lerp(startPosition, position, t), Quaternion.Slerp(startRotation, rotation, t));
                 gameCamera.orthographicSize = Mathf.Lerp(startSize, size, t);

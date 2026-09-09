@@ -130,7 +130,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (motion)
             {
                 motion.BeginProne();
-                while (Keyboard.current == null || !(Keyboard.current.wKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed))
+                while (GamePauseMenu.IsPaused || Keyboard.current == null || !(Keyboard.current.wKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed))
                     yield return null;
                 yield return motion.WakeAndStand();
             }
@@ -153,6 +153,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void Update()
         {
+            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused) return;
             if (State == Day1FlowState.AwaitingStorageReturn
                 && storageArrival.gameObject.activeInHierarchy
                 && (player.transform.position - storageArrival.position).sqrMagnitude
@@ -428,6 +429,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void OnGUI()
         {
+            if (GamePauseMenu.IsPaused) return;
             if (State != Day1FlowState.Dialogue)
                 return;
 
@@ -460,15 +462,21 @@ namespace DungeonTavern.Tavern25D.Narrative
                 active = { textColor = new Color(1f, 0.78f, 0.3f) }
             };
 
-            float margin = Mathf.Max(34f, Screen.height * 0.045f);
+            GUI.depth = -6000;
+            int fontSize = Mathf.Clamp(Mathf.RoundToInt(Screen.height / 36f), 18, 30);
+            dialogueStyle.fontSize = choiceStyle.fontSize = fontSize;
+            float margin = Mathf.Max(16f, Screen.height * 0.025f);
             float width = Screen.width - margin * 2f;
-            float height = Mathf.Clamp(Screen.height * 0.42f, 300f, 480f);
+            float height = Mathf.Min(Screen.height - margin * 2, Mathf.Clamp(Screen.height * 0.42f, 240f, 480f));
             float x = margin;
             float y = Screen.height - height - margin;
             Rect panel = new(x, y, width, height);
-            GUI.Box(panel, GUIContent.none, dialoguePanelStyle);
-
-            Rect viewport = new(x + 34f, y + 28f, width - 68f, height - 56f);
+            Color previousColor = GUI.color;
+            GUI.color = new Color(.12f, .10f, .085f, .96f);
+            GUI.DrawTexture(panel, Texture2D.whiteTexture);
+            GUI.color = previousColor;
+            float footer = choices.Count == 0 ? 60f : 16f;
+            Rect viewport = new(x + 24f, y + 20f, width - 48f, height - 40f - footer);
             float contentWidth = Mathf.Max(100f, viewport.width - 24f);
             float contentHeight = 12f;
             if (dialogueHistory.Count > 0)
@@ -483,8 +491,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
             for (int index = 0; index < choices.Count; index++)
                 contentHeight += choiceStyle.CalcHeight(new GUIContent($"› {index + 1}. {choices[index].text}"), contentWidth) + 8f;
-            if (choices.Count == 0)
-                contentHeight += 40f;
+            contentHeight += 16f;
 
             bool contentChanged = renderedHistoryCount != dialogueHistory.Count
                 || renderedChoiceCount != choices.Count;
@@ -524,9 +531,13 @@ namespace DungeonTavern.Tavern25D.Narrative
                     clickedChoice = index;
                 contentY += choiceHeight + 8f;
             }
-            if (choices.Count == 0)
-                GUI.Label(new Rect(0f, contentY, contentWidth, 36f), "", choiceStyle);
             GUI.EndScrollView();
+            bool continueClicked = false;
+            if (choices.Count == 0)
+            {
+                var continueStyle = new GUIStyle(GUI.skin.button) { fontSize = fontSize, alignment = TextAnchor.MiddleCenter };
+                continueClicked = GUI.Button(new Rect(panel.xMax - 184f, panel.yMax - 64f, 160f, 44f), "继续", continueStyle);
+            }
 
             if (contentChanged)
             {
@@ -534,8 +545,8 @@ namespace DungeonTavern.Tavern25D.Narrative
                 renderedHistoryCount = dialogueHistory.Count;
                 renderedChoiceCount = choices.Count;
             }
-            if (clickedChoice >= 0)
-                Choose(clickedChoice);
+            if (clickedChoice >= 0) Choose(clickedChoice);
+            else if (continueClicked) ShowNextContent();
         }
 
         private static bool IsPlayerLine(string line)

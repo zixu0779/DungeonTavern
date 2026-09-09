@@ -22,7 +22,9 @@ presentation and asset organization, not future feature commitments.
   authored stair/gate geometry, travel triggers and collision support.
 - The playable protagonist uses a 3D Humanoid model with idle, walk and cup
   interaction animation. The protagonist uses KayKit Mage, Eve uses Rogue, and customers use Barbarian.
-  The previous protagonist sources and a pre-replacement prefab remain local.
+  Character direction now follows the current KayKit-style proportions, silhouettes,
+  and simple low-poly forms; the previous protagonist concept is no longer the
+  production target. Its source files and pre-replacement prefab remain local.
   Protagonist/customer scale is uniform, calibrated to shoulders above the counter.
   Original sprite children are inactive for rollback. Seating uses three imported
   clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
