@@ -41,6 +41,12 @@ presentation and asset organization, not future feature commitments.
 - Keep each character's design separate. For rigging candidates, prefer neutral
   A/T poses with separate limbs and empty hands; assess topology before animation.
 
+## Interface presentation
+
+- Runtime UI uses separate overlay canvases with dark iron panels, copper borders,
+  warm gold emphasis and parchment speech bubbles. Chinese text uses bundled
+  Noto Sans CJK SC. See [UI design](UIDesign.md) for layout and display order.
+
 ## Editing rules
 
 - Preserve user-authored positions, pivots, sprite slicing and material tints

@@ -7,58 +7,7 @@ namespace DungeonTavern.Gameplay.Interaction
         [SerializeField] private PlayerInteractionController interactionController;
         [SerializeField] private BusinessDayController businessDay;
 
-        private GUIStyle promptStyle;
-        private GUIStyle heldItemStyle;
 
-        private void OnGUI()
-        {
-            interactionController ??= FindAnyObjectByType<PlayerInteractionController>();
-            if (interactionController == null)
-                return;
 
-            promptStyle ??= new GUIStyle(GUI.skin.box)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
-                padding = new RectOffset(24, 24, 14, 14),
-                normal = { textColor = new Color(1f, 0.91f, 0.62f) }
-            };
-
-            heldItemStyle ??= new GUIStyle(GUI.skin.box)
-            {
-                alignment = TextAnchor.MiddleRight,
-                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
-                padding = new RectOffset(20, 20, 12, 12),
-                normal = { textColor = new Color(0.85f, 0.93f, 1f) }
-            };
-
-            string prompt = interactionController.CurrentPrompt;
-            if (!string.IsNullOrEmpty(prompt))
-            {
-                float width = Mathf.Min(620f, Screen.width - 40f);
-                GUI.Box(
-                    new Rect((Screen.width - width) * 0.5f, Screen.height - 116f, width, 76f),
-                    prompt,
-                    promptStyle);
-            }
-
-            if (interactionController.CurrentItem != HeldItem.None)
-            {
-                GUI.Box(
-                    new Rect(Screen.width - 430f, Screen.height - 96f, 416f, 76f),
-                    "手持：" + TavernMenuSystem.GetLabel(interactionController.CurrentItem),
-                    heldItemStyle);
-            }
-
-            if (businessDay != null)
-            {
-                GUI.Box(
-                    new Rect(Screen.width - 254f, 88f, 240f, 76f),
-                    businessDay.State == BusinessDayState.Completed
-                        ? $"Day complete: {businessDay.CompletedCustomers} / {businessDay.TotalCustomers}"
-                        : $"活跃顾客: {businessDay.ActiveCustomers}",
-                    heldItemStyle);
-            }
-        }
     }
 }

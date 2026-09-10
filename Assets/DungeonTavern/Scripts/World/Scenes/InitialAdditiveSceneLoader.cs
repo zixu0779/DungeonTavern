@@ -75,16 +75,8 @@ namespace DungeonTavern.Tavern25D
             return true;
         }
 
-        private void OnGUI()
-        {
-            if (startupOverlayAlpha <= 0f)
-                return;
 
-            Color previous = GUI.color;
-            GUI.depth = -10000;
-            GUI.color = new Color(0f, 0f, 0f, startupOverlayAlpha);
-            GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture);
-            GUI.color = previous;
-        }
+        private void LateUpdate() => DungeonTavern.UI.TavernUI.Instance?.SetFade(this, startupOverlayAlpha);
+        private void OnDisable() => DungeonTavern.UI.TavernUI.Instance?.ClearFade(this);
     }
 }

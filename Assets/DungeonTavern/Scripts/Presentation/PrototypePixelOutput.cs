@@ -26,10 +26,12 @@ namespace DungeonTavern.Prototypes.Rotation25D
             pixelTarget.Create();
             targetCamera.targetTexture = pixelTarget;
             CreateDisplayCamera();
+            DungeonTavern.UI.TavernUI.Instance?.SetWorldTexture(pixelTarget);
         }
 
         private void OnDisable()
         {
+            DungeonTavern.UI.TavernUI.Instance?.SetWorldTexture(null);
             if (targetCamera != null)
                 targetCamera.targetTexture = null;
 
@@ -47,29 +49,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             pixelTarget = null;
         }
 
-        private void OnGUI()
-        {
-            if (pixelTarget == null || Event.current.type != EventType.Repaint)
-                return;
 
-            float targetAspect = referenceWidth / (float)referenceHeight;
-            float screenAspect = Screen.width / (float)Mathf.Max(1, Screen.height);
-            Rect destination;
-
-            if (screenAspect > targetAspect)
-            {
-                float width = Screen.height * targetAspect;
-                destination = new Rect((Screen.width - width) * 0.5f, 0f, width, Screen.height);
-            }
-            else
-            {
-                float height = Screen.width / targetAspect;
-                destination = new Rect(0f, (Screen.height - height) * 0.5f, Screen.width, height);
-            }
-
-            GL.Clear(true, true, Color.black);
-            Graphics.DrawTexture(destination, pixelTarget);
-        }
 
         private void CreateDisplayCamera()
         {

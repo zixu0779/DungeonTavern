@@ -106,6 +106,15 @@ static class DemoPolishPlayCheck
         var departureFrames=new List<int>();foreach(var c in customers)c.StateChanged+=state=>{if(state==CustomerOrderState.Leaving)departureFrames.Add(Time.frameCount);};
         Assert(lever.Interact(hands)&&!orbit.EntranceFraming,"Temporary close should keep player view");
         Assert(player.GetComponent<WorldSpeechBubble>().CurrentText.EndsWith("！"),"Missing owner announcement");
+        Assert(player.MovementInputEnabled&&player.GetComponent<PlayerInteractionController>().enabled,"Temporary closure locks player input");
+        var tables=UnityEngine.Object.FindAnyObjectByType<SeatRegistry>().Tables.Where(t=>t!=null&&t.isActiveAndEnabled).ToArray();
+        var center=tables.Aggregate(Vector3.zero,(sum,t)=>sum+t.transform.position)/tables.Length;
+        Assert(Vector3.Dot(player.transform.forward,Vector3.ProjectOnPlane(center-player.transform.position,Vector3.up).normalized)>.98f,"Closure announcement does not face the hall");
+        Vector3 beforeMove=player.transform.position;
+        var moveKeys=InputSystem.AddDevice<Keyboard>();InputSystem.QueueStateEvent(moveKeys,new KeyboardState(Key.W));
+        yield return new WaitForSeconds(.2f);
+        InputSystem.QueueStateEvent(moveKeys,new KeyboardState());yield return null;InputSystem.RemoveDevice(moveKeys);
+        Assert(Vector3.Distance(beforeMove,player.transform.position)>.1f,"Player cannot move during closure announcement");
         yield return new WaitForSeconds(1.2f);
         Assert(departureFrames.Count==customers.Length&&departureFrames.Distinct().Count()==1,"Guests did not start departing together");
         foreach(var c in customers.Where(c=>c!=null))
@@ -115,8 +124,17 @@ static class DemoPolishPlayCheck
         while(lever.IsSwitching&&Time.time<exitDeadline){Assert(!orbit.EntranceFraming,"Temporary close detached camera");yield return null;}
         Assert(!lever.IsSwitching&&day.ActiveCustomers==0,"Guests stuck during temporary closure");
         Assert(menu.Balance==balance&&menu.PendingOrderCount==0&&day.WaitingCustomers==waiting,"Temporary closure charged/cancelled future arrivals");
-        Log("PASS temporary closure: owner announcement, simultaneous departures, randomized complaints, no camera cut, no unpaid revenue");
+        Log("PASS temporary closure: owner announcement, simultaneous departures, randomized complaints, no camera cut, no unpaid revenue, faces hall and movement remains available");
         yield return CheckUi(player,orbit,menu,narrative);
+    }
+    static void ClickUi(string name)
+    {
+        var button=DungeonTavern.UI.TavernUI.Instance.GetComponentsInChildren<UnityEngine.UI.Button>().Single(b=>b.name==name);
+        var events=UnityEngine.EventSystems.EventSystem.current;
+        var pointer=new UnityEngine.EventSystems.PointerEventData(events){position=RectTransformUtility.WorldToScreenPoint(null,button.transform.TransformPoint(((RectTransform)button.transform).rect.center))};
+        var hits=new List<UnityEngine.EventSystems.RaycastResult>();events.RaycastAll(pointer,hits);
+        Assert(hits.Count>0&&hits[0].gameObject.GetComponentInParent<UnityEngine.UI.Button>()==button,"UI obscured/not clickable: "+name);
+        UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject,pointer,UnityEngine.EventSystems.ExecuteEvents.pointerClickHandler);
     }
     static IEnumerator Capture(string path)
     {
@@ -124,24 +142,60 @@ static class DemoPolishPlayCheck
         yield return new WaitForEndOfFrame();
         yield return null;
     }
-    static IEnumerator CheckUi(PrototypePlayerMover player,PrototypeCameraOrbit orbit,TavernMenuSystem menu,Day1NarrativeController narrative)
+    public static IEnumerator CheckUi(PrototypePlayerMover player,PrototypeCameraOrbit orbit,TavernMenuSystem menu,Day1NarrativeController narrative)
     {
+        var ui=DungeonTavern.UI.TavernUI.Instance;
+        Assert(ui!=null,"Missing UI root");
+        var canvases=ui.GetComponentsInChildren<Canvas>(true);
+        Assert(canvases.Length==8&&canvases.Select(c=>c.sortingOrder).Distinct().Count()==8,"UI layers missing or ambiguous");
+        Assert(canvases.All(c=>c.gameObject.layer==5&&c.renderMode==RenderMode.ScreenSpaceOverlay),"UI not isolated on overlay layer");
+        Assert(DungeonTavern.UI.TavernUiTheme.Font!=null&&DungeonTavern.UI.TavernUiTheme.Font.HasCharacter('酒'),"Packaged Chinese font unavailable");
+        ScreenCapture.CaptureScreenshot("/tmp/tavern-ui-hud.png");yield return new WaitForEndOfFrame();yield return null;
         var pause=UnityEngine.Object.FindAnyObjectByType<GamePauseMenu>();
-        pause.SetPaused(true);float time=Time.time;var position=player.transform.position;var rotation=orbit.transform.rotation;
+        yield return new WaitForSeconds(.6f);
+        ClickUi("PauseButton");Assert(GamePauseMenu.IsPaused,"Pause button did not respond");
+        float time=Time.time;var position=player.transform.position;var rotation=orbit.transform.rotation;
         yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-menu.png");
         yield return new WaitForSecondsRealtime(.4f);
         Assert(Time.time==time&&player.transform.position==position&&orbit.transform.rotation==rotation&&!player.GetComponent<PlayerInteractionController>().TryInteract(),"Pause did not freeze world/input");
-        Set(pause,"controls",true);yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-controls.png");
-        Set(pause,"controls",false);Set(pause,"confirmQuit",true);yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-quit.png");
-        yield return new WaitForSecondsRealtime(.2f);pause.SetPaused(false);Assert(Time.timeScale>0,"Pause did not restore time");
+        ClickUi("Option2");Assert(pause.ControlsVisible,"Controls button did not respond");yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-controls.png");
+        ClickUi("Back");yield return null;ClickUi("Option3");Assert(pause.ConfirmingQuit,"Quit confirmation did not open");yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-quit.png");
+        yield return new WaitForSecondsRealtime(.2f);ClickUi("Cancel");yield return null;ClickUi("Resume");Assert(Time.timeScale>0,"Pause did not restore time");
         Set(menu,"isOpen",true);Set(menu,"selectedTab",0);yield return new WaitForSeconds(.2f);yield return Capture("/tmp/menu-summary.png");
-        Set(menu,"selectedTab",1);yield return new WaitForSeconds(.2f);yield return Capture("/tmp/menu-orders.png");
-        yield return new WaitForSeconds(.2f);Set(menu,"isOpen",false);
-        narrative.enabled=true;
+        ClickUi("OrdersTab");Assert(menu.SelectedTab==1,"Orders tab did not respond");yield return new WaitForSeconds(.2f);yield return Capture("/tmp/menu-orders.png");
+        yield return new WaitForSeconds(.2f);
+        var keyboard=InputSystem.AddDevice<Keyboard>();InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.Escape));
+        yield return null;yield return null;InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;InputSystem.RemoveDevice(keyboard);
+        Assert(!menu.IsOpen&&!GamePauseMenu.IsPaused,"Esc on ledger should close it without opening pause");
+        // Verify live held-item / interaction views and both bubble forms.
+        var body=player.GetComponent<CharacterController>();body.enabled=false;
+        var lever=UnityEngine.Object.FindAnyObjectByType<FloorLeverPoint>();player.transform.position=lever.transform.position-Vector3.forward*.8f;
+        Physics.SyncTransforms();body.enabled=true;
+        var hands=player.GetComponent<PlayerHands>();hands.Clear();hands.TryHold(HeldItem.EmptyCup);
+        var bubble=player.GetComponent<WorldSpeechBubble>();if(bubble==null)bubble=player.gameObject.AddComponent<WorldSpeechBubble>();
+        bubble.Show("酒馆要临时关闭了，请各位先离开！");
+        yield return new WaitForSeconds(.6f);yield return Capture("/tmp/ui-hud-interaction.png");
+        Assert(ui.transform.Find("20_HUD/SafeArea/HeldItem").gameObject.activeInHierarchy,"Held item HUD hidden");
+        Assert(ui.transform.Find("20_HUD/SafeArea/InteractionHint").gameObject.activeInHierarchy,"Interaction HUD hidden");
+        var order=new CustomerOrder(new[]{new OrderRequest{item=HeldItem.TestDrink,quantity=2}},menu.FindDish);
+        order.TryDeliver(HeldItem.TestDrink);bubble.ShowOrder(order,true);
+        yield return new WaitForSeconds(.3f);yield return Capture("/tmp/ui-order-bubble.png");bubble.Hide();hands.Clear();
+        narrative.enabled=true;menu.Toggle();
+        var eve=(Day1EveActor)Get(narrative,"eve");
+        typeof(Day1NarrativeController).GetMethod("BeginCloseDialogue",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,new object[]{eve.transform});
         var story=(Ink.Runtime.Story)Get(narrative,"story");story.ChoosePathString("day01_eve_conversation");
         typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
-        yield return new WaitForSeconds(.2f);yield return Capture("/tmp/dialogue-bottom.png");
-        yield return new WaitForSeconds(.2f);
-        Log("PASS pause freezes time/input and restores it; captured pause, controls, quit confirmation, both menu tabs and dialogue layout");
+        Assert(!menu.IsOpen,"Dialogue did not dismiss ledger");
+        yield return new WaitForSeconds(.6f);yield return Capture("/tmp/dialogue-speech.png");
+        if(narrative.CurrentChoiceCount==0) { ClickUi("Continue");yield return null; }
+        for(int i=0;i<20&&narrative.CurrentChoiceCount==0;i++)narrative.ContinueDialogue();
+        yield return new WaitForSeconds(.3f);yield return Capture("/tmp/dialogue-bottom.png");
+        Assert(narrative.CurrentChoiceCount>0,"Expected conversation choices");
+        ClickUi("Choice1");yield return new WaitForSeconds(.2f);
+        Assert(narrative.CurrentChoiceCount==0&&!string.IsNullOrEmpty(narrative.CurrentLine),"Dialogue choice did not produce text");
+        yield return Capture("/tmp/dialogue-speech.png");
+        string priorLine=narrative.CurrentLine;ClickUi("Continue");yield return null;
+        Assert(narrative.CurrentLine!=priorLine||narrative.CurrentChoiceCount>0,"Continue button did not advance Ink");
+        Log("PASS UI raycast clicks, tabs, Esc routing; pause freezes time/input and restores it; captured pause, controls, quit confirmation, both menu tabs and dialogue layout");
     }
 }

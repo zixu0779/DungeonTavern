@@ -49,17 +49,10 @@ namespace DungeonTavern.Tavern25D.Narrative
         private Story story;
         private CustomerServicePoint bran;
         private string currentLine;
-        private GUIStyle dialoguePanelStyle;
-        private GUIStyle dialogueStyle;
-        private GUIStyle choiceStyle;
-        private GUIStyle cinematicStyle;
         private bool openingCinematic = true;
         private bool showingCinematic;
         private bool closeDialogueActive;
         private PrototypeCameraOrbit cameraOrbit;
-        private Vector2 dialogueScroll;
-        private int renderedHistoryCount = -1;
-        private int renderedChoiceCount = -1;
         private string pendingBranBubble;
         private string pendingClosingBubble;
 
@@ -71,6 +64,23 @@ namespace DungeonTavern.Tavern25D.Narrative
             && businessDay != null
             && (businessDay.DemoService || businessDay.State == BusinessDayState.Completed);
         public int CurrentChoiceCount => choices.Count;
+        public bool IsCinematic => showingCinematic;
+        public string CurrentLine => currentLine ?? string.Empty;
+        public string DisplayText => dialogueHistory.Count > 0
+            ? string.Join("\n\n", dialogueHistory.ConvertAll(entry=>entry.Text)) : CurrentLine;
+        public IReadOnlyList<string> ChoiceTexts => choices.ConvertAll(choice=>choice.text);
+        public string SpeakerLabel
+        {
+            get
+            {
+                string line=CurrentLine;
+                if(string.IsNullOrEmpty(line)&&dialogueHistory.Count>0)line=dialogueHistory[dialogueHistory.Count-1].Text;
+                int colon=line.IndexOf('：');
+                return choices.Count>0 ? "你的回应" : colon>0&&colon<12 ? line.Substring(0,colon) : "酒馆纪事";
+            }
+        }
+        public void ContinueDialogue() { if(!GamePauseMenu.IsPaused&&State==Day1FlowState.Dialogue&&choices.Count==0)ShowNextContent(); }
+        public void SelectChoice(int index) { if(!GamePauseMenu.IsPaused&&State==Day1FlowState.Dialogue&&index>=0&&index<choices.Count)Choose(index); }
 
         public void Configure(
             InkFile storyAsset,
@@ -130,7 +140,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (motion)
             {
                 motion.BeginProne();
-                while (GamePauseMenu.IsPaused || Keyboard.current == null || !(Keyboard.current.wKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed))
+                while (GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen || Keyboard.current == null || !(Keyboard.current.wKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed))
                     yield return null;
                 yield return motion.WakeAndStand();
             }
@@ -255,9 +265,6 @@ namespace DungeonTavern.Tavern25D.Narrative
         private void BeginCloseDialogue(Transform speaker)
         {
             dialogueHistory.Clear();
-            dialogueScroll = Vector2.zero;
-            renderedHistoryCount = -1;
-            renderedChoiceCount = -1;
             closeDialogueActive = true;
             SetDialogueActive(true);
             cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
@@ -401,7 +408,6 @@ namespace DungeonTavern.Tavern25D.Narrative
                     selectedText = $"你：{selectedText}";
                 }
                 dialogueHistory.Add(new DialogueEntry(selectedText, true));
-                renderedHistoryCount = -1;
             }
             story.ChooseChoiceIndex(choices[index].index);
             ShowNextContent();
@@ -418,6 +424,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void SetDialogueActive(bool active)
         {
+            if(active)FindAnyObjectByType<TavernMenuSystem>()?.Close();
             if (player != null)
                 player.MovementInputEnabled = !active;
             if (!active)
@@ -427,127 +434,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             }
         }
 
-        private void OnGUI()
-        {
-            if (GamePauseMenu.IsPaused) return;
-            if (State != Day1FlowState.Dialogue)
-                return;
 
-            if (showingCinematic)
-            {
-                DrawCinematicPlaceholder();
-                return;
-            }
-
-            dialoguePanelStyle ??= new GUIStyle(GUI.skin.box)
-            {
-                padding = new RectOffset(30, 30, 24, 24)
-            };
-            dialogueStyle ??= new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.UpperLeft,
-                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
-                wordWrap = true,
-                padding = new RectOffset(8, 8, 6, 6),
-                normal = { textColor = Color.white }
-            };
-            choiceStyle ??= new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.UpperLeft,
-                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
-                wordWrap = true,
-                padding = new RectOffset(18, 18, 8, 8),
-                normal = { textColor = new Color(1f, 0.9f, 0.58f) },
-                hover = { textColor = Color.white },
-                active = { textColor = new Color(1f, 0.78f, 0.3f) }
-            };
-
-            GUI.depth = -6000;
-            int fontSize = Mathf.Clamp(Mathf.RoundToInt(Screen.height / 36f), 18, 30);
-            dialogueStyle.fontSize = choiceStyle.fontSize = fontSize;
-            float margin = Mathf.Max(16f, Screen.height * 0.025f);
-            float width = Screen.width - margin * 2f;
-            float height = Mathf.Min(Screen.height - margin * 2, Mathf.Clamp(Screen.height * 0.42f, 240f, 480f));
-            float x = margin;
-            float y = Screen.height - height - margin;
-            Rect panel = new(x, y, width, height);
-            Color previousColor = GUI.color;
-            GUI.color = new Color(.12f, .10f, .085f, .96f);
-            GUI.DrawTexture(panel, Texture2D.whiteTexture);
-            GUI.color = previousColor;
-            float footer = choices.Count == 0 ? 60f : 16f;
-            Rect viewport = new(x + 24f, y + 20f, width - 48f, height - 40f - footer);
-            float contentWidth = Mathf.Max(100f, viewport.width - 24f);
-            float contentHeight = 12f;
-            if (dialogueHistory.Count > 0)
-            {
-                for (int index = 0; index < dialogueHistory.Count; index++)
-                    contentHeight += dialogueStyle.CalcHeight(new GUIContent(dialogueHistory[index].Text), contentWidth) + 12f;
-            }
-            else if (!string.IsNullOrEmpty(currentLine))
-            {
-                contentHeight += dialogueStyle.CalcHeight(new GUIContent(currentLine), contentWidth) + 12f;
-            }
-
-            for (int index = 0; index < choices.Count; index++)
-                contentHeight += choiceStyle.CalcHeight(new GUIContent($"› {index + 1}. {choices[index].text}"), contentWidth) + 8f;
-            contentHeight += 16f;
-
-            bool contentChanged = renderedHistoryCount != dialogueHistory.Count
-                || renderedChoiceCount != choices.Count;
-            Rect content = new(0f, 0f, contentWidth, Mathf.Max(viewport.height, contentHeight));
-            dialogueScroll = GUI.BeginScrollView(
-                viewport,
-                dialogueScroll,
-                content,
-                false,
-                false,
-                GUIStyle.none,
-                GUI.skin.verticalScrollbar);
-            float contentY = 8f;
-            if (dialogueHistory.Count > 0)
-            {
-                for (int index = 0; index < dialogueHistory.Count; index++)
-                {
-                    string text = dialogueHistory[index].Text;
-                    float lineHeight = dialogueStyle.CalcHeight(new GUIContent(text), contentWidth);
-                    GUI.Label(new Rect(0f, contentY, contentWidth, lineHeight), text, dialogueStyle);
-                    contentY += lineHeight + 12f;
-                }
-            }
-            else if (!string.IsNullOrEmpty(currentLine))
-            {
-                float lineHeight = dialogueStyle.CalcHeight(new GUIContent(currentLine), contentWidth);
-                GUI.Label(new Rect(0f, contentY, contentWidth, lineHeight), currentLine, dialogueStyle);
-                contentY += lineHeight + 12f;
-            }
-
-            int clickedChoice = -1;
-            for (int index = 0; index < choices.Count; index++)
-            {
-                string text = $"› {index + 1}. {choices[index].text}";
-                float choiceHeight = choiceStyle.CalcHeight(new GUIContent(text), contentWidth);
-                if (GUI.Button(new Rect(0f, contentY, contentWidth, choiceHeight), text, choiceStyle))
-                    clickedChoice = index;
-                contentY += choiceHeight + 8f;
-            }
-            GUI.EndScrollView();
-            bool continueClicked = false;
-            if (choices.Count == 0)
-            {
-                var continueStyle = new GUIStyle(GUI.skin.button) { fontSize = fontSize, alignment = TextAnchor.MiddleCenter };
-                continueClicked = GUI.Button(new Rect(panel.xMax - 184f, panel.yMax - 64f, 160f, 44f), "继续", continueStyle);
-            }
-
-            if (contentChanged)
-            {
-                dialogueScroll.y = Mathf.Max(0f, contentHeight - viewport.height);
-                renderedHistoryCount = dialogueHistory.Count;
-                renderedChoiceCount = choices.Count;
-            }
-            if (clickedChoice >= 0) Choose(clickedChoice);
-            else if (continueClicked) ShowNextContent();
-        }
 
         private static bool IsPlayerLine(string line)
         {
@@ -558,32 +445,6 @@ namespace DungeonTavern.Tavern25D.Narrative
                 || trimmed.StartsWith("你:", StringComparison.Ordinal);
         }
 
-        private void DrawCinematicPlaceholder()
-        {
-            GUI.depth = -5000;
-            Color old = GUI.color;
-            GUI.color = new Color(0.11f, 0.075f, 0.055f, 1f);
-            GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture);
 
-            Rect paper = new(Screen.width * 0.12f, Screen.height * 0.1f, Screen.width * 0.76f, Screen.height * 0.7f);
-            GUI.color = new Color(0.76f, 0.66f, 0.48f, 1f);
-            GUI.DrawTexture(paper, Texture2D.whiteTexture);
-            GUI.color = new Color(0.22f, 0.16f, 0.12f, 0.9f);
-            GUI.DrawTexture(new Rect(paper.x + paper.width * 0.1f, paper.y + paper.height * 0.2f, paper.width * 0.28f, paper.height * 0.58f), Texture2D.whiteTexture);
-            GUI.color = new Color(0.45f, 0.35f, 0.24f, 0.85f);
-            GUI.DrawTexture(new Rect(paper.x + paper.width * 0.55f, paper.y + paper.height * 0.3f, paper.width * 0.3f, paper.height * 0.36f), Texture2D.whiteTexture);
-
-            cinematicStyle ??= new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height / 28f)),
-                wordWrap = true,
-                padding = new RectOffset(44, 44, 24, 24),
-                normal = { textColor = new Color(0.94f, 0.88f, 0.75f) }
-            };
-            GUI.color = Color.white;
-            GUI.Label(new Rect(Screen.width * 0.16f, Screen.height * 0.82f, Screen.width * 0.68f, Screen.height * 0.12f), currentLine, cinematicStyle);
-            GUI.color = old;
-        }
     }
 }

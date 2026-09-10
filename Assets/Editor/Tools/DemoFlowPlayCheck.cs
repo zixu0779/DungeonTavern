@@ -20,6 +20,8 @@ static class DemoFlowPlayCheck
     const string Key="DungeonTavern.DemoFlowCheck";
     const string Output="/tmp/demo-flow-playcheck.txt";
     static double started;
+    static readonly List<string> runtimeErrors=new();
+    static void CaptureError(string message,string trace,LogType type) { if(type==LogType.Exception||type==LogType.Error)runtimeErrors.Add(message); }
     static PrototypePlayerMover player;
     static PlayerHands hands;
     static TavernMenuSystem menu;
@@ -30,6 +32,8 @@ static class DemoFlowPlayCheck
     static void Assert(bool value,string message){if(!value)throw new Exception(message);}
     static void Log(string text)=>File.AppendAllText(Output,text+"\n");
     static DemoFlowPlayCheck(){EditorApplication.playModeStateChanged+=Mode;}
+    [MenuItem("Tools/Demo Flow/Test UI")]
+    static void RunUi(){SessionState.SetBool(Key+"UI",true);Run();}
     [MenuItem("Tools/Demo Flow/Test Interaction Polish")]
     static void RunPolish(){SessionState.SetBool(Key+"Polish",true);Run();}
     [MenuItem("Tools/Demo Flow/Test Demo Flow")]
@@ -37,6 +41,7 @@ static class DemoFlowPlayCheck
     {
         if(EditorApplication.isPlaying)throw new Exception("Exit Play Mode first");
         EditorSceneManager.SaveOpenScenes();
+        runtimeErrors.Clear();Application.logMessageReceived-=CaptureError;Application.logMessageReceived+=CaptureError;
         SessionState.SetBool(Key,true);File.WriteAllText(Output,"Demo flow runtime regression\n");
         EditorSceneManager.OpenScene("Assets/Scenes/Tavern/Tavern_Main.unity");
         DemoPolishPlayCheck.CacheLeverGrip();
@@ -45,7 +50,7 @@ static class DemoFlowPlayCheck
     static void Mode(PlayModeStateChange state)
     {
         if(!SessionState.GetBool(Key,false))return;
-        if(state==PlayModeStateChange.EnteredPlayMode){started=EditorApplication.timeSinceStartup;EditorApplication.update+=WaitForLoad;}
+        if(state==PlayModeStateChange.EnteredPlayMode){runtimeErrors.Clear();Application.logMessageReceived-=CaptureError;Application.logMessageReceived+=CaptureError;started=EditorApplication.timeSinceStartup;EditorApplication.update+=WaitForLoad;}
         if(state==PlayModeStateChange.EnteredEditMode){SessionState.SetBool(Key,false);EditorApplication.update-=WaitForLoad;}
     }
     static void WaitForLoad()
@@ -70,7 +75,7 @@ static class DemoFlowPlayCheck
         }
         Finish("PASS all demo flow checks");
     }
-    static void Finish(string result){Log(result);EditorApplication.update-=WaitForLoad;EditorApplication.delayCall+=()=>EditorApplication.isPlaying=false;}
+    static void Finish(string result){Application.logMessageReceived-=CaptureError;if(runtimeErrors.Count>0)result="FAIL runtime errors: "+string.Join("; ",runtimeErrors.Distinct());Log(result);EditorApplication.update-=WaitForLoad;EditorApplication.delayCall+=()=>EditorApplication.isPlaying=false;}
     static IEnumerator Check()
     {
         var narrative=UnityEngine.Object.FindAnyObjectByType<Day1NarrativeController>();
@@ -90,6 +95,12 @@ static class DemoFlowPlayCheck
         activation=dispenser.GetComponent<CupDispenserActivation>();
         if(activation==null)activation=(CupDispenserActivation)Get(dispenser,"activation");
         orbit=UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>();orbit.FollowTarget=player.transform;
+        if(SessionState.GetBool(Key+"UI",false))
+        {
+            SessionState.SetBool(Key+"UI",false);
+            yield return DemoPolishPlayCheck.CheckUi(player,orbit,menu,narrative);
+            yield break;
+        }
         if(SessionState.GetBool(Key+"Polish",false))
         {
             SessionState.SetBool(Key+"Polish",false);

@@ -27,7 +27,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void Update()
         {
-            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused) return;
+            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen) return;
             currentTarget = FindClosestTarget();
 
             Keyboard keyboard = Keyboard.current;
@@ -37,7 +37,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public bool TryInteract()
         {
-            if (GamePauseMenu.IsPaused) return false;
+            if (GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen) return false;
             if (GetComponentInChildren<DungeonTavern.Tavern25D.CharacterModelMotion>() is { IsFullBodyAction: true }) return false;
             currentTarget = FindClosestTarget();
             return currentTarget != null && currentTarget.Interact(hands);

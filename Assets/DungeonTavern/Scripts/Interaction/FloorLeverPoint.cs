@@ -42,7 +42,8 @@ namespace DungeonTavern.Gameplay.Interaction
             day = FindAnyObjectByType<BusinessDayController>();
             temporaryClosing = !IsOn && day != null && day.ActiveCustomers > 0;
             if (!IsOn) day?.PauseAdmissions();
-            StartCoroutine(SwitchBusiness());
+            if(temporaryClosing)day.StartCoroutine(SwitchBusiness());
+            else StartCoroutine(SwitchBusiness());
             return true;
         }
         private IEnumerator SwitchBusiness()
@@ -51,11 +52,20 @@ namespace DungeonTavern.Gameplay.Interaction
             inputRestored = false;
             player = FindAnyObjectByType<PrototypePlayerMover>();
             orbit = FindAnyObjectByType<PrototypeCameraOrbit>();
-            if (player != null) { previousMovement = player.MovementInputEnabled; player.MovementInputEnabled = false; }
+            if (player != null) { previousMovement = player.MovementInputEnabled; if(!temporaryClosing) player.MovementInputEnabled = false; }
             interaction = player == null ? null : player.GetComponent<PlayerInteractionController>();
-            if (interaction != null) { previousInteraction = interaction.enabled; interaction.enabled = false; }
+            if (interaction != null) { previousInteraction = interaction.enabled; if(!temporaryClosing) interaction.enabled = false; }
             if (temporaryClosing)
             {
+                inputRestored=true;
+                var seats=FindAnyObjectByType<SeatRegistry>();
+                Vector3 hall=Vector3.zero;int count=0;
+                if(seats!=null)foreach(var table in seats.Tables)
+                    if(table!=null&&table.isActiveAndEnabled){hall+=table.transform.position;count++;}
+                hall=count>0?hall/count:entranceDoor.transform.position;
+                Vector3 facing=Vector3.ProjectOnPlane(hall-player.transform.position,Vector3.up);
+                if(facing.sqrMagnitude>.01f)player.transform.rotation=Quaternion.LookRotation(facing);
+
                 var bubble = player.GetComponent<WorldSpeechBubble>();
                 if (bubble == null) bubble = player.gameObject.AddComponent<WorldSpeechBubble>();
                 bubble.Show("酒馆要临时关闭了，请各位先离开！", 3f);
@@ -97,6 +107,7 @@ namespace DungeonTavern.Gameplay.Interaction
         }
         protected override void OnDisable()
         {
+            if(temporaryClosing && IsSwitching) { base.OnDisable(); return; }
             StopAllCoroutines();
             RestoreControl();
             base.OnDisable();

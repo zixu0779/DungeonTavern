@@ -35,7 +35,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Update()
         {
-            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused) return;
+            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen) return;
             if (mover.MovementDirection.sqrMagnitude > 0.0001f)
             {
                 recentMoveDirection = mover.MovementDirection;

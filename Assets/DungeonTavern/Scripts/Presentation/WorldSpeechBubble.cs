@@ -12,7 +12,11 @@ namespace DungeonTavern.Tavern25D.Narrative
         private CustomerOrder order;
         private bool eating;
         private float hideAt = -1;
-        private GUIStyle style;
+        private UnityEngine.RectTransform view;
+        private string viewKey;
+        private readonly System.Collections.Generic.List<UnityEngine.UI.Image> progress = new();
+        private readonly System.Collections.Generic.List<RectTransform> icons = new();
+        private float nextRefresh;
         private Renderer[] characterRenderers;
 
         private void Awake()
@@ -47,126 +51,84 @@ namespace DungeonTavern.Tavern25D.Narrative
             hideAt = -1;
         }
 
-        private void OnGUI()
+        private void OnDisable()
         {
-            if (!IsVisible || Camera.main == null)
-                return;
-
-            // PrototypePixelOutput draws the low-resolution game texture from OnGUI.
-            // Draw bubbles above that full-screen output, but below fades/cinematics.
-            GUI.depth = -4000;
-
-            Vector3 anchor = GetHeadAnchor();
-            Vector3 viewportPoint = Camera.main.WorldToViewportPoint(anchor);
-            if (viewportPoint.z <= 0f
-                || viewportPoint.x < 0f || viewportPoint.x > 1f
-                || viewportPoint.y < 0f || viewportPoint.y > 1f)
-                return;
-
-            Rect outputRect = GetCameraOutputRect(Camera.main);
-            Vector2 screen = new(
-                outputRect.x + viewportPoint.x * outputRect.width,
-                outputRect.y + (1f - viewportPoint.y) * outputRect.height);
-
-            style ??= new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = Mathf.Max(18, Mathf.RoundToInt(Screen.height / 42f)),
-                wordWrap = true,
-                padding = new RectOffset(12, 12, 7, 7),
-                normal = { textColor = new Color(0.19f, 0.13f, 0.1f) }
-            };
-            ApplyNonInteractiveTextColor(style, style.normal.textColor);
-
-            if (order != null)
-            {
-                DrawOrder(screen);
-                return;
-            }
-
-            float width = Mathf.Clamp(style.CalcSize(new GUIContent(line)).x + 24f, 120f, 300f);
-            float height = style.CalcHeight(new GUIContent(line), width);
-            Rect rect = new(screen.x - width * 0.5f, screen.y - height - 12f, width, height);
-
-            Color old = GUI.color;
-            GUI.color = new Color(0.93f, 0.86f, 0.7f, 1f);
-            GUI.DrawTexture(rect, Texture2D.whiteTexture);
-            GUI.color = Color.white;
-            GUI.Label(rect, line, style);
-            GUI.color = old;
+            if(view!=null)Destroy(view.gameObject);
+            view=null;viewKey=null;
         }
-
-        private void DrawOrder(Vector2 screen)
+        private void LateUpdate()
         {
-            var groups = order.Portions.Where(p => !p.Consumed).GroupBy(p => p.Item).ToArray();
-            if (groups.Length == 0) return;
-            float scale = Mathf.Clamp(Screen.height / 720f, .8f, 1.5f);
-            float width = 106 * scale, row = 48 * scale;
-            Rect panel = new(screen.x - width / 2, screen.y - row * groups.Length - 12, width, row * groups.Length);
-            Color old = GUI.color;
-            GUI.color = new Color(.93f, .86f, .7f); GUI.DrawTexture(panel, Texture2D.whiteTexture); GUI.color = Color.white;
-            for (int i = 0; i < groups.Length; i++)
+            var ui=DungeonTavern.UI.TavernUI.Instance;
+            var camera=Camera.main;
+            if(ui==null||camera==null)return;
+            var head=GetHeadAnchor();var point=camera.WorldToViewportPoint(head);
+            bool visible=IsVisible&&point.z>0&&point.x>=0&&point.x<=1&&point.y>=0&&point.y<=1;
+            if(view!=null)view.gameObject.SetActive(visible);
+            if(!visible)return;
+            if(view==null)
             {
-                var group = groups[i];
-                bool active = eating && group.Any(p => p.Delivered && !p.Consumed);
-                float remaining = active ? group.Where(p => p.Delivered).Average(p => p.RemainingFraction) : 1f;
-                Rect icon = new(panel.x + 12 * scale, panel.y + i * row + 7 * scale, 28 * scale, 28 * scale);
-                var matrix = GUI.matrix;
-                if (active) GUIUtility.RotateAroundPivot(-8f + Mathf.Sin(Time.time * 3f) * 8f, icon.center);
-                DrawFoodIcon(icon, group.Key, remaining);
-                GUI.matrix = matrix;
-                GUI.Label(new Rect(panel.x + 45 * scale, panel.y + i * row, 60 * scale, row), "×" + group.Count(), style);
-                if (active)
+                view=DungeonTavern.UI.TavernUiTheme.PanelRect(name+"_Bubble",ui.BubbleLayer,DungeonTavern.UI.TavernUiTheme.Paper);
+                view.anchorMin=view.anchorMax=new Vector2(.5f,.5f);view.pivot=new Vector2(.5f,0);
+            }
+            if(Time.unscaledTime>=nextRefresh){nextRefresh=Time.unscaledTime+.1f;RefreshView();}
+            var local=ui.WorldToUI(head,camera)+new Vector2(0,18);
+            var bounds=ui.BubbleLayer.rect;
+            local.x=Mathf.Clamp(local.x,bounds.xMin+view.rect.width*.5f+12,bounds.xMax-view.rect.width*.5f-12);
+            local.y=Mathf.Min(local.y,bounds.yMax-view.rect.height-12);
+            view.anchoredPosition=local;
+        }
+        private void RefreshView()
+        {
+            var groups=order?.Portions.Where(p=>!p.Consumed).GroupBy(p=>p.Item).ToArray();
+            string key=order==null?line:string.Join("|",groups.Select(g=>$"{g.Key}:{g.Count()}"));
+            if(viewKey!=key)
+            {
+                viewKey=key;DungeonTavern.UI.TavernUiTheme.Clear(view);progress.Clear();icons.Clear();
+                var tail=DungeonTavern.UI.TavernUiTheme.Image("Tail",view,DungeonTavern.UI.TavernUiTheme.Paper);
+                DungeonTavern.UI.TavernUiTheme.Place(tail.rectTransform,-6,0,12,12,new Vector2(.5f,0));tail.rectTransform.localEulerAngles=new Vector3(0,0,45);
+                if(order==null)
                 {
-                    Fill(new Rect(panel.x + 10 * scale, panel.y + (i + 1) * row - 7 * scale, width - 20 * scale, 3 * scale), new Color(.28f,.23f,.17f));
-                    Fill(new Rect(panel.x + 10 * scale, panel.y + (i + 1) * row - 7 * scale, (width - 20 * scale) * remaining, 3 * scale), new Color(.65f,.4f,.12f));
+                    var text=DungeonTavern.UI.TavernUiTheme.Label("Speech",view,line,24,DungeonTavern.UI.TavernUiTheme.PaperInk,TextAnchor.MiddleCenter);
+                    float width=Mathf.Clamp(text.preferredWidth+42,120,360);text.rectTransform.sizeDelta=new Vector2(width-36,100);
+                    float height=Mathf.Max(58,text.preferredHeight+26);
+                    view.sizeDelta=new Vector2(width,height);DungeonTavern.UI.TavernUiTheme.Fill(text.rectTransform,14);
+                }
+                else
+                {
+                    view.sizeDelta=new Vector2(152,groups.Length*60+16);
+                    for(int i=0;i<groups.Length;i++)
+                    {
+                        var icon=DungeonTavern.UI.TavernUiTheme.Rect("FoodIcon",view);DungeonTavern.UI.TavernUiTheme.Place(icon,18,14+i*60,34,36);icons.Add(icon);
+                        DrawIcon(icon,groups[i].Key);
+                        var quantity=DungeonTavern.UI.TavernUiTheme.Label("Quantity",view,"× "+groups[i].Count(),26,DungeonTavern.UI.TavernUiTheme.PaperInk);
+                        DungeonTavern.UI.TavernUiTheme.Place(quantity.rectTransform,70,8+i*60,70,42);
+                        var track=DungeonTavern.UI.TavernUiTheme.Image("Track",view,new Color(.35f,.28f,.18f,.3f));DungeonTavern.UI.TavernUiTheme.Place(track.rectTransform,18,55+i*60,116,3);
+                        var fill=DungeonTavern.UI.TavernUiTheme.Image("Consumption",track.transform,new Color(.52f,.32f,.10f));DungeonTavern.UI.TavernUiTheme.Fill(fill.rectTransform);progress.Add(fill);
+                    }
                 }
             }
-            GUI.color = old;
-        }
-
-        // Pixel-shaped icons avoid platform-dependent emoji fonts; quantities remain ordinary text.
-        private static void DrawFoodIcon(Rect r, HeldItem item, float remaining)
-        {
-            Color outline = new(.22f,.13f,.06f), liquid = new(.78f,.43f,.09f), foam = new(1f,.96f,.78f);
-            if (item == HeldItem.TestDrink)
+            if(groups==null)return;
+            for(int i=0;i<groups.Length&&i<progress.Count;i++)
             {
-                Fill(new Rect(r.x+r.width*.65f,r.y+r.height*.25f,r.width*.3f,r.height*.48f),outline);
-                Fill(new Rect(r.x+r.width*.72f,r.y+r.height*.34f,r.width*.14f,r.height*.27f),new Color(.93f,.86f,.7f));
-                Fill(new Rect(r.x,r.y+r.height*.12f,r.width*.7f,r.height*.83f),outline);
-                Fill(new Rect(r.x+r.width*.1f,r.y+r.height*.22f,r.width*.49f,r.height*.61f),new Color(.45f,.32f,.19f));
-                Fill(new Rect(r.x+r.width*.1f,r.y+r.height*(.83f-.61f*remaining),r.width*.49f,r.height*.61f*remaining),liquid);
-                Fill(new Rect(r.x,r.y+r.height*.08f,r.width*.7f,r.height*.15f),foam);
-            }
-            else
-            {
-                Fill(new Rect(r.x,r.y+r.height*.65f,r.width,r.height*.2f),outline);
-                Fill(new Rect(r.x+r.width*.12f,r.y+r.height*.25f,r.width*.76f,r.height*.4f),item==HeldItem.MainDish?new Color(.59f,.27f,.12f):new Color(.32f,.48f,.15f));
+                bool active=eating&&groups[i].Any(p=>p.Delivered&&!p.Consumed);
+                float remaining=active?groups[i].Where(p=>p.Delivered).Average(p=>p.RemainingFraction):1;
+                progress[i].transform.parent.gameObject.SetActive(active);
+                progress[i].rectTransform.anchorMax=new Vector2(remaining,1);
+                icons[i].localEulerAngles=new Vector3(0,0,active?Mathf.Sin(Time.time*3)*6:0);
             }
         }
-        private static void Fill(Rect rect, Color color)
+        static void DrawIcon(RectTransform parent,HeldItem item)
         {
-            GUI.color = color; GUI.DrawTexture(rect, Texture2D.whiteTexture); GUI.color = Color.white;
+            void Part(string name,float x,float y,float w,float h,Color c)
+            {var image=DungeonTavern.UI.TavernUiTheme.Image(name,parent,c);DungeonTavern.UI.TavernUiTheme.Place(image.rectTransform,x,y,w,h);}
+            var ink=DungeonTavern.UI.TavernUiTheme.PaperInk;
+            if(item==HeldItem.TestDrink)
+            {
+                Part("Handle",23,9,11,19,ink);Part("HandleHole",25,12,6,12,DungeonTavern.UI.TavernUiTheme.Paper);
+                Part("Cup",0,4,25,30,ink);Part("Drink",4,8,17,22,new Color(.72f,.42f,.13f));Part("Foam",0,1,25,7,new Color(1,.97f,.85f));
+            }
+            else {Part("Plate",0,27,34,6,ink);Part("Food",5,10,25,17,item==HeldItem.MainDish?new Color(.60f,.26f,.13f):new Color(.3f,.43f,.17f));}
         }
-
-        private static void ApplyNonInteractiveTextColor(GUIStyle target, Color color)
-        {
-            target.hover.textColor = color;
-            target.hover.background = target.normal.background;
-            target.active.textColor = color;
-            target.active.background = target.normal.background;
-            target.focused.textColor = color;
-            target.focused.background = target.normal.background;
-            target.onNormal.textColor = color;
-            target.onNormal.background = target.normal.background;
-            target.onHover.textColor = color;
-            target.onHover.background = target.normal.background;
-            target.onActive.textColor = color;
-            target.onActive.background = target.normal.background;
-            target.onFocused.textColor = color;
-            target.onFocused.background = target.normal.background;
-        }
-
         private Vector3 GetHeadAnchor()
         {
             float highestPoint = float.NegativeInfinity;
@@ -187,20 +149,5 @@ namespace DungeonTavern.Tavern25D.Narrative
             return anchor;
         }
 
-        private static Rect GetCameraOutputRect(Camera camera)
-        {
-            float targetAspect = camera.targetTexture != null
-                ? camera.targetTexture.width / (float)Mathf.Max(1, camera.targetTexture.height)
-                : camera.aspect;
-            float screenAspect = Screen.width / (float)Mathf.Max(1, Screen.height);
-            if (screenAspect > targetAspect)
-            {
-                float width = Screen.height * targetAspect;
-                return new Rect((Screen.width - width) * 0.5f, 0f, width, Screen.height);
-            }
-
-            float height = Screen.width / targetAspect;
-            return new Rect(0f, (Screen.height - height) * 0.5f, Screen.width, height);
-        }
     }
 }

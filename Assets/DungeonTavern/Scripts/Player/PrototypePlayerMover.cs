@@ -45,7 +45,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Update()
         {
-            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused) return;
+            if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen) return;
             if (cameraTransform == null && Camera.main != null)
                 cameraTransform = Camera.main.transform;
 
