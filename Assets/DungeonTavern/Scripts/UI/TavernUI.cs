@@ -265,7 +265,15 @@ namespace DungeonTavern.UI
             if(dialogueKey==key)return;dialogueKey=key;Clear(dialogueContent);Clear(choicesContent);
             Canvas.ForceUpdateCanvases();float width=Mathf.Max(300,dialogueContent.rect.width);float y=0;
             string text=narrative.PresentedLine;dialogueSpeaker.text=narrative.SpeakerLabel;
-            int colon=text.IndexOf('：');if(colon>0&&colon<12)text=text.Substring(colon+1).Trim();
+            int colon=text.IndexOf('：');
+            if(colon>0&&colon<12)
+            {
+                text=text.Substring(colon+1).Trim();
+                // Presentation only: the original Ink line remains intact in FullHistory.
+                if(text.Length>=2&&text[0]=='“'&&text[^1]=='”')text=text.Substring(1,text.Length-2);
+            }
+            var speakerPlate=(RectTransform)dialogueSpeaker.transform.parent;
+            speakerPlate.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,Mathf.Max(64,dialogueSpeaker.preferredWidth+40));
             if(!string.IsNullOrWhiteSpace(text))
             {
                 var t=Label("Speech",dialogueContent,text,28);Place(t.rectTransform,0,0,width-20,100);

@@ -45,8 +45,10 @@ This document is the durable source of truth for confirmed game and world design
   HUD plays one staggered fade/slide entrance; changing floors does not replay it.
 - Dialogue shows the current line and separate choices, with model portraits.
   Full dialogue history is available from dialogue review and the pause menu.
+  Spoken text omits only its enclosing quotation marks; history retains the
+  original line. Speaker plaques fit the speaker name.
 - Lightweight guidance announces B1/F1 on entry and tracks first successful
-  exit, lever, menu, cup, filling, serving and settlement actions. A pending
+  awakening, exit, lever, menu, cup, filling, serving and settlement actions. A pending
   actionable step shows text after 20 seconds and a target/path after 75 seconds.
   Pause, dialogue, ledger and travel do not consume this delay. Completed steps
   do not repeat during the run, including actions completed before their hints.

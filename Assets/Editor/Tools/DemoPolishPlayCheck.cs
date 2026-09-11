@@ -196,6 +196,15 @@ static class DemoPolishPlayCheck
         ClickUi("Choice1");yield return new WaitForSeconds(.2f);
         Assert(narrative.CurrentChoiceCount==0&&!string.IsNullOrEmpty(narrative.CurrentLine),"Dialogue choice did not produce text");
         yield return Capture("/tmp/dialogue-speech.png");
+        var speech=ui.GetComponentsInChildren<UnityEngine.UI.Text>().First(t=>t.name=="Speech");
+        string raw=narrative.PresentedLine;int colon=raw.IndexOf('：');
+        string spoken=colon>0&&colon<12?raw.Substring(colon+1).Trim():raw;
+        if(colon>0&&colon<12&&spoken.StartsWith("“")&&spoken.EndsWith("”"))spoken=spoken.Substring(1,spoken.Length-2);
+        Assert(speech.text==spoken,"Dialogue display quote stripping failed");
+        Assert(narrative.FullHistory.Contains(raw),"Original dialogue missing from history");
+        var speaker=ui.GetComponentsInChildren<UnityEngine.UI.Text>().First(t=>t.name=="Speaker");
+        Assert(Mathf.Abs(((RectTransform)speaker.transform.parent).rect.width-Mathf.Max(64,speaker.preferredWidth+40))<1,"Speaker plaque not fitted to name");
+        Log("PASS speech presentation strips outer quotes, history preserves original and name plaque fits text");
         string heldLine=narrative.CurrentLine;ClickUi("DialogueHistory");yield return null;
         Assert(pause.HistoryVisible&&GamePauseMenu.IsPaused,"Dialogue review did not pause");narrative.ContinueDialogue();Assert(narrative.CurrentLine==heldLine,"Review advanced dialogue");
         yield return Capture("/tmp/ui-dialogue-history.png");ClickUi("HistoryBack");yield return null;Assert(!GamePauseMenu.IsPaused,"Review did not return to dialogue");

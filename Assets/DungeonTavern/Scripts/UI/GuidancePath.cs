@@ -14,7 +14,7 @@ namespace DungeonTavern.UI
                 if(NavMesh.CalculatePath(start.position,end.position,NavMesh.AllAreas,path)&&path.status==NavMeshPathStatus.PathComplete)return path.corners;
             }
             // B1 has no NPC navigation surface. A small physics grid follows floor/stair support.
-            // Bounded to 4096 visits and refreshed once per second, only while the overdue hint is visible.
+            // Bounded to 4096 visits and refreshed at most four times per second, only while the overdue hint is visible.
             const float spacing=.45f;
             var origin=from;var open=new List<Vector2Int>{Vector2Int.zero};var closed=new HashSet<Vector2Int>();
             var points=new Dictionary<Vector2Int,Vector3>{{Vector2Int.zero,from}};var cost=new Dictionary<Vector2Int,float>{{Vector2Int.zero,0}};var parent=new Dictionary<Vector2Int,Vector2Int>();

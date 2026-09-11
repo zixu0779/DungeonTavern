@@ -147,6 +147,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                 motion.BeginProne();
                 while (GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen || Keyboard.current == null || !(Keyboard.current.wKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed))
                     yield return null;
+                DungeonTavern.UI.TavernGuidance.Complete(DungeonTavern.UI.GuideStep.Awaken);
                 yield return motion.WakeAndStand();
             }
             player.MovementInputEnabled = true;
