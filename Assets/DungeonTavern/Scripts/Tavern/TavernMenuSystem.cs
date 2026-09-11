@@ -39,7 +39,20 @@ namespace DungeonTavern.Gameplay.Interaction
         public bool IsOpen => isOpen;
         public int SelectedTab { get => selectedTab; set => selectedTab = Mathf.Clamp(value,0,1); }
         public void Close() => isOpen=false;
-        public void Toggle() => isOpen = !isOpen;
+        public bool CanOpen
+        {
+            get
+            {
+                var n=FindAnyObjectByType<DungeonTavern.Tavern25D.Narrative.Day1NarrativeController>();
+                return n != null && n.ManagementUnlocked && n.State != DungeonTavern.Tavern25D.Narrative.Day1FlowState.Dialogue;
+            }
+        }
+        public void Toggle()
+        {
+            if(!isOpen && !CanOpen)return;
+            isOpen=!isOpen;
+            if(isOpen)DungeonTavern.UI.TavernGuidance.Complete(DungeonTavern.UI.GuideStep.Menu);
+        }
 
         public bool RegisterOrder(CustomerServicePoint customer, CustomerOrder order)
         {
@@ -53,6 +66,7 @@ namespace DungeonTavern.Gameplay.Interaction
         public bool TryServe(CustomerServicePoint customer, HeldItem item)
         {
             if (!orders.TryGetValue(customer, out var order) || !order.TryDeliver(item)) return false;
+            DungeonTavern.UI.TavernGuidance.Complete(DungeonTavern.UI.GuideStep.Serve);
             Changed?.Invoke();
             return true;
         }
@@ -70,6 +84,7 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             if (!orders.TryGetValue(customer, out var order) || !order.TryPay()) return false;
             Balance += order.Total;
+            DungeonTavern.UI.TavernGuidance.Complete(DungeonTavern.UI.GuideStep.Settle);
             orders.Remove(customer);
             Changed?.Invoke();
             return true;

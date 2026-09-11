@@ -32,6 +32,7 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             if (CurrentItem != HeldItem.EmptyCup) return false;
             CurrentItem = HeldItem.TestDrink;
+            DungeonTavern.UI.TavernGuidance.Complete(DungeonTavern.UI.GuideStep.Fill);
             ItemChanged?.Invoke(CurrentItem);
             return true;
         }

@@ -158,6 +158,7 @@ static class DemoPolishPlayCheck
         yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-menu.png");
         yield return new WaitForSecondsRealtime(.4f);
         Assert(Time.time==time&&player.transform.position==position&&orbit.transform.rotation==rotation&&!player.GetComponent<PlayerInteractionController>().TryInteract(),"Pause did not freeze world/input");
+        ClickUi("Option4");yield return null;Assert(pause.HistoryVisible,"History menu did not open");yield return Capture("/tmp/ui-history.png");ClickUi("HistoryBack");yield return null;
         ClickUi("Option2");Assert(pause.ControlsVisible,"Controls button did not respond");yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-controls.png");
         ClickUi("Back");yield return null;ClickUi("Option3");Assert(pause.ConfirmingQuit,"Quit confirmation did not open");yield return new WaitForSecondsRealtime(.2f);yield return Capture("/tmp/pause-quit.png");
         yield return new WaitForSecondsRealtime(.2f);ClickUi("Cancel");yield return null;ClickUi("Resume");Assert(Time.timeScale>0,"Pause did not restore time");
@@ -182,6 +183,7 @@ static class DemoPolishPlayCheck
         yield return new WaitForSeconds(.3f);yield return Capture("/tmp/ui-order-bubble.png");bubble.Hide();hands.Clear();
         narrative.enabled=true;menu.Toggle();
         var eve=(Day1EveActor)Get(narrative,"eve");
+        eve.gameObject.SetActive(true);yield return null;yield return null;
         typeof(Day1NarrativeController).GetMethod("BeginCloseDialogue",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,new object[]{eve.transform});
         var story=(Ink.Runtime.Story)Get(narrative,"story");story.ChoosePathString("day01_eve_conversation");
         typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
@@ -194,6 +196,9 @@ static class DemoPolishPlayCheck
         ClickUi("Choice1");yield return new WaitForSeconds(.2f);
         Assert(narrative.CurrentChoiceCount==0&&!string.IsNullOrEmpty(narrative.CurrentLine),"Dialogue choice did not produce text");
         yield return Capture("/tmp/dialogue-speech.png");
+        string heldLine=narrative.CurrentLine;ClickUi("DialogueHistory");yield return null;
+        Assert(pause.HistoryVisible&&GamePauseMenu.IsPaused,"Dialogue review did not pause");narrative.ContinueDialogue();Assert(narrative.CurrentLine==heldLine,"Review advanced dialogue");
+        yield return Capture("/tmp/ui-dialogue-history.png");ClickUi("HistoryBack");yield return null;Assert(!GamePauseMenu.IsPaused,"Review did not return to dialogue");
         string priorLine=narrative.CurrentLine;ClickUi("Continue");yield return null;
         Assert(narrative.CurrentLine!=priorLine||narrative.CurrentChoiceCount>0,"Continue button did not advance Ink");
         Log("PASS UI raycast clicks, tabs, Esc routing; pause freezes time/input and restores it; captured pause, controls, quit confirmation, both menu tabs and dialogue layout");

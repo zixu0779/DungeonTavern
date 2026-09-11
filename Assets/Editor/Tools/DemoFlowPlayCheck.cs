@@ -82,6 +82,7 @@ static class DemoFlowPlayCheck
         Assert(narrative.State==Day1FlowState.Awakening,"Demo startup state: "+narrative.State);
         Assert(!(bool)Get(narrative,"showingCinematic"),"Opening overlay visible");
         Log("PASS opening text skipped; prone/awakening gate retained");
+        if(SessionState.GetBool(Key+"UI",false))yield return DemoUiGuidanceCheck.Startup(player,narrative);
         narrative.StopAllCoroutines();narrative.enabled=false;
         player.GetComponentInChildren<CharacterModelMotion>().EndFullBodyAction();
         var loader=UnityEngine.Object.FindAnyObjectByType<InitialAdditiveSceneLoader>();
@@ -98,7 +99,13 @@ static class DemoFlowPlayCheck
         if(SessionState.GetBool(Key+"UI",false))
         {
             SessionState.SetBool(Key+"UI",false);
+            yield return DemoUiGuidanceCheck.Unlock(player,narrative,menu);
             yield return DemoPolishPlayCheck.CheckUi(player,orbit,menu,narrative);
+            yield return CheckCups();
+            var guidance=DungeonTavern.UI.TavernUI.Instance.GetComponent<DungeonTavern.UI.TavernGuidance>();
+            foreach(var step in new[]{DungeonTavern.UI.GuideStep.Cup,DungeonTavern.UI.GuideStep.Fill,DungeonTavern.UI.GuideStep.Serve,DungeonTavern.UI.GuideStep.Settle})
+                Assert(guidance.IsComplete(step),"Successful service did not complete hint: "+step);
+            Log("PASS real cup/fill/serve/payment actions mark guidance complete");
             yield break;
         }
         if(SessionState.GetBool(Key+"Polish",false))

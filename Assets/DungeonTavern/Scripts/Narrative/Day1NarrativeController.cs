@@ -47,6 +47,11 @@ namespace DungeonTavern.Tavern25D.Narrative
         private readonly List<Choice> choices = new();
         private readonly List<DialogueEntry> dialogueHistory = new();
         private Story story;
+        private readonly List<string> fullHistory = new();
+        public IReadOnlyList<string> FullHistory => fullHistory;
+        public bool ManagementUnlocked { get; private set; }
+        public Transform DialogueActor { get; private set; }
+        public string PresentedLine => !string.IsNullOrEmpty(CurrentLine) ? CurrentLine : dialogueHistory.Count > 0 ? dialogueHistory[^1].Text : string.Empty;
         private CustomerServicePoint bran;
         private string currentLine;
         private bool openingCinematic = true;
@@ -73,10 +78,10 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             get
             {
-                string line=CurrentLine;
+                string line=PresentedLine;
                 if(string.IsNullOrEmpty(line)&&dialogueHistory.Count>0)line=dialogueHistory[dialogueHistory.Count-1].Text;
                 int colon=line.IndexOf('：');
-                return choices.Count>0 ? "你的回应" : colon>0&&colon<12 ? line.Substring(0,colon) : "酒馆纪事";
+                return colon>0&&colon<12 ? line.Substring(0,colon) : "酒馆纪事";
             }
         }
         public void ContinueDialogue() { if(!GamePauseMenu.IsPaused&&State==Day1FlowState.Dialogue&&choices.Count==0)ShowNextContent(); }
@@ -265,6 +270,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         private void BeginCloseDialogue(Transform speaker)
         {
             dialogueHistory.Clear();
+            DialogueActor = speaker;
             closeDialogueActive = true;
             SetDialogueActive(true);
             cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
@@ -284,6 +290,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                     ShowNextContent();
                     return;
                 }
+                fullHistory.Add(currentLine);
                 if (TryPresentAsBubble(currentLine))
                 {
                     ShowNextContent();
@@ -326,7 +333,10 @@ namespace DungeonTavern.Tavern25D.Narrative
                 StartCoroutine(AwakenPlayer());
             }
             else if (gate.Contains("营业拉杆", StringComparison.Ordinal))
+            {
+                ManagementUnlocked = true;
                 State = Day1FlowState.AwaitingOpeningSwitch;
+            }
             else if (gate.Contains("完成第一日营业", StringComparison.Ordinal))
             {
                 State = Day1FlowState.ServingBran;
@@ -408,6 +418,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                     selectedText = $"你：{selectedText}";
                 }
                 dialogueHistory.Add(new DialogueEntry(selectedText, true));
+                fullHistory.Add(selectedText);
             }
             story.ChooseChoiceIndex(choices[index].index);
             ShowNextContent();

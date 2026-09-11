@@ -40,6 +40,17 @@ This document is the durable source of truth for confirmed game and world design
 - UI uses independent layered overlay canvases with a shared dark iron, copper
   and parchment theme. See `Docs/Art/UIDesign.md`; follow-up work is tracked in
   `Docs/GameDesign/NextDevelopmentPlan.md`.
+- Management HUD (coin/customer icons and values), M and the physical ledger
+  unlock after the first Eve conversation reaches the opening-lever gate. The
+  HUD plays one staggered fade/slide entrance; changing floors does not replay it.
+- Dialogue shows the current line and separate choices, with model portraits.
+  Full dialogue history is available from dialogue review and the pause menu.
+- Lightweight guidance announces B1/F1 on entry and tracks first successful
+  exit, lever, menu, cup, filling, serving and settlement actions. A pending
+  actionable step shows text after 20 seconds and a target/path after 75 seconds.
+  Pause, dialogue, ledger and travel do not consume this delay. Completed steps
+  do not repeat during the run, including actions completed before their hints.
+  No quest log, rewards or additional progression system is introduced.
 - The pause menu freezes simulation and input, offers disabled save/load entries,
   current control instructions, and an exit confirmation. The tavern menu has
   a dish-summary tab with pending quantities and customer counts and an orders

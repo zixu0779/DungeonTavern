@@ -10,12 +10,14 @@ namespace DungeonTavern.Gameplay.Interaction
         private static GamePauseMenu instance;
         private float previousTimeScale = 1;
         private bool previousAudioPause;
-        private bool controls, confirmQuit;
+        private bool controls, confirmQuit, history, historyReturnsToGame;
+        public bool HistoryVisible => history;
+        public void ShowHistory(bool returnToDialogue=false) { history=true;historyReturnsToGame=returnToDialogue;controls=confirmQuit=false; }
         public bool ControlsVisible => controls;
         public bool ConfirmingQuit => confirmQuit;
-        public void ShowControls() { controls=true;confirmQuit=false; }
-        public void ShowQuit() { confirmQuit=true;controls=false; }
-        public void Back() { controls=confirmQuit=false; }
+        public void ShowControls() { controls=true;confirmQuit=history=false; }
+        public void ShowQuit() { confirmQuit=true;controls=history=false; }
+        public void Back() { if(history&&historyReturnsToGame){SetPaused(false);return;}controls=confirmQuit=history=false; }
         public void ConfirmExit()
         {
             SetPaused(false);
@@ -42,14 +44,14 @@ namespace DungeonTavern.Gameplay.Interaction
             IsPaused = value;
             Time.timeScale = value ? 0 : previousTimeScale;
             AudioListener.pause = value || previousAudioPause;
-            controls = confirmQuit = false;
+            controls = confirmQuit = history = false;
         }
         private void Update()
         {
             if (Keyboard.current?.escapeKey.wasPressedThisFrame != true) return;
             if (!IsPaused && DungeonTavern.UI.TavernUI.WindowOpen)
             { FindAnyObjectByType<TavernMenuSystem>()?.Close(); return; }
-            if (IsPaused && (controls || confirmQuit)) { controls = confirmQuit = false; }
+            if (IsPaused && (controls || confirmQuit || history)) Back();
             else SetPaused(!IsPaused);
         }
         private void OnDestroy()

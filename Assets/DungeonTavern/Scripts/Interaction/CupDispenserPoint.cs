@@ -33,6 +33,7 @@ namespace DungeonTavern.Gameplay.Interaction
         public override bool Interact(PlayerHands hands)
         {
             if (!CupReady || hands == null || !hands.TryHold(HeldItem.EmptyCup)) return false;
+            DungeonTavern.UI.TavernGuidance.Complete(DungeonTavern.UI.GuideStep.Cup);
             playerHands = hands;
             appearance = 0;
             CupReady = false;

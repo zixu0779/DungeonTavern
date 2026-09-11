@@ -24,6 +24,7 @@ namespace DungeonTavern.Gameplay.Interaction
         private bool temporaryClosing, inputRestored;
         private BusinessDayController day;
         private PlayerInteractionController interaction;
+        public bool HasOpened => hasOpened;
         public bool IsOn { get; private set; }
         public bool IsSwitching { get; private set; }
         private bool CanSwitch => !IsSwitching && Time.timeScale > 0 && (IsOn || hasOpened
