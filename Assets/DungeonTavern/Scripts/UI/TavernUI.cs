@@ -62,6 +62,8 @@ namespace DungeonTavern.UI
             var transition=Layer("80_Transition",80,false);fade=Image("Fade",transition,Color.clear,true);Fill(fade.rectTransform);
             pauseLayer=Layer("100_Pause",100);confirmLayer=Layer("110_Confirmation",110);
             BuildHud();BuildLedger();BuildDialogue();BuildPause();
+            foreach(var view in new[]{windows.gameObject,dialogue.gameObject,pauseLayer.gameObject,confirmLayer.gameObject,
+                hintPanel,heldPanel,pauseMain,controlsPage,historyPage.gameObject})TavernFadeIn.Add(view);
             gameObject.AddComponent<TavernGuidance>().Initialize(this,hud);
             if(EventSystem.current==null)
             {
@@ -117,7 +119,7 @@ namespace DungeonTavern.UI
         void Tooltip(GameObject source,string caption,Vector2 anchor,float x,float y,float width)
         {
             var tip=PanelRect("Tooltip",source.transform);Place(tip,x,y,width,44,anchor);
-            var label=Label("Text",tip,caption,20,Cream,TextAnchor.MiddleCenter);Fill(label.rectTransform,6);tip.gameObject.SetActive(false);
+            var label=Label("Text",tip,caption,20,Cream,TextAnchor.MiddleCenter);Fill(label.rectTransform,6);TavernFadeIn.Add(tip.gameObject);tip.gameObject.SetActive(false);
             source.GetComponent<TavernPanelGraphic>().raycastTarget=true;source.AddComponent<TavernTooltip>().View=tip.gameObject;
         }
         static float RevealEase(float t){t=Mathf.Clamp01(t);return 1-Mathf.Pow(1-t,3);}
@@ -149,14 +151,15 @@ namespace DungeonTavern.UI
             var box=PanelRect("DialogueBox",dialogue,raycast:true);dialogueBox=box.gameObject;
             box.anchorMin=new Vector2(.08f,0);box.anchorMax=new Vector2(.92f,0);box.pivot=new Vector2(.5f,0);box.anchoredPosition=new Vector2(0,30);box.sizeDelta=new Vector2(0,254);
             var tab=PanelRect("SpeakerPlate",box,new Color(.25f,.20f,.13f));Place(tab,28,-23,260,54);
-            dialogueSpeaker=Label("Speaker",tab,"对话",25,Gold);Fill(dialogueSpeaker.rectTransform,14);
+            dialogueSpeaker=Label("Speaker",tab,"对话",25,Gold,TextAnchor.MiddleCenter);Fill(dialogueSpeaker.rectTransform,14);
             dialogueScroll=Scroll("Transcript",box,out dialogueContent);
             var r=(RectTransform)dialogueScroll.transform;r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=new Vector2(34,78);r.offsetMax=new Vector2(-350,-52);
             dialogueHint=Label("DialogueHint",box,"Enter / Space  继续",19,Muted);Place(dialogueHint.rectTransform,34,-55,650,32,new Vector2(0,0));
             continueButton=Button("Continue",box,"继续  ›",()=>narrative?.ContinueDialogue(),true);Place((RectTransform)continueButton.transform,-198,-65,164,48,new Vector2(1,0));
             var recall=Button("DialogueHistory",box,"回顾",()=>{pause?.SetPaused(true);pause?.ShowHistory(true);});Place((RectTransform)recall.transform,-320,-65,110,48,new Vector2(1,0));
-            var choiceScroll=Scroll("DialogueChoices",dialogue,out choicesContent);var cr=(RectTransform)choiceScroll.transform;
-            cr.anchorMin=new Vector2(.08f,.34f);cr.anchorMax=new Vector2(.65f,.82f);cr.offsetMin=cr.offsetMax=Vector2.zero;
+            choicesContent=Rect("DialogueChoices",dialogue);var cr=choicesContent;
+            cr.anchorMin=cr.anchorMax=new Vector2(.08f,0);cr.pivot=new Vector2(0,0);
+            cr.anchoredPosition=new Vector2(0,318);cr.sizeDelta=new Vector2(900,320);
             portrait=gameObject.AddComponent<TavernPortrait>();portrait.Initialize(box);
             var cinema=Image("Cinematic",dialogue,new Color(.045f,.055f,.06f),true);Fill(cinema.rectTransform);cinematic=cinema.gameObject;
             var label=Label("Chapter",cinema.transform,"地 下 酒 馆",28,Gold,TextAnchor.MiddleCenter);Place(label.rectTransform,-400,-220,800,80,new Vector2(.5f,.5f));
@@ -180,8 +183,8 @@ namespace DungeonTavern.UI
             var resume=Button("Resume",pauseMain.transform,"Esc   返回酒馆",()=>pause?.SetPaused(false),true);Place((RectTransform)resume.transform,66,704,468,54);
             controlsPage=PanelRect("Controls",pauseLayer,raycast:true).gameObject;Place((RectTransform)controlsPage.transform,-420,-395,840,790,new Vector2(.5f,.5f));
             var controlsTitle=Label("Title",controlsPage.transform,"操作说明",36,Gold);Place(controlsTitle.rectTransform,44,28,680,65);Rule(controlsPage.transform,44,111,752);
-            string[] keys={"WASD","Q / E","F","Space","M","C","Enter","1 — 5","Esc"};
-            string[] descriptions={"移动角色","切换四个观察方向","与附近人物或物品交互","朝吧台移动时翻越","打开 / 收起酒馆账簿","跟随排队客人，再按返回","继续对话，也可按 Space","选择对话选项，也可点击","暂停游戏 / 返回上一页"};
+            string[] keys={"WASD","Q / E","F","Space","M","C","Enter","鼠标","Esc"};
+            string[] descriptions={"移动角色","切换四个观察方向","与附近人物或物品交互","朝吧台移动时翻越","打开 / 收起酒馆账簿","跟随排队客人，再按返回","继续对话，也可按 Space","点击选择对话选项","暂停游戏 / 返回上一页"};
             for(int i=0;i<keys.Length;i++){Key(controlsPage.transform,keys[i],44,139+i*55,112);var t=Label("Control"+i,controlsPage.transform,descriptions[i],24);Place(t.rectTransform,181,133+i*55,610,50);}
             var back=Button("Back",controlsPage.transform,"返回",()=>pause?.Back(),true);Place((RectTransform)back.transform,44,699,752,56);
             historyPage=PanelRect("DialogueHistoryPage",pauseLayer,raycast:true);Place(historyPage,-570,-400,1140,800,new Vector2(.5f,.5f));
@@ -256,22 +259,23 @@ namespace DungeonTavern.UI
             var t=Label("HistoryText",historyContent,count==0?"还没有对话记录。":string.Join("\n\n",narrative.FullHistory),26);
             Place(t.rectTransform,0,0,width,100);float height=Mathf.Max(100,t.preferredHeight+24);t.rectTransform.sizeDelta=new Vector2(width,height);historyContent.sizeDelta=new Vector2(0,height);historyScroll.verticalNormalizedPosition=0;
         }
+        internal static string StripOuterQuotes(string text)
+        {
+            text=text.Trim();
+            return text.Length>=2&&((text[0]=='“'&&text[^1]=='”')||(text[0]=='"'&&text[^1]=='"'))?text.Substring(1,text.Length-2):text;
+        }
         void RefreshDialogue()
         {
             bool isCinema=narrative.IsCinematic;cinematic.SetActive(isCinema);dialogueBox.SetActive(!isCinema);
-            choicesContent.parent.parent.gameObject.SetActive(!isCinema&&narrative.ChoiceTexts.Count>0);
+            choicesContent.gameObject.SetActive(!isCinema&&narrative.ChoiceTexts.Count>0);
             cinematicText.text=narrative.CurrentLine;
             string key=narrative.PresentedLine+"|"+string.Join("|",narrative.ChoiceTexts);
             if(dialogueKey==key)return;dialogueKey=key;Clear(dialogueContent);Clear(choicesContent);
             Canvas.ForceUpdateCanvases();float width=Mathf.Max(300,dialogueContent.rect.width);float y=0;
             string text=narrative.PresentedLine;dialogueSpeaker.text=narrative.SpeakerLabel;
             int colon=text.IndexOf('：');
-            if(colon>0&&colon<12)
-            {
-                text=text.Substring(colon+1).Trim();
-                // Presentation only: the original Ink line remains intact in FullHistory.
-                if(text.Length>=2&&text[0]=='“'&&text[^1]=='”')text=text.Substring(1,text.Length-2);
-            }
+            if(colon>0&&colon<12)text=text.Substring(colon+1).Trim();
+            text=StripOuterQuotes(text);
             var speakerPlate=(RectTransform)dialogueSpeaker.transform.parent;
             speakerPlate.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,Mathf.Max(64,dialogueSpeaker.preferredWidth+40));
             if(!string.IsNullOrWhiteSpace(text))
@@ -280,16 +284,16 @@ namespace DungeonTavern.UI
                 float height=Mathf.Max(60,t.preferredHeight+12);t.rectTransform.sizeDelta=new Vector2(width-20,height);y=height+16;
             }
             dialogueContent.sizeDelta=new Vector2(0,y);dialogueScroll.verticalNormalizedPosition=1;
-            width=Mathf.Max(300,choicesContent.rect.width);y=0;var choices=narrative.ChoiceTexts;
+            width=Mathf.Min(900,dialogue.rect.width*.58f);y=0;var choices=narrative.ChoiceTexts;
             for(int i=0;i<choices.Count;i++)
             {
-                int index=i;var b=Button("Choice"+i,choicesContent,$"{i+1}    {choices[i]}",()=>narrative?.SelectChoice(index));
-                var label=b.GetComponentInChildren<Text>();label.alignment=TextAnchor.MiddleLeft;label.fontSize=26;
-                float height=Mathf.Max(64,Mathf.Ceil(label.cachedTextGeneratorForLayout.GetPreferredHeight(label.text,label.GetGenerationSettings(new Vector2(width-60,0)))/label.pixelsPerUnit)+22);
-                Place((RectTransform)b.transform,0,y,width-20,height);y+=height+14;
+                int index=i;var b=Button("Choice"+i,choicesContent,StripOuterQuotes(choices[i]),()=>narrative?.SelectChoice(index));
+                var label=b.GetComponentInChildren<Text>();label.alignment=TextAnchor.MiddleCenter;label.fontSize=26;
+                float height=Mathf.Max(72,Mathf.Ceil(label.cachedTextGeneratorForLayout.GetPreferredHeight(label.text,label.GetGenerationSettings(new Vector2(width-60,0)))/label.pixelsPerUnit)+22);
+                Place((RectTransform)b.transform,0,y,width-20,height);y+=height+16;TavernFadeIn.Add(b.gameObject);
             }
-            choicesContent.sizeDelta=new Vector2(0,y);
-            continueButton.gameObject.SetActive(choices.Count==0);dialogueHint.text=choices.Count==0?"Enter / Space  继续":"1 — 5  选择回应，也可点击";
+            choicesContent.sizeDelta=new Vector2(width,Mathf.Max(72,y-16));
+            continueButton.gameObject.SetActive(choices.Count==0);dialogueHint.text=choices.Count==0?"Enter / Space  继续":"点击选项回应";
             Transform actor=narrative.SpeakerLabel=="你"?interaction?.transform:narrative.DialogueActor;
             portrait.Show(actor,!isCinema);
         }

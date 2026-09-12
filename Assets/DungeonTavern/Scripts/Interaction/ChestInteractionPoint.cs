@@ -11,9 +11,14 @@ namespace DungeonTavern.Gameplay.Interaction
         private TwoStateProp chest;
         private Transform interactor;
         private float awayTime;
-        private void Awake() => chest = GetComponent<TwoStateProp>();
-        public override string GetPrompt(PlayerHands hands) => chest == null || chest.IsTransitioning
-            ? string.Empty : chest.IsOpen ? "F：关闭箱子" : "F：打开箱子";
+        private bool displayedOpen;
+        private void Awake(){chest=GetComponent<TwoStateProp>();displayedOpen=chest.IsOpen;}
+        public override string GetPrompt(PlayerHands hands)
+        {
+            if(chest==null)return string.Empty;
+            if(!chest.IsTransitioning)displayedOpen=chest.IsOpen;
+            return displayedOpen?"F：关闭箱子":"F：打开箱子";
+        }
         public override bool Interact(PlayerHands hands)
         {
             if (chest == null || chest.IsTransitioning) return false;

@@ -68,6 +68,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             if(view==null)
             {
                 view=DungeonTavern.UI.TavernUiTheme.PanelRect(name+"_Bubble",ui.BubbleLayer,DungeonTavern.UI.TavernUiTheme.Paper);
+                DungeonTavern.UI.TavernFadeIn.Add(view.gameObject);
                 view.anchorMin=view.anchorMax=new Vector2(.5f,.5f);view.pivot=new Vector2(.5f,0);
             }
             if(Time.unscaledTime>=nextRefresh){nextRefresh=Time.unscaledTime+.1f;RefreshView();}

@@ -348,51 +348,48 @@ namespace DungeonTavern.Prototypes.Rotation25D
             float preferred = leftToRight.sqrMagnitude > 0.01f
                 ? Mathf.Atan2(leftToRight.x, leftToRight.z) * Mathf.Rad2Deg - 90f
                 : transform.eulerAngles.y;
-            float[] headings = { 45f, 135f, 225f, 315f };
-            float bestYaw = preferred;
-            float bestScore = float.PositiveInfinity;
-            for (int index = 0; index < headings.Length; index++)
-            {
-                float candidate = headings[index];
-                int blockers = CountCandidateBlockers(candidate, leftCharacter, rightCharacter);
-                float score = blockers * 1000f + Mathf.Abs(Mathf.DeltaAngle(preferred, candidate));
-                if (score < bestScore)
-                {
-                    bestScore = score;
-                    bestYaw = candidate;
-                }
-            }
-            return bestYaw;
+            float opposite=Mathf.Repeat(preferred+180,360);
+            float current=transform.eulerAngles.y;
+            float near=Mathf.Abs(Mathf.DeltaAngle(current,preferred))<=Mathf.Abs(Mathf.DeltaAngle(current,opposite))?preferred:opposite;
+            float far=Mathf.Repeat(near+180,360);
+            // Only the two perpendicular views qualify. Both blocked (or neither): retain the shorter turn.
+            return CountCandidateBlockers(near,leftCharacter,rightCharacter)>0
+                &&CountCandidateBlockers(far,leftCharacter,rightCharacter)==0?far:near;
         }
 
         private int CountCandidateBlockers(float yaw, Transform leftCharacter, Transform rightCharacter)
         {
-            if (gameCamera == null)
-                return 0;
-            Vector3 midpoint = (leftCharacter.position + rightCharacter.position) * 0.5f;
-            midpoint.y = 0f;
-            Vector3 cameraLocal = transform.InverseTransformPoint(gameCamera.transform.position);
-            Vector3 cameraPosition = Matrix4x4.TRS(midpoint, Quaternion.Euler(0f, yaw, 0f), transform.lossyScale)
-                .MultiplyPoint3x4(cameraLocal);
-            return CountBlockers(cameraPosition, GetLookPoint(leftCharacter), leftCharacter, rightCharacter)
-                + CountBlockers(cameraPosition, GetLookPoint(rightCharacter), leftCharacter, rightCharacter);
+            if(gameCamera==null)return 0;
+            Vector3 midpoint=(leftCharacter.position+rightCharacter.position)*.5f;midpoint.y=0;
+            Quaternion rotation=Quaternion.Euler(0,yaw,0);
+            Vector3 cameraPosition=midpoint+rotation*Vector3.Scale(gameCamera.transform.localPosition,transform.lossyScale);
+            Vector3 forward=rotation*gameCamera.transform.localRotation*Vector3.forward;
+            return CharacterBlocked(cameraPosition,forward,leftCharacter,leftCharacter,rightCharacter)
+                +CharacterBlocked(cameraPosition,forward,rightCharacter,leftCharacter,rightCharacter);
         }
-
-        private static int CountBlockers(Vector3 origin, Vector3 target, Transform leftCharacter, Transform rightCharacter)
+        private static int CharacterBlocked(Vector3 cameraPosition,Vector3 forward,Transform character,Transform left,Transform right)
         {
-            Vector3 direction = target - origin;
-            float distance = direction.magnitude;
-            if (distance <= 0.01f)
-                return 0;
-            RaycastHit[] hits = Physics.RaycastAll(origin, direction / distance, distance, ~0, QueryTriggerInteraction.Ignore);
-            int blockers = 0;
-            for (int index = 0; index < hits.Length; index++)
+            Vector3 head=GetLookPoint(character);float height=Mathf.Max(.5f,head.y-character.position.y);int blocked=0;
+            for(int i=0;i<3;i++)
             {
-                Transform hit = hits[index].collider.transform;
-                if (!hit.IsChildOf(leftCharacter) && !hit.IsChildOf(rightCharacter))
-                    blockers++;
+                Vector3 point=head-Vector3.up*(height*i*.3f);
+                // Parallel sight lines match the actual orthographic projection.
+                float distance=Vector3.Dot(point-cameraPosition,forward);
+                if(distance<=0)continue;
+                Vector3 origin=point-forward*distance;
+                foreach(var hit in Physics.RaycastAll(origin,forward,distance,~0,QueryTriggerInteraction.Ignore))
+                {
+                    var collider=hit.collider;var t=collider.transform;
+                    if(t.IsChildOf(left)||t.IsChildOf(right)||collider.GetComponentInParent<CharacterController>()
+                        ||collider.GetComponentInParent<UnityEngine.AI.NavMeshAgent>())continue;
+                    if(collider.attachedRigidbody&&!collider.attachedRigidbody.isKinematic)continue;
+                    if(collider.bounds.size.y<.6f)continue;
+                    var renderer=t.GetComponent<Renderer>()??t.GetComponentInParent<Renderer>()??t.GetComponentInChildren<Renderer>();
+                    if(renderer==null||!renderer.enabled)continue;
+                    blocked++;break;
+                }
             }
-            return blockers;
+            return blocked>=2?1:0;
         }
 
         private void UpdateDialogueOccluders()

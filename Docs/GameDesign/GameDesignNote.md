@@ -31,12 +31,16 @@ This document is the durable source of truth for confirmed game and world design
 - Seated customers occupy the actual stool surface. Navigation approach points
   are separate from sitting poses; seated bodies leave the approach aisle clear.
 - Tableware disappears automatically after settlement; manual tableware collection is not part of the current demo.
-- The owner may close at any point during service. With guests present, an
+- The owner may close at any point during service. With guests present or future arrivals still scheduled, an
   exclamation bubble announces temporary closure; the owner turns toward the hall
   and remains free to move and interact. All guests start leaving
   together with randomized symbol complaints, and the entrance closes only after
   they leave. This uses the player view, cancels unpaid orders without revenue,
   and preserves unspawned waves for reopening; it does not complete Bran's story.
+  Turning toward the hall is eased and yields to movement input. Normal closure
+  requires an empty tavern, no further arrivals, and Eve's closing-time reminder;
+  it does not trigger the owner's announcement. Eve gives that reminder only
+  after service and the Day 1 story gate are complete, while the tavern is open.
 - UI uses independent layered overlay canvases with a shared dark iron, copper
   and parchment theme. See `Docs/Art/UIDesign.md`; follow-up work is tracked in
   `Docs/GameDesign/NextDevelopmentPlan.md`.
@@ -46,10 +50,20 @@ This document is the durable source of truth for confirmed game and world design
 - Dialogue shows the current line and separate choices, with model portraits.
   Full dialogue history is available from dialogue review and the pause menu.
   Spoken text omits only its enclosing quotation marks; history retains the
-  original line. Speaker plaques fit the speaker name.
+  original line. Speaker plaques fit and center the speaker name. Dialogue choices are centered,
+  unnumbered and mouse-only; their history retains original text. Choices are
+  fixed-position, without scrolling. Multiple choices accompany the preceding
+  line; a lone choice becomes the protagonist's action/speech in the dialogue
+  box and continues without a choice button.
+- Dialogue camera yaw is perpendicular to the character pair, selecting between
+  two opposing headings. Prefer the smaller rotation unless that view is blocked
+  by fixed scenery and the opposite is clear. If both are blocked, use the smaller
+  rotation. Orthographic sight lines exclude triggers and other characters.
 - Lightweight guidance announces B1/F1 on entry and tracks first successful
   awakening, exit, lever, menu, cup, filling, serving and settlement actions. A pending
-  actionable step shows text after 20 seconds and a target/path after 75 seconds.
+  actionable step offers a guide button beside the pause menu after 20 seconds;
+  after 75 seconds it glows softly. Clicking toggles the card and route together.
+  Unfinished F1 guidance persists in B1, targeting the return stairs until F1 resumes.
   Pause, dialogue, ledger and travel do not consume this delay. Completed steps
   do not repeat during the run, including actions completed before their hints.
   No quest log, rewards or additional progression system is introduced.
@@ -64,12 +78,12 @@ This document is the durable source of truth for confirmed game and world design
   and consumed. Seat reservation and physical arrival are separate.
 - Day 1 uses the placed FloorLever model as the open/close control, replacing
   the hanging-rope placeholder. Eve walks to the adjacent guide position before
-  presenting its bubble. Normal opening and empty-tavern closing temporarily lock player control,
+  presenting its bubble. Normal opening and end-of-day closing temporarily lock player control,
   pans the camera to the public entrance, opens/closes the door, plays the full
   corresponding sign animation, then pans back and restores control. Closing stops
   new admissions immediately; opening starts service after the mechanism finishes.
   W/A/S/D or Q/E during the entrance shot returns the camera to the player early;
-  the door and sign finish their sequence. Occupied-tavern closing follows the
+  the door and sign finish their sequence. Closure before the closing-time reminder follows the
   temporary-closure flow above without an entrance shot.
 - The cup dispenser tracks missing cups for current drink orders rather than new-order
   events. Delivered cups cover delivered portions until settlement; a held empty/full
@@ -77,7 +91,8 @@ This document is the durable source of truth for confirmed game and world design
   each collected cup is replaced by another floating cup. It powers down only when
   the deficit reaches zero. Food-only orders do not request cups.
   The barrel fills only a held empty cup. Chests offer an action matching their
-  current state and close automatically when the player moves away.
+  current state and close automatically when the player moves away. During lid
+  animation the prompt retains its previous open/close action until motion ends.
 - The tavern treats all creatures equally, including adventurers and native dungeon creatures.
 - There is one shared public entrance, one shared bar, and mixed seating. Public areas are never segregated by species or faction.
 - The owner created the tavern and its peace rules after a long first-floor conflict between adventurers and dungeon residents. All conventional routes to deeper floors are sealed; the sole controlled route is beneath the tavern. The route is open to any species that meets its peace conditions, although deep residents use it most often.

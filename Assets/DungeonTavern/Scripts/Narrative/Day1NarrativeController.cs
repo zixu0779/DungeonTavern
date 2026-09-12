@@ -47,6 +47,9 @@ namespace DungeonTavern.Tavern25D.Narrative
         private readonly List<Choice> choices = new();
         private readonly List<DialogueEntry> dialogueHistory = new();
         private Story story;
+        private Story choicePreview;
+        private string pendingChoiceState;
+        private bool singleChoicePresented;
         private readonly List<string> fullHistory = new();
         public IReadOnlyList<string> FullHistory => fullHistory;
         public bool ManagementUnlocked { get; private set; }
@@ -65,15 +68,16 @@ namespace DungeonTavern.Tavern25D.Narrative
         public bool CanOpenTavern => State == Day1FlowState.AwaitingOpeningSwitch
             && eve != null
             && eve.IsOpeningGuidanceReady;
+        public bool ClosingTimeAnnounced { get; private set; }
         public bool CanCloseTavern => State == Day1FlowState.AwaitingClosingSwitch
             && businessDay != null
-            && (businessDay.DemoService || businessDay.State == BusinessDayState.Completed);
-        public int CurrentChoiceCount => choices.Count;
+            && businessDay.State == BusinessDayState.Completed && ClosingTimeAnnounced;
+        public int CurrentChoiceCount => choices.Count>1?choices.Count:0;
         public bool IsCinematic => showingCinematic;
         public string CurrentLine => currentLine ?? string.Empty;
         public string DisplayText => dialogueHistory.Count > 0
             ? string.Join("\n\n", dialogueHistory.ConvertAll(entry=>entry.Text)) : CurrentLine;
-        public IReadOnlyList<string> ChoiceTexts => choices.ConvertAll(choice=>choice.text);
+        public IReadOnlyList<string> ChoiceTexts => choices.Count>1?choices.ConvertAll(choice=>choice.text):Array.Empty<string>();
         public string SpeakerLabel
         {
             get
@@ -84,7 +88,13 @@ namespace DungeonTavern.Tavern25D.Narrative
                 return colon>0&&colon<12 ? line.Substring(0,colon) : "酒馆纪事";
             }
         }
-        public void ContinueDialogue() { if(!GamePauseMenu.IsPaused&&State==Day1FlowState.Dialogue&&choices.Count==0)ShowNextContent(); }
+        public void ContinueDialogue()
+        {
+            if(GamePauseMenu.IsPaused||State!=Day1FlowState.Dialogue||choices.Count>1)return;
+            if(choices.Count==1)
+            {if(singleChoicePresented)Choose(0);else PresentSingleChoice();}
+            else ShowNextContent();
+        }
         public void SelectChoice(int index) { if(!GamePauseMenu.IsPaused&&State==Day1FlowState.Dialogue&&index>=0&&index<choices.Count)Choose(index); }
 
         public void Configure(
@@ -170,6 +180,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         private void Update()
         {
             if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused) return;
+            TryAnnounceClosingTime();
             if (State == Day1FlowState.AwaitingStorageReturn
                 && storageArrival.gameObject.activeInHierarchy
                 && (player.transform.position - storageArrival.position).sqrMagnitude
@@ -187,10 +198,9 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (keyboard == null)
                 return;
 
-            if (choices.Count == 0 && (keyboard.enterKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame))
-                ShowNextContent();
-            else if (choices.Count > 0)
-                TryKeyboardChoice(keyboard);
+            if (keyboard.enterKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame)
+                ContinueDialogue();
+
         }
 
         public bool TryUseBusinessSwitch()
@@ -225,11 +235,17 @@ namespace DungeonTavern.Tavern25D.Narrative
             return true;
         }
 
-        private void OnBusinessDayCompleted()
+        private void OnBusinessDayCompleted() => TryAnnounceClosingTime();
+        private void TryAnnounceClosingTime()
         {
-            if (string.IsNullOrEmpty(pendingClosingBubble)) return;
+            if(ClosingTimeAnnounced||string.IsNullOrEmpty(pendingClosingBubble)
+                ||State!=Day1FlowState.AwaitingClosingSwitch||businessDay.State!=BusinessDayState.Completed
+                ||!eve.gameObject.activeInHierarchy||GamePauseMenu.IsPaused
+                ||DungeonTavern.UI.TavernUI.WindowOpen||DungeonTavern.UI.TavernUI.Instance.TransitionVisible)return;
+            var lever=FindAnyObjectByType<FloorLeverPoint>();
+            if(lever==null||!lever.IsOn||lever.IsSwitching)return;
             eve.ShowBubble(pendingClosingBubble);
-            pendingClosingBubble = null;
+            pendingClosingBubble=null;ClosingTimeAnnounced=true;
         }
 
         private void OnCustomerSpawned(CustomerServicePoint customer)
@@ -280,7 +296,7 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void ShowNextContent()
         {
-            choices.Clear();
+            choices.Clear();pendingChoiceState=null;singleChoicePresented=false;
             currentLine = string.Empty;
 
             if (story.canContinue)
@@ -302,6 +318,7 @@ namespace DungeonTavern.Tavern25D.Narrative
                     dialogueHistory.Add(new DialogueEntry(currentLine, IsPlayerLine(currentLine)));
                 State = Day1FlowState.Dialogue;
                 SetDialogueActive(true);
+                PrepareUpcomingChoices();
                 return;
             }
 
@@ -311,9 +328,34 @@ namespace DungeonTavern.Tavern25D.Narrative
 
             if (choices.Count > 0)
             {
-                State = Day1FlowState.Dialogue;
-                SetDialogueActive(true);
+                State = Day1FlowState.Dialogue;SetDialogueActive(true);
+                if(choices.Count==1)PresentSingleChoice();
             }
+        }
+
+        private void PrepareUpcomingChoices()
+        {
+            // Preview in an independent Ink state: inspect choices without executing branches or changing live variables.
+            choicePreview??=new Story(chapterOne.storyJson);
+            choicePreview.state.LoadJson(story.state.ToJson());
+            while(choicePreview.canContinue)
+                if(!string.IsNullOrWhiteSpace(choicePreview.Continue()))return;
+            var upcoming=choicePreview.currentChoices;
+            if(upcoming.Count==0||(upcoming.Count==1&&upcoming[0].text.Contains("Inky 预览",StringComparison.Ordinal)))return;
+            pendingChoiceState=choicePreview.state.ToJson();choices.AddRange(upcoming);
+        }
+        private void PresentSingleChoice()
+        {
+            singleChoicePresented=true;
+            currentLine=PlayerChoiceLine(choices[0].text);
+            fullHistory.Add(currentLine);
+            if(closeDialogueActive)dialogueHistory.Add(new DialogueEntry(currentLine,true));
+            showingCinematic=false;State=Day1FlowState.Dialogue;SetDialogueActive(true);
+        }
+        private static string PlayerChoiceLine(string text)
+        {
+            text=text.Trim();
+            return text.StartsWith("你：",StringComparison.Ordinal)||text.StartsWith("你:",StringComparison.Ordinal)?text:$"你：{text}";
         }
 
         private bool TryEnterExternalGate()
@@ -372,10 +414,9 @@ namespace DungeonTavern.Tavern25D.Narrative
                     bran.GetComponent<WorldSpeechBubble>()?.Show(bubbleText);
                 return true;
             }
-            if (line.Contains("今天差不多了，就到这里吧", StringComparison.Ordinal))
+            if (line.Contains("今天差不多了，就到这里吧", StringComparison.Ordinal)||line.Contains("最后一位客人也走了", StringComparison.Ordinal))
             {
-                if (businessDay.DemoService || businessDay.State == BusinessDayState.Completed) eve.ShowBubble(ExtractBubbleText(line));
-                else pendingClosingBubble = ExtractBubbleText(line);
+                pendingClosingBubble = "最后一位客人也走了，今晚不会再有客人来了。到歇业的时候了，去拉下拉杆关门吧。";
                 return true;
             }
             return false;
@@ -410,28 +451,14 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             if (index < 0 || index >= choices.Count)
                 return;
-            if (closeDialogueActive)
+            if (closeDialogueActive&&!singleChoicePresented)
             {
-                string selectedText = choices[index].text.Trim();
-                if (!selectedText.StartsWith("你：", StringComparison.Ordinal)
-                    && !selectedText.StartsWith("你:", StringComparison.Ordinal))
-                {
-                    selectedText = $"你：{selectedText}";
-                }
-                dialogueHistory.Add(new DialogueEntry(selectedText, true));
-                fullHistory.Add(selectedText);
+                string selectedText=PlayerChoiceLine(choices[index].text);
+                dialogueHistory.Add(new DialogueEntry(selectedText,true));fullHistory.Add(selectedText);
             }
+            if(pendingChoiceState!=null)story.state.LoadJson(pendingChoiceState);
             story.ChooseChoiceIndex(choices[index].index);
             ShowNextContent();
-        }
-
-        private void TryKeyboardChoice(Keyboard keyboard)
-        {
-            if (choices.Count > 0 && keyboard.digit1Key.wasPressedThisFrame) Choose(0);
-            else if (choices.Count > 1 && keyboard.digit2Key.wasPressedThisFrame) Choose(1);
-            else if (choices.Count > 2 && keyboard.digit3Key.wasPressedThisFrame) Choose(2);
-            else if (choices.Count > 3 && keyboard.digit4Key.wasPressedThisFrame) Choose(3);
-            else if (choices.Count > 4 && keyboard.digit5Key.wasPressedThisFrame) Choose(4);
         }
 
         private void SetDialogueActive(bool active)

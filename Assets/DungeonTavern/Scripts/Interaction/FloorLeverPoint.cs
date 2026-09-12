@@ -41,7 +41,8 @@ namespace DungeonTavern.Gameplay.Interaction
             }
             IsOn = !IsOn;
             day = FindAnyObjectByType<BusinessDayController>();
-            temporaryClosing = !IsOn && day != null && day.ActiveCustomers > 0;
+            temporaryClosing = !IsOn && day != null && !(day.State==BusinessDayState.Completed
+                &&(narrative==null||!narrative.isActiveAndEnabled||narrative.CanCloseTavern));
             if (!IsOn) day?.PauseAdmissions();
             if(temporaryClosing)day.StartCoroutine(SwitchBusiness());
             else StartCoroutine(SwitchBusiness());
@@ -65,12 +66,21 @@ namespace DungeonTavern.Gameplay.Interaction
                     if(table!=null&&table.isActiveAndEnabled){hall+=table.transform.position;count++;}
                 hall=count>0?hall/count:entranceDoor.transform.position;
                 Vector3 facing=Vector3.ProjectOnPlane(hall-player.transform.position,Vector3.up);
-                if(facing.sqrMagnitude>.01f)player.transform.rotation=Quaternion.LookRotation(facing);
+                Quaternion startFacing=player.transform.rotation;
+                Quaternion hallFacing=facing.sqrMagnitude>.01f?Quaternion.LookRotation(facing):startFacing;
 
                 var bubble = player.GetComponent<WorldSpeechBubble>();
                 if (bubble == null) bubble = player.gameObject.AddComponent<WorldSpeechBubble>();
                 bubble.Show("酒馆要临时关闭了，请各位先离开！", 3f);
-                yield return new WaitForSeconds(1f);
+                for(float age=0;age<.45f;age+=Time.deltaTime)
+                {
+                    // Movement keeps priority; do not fight the player's own turning input.
+                    if(player.MovementDirection.sqrMagnitude>.001f)break;
+                    player.transform.rotation=Quaternion.Slerp(startFacing,hallFacing,Mathf.SmoothStep(0,1,age/.45f));
+                    yield return null;
+                }
+                if(player.MovementDirection.sqrMagnitude<.001f)player.transform.rotation=hallFacing;
+                yield return new WaitForSeconds(.6f);
                 day.DismissCustomers();
                 while (day.ActiveCustomers > 0) yield return null;
             }

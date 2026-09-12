@@ -230,10 +230,19 @@ static class DemoFlowPlayCheck
                 story.ChoosePathString("day01_close");
                 typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
                 for(int i=0;i<100&&narrative.State==Day1FlowState.Dialogue;i++)narrative.AdvanceForValidation();
-                Assert(narrative.CanCloseTavern,"Closing Ink gate not ready");
+                Assert(!narrative.CanCloseTavern,"Normal closure available while future waves remain");
+                day.StopAcceptingCustomers();yield return null;yield return null;
+                Assert(narrative.ClosingTimeAnnounced&&narrative.CanCloseTavern,"Closing Ink gate/reminder not ready");
+                Assert(eve.GetComponent<WorldSpeechBubble>().CurrentText.Contains("不会再有客人"),"Closing-time reminder text wrong");
+                player.GetComponent<WorldSpeechBubble>()?.Hide();
             }
             Assert(lever.Interact(hands),"Lever interaction rejected");
-            if(!opening)Assert(UnityEngine.Object.FindAnyObjectByType<BusinessDayController>().AdmissionsPaused,"Admissions continued during closing shot");
+            if(!opening)
+            {
+                Assert(UnityEngine.Object.FindAnyObjectByType<BusinessDayController>().AdmissionsPaused,"Admissions continued during closing shot");
+                Assert(!(bool)Get(lever,"temporaryClosing"),"End-of-day close classified as temporary");
+                Assert(player.GetComponent<WorldSpeechBubble>()?.IsVisible!=true,"Normal closure shouted");
+            }
             Assert(lever.IsSwitching&&!player.MovementInputEnabled&&!lever.Interact(hands),"Switch not locked");
             yield return new WaitForSeconds(.65f);
             Assert(door.IsOpen!=opening&&sign.IsOpen!=opening,"Door/sign changed before camera arrived");
@@ -265,6 +274,15 @@ static class DemoFlowPlayCheck
         while(UnityEngine.Object.FindObjectsByType<CustomerServicePoint>().Length<2&&Time.time<deadline)yield return null;
         var customers=UnityEngine.Object.FindObjectsByType<CustomerServicePoint>();
         Assert(customers.Length>=2,"Travel check needs multiple customers");
+        var guide=DungeonTavern.UI.TavernUI.Instance.GetComponent<DungeonTavern.UI.TavernGuidance>();
+        var narrative=UnityEngine.Object.FindAnyObjectByType<Day1NarrativeController>();bool narrativeEnabled=narrative.enabled;narrative.enabled=false;
+        var completed=(HashSet<DungeonTavern.UI.GuideStep>)Get(guide,"completed");completed.Remove(DungeonTavern.UI.GuideStep.Menu);
+        menu.RegisterOrder(customers[0],customers[0].Order);
+        ((float[])Get(guide,"elapsed"))[(int)DungeonTavern.UI.GuideStep.Menu]=80;
+        yield return new WaitForSeconds(.5f);
+        Assert(guide.CurrentStep==DungeonTavern.UI.GuideStep.Menu&&guide.ButtonVisible,"F1 guide setup missing");
+        guide.ToggleGuide();yield return null;
+        Assert(guide.TextVisible&&guide.RouteVisible,"F1 guide did not open");
         var seats=customers.Select(c=>c.AssignedSeat).ToArray();
         var orders=customers.Select(c=>c.Order).ToArray();
         var portal=UnityEngine.Object.FindObjectsByType<AdditiveScenePortal>().First(p=>(string)Get(p,"sceneToLoad")=="SealRoom_B1");
@@ -275,6 +293,9 @@ static class DemoFlowPlayCheck
         Assert(SceneManager.GetSceneByName("SealRoom_B1").isLoaded&&customers.All(c=>!c.gameObject.activeInHierarchy),"Tavern customers leaked into B1");
         Assert(customers.All(c=>c.gameObject.scene.name=="Tavern_Main"&&c.transform.parent!=null),"Customers have wrong scene ownership");
         Assert(UnityEngine.Object.FindObjectsByType<CustomerServicePoint>().Length==0,"Active customer remains in B1");
+        Assert(guide.CurrentStep==DungeonTavern.UI.GuideStep.Menu&&guide.TextVisible&&guide.RouteVisible,"F1 guidance lost in B1");
+        Assert(((Transform)Get(guide,"target")).GetComponent<AdditiveScenePortal>()!=null,"B1 guide must route to stairs");
+        ScreenCapture.CaptureScreenshot("/tmp/ui-cross-floor-guidance.png");
         var positions=customers.Select(c=>c.transform.position).ToArray();
         var states=customers.Select(c=>c.State).ToArray();
         float elapsed=(float)Get(day,"elapsedTime");int waiting=day.WaitingCustomers;
@@ -291,6 +312,10 @@ static class DemoFlowPlayCheck
         Assert(!SceneManager.GetSceneByName("SealRoom_B1").isLoaded&&customers.All(c=>c.gameObject.activeInHierarchy),"Customers did not resume after return");
         for(int i=0;i<customers.Length;i++)Assert(customers[i].Order==orders[i]&&customers[i].AssignedSeat==seats[i],"Travel lost order or seat reservation");
         Assert(UnityEngine.Object.FindObjectsByType<PrototypePlayerMover>().Length==1,"Duplicate player after travel");
+        Assert(guide.CurrentStep==DungeonTavern.UI.GuideStep.Menu&&guide.IsExpanded&&guide.TextVisible,"F1 guide did not resume on return");
+        Assert(((Transform)Get(guide,"target")).GetComponent<TavernMenuPoint>()!=null,"Guide target not restored to menu");
+        narrative.enabled=narrativeEnabled;
+        Log("PASS pending guide/button expansion preserved through real F1/B1/F1 travel, portal proxy and original target restored");
         Log($"PASS real F1/B1 portal round trip with {customers.Length} customers: hidden/frozen in B1, no arrivals for 7 seconds, same orders/seats restored in F1");
     }
 

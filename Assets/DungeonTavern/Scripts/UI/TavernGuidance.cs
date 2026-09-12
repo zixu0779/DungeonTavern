@@ -22,7 +22,14 @@ namespace DungeonTavern.UI
         [SerializeField,Min(1)] float textDelay=20,routeDelay=75;
         RectTransform notice, card, marker; Text areaTitle, areaSubtitle, title, body, keyLabel, keyAction;
         RectTransform keycap; GuidanceVisualGraphic visual;
-        CanvasGroup areaAlpha, cardAlpha;
+        CanvasGroup areaAlpha;
+        Button guideButton; TavernPanelGraphic guideFace; TavernGlowGraphic guideGlow;
+        readonly bool[] expanded=new bool[8];
+        GuideStep? tavernStep;string tavernHeading;
+        public bool ButtonVisible=>guideButton.gameObject.activeInHierarchy;
+        public bool IsExpanded=>current.HasValue&&expanded[(int)current.Value];
+        public bool IsUrgent=>current.HasValue&&elapsed[(int)current.Value]>=routeDelay;
+        public void ToggleGuide(){if(ButtonVisible&&current.HasValue)expanded[(int)current.Value]=!expanded[(int)current.Value];}
         TavernUI ui; PrototypePlayerMover player; Day1NarrativeController narrative; TavernMenuSystem menu;
         FloorLeverPoint lever; Camera camera; PlayerHands hands; Transform target;
         Vector3 lastRouteFrom=new(float.PositiveInfinity,0,0),lastRouteTo;
@@ -39,18 +46,28 @@ namespace DungeonTavern.UI
             notice=PanelRect("AreaAnnouncement",layer);Place(notice,-235,132,470,100,new Vector2(.5f,1));areaAlpha=notice.gameObject.AddComponent<CanvasGroup>();areaAlpha.blocksRaycasts=false;
             areaTitle=Label("AreaName",notice,"",32,Gold,TextAnchor.MiddleCenter);Place(areaTitle.rectTransform,24,8,422,48);
             areaSubtitle=Label("Floor",notice,"",20,Muted,TextAnchor.MiddleCenter);Place(areaSubtitle.rectTransform,24,59,422,29);
-            card=Image("FirstTimeGuidance",layer,new Color(.075f,.086f,.092f,.9f)).rectTransform;Place(card,-285,28,570,154,new Vector2(.5f,1));
-            var accent=Image("GuidanceAccent",card,Gold);Place(accent.rectTransform,0,12,3,130);cardAlpha=card.gameObject.AddComponent<CanvasGroup>();cardAlpha.blocksRaycasts=false;
-            title=Label("Title",card,"",26,Gold);Place(title.rectTransform,24,8,522,40);
-            body=Label("Instruction",card,"",23);Place(body.rectTransform,24,51,522,40);
-            var use=Label("KeyPrefix",card,"使用",21,Muted);Place(use.rectTransform,24,104,46,34);
-            keycap=PanelRect("GuidanceKey",card);Place(keycap,80,104,122,34);
-            keyLabel=Label("Key",keycap,"W A S D",21,Cream,TextAnchor.MiddleCenter);Fill(keyLabel.rectTransform,1);
-            keyAction=Label("KeyAction",card,"移动",21,Muted);Place(keyAction.rectTransform,214,104,320,34);
+            var glowRect=Rect("GuidanceGlow",layer);Place(glowRect,99,17,84,84);guideGlow=glowRect.gameObject.AddComponent<TavernGlowGraphic>();guideGlow.raycastTarget=false;TavernFadeIn.Add(guideGlow.gameObject);
+            guideButton=Button("GuidanceButton",layer,"",ToggleGuide);Place((RectTransform)guideButton.transform,110,28,62,62);
+            guideFace=guideButton.GetComponent<TavernPanelGraphic>();
+            TavernIcon.Add(guideButton.transform,TavernGlyph.Book,15,15,32);
+            var tip=Label("Hint",guideButton.transform,"?",14,Gold);Place(tip.rectTransform,43,3,14,20);
+            var tooltip=PanelRect("Tooltip",guideButton.transform);Place(tooltip,0,74,220,44);
+            var tooltipLabel=Label("Text",tooltip,"引导 · 点击展开 / 收起",18,Cream,TextAnchor.MiddleCenter);Fill(tooltipLabel.rectTransform,6);
+            TavernFadeIn.Add(tooltip.gameObject);tooltip.gameObject.SetActive(false);guideButton.gameObject.AddComponent<TavernTooltip>().View=tooltip.gameObject;
+            TavernFadeIn.Add(guideButton.gameObject);guideButton.gameObject.SetActive(false);guideGlow.gameObject.SetActive(false);
+            card=Image("FirstTimeGuidance",layer,new Color(.075f,.086f,.092f,.9f)).rectTransform;Place(card,110,104,500,142);
+            var accent=Image("GuidanceAccent",card,Gold);Place(accent.rectTransform,0,10,3,122);TavernFadeIn.Add(card.gameObject);card.GetComponent<CanvasGroup>().blocksRaycasts=false;
+            title=Label("Title",card,"",26,Gold);Place(title.rectTransform,20,7,460,38);
+            body=Label("Instruction",card,"",23);Place(body.rectTransform,20,48,460,38);
+            var use=Label("KeyPrefix",card,"使用",17,Muted);Place(use.rectTransform,20,99,34,28);
+            keycap=PanelRect("GuidanceKey",card);Place(keycap,60,99,100,28);
+            keyLabel=Label("Key",keycap,"W A S D",17,Cream,TextAnchor.MiddleCenter);Fill(keyLabel.rectTransform,1);
+            keyAction=Label("KeyAction",card,"移动",17,Muted);Place(keyAction.rectTransform,166,99,328,28);
             marker=Rect("GuidanceTarget",ui.BubbleLayer);Fill(marker);
-            visual=marker.gameObject.AddComponent<GuidanceVisualGraphic>();visual.raycastTarget=false;
+            visual=marker.gameObject.AddComponent<GuidanceVisualGraphic>();visual.raycastTarget=false;TavernFadeIn.Add(marker.gameObject);
             PlayerAreaTransition.Started+=OnTravelStarted;PlayerAreaTransition.Completed+=OnTravelCompleted;
             notice.gameObject.SetActive(false);card.gameObject.SetActive(false);marker.gameObject.SetActive(false);
+            guideButton.transform.SetAsLastSibling();
         }
         void OnDestroy()
         {
@@ -99,10 +116,14 @@ namespace DungeonTavern.UI
             bool actionable=!blocked&&current.HasValue&&!completed.Contains(current.Value)&&(player.MovementInputEnabled||current==GuideStep.Awaken);
             if(actionable)elapsed[(int)current.Value]+=Time.deltaTime;
             float age=current.HasValue?elapsed[(int)current.Value]:0;
-            card.gameObject.SetActive(actionable&&age>=textDelay&&areaAge>=3.4f);
-            cardAlpha.alpha=Ease((age-textDelay)/.3f);
-            bool showRoute=actionable&&current!=GuideStep.Awaken&&age>=routeDelay&&target&&camera;
-            marker.gameObject.SetActive(showRoute);
+            bool available=actionable&&age>=textDelay;
+            TavernFadeIn.Show(guideButton.gameObject,available);
+            var border=IsExpanded?Gold:Copper;if(guideFace.Border!=border){guideFace.Border=border;guideFace.SetVerticesDirty();}
+            TavernFadeIn.Show(guideGlow.gameObject,available&&IsUrgent);
+            guideGlow.color=new Color(1f,.72f,.3f,.45f+.25f*(.5f+.5f*Mathf.Sin(Time.unscaledTime*1.5f)));
+            TavernFadeIn.Show(card.gameObject,available&&IsExpanded);
+            bool showRoute=available&&IsExpanded&&current!=GuideStep.Awaken&&target&&camera;
+            TavernFadeIn.Show(marker.gameObject,showRoute);
             if(showRoute)
             {
                 if(Time.unscaledTime>=nextRoute&&((player.transform.position-lastRouteFrom).sqrMagnitude>.01f||(target.position-lastRouteTo).sqrMagnitude>.01f||route.Length==0))
@@ -120,6 +141,11 @@ namespace DungeonTavern.UI
             {Set(GuideStep.Awaken,player.transform,"站起身来","撑起身体，看看周围的情况。","W A S D","起身");return;}
             if(inBasement)
             {
+                if(narrative.ManagementUnlocked&&tavernStep.HasValue&&!completed.Contains(tavernStep.Value))
+                {
+                    Set(tavernStep.Value,FindAnyObjectByType<AdditiveScenePortal>()?.transform,tavernHeading,
+                        "沿石阶返回酒馆，继续"+tavernHeading+"。","W A S D","返回酒馆");return;
+                }
                 if(narrative.State==Day1FlowState.AwaitingStorageReturn)
                     Set(GuideStep.Exit,FindAnyObjectByType<AdditiveScenePortal>()?.transform,"寻找出口","沿石阶返回楼上的酒馆。","W A S D","移动");
                 return;
@@ -146,9 +172,11 @@ namespace DungeonTavern.UI
         {
             if(completed.Contains(step)||!destination)return;
             if(target!=destination){route=System.Array.Empty<Vector3>();nextRoute=0;}
+            if(!inBasement&&step!=GuideStep.Awaken)
+            {tavernStep=step;tavernHeading=heading;}
             current=step;target=destination;title.text=heading;body.text=instruction;
-            keyLabel.text=key;keyAction.text=action;float width=key.Length>1?122:38;
-            keycap.sizeDelta=new Vector2(width,34);keyAction.rectTransform.anchoredPosition=new Vector2(92+width,-104);
+            keyLabel.text=key;keyAction.text=action;float width=key.Length>1?100:28;
+            keycap.sizeDelta=new Vector2(width,28);keyAction.rectTransform.anchoredPosition=new Vector2(66+width,-99);
         }
         void LateUpdate()
         {

@@ -28,16 +28,30 @@ static class DemoUiGuidanceCheck
         n.StopAllCoroutines();
         Set(guide,"textDelay",((float[])Get(guide,"elapsed"))[(int)GuideStep.Awaken]+2f);
         yield return new WaitForSeconds(3.5f);
-        Assert(guide.TextVisible,"Delayed awakening hint did not appear");
+        Assert(guide.ButtonVisible&&!guide.TextVisible&&!guide.IsUrgent,"First timer should offer a quiet, collapsed guide button");
+        var button=ui.GetComponentsInChildren<Button>().First(b=>b.name=="GuidanceButton");
+        var hover=button.GetComponent<TavernTooltip>();Assert(hover!=null,"Guide tooltip missing");
+        hover.OnPointerEnter(null);yield return new WaitForSeconds(.25f);Assert(hover.View.activeInHierarchy,"Guide tooltip did not appear");
+        ScreenCapture.CaptureScreenshot("/tmp/ui-guide-tooltip.png");yield return new WaitForEndOfFrame();hover.OnPointerExit(null);
+        DemoPolishPlayCheck.ClickUi("GuidanceButton");yield return new WaitForSeconds(.25f);
+        Assert(guide.TextVisible,"Guide button did not expand card");
         Assert(ui.GetComponentsInChildren<Text>().Any(t=>t.name=="Key"&&t.text=="W A S D"),"WASD keycap missing");
         ScreenCapture.CaptureScreenshot("/tmp/ui-awakening-delayed.png");yield return new WaitForEndOfFrame();
-        TavernGuidance.Complete(GuideStep.Awaken);yield return null;
-        Assert(!guide.TextVisible,"Awakening hint remained after accepted input");
+        TavernGuidance.Complete(GuideStep.Awaken);yield return new WaitForSeconds(.6f);
+        Assert(!guide.TextVisible,"Awakening hint remained after accepted input: "+((RectTransform)Get(guide,"card")).GetComponent<CanvasGroup>().alpha);
         State(n,Day1FlowState.AwaitingStorageReturn);player.MovementInputEnabled=true;
         player.GetComponentInChildren<CharacterModelMotion>().EndFullBodyAction();
         Set(guide,"textDelay",.5f);Set(guide,"routeDelay",1f);
         yield return new WaitForSeconds(4);
-        Assert(guide.CurrentStep==GuideStep.Exit&&guide.TextVisible&&guide.RouteVisible,"B1 delayed exit guidance not visible");
+        Assert(guide.CurrentStep==GuideStep.Exit&&guide.ButtonVisible&&guide.IsUrgent&&!guide.TextVisible&&!guide.RouteVisible,"Second timer should glow, not auto-open");
+        DemoPolishPlayCheck.ClickUi("GuidanceButton");yield return new WaitForSeconds(.3f);
+        Assert(guide.TextVisible&&guide.RouteVisible,"Click did not show route and card together");
+        DemoPolishPlayCheck.ClickUi("GuidanceButton");yield return new WaitForSeconds(.08f);
+        float fading=((RectTransform)Get(guide,"card")).GetComponent<CanvasGroup>().alpha;
+        Assert(fading>0&&fading<1,"Guide card has no fade-out");
+        yield return new WaitForSeconds(.25f);
+        Assert(!guide.TextVisible&&!guide.RouteVisible&&guide.ButtonVisible,"Toggle should hide guidance but keep its button");
+        DemoPolishPlayCheck.ClickUi("GuidanceButton");yield return new WaitForSeconds(.3f);
         var route=(Vector3[])Get(guide,"route");Log("B1 path corners="+route.Length);Assert(route.Length>1,"B1 exit route missing");
         ScreenCapture.CaptureScreenshot("/tmp/ui-b1-route.png");yield return new WaitForEndOfFrame();
         var visual=ui.GetComponentInChildren<GuidanceVisualGraphic>();
@@ -66,7 +80,7 @@ static class DemoUiGuidanceCheck
         }
         var clock=(float[])Get(guide,"elapsed");float before=clock[(int)GuideStep.Exit];var pause=UnityEngine.Object.FindAnyObjectByType<GamePauseMenu>();pause.SetPaused(true);
         yield return new WaitForSecondsRealtime(.3f);Assert(clock[(int)GuideStep.Exit]==before,"Guidance timer advances while paused");pause.SetPaused(false);
-        TavernGuidance.Complete(GuideStep.Exit);yield return new WaitForSeconds(.5f);Assert(!guide.TextVisible&&!guide.RouteVisible,"Completed guidance remains visible");
+        TavernGuidance.Complete(GuideStep.Exit);yield return new WaitForSeconds(.5f);Assert(!guide.TextVisible&&!guide.RouteVisible&&!guide.ButtonVisible,"Completed guidance remains visible");
         Set(guide,"textDelay",20f);Set(guide,"routeDelay",75f);
         Log("PASS delayed awakening/keycap, continuous route follows 4cm movement, rapid banner replacement; B1 region banner, management gate, delayed text/route, paused timer and completed hint suppression");
     }

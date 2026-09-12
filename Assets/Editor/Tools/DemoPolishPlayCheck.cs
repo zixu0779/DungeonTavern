@@ -46,7 +46,8 @@ static class DemoPolishPlayCheck
             bool open=pass==0;prop.SetOpen(open);float previous=lid.localEulerAngles.x;float stop=Time.time+1.2f;
             while(Time.time<stop)
             {
-                yield return null;float current=lid.localEulerAngles.x;float delta=Mathf.DeltaAngle(previous,current);
+                yield return null;Assert(!string.IsNullOrEmpty(chest.GetPrompt(hands)),"Chest prompt disappears during animation");float current=lid.localEulerAngles.x;float delta=Mathf.DeltaAngle(previous,current);
+                Assert(chest.GetPrompt(hands)==(prop.IsTransitioning?(open?"F：打开箱子":"F：关闭箱子"):(open?"F：关闭箱子":"F：打开箱子")),"Chest prompt changed before animation completed");
                 Assert(open?delta<.3f:delta>-.3f,"Chest animation reverses/repeats mid-transition");previous=current;
             }
             Assert(!prop.IsTransitioning&&Mathf.Abs(Mathf.DeltaAngle(previous,open?-25:0))<.2f,"Chest final pose wrong");
@@ -104,11 +105,14 @@ static class DemoPolishPlayCheck
         yield return new WaitForSeconds(2);
         int balance=menu.Balance;int waiting=day.WaitingCustomers;
         var departureFrames=new List<int>();foreach(var c in customers)c.StateChanged+=state=>{if(state==CustomerOrderState.Leaving)departureFrames.Add(Time.frameCount);};
+        Quaternion beforeTurn=player.transform.rotation;
         Assert(lever.Interact(hands)&&!orbit.EntranceFraming,"Temporary close should keep player view");
+        Assert(Quaternion.Angle(beforeTurn,player.transform.rotation)<.1f,"Closure turn snapped immediately");
         Assert(player.GetComponent<WorldSpeechBubble>().CurrentText.EndsWith("！"),"Missing owner announcement");
         Assert(player.MovementInputEnabled&&player.GetComponent<PlayerInteractionController>().enabled,"Temporary closure locks player input");
         var tables=UnityEngine.Object.FindAnyObjectByType<SeatRegistry>().Tables.Where(t=>t!=null&&t.isActiveAndEnabled).ToArray();
         var center=tables.Aggregate(Vector3.zero,(sum,t)=>sum+t.transform.position)/tables.Length;
+        yield return new WaitForSeconds(.5f);
         Assert(Vector3.Dot(player.transform.forward,Vector3.ProjectOnPlane(center-player.transform.position,Vector3.up).normalized)>.98f,"Closure announcement does not face the hall");
         Vector3 beforeMove=player.transform.position;
         var moveKeys=InputSystem.AddDevice<Keyboard>();InputSystem.QueueStateEvent(moveKeys,new KeyboardState(Key.W));
@@ -127,7 +131,24 @@ static class DemoPolishPlayCheck
         Log("PASS temporary closure: owner announcement, simultaneous departures, randomized complaints, no camera cut, no unpaid revenue, faces hall and movement remains available");
         yield return CheckUi(player,orbit,menu,narrative);
     }
-    static void ClickUi(string name)
+    static void CheckDialogueCamera(PrototypeCameraOrbit orbit)
+    {
+        var choose=typeof(PrototypeCameraOrbit).GetMethod("ChooseDialogueYaw",BindingFlags.Instance|BindingFlags.NonPublic);
+        var left=GameObject.CreatePrimitive(PrimitiveType.Capsule);var right=GameObject.CreatePrimitive(PrimitiveType.Capsule);
+        left.transform.position=new Vector3(500,0,500);right.transform.position=new Vector3(502,0,500);
+        var near=GameObject.CreatePrimitive(PrimitiveType.Cube);near.transform.position=new Vector3(501,5,496);near.transform.localScale=new Vector3(10,20,.5f);
+        var far=GameObject.CreatePrimitive(PrimitiveType.Cube);far.transform.position=new Vector3(501,5,504);far.transform.localScale=near.transform.localScale;
+        Quaternion original=orbit.transform.rotation;orbit.transform.rotation=Quaternion.Euler(0,40,0);
+        float Pick()=>(float)choose.Invoke(orbit,new object[]{left.transform,right.transform});
+        near.SetActive(false);far.SetActive(false);Physics.SyncTransforms();
+        Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),0))<.01f,"Unblocked camera did not choose nearer perpendicular");
+        near.SetActive(true);Physics.SyncTransforms();Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),180))<.01f,"Blocked nearer view did not choose opposite");
+        far.SetActive(true);Physics.SyncTransforms();Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),0))<.01f,"Both blocked should choose shorter rotation");
+        orbit.transform.rotation=original;
+        foreach(var go in new[]{left,right,near,far}){go.SetActive(false);UnityEngine.Object.Destroy(go);}
+        Log("PASS two perpendicular dialogue angles: clear/one blocked/both blocked; shortest-turn fallback");
+    }
+    public static void ClickUi(string name)
     {
         var button=DungeonTavern.UI.TavernUI.Instance.GetComponentsInChildren<UnityEngine.UI.Button>().Single(b=>b.name==name);
         var events=UnityEngine.EventSystems.EventSystem.current;
@@ -183,18 +204,44 @@ static class DemoPolishPlayCheck
         yield return new WaitForSeconds(.3f);yield return Capture("/tmp/ui-order-bubble.png");bubble.Hide();hands.Clear();
         narrative.enabled=true;menu.Toggle();
         var eve=(Day1EveActor)Get(narrative,"eve");
-        eve.gameObject.SetActive(true);yield return null;yield return null;
+        eve.gameObject.SetActive(true);bool eveEnabled=eve.enabled;eve.enabled=false;eve.GetComponent<NpcNavigator>().Stop(true);
+        yield return null;yield return null;
         typeof(Day1NarrativeController).GetMethod("BeginCloseDialogue",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,new object[]{eve.transform});
-        var story=(Ink.Runtime.Story)Get(narrative,"story");story.ChoosePathString("day01_eve_conversation");
+        CheckDialogueCamera(orbit);
+        var story=(Ink.Runtime.Story)Get(narrative,"story");story.ChoosePathString("day01_eve_arrives");
+        typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
+        narrative.ContinueDialogue();narrative.ContinueDialogue();
+        Assert(narrative.CurrentLine.Contains("这是你的钥匙")&&narrative.CurrentChoiceCount==0,"Single choice leaked into choice UI");
+        narrative.ContinueDialogue();
+        Assert(narrative.CurrentLine=="你：接过钥匙。"&&narrative.ChoiceTexts.Count==0,"Single action was not presented in dialogue");
+        int actionCount=narrative.FullHistory.Count(t=>t=="你：接过钥匙。");
+        narrative.ContinueDialogue();
+        Assert(narrative.CurrentLine.Contains("你以前只交代过一句")&&narrative.CurrentChoiceCount>1,"Choices did not accompany preceding speech");
+        Assert(narrative.FullHistory.Count(t=>t=="你：接过钥匙。")==actionCount,"Single action recorded twice");
+        story.ChoosePathString("day01_eve_conversation");
         typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
         Assert(!menu.IsOpen,"Dialogue did not dismiss ledger");
-        yield return new WaitForSeconds(.6f);yield return Capture("/tmp/dialogue-speech.png");
+        yield return new WaitForSeconds(.8f);yield return Capture("/tmp/dialogue-speech.png");
+        Vector3 pair=eve.transform.position-player.transform.position;pair.y=0;
+        Vector3 cameraForward=Vector3.ProjectOnPlane(Camera.main.transform.forward,Vector3.up).normalized;
+        Assert(Mathf.Abs(Vector3.Dot(pair.normalized,cameraForward))<.025f,"Live dialogue view not perpendicular to the stopped pair");
+        Log("PASS settled live dialogue camera places the pair on a horizontal screen axis");
         if(narrative.CurrentChoiceCount==0) { ClickUi("Continue");yield return null; }
         for(int i=0;i<20&&narrative.CurrentChoiceCount==0;i++)narrative.ContinueDialogue();
         yield return new WaitForSeconds(.3f);yield return Capture("/tmp/dialogue-bottom.png");
         Assert(narrative.CurrentChoiceCount>0,"Expected conversation choices");
+        int choiceCount=narrative.CurrentChoiceCount;string choiceLine=narrative.CurrentLine;
+        var choiceKeyboard=InputSystem.AddDevice<Keyboard>();InputSystem.QueueStateEvent(choiceKeyboard,new KeyboardState(Key.Digit1));
+        yield return null;yield return null;InputSystem.QueueStateEvent(choiceKeyboard,new KeyboardState());yield return null;InputSystem.RemoveDevice(choiceKeyboard);
+        Assert(narrative.CurrentChoiceCount==choiceCount&&narrative.CurrentLine==choiceLine,"Digit key still chooses dialogue");
+        foreach(var b in ui.GetComponentsInChildren<UnityEngine.UI.Button>().Where(b=>b.name.StartsWith("Choice")))
+        {
+            var label=b.GetComponentInChildren<UnityEngine.UI.Text>();
+            Assert(label.alignment==TextAnchor.MiddleCenter&&!label.text.StartsWith("“")&&!char.IsDigit(label.text[0]),"Choice presentation not centered/stripped");
+        }
         ClickUi("Choice1");yield return new WaitForSeconds(.2f);
-        Assert(narrative.CurrentChoiceCount==0&&!string.IsNullOrEmpty(narrative.CurrentLine),"Dialogue choice did not produce text");
+        Assert(!string.IsNullOrEmpty(narrative.CurrentLine),"Dialogue choice did not produce text");
+        Assert(ui.transform.GetComponentsInChildren<UnityEngine.UI.ScrollRect>().All(s=>s.name!="DialogueChoices"),"Choices still use a scroll view");
         yield return Capture("/tmp/dialogue-speech.png");
         var speech=ui.GetComponentsInChildren<UnityEngine.UI.Text>().First(t=>t.name=="Speech");
         string raw=narrative.PresentedLine;int colon=raw.IndexOf('：');
@@ -208,8 +255,9 @@ static class DemoPolishPlayCheck
         string heldLine=narrative.CurrentLine;ClickUi("DialogueHistory");yield return null;
         Assert(pause.HistoryVisible&&GamePauseMenu.IsPaused,"Dialogue review did not pause");narrative.ContinueDialogue();Assert(narrative.CurrentLine==heldLine,"Review advanced dialogue");
         yield return Capture("/tmp/ui-dialogue-history.png");ClickUi("HistoryBack");yield return null;Assert(!GamePauseMenu.IsPaused,"Review did not return to dialogue");
-        string priorLine=narrative.CurrentLine;ClickUi("Continue");yield return null;
+        string priorLine=narrative.CurrentLine;if(narrative.CurrentChoiceCount==0)ClickUi("Continue");else ClickUi("Choice"+(narrative.CurrentChoiceCount-1));yield return null;
         Assert(narrative.CurrentLine!=priorLine||narrative.CurrentChoiceCount>0,"Continue button did not advance Ink");
+        eve.enabled=eveEnabled;
         Log("PASS UI raycast clicks, tabs, Esc routing; pause freezes time/input and restores it; captured pause, controls, quit confirmation, both menu tabs and dialogue layout");
     }
 }
