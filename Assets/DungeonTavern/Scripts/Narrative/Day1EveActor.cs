@@ -46,7 +46,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         {
             PrototypePlayerMover playerMover = FindAnyObjectByType<PrototypePlayerMover>();
             float playerSpeed = playerMover == null ? 3.25f : playerMover.MoveSpeed;
-            moveSpeed = Mathf.Max(6.5f, playerSpeed * 1.25f);
+            moveSpeed = playerSpeed * 1.08f;
             bubble = GetComponent<WorldSpeechBubble>();
             approachSpeech = GetComponent<NpcApproachSpeech>();
             if (approachSpeech == null)

@@ -39,6 +39,8 @@ namespace DungeonTavern.Gameplay.Interaction
         public CustomerSeatingKind SeatingKind { get; private set; }
         public int PartyId { get; private set; }
         public SeatPoint AssignedSeat => assignedSeat;
+        public Vector3 ServicePosition => modelMotion ? modelMotion.BodyPosition : transform.position+Vector3.up;
+
         public void ConfigureSeating(CustomerSeatingKind kind, int partyId = 0)
         {
             if (isInitialized) throw new InvalidOperationException("Configure seating before initialization.");
@@ -57,7 +59,7 @@ namespace DungeonTavern.Gameplay.Interaction
             modelMotion = GetComponentInChildren<CharacterModelMotion>(true);
             PrototypePlayerMover player = FindAnyObjectByType<PrototypePlayerMover>();
             float playerSpeed = player == null ? 3.25f : player.MoveSpeed;
-            moveSpeed = Mathf.Max(6.5f, playerSpeed * 1.25f);
+            moveSpeed = playerSpeed;
             bubble = GetComponent<WorldSpeechBubble>();
             if (bubble == null)
                 bubble = gameObject.AddComponent<WorldSpeechBubble>();
@@ -92,7 +94,11 @@ namespace DungeonTavern.Gameplay.Interaction
                 else queueArrived = arrived = MoveTowards(destination);
             }
             else if (State == CustomerOrderState.MovingToSeat)
-                arrived = MoveTowards(assignedSeat.Position);
+            {
+                var offset=Vector3.ProjectOnPlane(assignedSeat.Position-transform.position,Vector3.up);
+                arrived=offset.sqrMagnitude<=arrivalTolerance*arrivalTolerance;
+                if(arrived)navigator.Stop();else arrived=MoveTowards(assignedSeat.Position);
+            }
             else if (State == CustomerOrderState.Leaving && (modelMotion == null || !modelMotion.IsStandingUp))
             {
                 assignedSeat?.Release(this);
@@ -113,9 +119,9 @@ namespace DungeonTavern.Gameplay.Interaction
             }
             if (assignedSeat?.Table == null || State is not (CustomerOrderState.WaitingForFood
                 or CustomerOrderState.Eating or CustomerOrderState.AwaitingSettlement)) return;
-            var facing = assignedSeat.Table.transform.position - transform.position;
+            var facing = assignedSeat.Facing;
             facing.y = 0;
-            if (facing.sqrMagnitude > .001f) transform.rotation = Quaternion.LookRotation(facing);
+            if (facing.sqrMagnitude > .001f) transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(facing),180f*Time.deltaTime);
         }
 
         // Movement reports arrival; this method owns the service flow, independent of pathfinding.
@@ -152,11 +158,13 @@ namespace DungeonTavern.Gameplay.Interaction
                 case CustomerOrderState.MovingToSeat:
                     if (arrived)
                     {
-                        var facing = assignedSeat.Table != null
-                            ? assignedSeat.Table.transform.position - transform.position
-                            : assignedSeat.transform.forward;
-                        facing.y = 0f;
-                        if (facing.sqrMagnitude > .001f) transform.rotation = Quaternion.LookRotation(facing);
+                        var facing=assignedSeat.Facing;
+                        if(facing.sqrMagnitude>.001f)
+                        {
+                            var desired=Quaternion.LookRotation(facing);
+                            transform.rotation=Quaternion.RotateTowards(transform.rotation,desired,180f*seconds);
+                            if(Quaternion.Angle(transform.rotation,desired)>2f)break;
+                        }
                         ChangeState(CustomerOrderState.WaitingForFood);
                     }
                     break;

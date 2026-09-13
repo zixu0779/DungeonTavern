@@ -13,7 +13,7 @@
 | 主角饮用 | Drink 动作通过右臂 IK 与杯子倾斜曲线完成；提供 PlayDrink 调用，不改变库存，没有新增喝酒按键 |
 | 主角坐下、坐姿保持、起身 | 三段动画接入 Animator；提供 SetSeated 调用，尚无主角坐椅子的 F 交互 |
 | 伊芙/顾客待机、行走 | 伊芙 Rogue、顾客 Barbarian；主角 Mage，旧主角本地保留 |
-| 顾客坐下、坐姿保持、起身 | 接真实座位等待/用餐/结账状态；坐姿对齐凳面，站立位置保持站立；起身后释放座位并恢复寻路 |
+| 顾客坐下、坐姿保持、起身 | 接真实座位等待/用餐/结账状态；坐姿对齐凳面，跨楼层隐藏再显示时保留 Animator 姿态；站立位置保持站立；起身后释放座位并恢复寻路 |
 | 台阶移动 | 复用行走；没有专门上下楼梯和脚底贴合 |
 | 接酒、递杯、送菜 | 功能已有；人物对齐龙头、递放及端盘动作缺失 |
 | 拉杆、箱子、菜单 | 机关/界面功能已有；人物拨杆、掀盖、查看动作缺失 |
@@ -86,3 +86,5 @@ Play Mode 等主角加载后，运行 `Tools > Characters > Check Drink and Seat
 6. 每组动作在四个相机方位、空手/持物、靠墙/桌边、楼梯上验证。相机旋转不应改变人物真实朝向或把杯子甩到另一侧。
 
 推荐首个可验收闭环：待机/走路 → 启动取杯器 → 取杯 → 持杯行走 → 接酒 → 送酒 → 空手。
+
+顾客坐定预览：在 Project 中展开 `Assets/DungeonTavern/Art/Characters/Placeholder/Barbarian/Barbarian.fbx`，选中 `SeatedIdle`，在 Inspector 底部动画预览窗口播放。运行时也可选中顾客的 `CharacterModel`，打开 Animator 窗口观察 `SitDown → SeatedIdle → StandUp`。`Tools > Demo Flow > Test Customer Presentation` 自动检查坐姿循环、停用恢复、全部座位朝向与交互遮挡；检查会重新启动 Play Mode，结束后退出。

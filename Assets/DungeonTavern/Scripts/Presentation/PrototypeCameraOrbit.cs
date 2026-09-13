@@ -40,7 +40,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
         private float preDialogueTargetYaw;
         private float dialogueTargetYaw;
         private DialogueOcclusionFader occlusionFader;
-        private float nextOcclusionCheck;
+        private float dialogueAge, entranceDuration=1.3f;
+        private const float DialogueDuration=1.3f;
         private bool followingCustomer;
         private CustomerServicePoint followedCustomer;
         private Transform returnTarget;
@@ -150,6 +151,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             preEntranceRotation = Quaternion.Euler(0, targetYaw, 0);
             preEntranceYaw = targetYaw;
             preEntranceSize = gameCamera.orthographicSize;
+            entranceDuration=seconds;
             entranceFraming = true;
             EntranceWasCanceled = false;
             entranceReturning = false;
@@ -157,14 +159,14 @@ namespace DungeonTavern.Prototypes.Rotation25D
             entrancePanning = true;
             yield return PanTo(view.position, view.rotation, size, seconds);
             entrancePanning = false;
-            if (EntranceWasCanceled) yield return ReturnFromEntrance(.35f);
+            if (EntranceWasCanceled) yield return ReturnFromEntrance(entranceDuration);
         }
 
         public void RequestEntranceReturn()
         {
             if (!entranceFraming || EntranceWasCanceled || entranceReturning) return;
             EntranceWasCanceled = true;
-            if (!entrancePanning) StartCoroutine(ReturnFromEntrance(.35f));
+            if (!entrancePanning) StartCoroutine(ReturnFromEntrance(entranceDuration));
         }
 
         public IEnumerator ReturnFromEntrance(float seconds)
@@ -201,11 +203,13 @@ namespace DungeonTavern.Prototypes.Rotation25D
             for (float elapsed = 0; elapsed < seconds; elapsed += Time.deltaTime)
             {
                 if (EntranceWasCanceled && !entranceReturning) yield break;
+                if(entranceReturning&&followTarget)position=new Vector3(followTarget.position.x,0,followTarget.position.z);
                 float t = Mathf.SmoothStep(0, 1, elapsed / seconds);
                 transform.SetPositionAndRotation(Vector3.Lerp(startPosition, position, t), Quaternion.Slerp(startRotation, rotation, t));
                 gameCamera.orthographicSize = Mathf.Lerp(startSize, size, t);
                 yield return null;
             }
+            if(entranceReturning&&followTarget)position=new Vector3(followTarget.position.x,0,followTarget.position.z);
             transform.SetPositionAndRotation(position, rotation);
             gameCamera.orthographicSize = size;
         }
@@ -295,7 +299,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
             dialogueLeft = leftCharacter;
             dialogueRight = rightCharacter;
             dialogueTargetYaw = ChooseDialogueYaw(leftCharacter, rightCharacter);
-            nextOcclusionCheck = 0f;
+            dialogueAge=0;
+            occlusionFader?.RestoreAll();
             dialogueFraming = true;
         }
 
@@ -324,21 +329,11 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
             Vector3 midpoint = (dialogueLeft.position + dialogueRight.position) * 0.5f;
             midpoint.y = 0f;
-            transform.position = Vector3.Lerp(transform.position, midpoint, 1f - Mathf.Exp(-8f * Time.unscaledDeltaTime));
-
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                Quaternion.Euler(0f, dialogueTargetYaw, 0f),
-                1f - Mathf.Exp(-8f * Time.unscaledDeltaTime));
-
-            if (gameCamera != null)
-                gameCamera.orthographicSize = Mathf.Lerp(gameCamera.orthographicSize, 3.25f, 1f - Mathf.Exp(-7f * Time.unscaledDeltaTime));
-
-            if (Time.unscaledTime >= nextOcclusionCheck)
-            {
-                nextOcclusionCheck = Time.unscaledTime + 0.12f;
-                UpdateDialogueOccluders();
-            }
+            dialogueAge+=Time.deltaTime;
+            float t=Mathf.SmoothStep(0,1,Mathf.Clamp01(dialogueAge/DialogueDuration));
+            transform.position=Vector3.Lerp(preDialoguePosition,midpoint,t);
+            transform.rotation=Quaternion.Slerp(preDialogueRotation,Quaternion.Euler(0,dialogueTargetYaw,0),t);
+            if(gameCamera)gameCamera.orthographicSize=Mathf.Lerp(preDialogueSize,3.25f,t);
         }
 
         private float ChooseDialogueYaw(Transform leftCharacter, Transform rightCharacter)
@@ -390,34 +385,6 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 }
             }
             return blocked>=2?1:0;
-        }
-
-        private void UpdateDialogueOccluders()
-        {
-            if (gameCamera == null || dialogueLeft == null || dialogueRight == null)
-                return;
-            var renderers = new HashSet<Renderer>();
-            CollectOccluders(gameCamera.transform.position, GetLookPoint(dialogueLeft), renderers);
-            CollectOccluders(gameCamera.transform.position, GetLookPoint(dialogueRight), renderers);
-            occlusionFader?.SetOccluders(renderers);
-        }
-
-        private void CollectOccluders(Vector3 origin, Vector3 target, HashSet<Renderer> results)
-        {
-            Vector3 direction = target - origin;
-            float distance = direction.magnitude;
-            if (distance <= 0.01f)
-                return;
-            RaycastHit[] hits = Physics.RaycastAll(origin, direction / distance, distance, ~0, QueryTriggerInteraction.Ignore);
-            for (int index = 0; index < hits.Length; index++)
-            {
-                Transform hit = hits[index].collider.transform;
-                if (hit.IsChildOf(dialogueLeft) || hit.IsChildOf(dialogueRight) || hit.IsChildOf(transform))
-                    continue;
-                Renderer renderer = hit.GetComponentInParent<Renderer>() ?? hit.GetComponentInChildren<Renderer>();
-                if (renderer != null)
-                    results.Add(renderer);
-            }
         }
 
         private static Vector3 GetLookPoint(Transform character)

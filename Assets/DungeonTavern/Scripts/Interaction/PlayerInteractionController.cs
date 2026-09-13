@@ -46,29 +46,43 @@ namespace DungeonTavern.Gameplay.Interaction
         private InteractionPoint FindClosestTarget()
         {
             Vector3 origin = interactionOrigin == null ? transform.position : interactionOrigin.position;
-            float maximumDistanceSquared = interactionRadius * interactionRadius;
-            float closestDistanceSquared = maximumDistanceSquared;
-            InteractionPoint closest = null;
-
-            IReadOnlyList<InteractionPoint> points = InteractionPoint.Instances;
-            for (int index = 0; index < points.Count; index++)
+            float bestScore=float.PositiveInfinity;
+            InteractionPoint closest=null;
+            foreach(var point in InteractionPoint.Instances)
             {
-                InteractionPoint point = points[index];
-                if (point == null || !point.isActiveAndEnabled || string.IsNullOrEmpty(point.GetPrompt(hands)))
-                    continue;
-
-                Vector3 offset = point.transform.position - origin;
-                if (Mathf.Abs(offset.y) > 2f) continue;
-                offset.y = 0f;
-                float distanceSquared = offset.sqrMagnitude;
-                if (distanceSquared > closestDistanceSquared)
-                    continue;
-
-                closestDistanceSquared = distanceSquared;
-                closest = point;
+                if(!point||!point.isActiveAndEnabled||string.IsNullOrEmpty(point.GetPrompt(hands)))continue;
+                var customer=point as CustomerServicePoint;
+                Vector3 destination=customer?customer.ServicePosition:point.transform.position+Vector3.up;
+                var offset=destination-(origin+Vector3.up);
+                if(Mathf.Abs(offset.y)>2f)continue;
+                offset.y=0;
+                float distance=offset.magnitude;
+                float radius=customer?2.4f:interactionRadius;
+                if(distance>radius)continue;
+                float facing=distance>.01f?Vector3.Dot(transform.forward,offset/distance):1;
+                if(customer&&distance>.85f&&facing<-.25f)continue;
+                if(IsObstructed(origin+Vector3.up*1.2f,destination,point))continue;
+                float score=distance*(1+.7f*(1-facing));
+                if(point==currentTarget)score*=.9f;
+                if(score>=bestScore)continue;
+                bestScore=score;closest=point;
             }
 
             return closest;
+        }
+
+        private bool IsObstructed(Vector3 from,Vector3 to,InteractionPoint target)
+        {
+            var delta=to-from;
+            foreach(var hit in Physics.RaycastAll(from,delta.normalized,delta.magnitude,~0,QueryTriggerInteraction.Ignore))
+            {
+                var collider=hit.collider;
+                if(collider.transform.IsChildOf(transform)||collider.transform.IsChildOf(target.transform)||target.transform.IsChildOf(collider.transform))continue;
+                if(collider.GetComponentInParent<CustomerServicePoint>()||collider.GetComponentInParent<DungeonTavern.Tavern25D.NpcNavigator>())continue;
+                if(target is CustomerServicePoint guest&&guest.AssignedSeat?.Table is {} table&&collider.transform.IsChildOf(table.transform))continue;
+                return true;
+            }
+            return false;
         }
 
         private void OnDrawGizmosSelected()

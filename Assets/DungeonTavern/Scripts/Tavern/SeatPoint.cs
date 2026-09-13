@@ -21,13 +21,14 @@ namespace DungeonTavern.Gameplay.Interaction
             get
             {
                 if (chair == null) return Position;
-                var renderers = chairRenderers ??= chair.GetComponentsInChildren<Renderer>();
+                var renderers = chairRenderers ??= chair.GetComponentsInChildren<Renderer>(true);
                 if (renderers.Length == 0) return chair.position;
                 var bounds = renderers[0].bounds;
                 foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
                 return new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
             }
         }
+        public Vector3 Facing => table?table.FacingFrom(SittingSurface):transform.forward;
         public bool HasPersonalSpace
         {
             get { foreach (var seat in neighbours) if (seat != null && !seat.IsAvailable) return false; return true; }
@@ -45,7 +46,7 @@ namespace DungeonTavern.Gameplay.Interaction
         {
             Gizmos.color = standing ? Color.yellow : Color.cyan;
             Gizmos.DrawWireSphere(Position, .28f);
-            Gizmos.DrawLine(Position, Position + transform.forward * .6f);
+            Gizmos.DrawLine(Position, Position + Facing * .6f);
             if (chair != null) Gizmos.DrawLine(Position, chair.position);
         }
     }

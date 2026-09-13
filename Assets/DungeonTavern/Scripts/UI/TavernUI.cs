@@ -63,7 +63,7 @@ namespace DungeonTavern.UI
             pauseLayer=Layer("100_Pause",100);confirmLayer=Layer("110_Confirmation",110);
             BuildHud();BuildLedger();BuildDialogue();BuildPause();
             foreach(var view in new[]{windows.gameObject,dialogue.gameObject,pauseLayer.gameObject,confirmLayer.gameObject,
-                hintPanel,heldPanel,pauseMain,controlsPage,historyPage.gameObject})TavernFadeIn.Add(view);
+                hintPanel,heldPanel,pausePanel.gameObject,controlsPage,historyPage.gameObject,hud.gameObject,BubbleLayer.gameObject})TavernFadeIn.Add(view);
             gameObject.AddComponent<TavernGuidance>().Initialize(this,hud);
             if(EventSystem.current==null)
             {
@@ -210,17 +210,17 @@ namespace DungeonTavern.UI
             }
             bool talking=narrative!=null&&narrative.isActiveAndEnabled&&narrative.State==Day1FlowState.Dialogue;
             bool paused=GamePauseMenu.IsPaused;
-            hud.gameObject.SetActive(!talking&&!paused);BubbleLayer.gameObject.SetActive(!talking);
+            TavernFadeIn.Show(hud.gameObject,!talking&&!paused);TavernFadeIn.Show(BubbleLayer.gameObject,!talking);
             RefreshStatus(narrative!=null&&narrative.ManagementUnlocked);
             money.text=menu==null?"—":menu.Balance.ToString("N0");customers.text=(day==null?0:day.ActiveCustomers).ToString();
             string action=interaction==null||!interaction.enabled?"":interaction.CurrentPrompt;
-            hintPanel.SetActive(!string.IsNullOrEmpty(action)&&!WindowOpen);prompt.text=action.Replace("F：","").Replace("F:","").Trim();
-            var item=interaction==null?HeldItem.None:interaction.CurrentItem;heldPanel.SetActive(item!=HeldItem.None&&!WindowOpen);held.text="手持  ·  "+TavernMenuSystem.GetLabel(item);
-            windows.gameObject.SetActive(WindowOpen&&!talking);if(WindowOpen)RefreshLedger();
-            dialogue.gameObject.SetActive(talking);if(talking)RefreshDialogue();else dialogueKey=null;
-            pauseLayer.gameObject.SetActive(paused);confirmLayer.gameObject.SetActive(paused&&pause!=null&&pause.ConfirmingQuit);
-            pausePanel.gameObject.SetActive(pause==null||(!pause.ControlsVisible&&!pause.HistoryVisible));controlsPage.SetActive(pause!=null&&pause.ControlsVisible);
-            historyPage.gameObject.SetActive(pause!=null&&pause.HistoryVisible);if(paused&&pause!=null&&pause.HistoryVisible)RefreshHistory();
+            TavernFadeIn.Show(hintPanel,!string.IsNullOrEmpty(action)&&!WindowOpen);if(!string.IsNullOrEmpty(action))prompt.text=action.Replace("F：","").Replace("F:","").Trim();
+            var item=interaction==null?HeldItem.None:interaction.CurrentItem;TavernFadeIn.Show(heldPanel,item!=HeldItem.None&&!WindowOpen);if(item!=HeldItem.None)held.text="手持  ·  "+TavernMenuSystem.GetLabel(item);
+            TavernFadeIn.Show(windows.gameObject,WindowOpen&&!talking);if(WindowOpen)RefreshLedger();
+            TavernFadeIn.Show(dialogue.gameObject,talking);if(talking)RefreshDialogue();else dialogueKey=null;
+            TavernFadeIn.Show(pauseLayer.gameObject,paused);TavernFadeIn.Show(confirmLayer.gameObject,paused&&pause!=null&&pause.ConfirmingQuit);
+            TavernFadeIn.Show(pausePanel.gameObject,pause==null||(!pause.ControlsVisible&&!pause.HistoryVisible));TavernFadeIn.Show(controlsPage,pause!=null&&pause.ControlsVisible);
+            TavernFadeIn.Show(historyPage.gameObject,pause!=null&&pause.HistoryVisible);if(paused&&pause!=null&&pause.HistoryVisible)RefreshHistory();
             float alpha=0;foreach(var pair in fades)if(pair.Key!=null)alpha=Mathf.Max(alpha,pair.Value);
             fade.color=new Color(0,0,0,alpha);fade.raycastTarget=alpha>0;fade.gameObject.SetActive(alpha>0);
         }

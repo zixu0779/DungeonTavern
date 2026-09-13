@@ -63,7 +63,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             if(ui==null||camera==null)return;
             var head=GetHeadAnchor();var point=camera.WorldToViewportPoint(head);
             bool visible=IsVisible&&point.z>0&&point.x>=0&&point.x<=1&&point.y>=0&&point.y<=1;
-            if(view!=null)view.gameObject.SetActive(visible);
+            if(view!=null)DungeonTavern.UI.TavernFadeIn.Show(view.gameObject,visible);
             if(!visible)return;
             if(view==null)
             {

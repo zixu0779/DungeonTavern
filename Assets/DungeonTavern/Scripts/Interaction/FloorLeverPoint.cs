@@ -65,21 +65,10 @@ namespace DungeonTavern.Gameplay.Interaction
                 if(seats!=null)foreach(var table in seats.Tables)
                     if(table!=null&&table.isActiveAndEnabled){hall+=table.transform.position;count++;}
                 hall=count>0?hall/count:entranceDoor.transform.position;
-                Vector3 facing=Vector3.ProjectOnPlane(hall-player.transform.position,Vector3.up);
-                Quaternion startFacing=player.transform.rotation;
-                Quaternion hallFacing=facing.sqrMagnitude>.01f?Quaternion.LookRotation(facing):startFacing;
-
                 var bubble = player.GetComponent<WorldSpeechBubble>();
                 if (bubble == null) bubble = player.gameObject.AddComponent<WorldSpeechBubble>();
                 bubble.Show("酒馆要临时关闭了，请各位先离开！", 3f);
-                for(float age=0;age<.45f;age+=Time.deltaTime)
-                {
-                    // Movement keeps priority; do not fight the player's own turning input.
-                    if(player.MovementDirection.sqrMagnitude>.001f)break;
-                    player.transform.rotation=Quaternion.Slerp(startFacing,hallFacing,Mathf.SmoothStep(0,1,age/.45f));
-                    yield return null;
-                }
-                if(player.MovementDirection.sqrMagnitude<.001f)player.transform.rotation=hallFacing;
+                yield return player.TurnToward(hall);
                 yield return new WaitForSeconds(.6f);
                 day.DismissCustomers();
                 while (day.ActiveCustomers > 0) yield return null;

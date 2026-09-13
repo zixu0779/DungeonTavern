@@ -32,6 +32,8 @@ static class DemoFlowPlayCheck
     static void Assert(bool value,string message){if(!value)throw new Exception(message);}
     static void Log(string text)=>File.AppendAllText(Output,text+"\n");
     static DemoFlowPlayCheck(){EditorApplication.playModeStateChanged+=Mode;}
+    [MenuItem("Tools/Demo Flow/Test Customer Presentation")]
+    static void RunCustomers(){SessionState.SetBool(Key+"Customers",true);Run();}
     [MenuItem("Tools/Demo Flow/Test UI")]
     static void RunUi(){SessionState.SetBool(Key+"UI",true);Run();}
     [MenuItem("Tools/Demo Flow/Test Interaction Polish")]
@@ -96,6 +98,7 @@ static class DemoFlowPlayCheck
         activation=dispenser.GetComponent<CupDispenserActivation>();
         if(activation==null)activation=(CupDispenserActivation)Get(dispenser,"activation");
         orbit=UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>();orbit.FollowTarget=player.transform;
+        if(SessionState.GetBool(Key+"Customers",false)){SessionState.SetBool(Key+"Customers",false);yield return CustomerPresentationCheck.Run(player);yield break;}
         if(SessionState.GetBool(Key+"UI",false))
         {
             SessionState.SetBool(Key+"UI",false);
@@ -106,6 +109,9 @@ static class DemoFlowPlayCheck
             foreach(var step in new[]{DungeonTavern.UI.GuideStep.Cup,DungeonTavern.UI.GuideStep.Fill,DungeonTavern.UI.GuideStep.Serve,DungeonTavern.UI.GuideStep.Settle})
                 Assert(guidance.IsComplete(step),"Successful service did not complete hint: "+step);
             Log("PASS real cup/fill/serve/payment actions mark guidance complete");
+            DungeonTavern.UI.TavernGuidance.Complete(DungeonTavern.UI.GuideStep.Lever);
+            yield return new WaitForSeconds(.6f);
+            Assert(!guidance.ButtonVisible,"Guide icon survived all first-time actions");
             yield break;
         }
         if(SessionState.GetBool(Key+"Polish",false))
@@ -281,7 +287,9 @@ static class DemoFlowPlayCheck
         ((float[])Get(guide,"elapsed"))[(int)DungeonTavern.UI.GuideStep.Menu]=80;
         yield return new WaitForSeconds(.5f);
         Assert(guide.CurrentStep==DungeonTavern.UI.GuideStep.Menu&&guide.ButtonVisible,"F1 guide setup missing");
-        guide.ToggleGuide();yield return null;
+        guide.ToggleGuide();
+        deadline=Time.time+10;
+        while(!guide.RouteVisible&&Time.time<deadline)yield return null;
         Assert(guide.TextVisible&&guide.RouteVisible,"F1 guide did not open");
         var seats=customers.Select(c=>c.AssignedSeat).ToArray();
         var orders=customers.Select(c=>c.Order).ToArray();

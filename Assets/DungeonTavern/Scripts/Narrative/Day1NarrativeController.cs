@@ -292,6 +292,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             SetDialogueActive(true);
             cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
             cameraOrbit?.BeginDialogueFraming(player.transform, speaker);
+            StartCoroutine(player.TurnToward(speaker.GetComponent<CustomerServicePoint>() is {} guest?guest.ServicePosition:speaker.position));
         }
 
         private void ShowNextContent()

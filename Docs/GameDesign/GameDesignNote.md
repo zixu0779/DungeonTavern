@@ -24,12 +24,19 @@ This document is the durable source of truth for confirmed game and world design
 - Customers queue at the menu before ordering, then move to reserved seats.
   They receive food, eat, and settle in place before leaving; there is no
   separate settlement queue.
+- Customers walk at the player's configured movement speed; Eve walks 8% faster.
 - NPC movement inside the tavern uses walkable-route navigation rather than
   direct movement toward a target. An NPC-initiated conversation requires both
   a complete reachable route within conversation range and an unobstructed
   line between the speakers, so walls cannot trigger dialogue through them.
 - Seated customers occupy the actual stool surface. Navigation approach points
   are separate from sitting poses; seated bodies leave the approach aisle clear.
+  Seat facing uses the actual tabletop mesh center and axes, not the stool distribution.
+  Round-table seats face the table center; long-table seats face inward perpendicular
+  to the table edge. Guests turn before sitting, retain facing through service and
+  standing up, and preserve seated animation across floor visibility changes.
+  Customer interaction measures the visible body within 2.4 metres, prioritizes
+  nearby guests in front of the player, and rejects blocked lines through walls.
 - Tableware disappears automatically after settlement; manual tableware collection is not part of the current demo.
 - The owner may close at any point during service. With guests present or future arrivals still scheduled, an
   exclamation bubble announces temporary closure; the owner turns toward the hall
@@ -59,10 +66,15 @@ This document is the durable source of truth for confirmed game and world design
   two opposing headings. Prefer the smaller rotation unless that view is blocked
   by fixed scenery and the opposite is clear. If both are blocked, use the smaller
   rotation. Orthographic sight lines exclude triggers and other characters.
+  Dialogue framing eases over 1.3 seconds and never fades wall materials.
+  The protagonist smoothly turns toward the speaker over 0.35–1 second, according to
+  turn angle. Temporary-closing turns use the same speed and yield to movement.
 - Lightweight guidance announces B1/F1 on entry and tracks first successful
   awakening, exit, lever, menu, cup, filling, serving and settlement actions. A pending
-  actionable step offers a guide button beside the pause menu after 20 seconds;
-  after 75 seconds it glows softly. Clicking toggles the card and route together.
+  action offers a guide button beside the pause menu from the start of the game,
+  until all eight first-time actions have been completed. After 25 actionable seconds
+  it breathes with warm gold light on a three-second cycle, retaining a visible minimum glow. Clicking toggles the card and route together; between actionable steps it shows
+  a quiet waiting message without a route.
   Unfinished F1 guidance persists in B1, targeting the return stairs until F1 resumes.
   Pause, dialogue, ledger and travel do not consume this delay. Completed steps
   do not repeat during the run, including actions completed before their hints.
@@ -83,7 +95,8 @@ This document is the durable source of truth for confirmed game and world design
   corresponding sign animation, then pans back and restores control. Closing stops
   new admissions immediately; opening starts service after the mechanism finishes.
   W/A/S/D or Q/E during the entrance shot returns the camera to the player early;
-  the door and sign finish their sequence. Closure before the closing-time reminder follows the
+  the door and sign finish their sequence. The interrupted return uses the same
+  duration as the outward pan, following the moving player throughout. Closure before the closing-time reminder follows the
   temporary-closure flow above without an entrance shot.
 - The cup dispenser tracks missing cups for current drink orders rather than new-order
   events. Delivered cups cover delivered portions until settlement; a held empty/full

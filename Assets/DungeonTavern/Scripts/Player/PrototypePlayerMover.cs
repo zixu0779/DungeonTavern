@@ -43,6 +43,21 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 gameObject.AddComponent<CounterVaultController>();
         }
 
+        public System.Collections.IEnumerator TurnToward(Vector3 point)
+        {
+            var direction=Vector3.ProjectOnPlane(point-transform.position,Vector3.up);
+            if(direction.sqrMagnitude<.001f)yield break;
+            var start=transform.rotation;var end=Quaternion.LookRotation(direction);
+            float duration=Mathf.Clamp(Quaternion.Angle(start,end)/180f,.35f,1f);
+            for(float age=0;age<duration;age+=Time.deltaTime)
+            {
+                if(MovementInputEnabled&&MovementDirection.sqrMagnitude>.001f)yield break;
+                transform.rotation=Quaternion.Slerp(start,end,Mathf.SmoothStep(0,1,age/duration));
+                yield return null;
+            }
+            transform.rotation=end;
+        }
+
         private void Update()
         {
             if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen) return;

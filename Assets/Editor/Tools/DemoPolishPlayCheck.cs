@@ -89,6 +89,8 @@ static class DemoPolishPlayCheck
         yield return null;
         InputSystem.RemoveDevice(keyboard);
         yield return new WaitForSeconds(.5f);
+        Assert(orbit.EntranceFraming,"Interrupted entrance camera returned faster than opening pan");
+        yield return new WaitForSeconds(.9f);
         Assert(!orbit.EntranceFraming&&player.MovementInputEnabled,"Interrupted entrance camera did not return control");
         while(lever.IsSwitching)yield return null;
         var movedDirection=pivot.TransformPoint(localGrip)-pivot.position;
@@ -206,7 +208,11 @@ static class DemoPolishPlayCheck
         var eve=(Day1EveActor)Get(narrative,"eve");
         eve.gameObject.SetActive(true);bool eveEnabled=eve.enabled;eve.enabled=false;eve.GetComponent<NpcNavigator>().Stop(true);
         yield return null;yield return null;
+        var wallMaterials=UnityEngine.Object.FindObjectsByType<Renderer>().Where(r=>r.name.Contains("Wall")).ToDictionary(r=>r,r=>r.sharedMaterials);
         typeof(Day1NarrativeController).GetMethod("BeginCloseDialogue",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,new object[]{eve.transform});
+        var finalView=Quaternion.Euler(0,(float)Get(orbit,"dialogueTargetYaw"),0);float initialTurn=Quaternion.Angle(orbit.transform.rotation,finalView);
+        yield return new WaitForSeconds(.3f);
+        if(initialTurn>10)Assert(Quaternion.Angle(orbit.transform.rotation,finalView)>initialTurn*.5f,"Dialogue camera rotates too quickly");
         CheckDialogueCamera(orbit);
         var story=(Ink.Runtime.Story)Get(narrative,"story");story.ChoosePathString("day01_eve_arrives");
         typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
@@ -221,11 +227,13 @@ static class DemoPolishPlayCheck
         story.ChoosePathString("day01_eve_conversation");
         typeof(Day1NarrativeController).GetMethod("ShowNextContent",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(narrative,null);
         Assert(!menu.IsOpen,"Dialogue did not dismiss ledger");
-        yield return new WaitForSeconds(.8f);yield return Capture("/tmp/dialogue-speech.png");
+        yield return new WaitForSeconds(1.5f);yield return Capture("/tmp/dialogue-speech.png");
+        Assert(Vector3.Dot(player.transform.forward,Vector3.ProjectOnPlane(eve.transform.position-player.transform.position,Vector3.up).normalized)>.995f,"Player did not turn toward dialogue speaker");
         Vector3 pair=eve.transform.position-player.transform.position;pair.y=0;
         Vector3 cameraForward=Vector3.ProjectOnPlane(Camera.main.transform.forward,Vector3.up).normalized;
         Assert(Mathf.Abs(Vector3.Dot(pair.normalized,cameraForward))<.025f,"Live dialogue view not perpendicular to the stopped pair");
-        Log("PASS settled live dialogue camera places the pair on a horizontal screen axis");
+        foreach(var pairMaterials in wallMaterials)if(pairMaterials.Key)Assert(pairMaterials.Key.sharedMaterials.SequenceEqual(pairMaterials.Value),"Dialogue changed wall material: "+pairMaterials.Key.name);
+        Log("PASS dialogue camera eases over 1.3 seconds, remains perpendicular, leaves all wall materials unchanged");
         if(narrative.CurrentChoiceCount==0) { ClickUi("Continue");yield return null; }
         for(int i=0;i<20&&narrative.CurrentChoiceCount==0;i++)narrative.ContinueDialogue();
         yield return new WaitForSeconds(.3f);yield return Capture("/tmp/dialogue-bottom.png");

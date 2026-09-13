@@ -4,13 +4,14 @@ namespace DungeonTavern.UI
     [RequireComponent(typeof(CanvasGroup))]
     public sealed class TavernFadeIn : MonoBehaviour
     {
-        CanvasGroup group;float progress;bool visible=true;
+        CanvasGroup group;float progress;bool visible=true;bool blockRaycasts;
+        void Awake(){group=GetComponent<CanvasGroup>();blockRaycasts=group.blocksRaycasts;}
         void OnEnable(){group=GetComponent<CanvasGroup>();progress=0;group.alpha=0;visible=true;}
         public void SetVisible(bool value)
         {
             if(value&&!gameObject.activeSelf)gameObject.SetActive(true);
             visible=value;
-            if(group)group.interactable=value;
+            if(group){group.interactable=value;group.blocksRaycasts=value&&blockRaycasts;}
         }
         void Update()
         {

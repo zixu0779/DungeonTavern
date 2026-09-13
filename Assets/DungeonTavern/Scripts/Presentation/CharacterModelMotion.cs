@@ -25,6 +25,9 @@ namespace DungeonTavern.Tavern25D
         private float vaultClipLength = 1;
         private Vector3 vaultHandPoint;
         public bool IsFullBodyAction => fullBodyAction;
+        public Vector3 BodyPosition => animator&&animator.isHuman
+            ? (animator.GetBoneTransform(HumanBodyBones.Hips).position+animator.GetBoneTransform(HumanBodyBones.Head).position)*.5f
+            : motionRoot.position+Vector3.up;
         private float standUntil;
         public bool IsStandingUp => !seated && (Time.time < standUntil ||
             animator.GetCurrentAnimatorStateInfo(0).IsName("SitDown") ||
@@ -48,6 +51,7 @@ namespace DungeonTavern.Tavern25D
             customer = motionRoot.GetComponent<CustomerServicePoint>();
             navigator = motionRoot.GetComponent<NpcNavigator>();
             animator.applyRootMotion = false;
+            if(customer)animator.keepAnimatorStateOnDisable=true;
             foreach (var clip in animator.runtimeAnimatorController.animationClips)
                 if (clip.name == "Vault") vaultClipLength = clip.length;
         }
