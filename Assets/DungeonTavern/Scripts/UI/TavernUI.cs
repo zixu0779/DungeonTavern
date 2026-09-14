@@ -246,7 +246,7 @@ namespace DungeonTavern.UI
             foreach(var dish in menu.Dishes)
             {
                 float y=72+row*78;var stripe=Image("Row"+row,ledgerContent,row%2==0?new Color(1,1,1,.035f):Color.clear);Place(stripe.rectTransform,0,y,1070,70);
-                TavernIcon.Add(stripe.transform,dish.item==HeldItem.TestDrink?TavernGlyph.Cup:dish.item==HeldItem.SideDish?TavernGlyph.SideDish:TavernGlyph.Dish,16,16,36);
+                var dishIcon=Rect("DishIcon",stripe.transform);Place(dishIcon,16,16,36,36);dishIcon.gameObject.AddComponent<TavernDishIcon>().Item=dish.item;
                 string[] values={dish.label,dish.price+" G",menu.Count(dish.item).ToString(),menu.GetCustomers(dish.item).Count.ToString()};
                 for(int i=0;i<4;i++){var t=Label("Value"+i,stripe.transform,values[i],27,i==1?Gold:Cream);Place(t.rectTransform,i==0?72:columns[i],8,i==0?416:156,54);}row++;
             }

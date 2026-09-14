@@ -14,9 +14,11 @@ namespace DungeonTavern.Gameplay.Interaction
         private TavernMenuSystem menu;
         private PlayerHands playerHands;
         public bool CupReady { get; private set; }
+        public Vector3 GuidancePosition => activation ? activation.GuidancePosition : transform.position;
+
         // Delivered cups remain at their customers until settlement. They cover the
         // delivered drink portions, so only unserved drinks minus the held cup remain.
-        public int MissingCups => Mathf.Max(0, (menu == null ? 0 : menu.Count(HeldItem.TestDrink))
+        public int MissingCups => Mathf.Max(0, (menu == null ? 0 : menu.MissingServingCups)
             - (playerHands != null && playerHands.CurrentItem is HeldItem.EmptyCup or HeldItem.TestDrink ? 1 : 0));
 
         private void Awake()

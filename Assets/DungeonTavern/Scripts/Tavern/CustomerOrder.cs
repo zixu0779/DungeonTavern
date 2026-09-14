@@ -35,7 +35,13 @@ namespace DungeonTavern.Gameplay.Interaction
         public bool AllDelivered => portions.Count > 0 && portions.All(p => p.Delivered);
         public bool AllConsumed => portions.Count > 0 && portions.All(p => p.Consumed);
         public bool HasFood => portions.Any(p => p.Delivered && !p.Consumed);
-        public int Total => portions.Sum(p => p.Price);
+        private CustomerOrder shared;
+        private bool ownsShared;
+        public bool AllowDrinkSubstitute { get; set; }
+        public int Total => portions.Where(p=>shared==null||ownsShared||!shared.portions.Contains(p)).Sum(p=>p.Price);
+        public void AttachShared(CustomerOrder order, bool owner)
+        { if(shared!=null)throw new InvalidOperationException("Shared order already attached.");shared=order;ownsShared=owner;portions.AddRange(order.portions); }
+        public Portion NextDelivery(HeldItem item) => Paid ? null : portions.FirstOrDefault(p=>!p.Delivered && (p.Item==item || AllowDrinkSubstitute&&item==HeldItem.TestDrink));
         public bool Paid { get; private set; }
 
         public CustomerOrder(IEnumerable<OrderRequest> requests, Func<HeldItem, DishDefinition> lookup)
@@ -52,10 +58,10 @@ namespace DungeonTavern.Gameplay.Interaction
             if (portions.Count == 0) throw new ArgumentException("Order must contain at least one portion.");
         }
 
-        public bool Needs(HeldItem item) => portions.Any(p => p.Item == item && !p.Delivered);
+        public bool Needs(HeldItem item) => NextDelivery(item)!=null;
         public bool TryDeliver(HeldItem item)
         {
-            var portion = portions.FirstOrDefault(p => p.Item == item && !p.Delivered);
+            var portion = NextDelivery(item);
             if (portion == null || Paid) return false;
             portion.Deliver();
             return true;
@@ -63,7 +69,7 @@ namespace DungeonTavern.Gameplay.Interaction
         public void Eat(float seconds)
         {
             if (seconds <= 0) return;
-            foreach (var portion in portions.Where(p => p.Delivered && !p.Consumed))
+            foreach (var portion in portions.Where(p => p.Delivered && !p.Consumed && (shared==null||ownsShared||!shared.portions.Contains(p))))
             {
                 float elapsed = Mathf.Min(seconds, portion.SecondsRemaining);
                 portion.Eat(elapsed);

@@ -16,8 +16,11 @@ This document is the durable source of truth for confirmed game and world design
   each hub has a separately motivated progression choice, and meaningful choices
   either converge intentionally or persist a later consequence.
 - NPC-initiated conversations use active approach: the NPC follows the player
-  until entering a 2.2 metre trigger range, keeps at least 1.1 metres
-  of personal space, then stops player movement and begins the close view.
+  until entering a 4.2 metre trigger range with a clear conversation line. Walls block
+  triggering; marked counters do not. The player pauses while the NPC approaches
+  for at most 0.5 seconds at its normal speed, preserving the existing conversation
+  spacing. The approach cannot detour around a counter or increase pair distance.
+  Once stopped, both actors turn smoothly toward one another and the close view begins.
 - The close dialogue camera frames the owner on the left and the NPC on the
   right. World head bubbles persist until replaced by another bubble or closed
   by the start of a formal dialogue.
@@ -26,9 +29,9 @@ This document is the durable source of truth for confirmed game and world design
   separate settlement queue.
 - Customers walk at the player's configured movement speed; Eve walks 8% faster.
 - NPC movement inside the tavern uses walkable-route navigation rather than
-  direct movement toward a target. An NPC-initiated conversation requires both
-  a complete reachable route within conversation range and an unobstructed
-  line between the speakers, so walls cannot trigger dialogue through them.
+  direct movement toward a target. An NPC-initiated conversation requires a clear line between speakers except
+  for marked counters. Its final short approach stays on the NPC side of a counter;
+  walls cannot trigger dialogue through them.
 - Seated customers occupy the actual stool surface. Navigation approach points
   are separate from sitting poses; seated bodies leave the approach aisle clear.
   Seat facing uses the actual tabletop mesh center and axes, not the stool distribution.
@@ -102,7 +105,10 @@ This document is the durable source of truth for confirmed game and world design
   events. Delivered cups cover delivered portions until settlement; a held empty/full
   cup covers one unserved drink. While a deficit remains, the halo stays active and
   each collected cup is replaced by another floating cup. It powers down only when
-  the deficit reaches zero. Food-only orders do not request cups.
+  the deficit reaches zero. Ordinary demo menu orders use a filled cup as a temporary substitute for any
+  portion, so their food portions also request cups. Authored non-proxy food orders
+  do not request cups. Shared portions are counted once; personal portions receive
+  substitute delivery before shared portions.
   The barrel fills only a held empty cup. Chests offer an action matching their
   current state and close automatically when the player moves away. During lid
   animation the prompt retains its previous open/close action until motion ends.
@@ -330,7 +336,9 @@ from old layouts. F1 narrative arrival currently references the authored
 
 ## Customer ordering presentation (2026-09-18)
 
-- Customers physically reach the queue in front of the placed menu and face toward the preceding queue position when stopped; the head faces the menu. Only the queue head thinks and orders; thinking is shown as `...`.
+- Customers physically reach the queue in front of the placed menu and face toward the preceding queue position when stopped; the head faces the menu. Solo guests order when first in line. Parties queue individually, then fan out
+  to distinct reachable positions beside the menu when their leader reaches the head.
+  All members start choosing after everyone reaches their position; thinking is `...`.
 - The customer then visibly displays the ordered item icon and quantity before leaving the menu queue for their seat. The order remains visible while travelling and waiting for service.
 - After delivery, eating is communicated without descriptive text using the item icon and decreasing progress. After eating finishes, the bubble reads `结账`; after payment the customer leaves.
 
@@ -350,8 +358,17 @@ from old layouts. F1 narrative arrival currently references the authored
   guests over parties. Party arrivals are excluded when no eligible large round
   table is empty. Inspector weights are tunable; their initial 6:3:1 values are
   implementation defaults, not a locked design ratio.
-- Each guest still queues, orders, receives food and settles individually. Party
-  table reservation does not introduce shared orders or shared payment.
+- Parties order together but retain individual personal orders and settlement.
+  Each member can order at most two personal dishes and one drink; the whole party
+  can order at most two shared dishes. Shared dishes appear in every member bubble,
+  accept delivery through any member, and are consumed and charged once.
+- Confirmed dishes occupy the upper bubble area, with animated upward confirmation;
+  the lower area shows thinking, the current dish, or a shared proposal/vote.
+  Members think independently and finish their current confirmation before joining
+  a shared proposal. The proposer holds dish + question mark; others briefly show
+  a question mark, then independently accept or rarely reject. A single rejection
+  rejects the proposal; unanimity adds it to everyone's confirmed area. All wait
+  until ordering is finished before departing for their seats together.
 - The first-day authored Bran arrival stays a single customer. Additional ordinary
   arrivals are configured separately from the story schedule.
 
@@ -364,4 +381,18 @@ from old layouts. F1 narrative arrival currently references the authored
   guest. Later waves use the configured weights. A full seating area or obstructed
   entrance defers the wave until space is available; there is no five-person cap.
 - The lever can interrupt service at any time using the temporary-closure flow
-  above. Party orders and bills remain individual during normal service.
+  above. Personal bills remain individual; shared dishes are charged once to the party's first member during normal service.
+
+### Demo menu and temporary serving
+
+- Shared dishes: 铁锅洞菇炖肉, 炭烤穴猪拼盘. Personal dishes: 盐焗岩薯, 黑麦根面包, 酸渍洞蕨.
+- Drinks: 深窖麦芽酒, 幽菇淡艾尔, 余烬蜂蜜酒. Ordinary demo guests choose from these;
+  Bran retains his authored drink order and story settlement.
+- Until food preparation and distinct drinks are implemented, one filled cup serves
+  one pending portion. The prompt names the actual ordered dish. Menu counts, cup
+  demand and settlement count shared portions only once.
+- The cup-dispenser guide uses a reachable floor endpoint for pathfinding and a
+  separate fixed visual target on the real dispenser; an elevated final connector
+  joins them without routing the player onto the counter.
+
+The demo menu prices and geometric dish icons are prototype tuning/presentation assets, not final economy balance.

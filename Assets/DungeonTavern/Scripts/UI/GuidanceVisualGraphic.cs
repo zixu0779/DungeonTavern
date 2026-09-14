@@ -30,6 +30,8 @@ namespace DungeonTavern.UI
                 path.Add(from);
                 if((join-from).sqrMagnitude>.0025f)path.Add(join);
                 for(int i=segment+1;i<route.Length;i++)if((route[i]-path[^1]).sqrMagnitude>.0025f)path.Add(route[i]);
+                // The visual connector may rise to a prop on a counter; it is not a navigation segment.
+                if(step==GuideStep.Cup&&(path[^1]-destination).sqrMagnitude>.01f)path.Add(destination);
                 // The destination is fixed by the guide, not by each new route search.
                 curve.Add(path[0]);
                 for(int i=1;i<path.Count-1;i++)

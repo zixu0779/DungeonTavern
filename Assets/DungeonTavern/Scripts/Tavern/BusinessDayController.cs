@@ -225,6 +225,7 @@ namespace DungeonTavern.Gameplay.Interaction
                     var customer = instance.GetComponent<CustomerServicePoint>();
                     if (customer == null) customer = instance.AddComponent<CustomerServicePoint>();
                     customer.ConfigureSeating(kind, partyId);
+                    customer.UsesDemoMenu = count > 1 || demoService && !entry.DisplayName.Contains("Bran") && !entry.DisplayName.Contains("布兰");
                     group.Add(customer);
                 }
                 if (count > 1)

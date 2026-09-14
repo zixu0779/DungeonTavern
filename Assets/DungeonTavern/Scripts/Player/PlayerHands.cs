@@ -9,7 +9,8 @@ namespace DungeonTavern.Gameplay.Interaction
         TestDrink,
         MainDish,
         SideDish,
-        EmptyCup
+        EmptyCup,
+        CaveBoarPlatter, RootBread, PickledFern, GlowcapAle, CinderMead
     }
 
     public sealed class PlayerHands : MonoBehaviour

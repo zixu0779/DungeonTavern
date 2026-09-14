@@ -47,6 +47,18 @@ static class CustomerPresentationCheck
             float angle=Vector3.Angle(animator.GetBoneTransform(HumanBodyBones.RightUpperLeg).position-knee.position,animator.GetBoneTransform(HumanBodyBones.RightFoot).position-knee.position);
             if(i>1){Assert(animator.GetCurrentAnimatorStateInfo(0).IsName("SeatedIdle"),"Customer left seated state");Assert(angle<130,"Customer knee is standing during seated loop");Assert(Vector3.Distance(hip.position,seat.SittingSurface+Vector3.up*.12f)<.03f,"Hips off stool");}
         }
+        var story=UnityEngine.Object.FindAnyObjectByType<DungeonTavern.Tavern25D.Narrative.Day1NarrativeController>();
+        Set(story,"<State>k__BackingField",DungeonTavern.Tavern25D.Narrative.Day1FlowState.Dialogue);
+        playerBody.enabled=false;player.transform.position=customer.ServicePosition+seat.Facing*2;var pp=player.transform.position;pp.y=0;player.transform.position=pp;playerBody.enabled=true;
+        typeof(DungeonTavern.Tavern25D.Narrative.Day1NarrativeController).GetMethod("BeginCloseDialogue",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(story,new object[]{customer.transform});
+        yield return new WaitForSeconds(1.2f);
+        var conversationDirection=Vector3.ProjectOnPlane(player.transform.position-customer.ServicePosition,Vector3.up).normalized;
+        Assert(Vector3.Dot(customer.transform.forward,conversationDirection)>.98f,"Seated NPC does not face player from visible body position");
+        typeof(DungeonTavern.Tavern25D.Narrative.Day1NarrativeController).GetMethod("SetDialogueActive",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(story,new object[]{false});
+        Set(story,"closeDialogueActive",false);Set(story,"<State>k__BackingField",DungeonTavern.Tavern25D.Narrative.Day1FlowState.AwaitingEveInteraction);
+        playerBody.enabled=false;player.transform.position=new Vector3(30,0,14);playerBody.enabled=true;
+        yield return new WaitForSeconds(1.2f);
+        Log("PASS seated dialogue NPC faces player from actual visible seat position and restores table facing");
         go.SetActive(false);yield return null;go.SetActive(true);yield return new WaitForSeconds(1);
         Assert(animator.GetBool("Seated")&&animator.GetCurrentAnimatorStateInfo(0).IsName("SeatedIdle"),"Reactivation reset seated pose");
         Capture(go,animator);

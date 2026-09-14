@@ -21,7 +21,15 @@ static class DemoFlowPlayCheck
     const string Output="/tmp/demo-flow-playcheck.txt";
     static double started;
     static readonly List<string> runtimeErrors=new();
-    static void CaptureError(string message,string trace,LogType type) { if(type==LogType.Exception||type==LogType.Error)runtimeErrors.Add(message); }
+    static void CaptureError(string message,string trace,LogType type)
+    {
+        if(type!=LogType.Exception&&type!=LogType.Error)return;
+        // Unity AI Assistant's editor relay is unrelated to the running game. Keep the
+        // diagnostic in the report, but do not classify its network outage as a gameplay error.
+        if(message.StartsWith("connection.state_change")&&trace.Contains("Unity.Relay.Editor.RelayService"))
+        {Log("EDITOR ONLY: Unity AI Assistant relay connection failed (game checks continue)");return;}
+        runtimeErrors.Add(message);
+    }
     static PrototypePlayerMover player;
     static PlayerHands hands;
     static TavernMenuSystem menu;
@@ -32,6 +40,8 @@ static class DemoFlowPlayCheck
     static void Assert(bool value,string message){if(!value)throw new Exception(message);}
     static void Log(string text)=>File.AppendAllText(Output,text+"\n");
     static DemoFlowPlayCheck(){EditorApplication.playModeStateChanged+=Mode;}
+    [MenuItem("Tools/Demo Flow/Test Group Ordering and Dialogue")]
+    static void RunGroups(){SessionState.SetBool(Key+"Groups",true);Run();}
     [MenuItem("Tools/Demo Flow/Test Customer Presentation")]
     static void RunCustomers(){SessionState.SetBool(Key+"Customers",true);Run();}
     [MenuItem("Tools/Demo Flow/Test UI")]
@@ -98,6 +108,7 @@ static class DemoFlowPlayCheck
         activation=dispenser.GetComponent<CupDispenserActivation>();
         if(activation==null)activation=(CupDispenserActivation)Get(dispenser,"activation");
         orbit=UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>();orbit.FollowTarget=player.transform;
+        if(SessionState.GetBool(Key+"Groups",false)){SessionState.SetBool(Key+"Groups",false);yield return DemoGroupOrderingCheck.Run(player,narrative);yield break;}
         if(SessionState.GetBool(Key+"Customers",false)){SessionState.SetBool(Key+"Customers",false);yield return CustomerPresentationCheck.Run(player);yield break;}
         if(SessionState.GetBool(Key+"UI",false))
         {

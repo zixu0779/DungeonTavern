@@ -32,7 +32,7 @@ namespace DungeonTavern.UI
         public void ToggleGuide(){if(!ButtonVisible)return;if(current.HasValue)expanded[(int)current.Value]=!expanded[(int)current.Value];else waitingExpanded=!waitingExpanded;}
         TavernUI ui; PrototypePlayerMover player; Day1NarrativeController narrative; TavernMenuSystem menu;
         FloorLeverPoint lever; Camera camera; PlayerHands hands; Transform target;
-        Vector3 lastRouteFrom=new(float.PositiveInfinity,0,0),lastRouteTo, destination;
+        Vector3 lastRouteFrom=new(float.PositiveInfinity,0,0),lastRouteTo, destination, markerDestination;
         bool routeAttempted, destinationResolved, calculatingRoute;
         public int RouteCalculationCount { get; private set; }
         public Vector3 Destination => destination;
@@ -139,7 +139,7 @@ namespace DungeonTavern.UI
                     {
                         route=result;calculatingRoute=false;
                         if(route.Length>1&&!destinationResolved){destination=route[^1];destinationResolved=true;}
-                    },destinationResolved));
+                    },destinationResolved,target.GetComponent<CupDispenserPoint>()!=null));
                 }
 
             }
@@ -193,6 +193,8 @@ namespace DungeonTavern.UI
                 var guest=destination.GetComponent<CustomerServicePoint>();
                 this.destination=guest?guest.ServicePosition:destination.position;
                 if(guest)this.destination.y=guest.transform.position.y;
+                var dispenser=destination.GetComponent<CupDispenserPoint>();
+                markerDestination=dispenser?dispenser.GuidancePosition:this.destination;
             }
             if(!inBasement&&step!=GuideStep.Awaken)
             {tavernStep=step;tavernHeading=heading;}
@@ -212,7 +214,7 @@ namespace DungeonTavern.UI
         void LateUpdate()
         {
             if(!RouteVisible||!player||!target||!camera)return;
-            visual.Draw(ui,camera,route,player.transform.position,destination,current??GuideStep.Exit);
+            visual.Draw(ui,camera,route,player.transform.position,target.GetComponent<CupDispenserPoint>()?markerDestination:destination,current??GuideStep.Exit);
         }
     }
 }

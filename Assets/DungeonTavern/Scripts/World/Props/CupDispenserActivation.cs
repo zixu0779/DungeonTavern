@@ -24,6 +24,7 @@ namespace DungeonTavern.Tavern25D
         private bool initialized;
         private MaterialPropertyBlock glowBlock, effectBlock;
         public bool IsActivated => activated;
+        public Vector3 GuidancePosition => halo ? halo.parent.TransformPoint(initialized?restingPosition:halo.localPosition) : transform.position;
 
         private void OnEnable()
         {

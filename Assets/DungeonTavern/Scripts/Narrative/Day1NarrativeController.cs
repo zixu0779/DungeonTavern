@@ -1,4 +1,5 @@
 using System;
+using DungeonTavern.Tavern25D;
 using System.Collections;
 using System.Collections.Generic;
 using DungeonTavern.Gameplay.Interaction;
@@ -293,6 +294,25 @@ namespace DungeonTavern.Tavern25D.Narrative
             cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
             cameraOrbit?.BeginDialogueFraming(player.transform, speaker);
             StartCoroutine(player.TurnToward(speaker.GetComponent<CustomerServicePoint>() is {} guest?guest.ServicePosition:speaker.position));
+            StartCoroutine(TurnSpeaker(speaker));
+        }
+
+        private IEnumerator TurnSpeaker(Transform speaker)
+        {
+            var guest=speaker.GetComponent<CustomerServicePoint>();
+            if(guest)guest.DialogueFacing=true;
+            speaker.GetComponent<NpcNavigator>()?.Stop();
+            var direction=Vector3.ProjectOnPlane(player.transform.position-(guest?guest.ServicePosition:speaker.position),Vector3.up);
+            if(direction.sqrMagnitude>.001f)
+            {
+                var from=speaker.rotation;var to=Quaternion.LookRotation(direction);
+                float duration=Mathf.Clamp(Quaternion.Angle(from,to)/180f,.35f,1f);
+                for(float t=0;t<duration;t+=Time.deltaTime)
+                {if(!speaker)yield break;if(!closeDialogueActive)break;speaker.rotation=Quaternion.Slerp(from,to,Mathf.SmoothStep(0,1,t/duration));yield return null;}
+                if(closeDialogueActive)speaker.rotation=to;
+            }
+            while(closeDialogueActive && State==Day1FlowState.Dialogue)yield return null;
+            if(guest)guest.DialogueFacing=false;
         }
 
         private void ShowNextContent()

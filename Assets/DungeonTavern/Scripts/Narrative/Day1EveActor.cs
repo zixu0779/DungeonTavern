@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using UnityEngine.AI;
 using DungeonTavern.Gameplay.Interaction;
 using DungeonTavern.Prototypes.Rotation25D;
 using UnityEngine;
@@ -16,6 +18,7 @@ namespace DungeonTavern.Tavern25D.Narrative
         [SerializeField] private LayerMask conversationBlockers = ~0;
 
         private WorldSpeechBubble bubble;
+        private Transform[] counterGroups;
         private NpcApproachSpeech approachSpeech;
         private Transform player;
         [SerializeField] private Transform sceneEntranceWaitPoint;
@@ -30,6 +33,8 @@ namespace DungeonTavern.Tavern25D.Narrative
         private Transform openingGuidePoint;
         private string openingGuidanceLine;
         private bool turningToOpeningSwitch;
+        private const float TriggerRange = 4.2f;
+        public const float ApproachSeconds = .5f;
 
         public bool IsOpeningGuidanceReady => openingGuidanceReady;
 
@@ -44,6 +49,10 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private void Awake()
         {
+            // In the Bar prefab, vault markers and imported mesh colliders are siblings.
+            // Treat that furniture group consistently, without exempting neighbouring wall groups.
+            counterGroups=Array.ConvertAll(FindObjectsByType<CounterVaultObstacle>(FindObjectsInactive.Include),
+                marker=>marker.transform.parent?marker.transform.parent:marker.transform);
             PrototypePlayerMover playerMover = FindAnyObjectByType<PrototypePlayerMover>();
             float playerSpeed = playerMover == null ? 3.25f : playerMover.MoveSpeed;
             moveSpeed = playerSpeed * 1.08f;
@@ -130,7 +139,7 @@ namespace DungeonTavern.Tavern25D.Narrative
             {
                 arriving = false;
                 navigator.Stop(true);
-                StartConversation();
+                StartCoroutine(SettleBeforeConversation());
             }
         }
 
@@ -164,41 +173,56 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private bool CanStartConversation()
         {
-            return playerInTavernArea
-                && navigator.HasCompletePath
-                && navigator.RemainingDistance <= conversationRange
+            return playerInTavernArea && Vector3.Distance(player.position,transform.position)<=TriggerRange
                 && HasClearConversationLineOfSight();
         }
 
         private bool HasClearConversationLineOfSight()
         {
-            Vector3 direction = player.position - transform.position;
-            direction.y = 0f;
-            float distance = direction.magnitude;
-            if (distance <= 0.001f)
-                return true;
-
-            Vector3 lower = transform.position + Vector3.up * sightLowerHeight;
-            Vector3 upper = transform.position + Vector3.up * sightUpperHeight;
-            RaycastHit[] hits = Physics.CapsuleCastAll(
-                lower,
-                upper,
-                conversationClearanceRadius,
-                direction / distance,
-                distance,
-                conversationBlockers,
-                QueryTriggerInteraction.Ignore);
-            for (int index = 0; index < hits.Length; index++)
+            var delta=player.position-transform.position;delta.y=0;
+            foreach(var hit in Physics.CapsuleCastAll(transform.position+Vector3.up*sightLowerHeight,
+                transform.position+Vector3.up*sightUpperHeight,conversationClearanceRadius,delta.normalized,delta.magnitude,conversationBlockers,QueryTriggerInteraction.Ignore))
             {
-                Transform hit = hits[index].collider.transform;
-                if (hit == transform || hit.IsChildOf(transform)
-                    || hit == player || hit.IsChildOf(player))
-                {
-                    continue;
-                }
+                var t=hit.transform;
+                if(t.IsChildOf(transform)||t.IsChildOf(player)||t.GetComponentInParent<CharacterController>())continue;
+                if(t.GetComponentInParent<CounterVaultObstacle>() || Array.Exists(counterGroups,group=>group&&t.IsChildOf(group)))continue;
                 return false;
             }
             return true;
+        }
+
+        private IEnumerator SettleBeforeConversation()
+        {
+            var mover=player.GetComponent<PrototypePlayerMover>();
+            bool wasEnabled=mover.MovementInputEnabled;mover.MovementInputEnabled=false;
+            var start=transform.position;var end=start;var delta=player.position-start;delta.y=0;
+            float distance=delta.magnitude;
+            // A straight, short approach cannot route around the counter or start by moving away.
+            float length=Mathf.Min(moveSpeed*ApproachSeconds,Mathf.Max(0,distance-conversationRange));
+            if(length>.05f && NavMesh.SamplePosition(start,out var source,.5f,NavMesh.AllAreas))
+            {
+                end=start+delta.normalized*length;
+                if(NavMesh.Raycast(source.position,end,out var boundary,NavMesh.AllAreas))
+                    end=boundary.position-delta.normalized*.15f;
+                if(!NavMesh.SamplePosition(end,out var sample,.25f,NavMesh.AllAreas))end=start;
+                else end=sample.position;
+                var path=new NavMeshPath();
+                if(!NavMesh.CalculatePath(source.position,end,NavMesh.AllAreas,path)||path.status!=NavMeshPathStatus.PathComplete)end=start;
+                else foreach(var corner in path.corners)
+                    if(Vector3.ProjectOnPlane(corner-player.position,Vector3.up).magnitude>distance+.02f) {end=start;break;}
+            }
+            float elapsed=0;
+            while(elapsed<ApproachSeconds && Vector3.Distance(transform.position,end)>.12f)
+            {
+                elapsed+=Time.deltaTime;
+                if(Vector3.ProjectOnPlane(transform.position-player.position,Vector3.up).magnitude>distance+.02f)break;
+                navigator.MoveTo(end,.1f);
+                yield return null;
+            }
+            navigator.Stop(true);
+            if(!HasClearConversationLineOfSight())
+            {mover.MovementInputEnabled=wasEnabled;arriving=true;yield break;}
+            StartConversation();
         }
 
         public void ShowBubble(string text)

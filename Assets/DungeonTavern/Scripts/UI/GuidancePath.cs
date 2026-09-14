@@ -5,13 +5,40 @@ namespace DungeonTavern.UI
 {
     internal static class GuidancePath
     {
-        public static System.Collections.IEnumerator Calculate(Vector3 from,Vector3 to,bool basement,Transform player,System.Action<Vector3[]> completed,bool fixedDestination)
+        public static System.Collections.IEnumerator Calculate(Vector3 from,Vector3 to,bool basement,Transform player,System.Action<Vector3[]> completed,bool fixedDestination,bool elevatedTarget=false)
         {
             // F1 already owns a baked navigation surface. Never use its overlapping coordinates for B1.
-            if(!basement&&NavMesh.SamplePosition(from,out var start,1.5f,NavMesh.AllAreas)&&NavMesh.SamplePosition(to,out var end,2,NavMesh.AllAreas))
+            if(!basement&&NavMesh.SamplePosition(from,out var start,1.5f,NavMesh.AllAreas))
             {
-                var path=new NavMeshPath();
-                if(NavMesh.CalculatePath(start.position,end.position,NavMesh.AllAreas,path)&&path.status==NavMeshPathStatus.PathComplete){completed(path.corners);yield break;}
+                if(elevatedTarget&&!fixedDestination)
+                {
+                    // Countertops can be isolated NavMesh islands. Choose a reachable floor point
+                    // within interaction range, never the mesh directly underneath the prop.
+                    Vector3[] best=null;float bestCost=float.PositiveInfinity;
+                    for(int ring=0;ring<3;ring++)
+                    {
+                        float radius=.7f+ring*.4f;
+                        for(int i=0;i<12;i++)
+                        {
+                            float angle=i*Mathf.PI/6;
+                            var sample=new Vector3(to.x+Mathf.Cos(angle)*radius,start.position.y,to.z+Mathf.Sin(angle)*radius);
+                            if(!NavMesh.SamplePosition(sample,out var floor,.4f,NavMesh.AllAreas)||Mathf.Abs(floor.position.y-start.position.y)>.4f
+                                ||Vector3.ProjectOnPlane(floor.position-to,Vector3.up).magnitude>1.6f)continue;
+                            var path=new NavMeshPath();
+                            if(!NavMesh.CalculatePath(start.position,floor.position,NavMesh.AllAreas,path)||path.status!=NavMeshPathStatus.PathComplete)continue;
+                            var corners=path.corners;float routeCost=Vector3.ProjectOnPlane(floor.position-to,Vector3.up).magnitude;
+                            for(int c=1;c<corners.Length;c++)routeCost+=Vector3.Distance(corners[c-1],corners[c]);
+                            if(routeCost<bestCost){bestCost=routeCost;best=corners;}
+                        }
+                        yield return null;
+                    }
+                    completed(best??System.Array.Empty<Vector3>());yield break;
+                }
+                if(NavMesh.SamplePosition(to,out var end,2,NavMesh.AllAreas))
+                {
+                    var path=new NavMeshPath();
+                    if(NavMesh.CalculatePath(start.position,end.position,NavMesh.AllAreas,path)&&path.status==NavMeshPathStatus.PathComplete){completed(path.corners);yield break;}
+                }
             }
             // B1 has no NPC navigation surface. A small physics grid follows floor/stair support.
             // Bound total work and spread physics searches across frames to avoid blocking play.

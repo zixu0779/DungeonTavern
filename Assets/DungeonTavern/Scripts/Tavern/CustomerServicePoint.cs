@@ -38,6 +38,12 @@ namespace DungeonTavern.Gameplay.Interaction
         public string CustomerName => customerName;
         public CustomerSeatingKind SeatingKind { get; private set; }
         public int PartyId { get; private set; }
+        public bool DialogueFacing { get; set; }
+        public bool UsesDemoMenu { get; set; }
+        public void BeginGroupOrdering() => ChangeState(CustomerOrderState.Ordering);
+        public void FinishGroupOrdering(CustomerOrder order)
+        { Order=order;menuSystem.RegisterOrder(this,Order);serviceQueue.Remove(this);ChangeState(CustomerOrderState.FindingSeat); }
+
         public SeatPoint AssignedSeat => assignedSeat;
         public Vector3 ServicePosition => modelMotion ? modelMotion.BodyPosition : transform.position+Vector3.up;
 
@@ -110,6 +116,7 @@ namespace DungeonTavern.Gameplay.Interaction
 
         private void LateUpdate()
         {
+            if(DialogueFacing)return;
             if (State is CustomerOrderState.Ordering or CustomerOrderState.ShowingOrder
                 || (State == CustomerOrderState.QueueingForOrder && queueArrived))
             {
@@ -134,9 +141,10 @@ namespace DungeonTavern.Gameplay.Interaction
                     ChangeState(CustomerOrderState.QueueingForOrder);
                     break;
                 case CustomerOrderState.QueueingForOrder:
-                    if (arrived && serviceQueue.IsFirst(this)) ChangeState(CustomerOrderState.Ordering);
+                    if (arrived && serviceQueue.IsFirst(this)) { if(UsesDemoMenu)serviceQueue.TryBeginGroup(this);else ChangeState(CustomerOrderState.Ordering); }
                     break;
                 case CustomerOrderState.Ordering:
+                    if(UsesDemoMenu)break;
                     stateTimer -= seconds;
                     if (stateTimer <= 0 && menuSystem.RegisterOrder(this, Order))
                     {
@@ -167,6 +175,10 @@ namespace DungeonTavern.Gameplay.Interaction
                         }
                         ChangeState(CustomerOrderState.WaitingForFood);
                     }
+                    break;
+                case CustomerOrderState.WaitingForFood:
+                    if(Order.HasFood)ChangeState(CustomerOrderState.Eating);
+                    else if(Order.AllConsumed)ChangeState(CustomerOrderState.AwaitingSettlement);
                     break;
                 case CustomerOrderState.Eating:
                     Order.Eat(seconds);
@@ -219,7 +231,7 @@ namespace DungeonTavern.Gameplay.Interaction
             if (hands == null || hands.CurrentItem == HeldItem.None)
                 return Order.AllDelivered ? $"{customerName}正在用餐" : $"{customerName}正在等待上菜";
             return Order.Needs(hands.CurrentItem)
-                ? $"F：送上{menuSystem.FindDish(hands.CurrentItem).label}" : "这不是这位客人待上的菜品";
+                ? $"F：送上{menuSystem.FindDish(Order.NextDelivery(hands.CurrentItem).Item).label}" : "这不是这位客人待上的菜品";
         }
 
         public override bool Interact(PlayerHands hands)

@@ -18,11 +18,28 @@ namespace DungeonTavern.Gameplay.Interaction
 
         [SerializeField, Min(0)] private int startingMoney = 500;
         public int Balance { get; private set; }
-        public int PendingOrderCount => orders.Values.Sum(o => o.Portions.Count(p => !p.Delivered));
+        public int PendingOrderCount => UniquePortions.Count(p => !p.Delivered);
         public event Action Changed;
         public event Action OrderRegistered;
 
-        private void Awake() => Balance = startingMoney;
+        private void Awake()
+        {
+            Balance = startingMoney;
+            dishes = new List<DishDefinition> {
+                new() { item=HeldItem.MainDish,label="铁锅洞菇炖肉",price=24,eatingSeconds=5 },
+                new() { item=HeldItem.CaveBoarPlatter,label="炭烤穴猪拼盘",price=28,eatingSeconds=6 },
+                new() { item=HeldItem.SideDish,label="盐焗岩薯",price=7,eatingSeconds=3 },
+                new() { item=HeldItem.RootBread,label="黑麦根面包",price=6,eatingSeconds=3 },
+                new() { item=HeldItem.PickledFern,label="酸渍洞蕨",price=5,eatingSeconds=2.5f },
+                new() { item=HeldItem.TestDrink,label="深窖麦芽酒",price=8,eatingSeconds=3 },
+                new() { item=HeldItem.GlowcapAle,label="幽菇淡艾尔",price=10,eatingSeconds=3 },
+                new() { item=HeldItem.CinderMead,label="余烬蜂蜜酒",price=12,eatingSeconds=3 }
+            };
+        }
+        public static bool IsDrink(HeldItem item) => item is HeldItem.TestDrink or HeldItem.GlowcapAle or HeldItem.CinderMead;
+        public static bool IsSharedDish(HeldItem item) => item is HeldItem.MainDish or HeldItem.CaveBoarPlatter;
+        private IEnumerable<CustomerOrder.Portion> UniquePortions => orders.Values.SelectMany(o=>o.Portions).Distinct();
+        public int MissingServingCups => orders.Values.SelectMany(o=>o.Portions.Where(p=>!p.Delivered&&(o.AllowDrinkSubstitute||IsDrink(p.Item)))).Distinct().Count();
 
         private void Update()
         {
@@ -76,9 +93,9 @@ namespace DungeonTavern.Gameplay.Interaction
             if (orders.Remove(customer)) Changed?.Invoke();
         }
 
-        public int Count(HeldItem item) => orders.Values.Sum(o => o.Portions.Count(p => p.Item == item && !p.Delivered));
+        public int Count(HeldItem item) => UniquePortions.Count(p => p.Item == item && !p.Delivered);
         public IReadOnlyList<CustomerServicePoint> GetCustomers(HeldItem item) => orders
-            .Where(pair => pair.Key != null && pair.Value.Needs(item)).Select(pair => pair.Key).ToArray();
+            .Where(pair => pair.Key != null && pair.Value.Portions.Any(p=>p.Item==item&&!p.Delivered)).Select(pair => pair.Key).ToArray();
 
         public bool CompleteSale(CustomerServicePoint customer)
         {
@@ -92,7 +109,8 @@ namespace DungeonTavern.Gameplay.Interaction
 
         public static string GetLabel(HeldItem item) => item switch
         {
-            HeldItem.EmptyCup => "空酒杯", HeldItem.TestDrink => "麦芽饮料", HeldItem.MainDish => "主菜", HeldItem.SideDish => "配菜", _ => item.ToString()
+            HeldItem.EmptyCup => "空酒杯", HeldItem.TestDrink => "深窖麦芽酒", HeldItem.MainDish => "铁锅洞菇炖肉", HeldItem.SideDish => "盐焗岩薯",
+            HeldItem.CaveBoarPlatter=>"炭烤穴猪拼盘",HeldItem.RootBread=>"黑麦根面包",HeldItem.PickledFern=>"酸渍洞蕨",HeldItem.GlowcapAle=>"幽菇淡艾尔",HeldItem.CinderMead=>"余烬蜂蜜酒", _ => item.ToString()
         };
 
 
