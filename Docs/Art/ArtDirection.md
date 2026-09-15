@@ -29,6 +29,28 @@ presentation and asset organization, not future feature commitments.
   Original sprite children are inactive for rollback. Seating uses three imported
   clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
 
+## Local wall cutouts
+
+- `DialogueOcclusionFader` uses sphere casts every 0.1 seconds and smooth world-space
+  view-segment capsule masks with triplanar noise and independent fade transitions, based on Brendan Sullivan's public breakdown:
+  https://www.artofsully.com/projects/WXVnyD . This is an original Unity implementation;
+  no downloadable source from the author was found.
+- Runtime wall material copies preserve base texture/tint/UVs. Native Pixel Face
+  retains its atlas mapping. Fixed world-space noise breaks up the cut edge.
+- Only architecture under Walls, Walls_Stone and StairRearEnclosure participates.
+  Floors and collisions remain unchanged; renderer objects are never hidden.
+- Hollow wall slabs use depth-correct reconstructed cut surfaces, bounded by each
+  mesh's back faces and local bounds. The original exterior texture is never used
+  as an interior fill. Brick cores use crushed brick/lime mortar; stone cores use
+  grey mineral aggregate. Textures live in Walls/Sections/Resources and use fixed
+  world-space scale. This is a rendering cap, not a change to mesh or collision.
+- Non-wall props (including stairs and moving door leaves) keep their normal
+  occlusion. Stone door frames remain eligible. Deeply concave/disconnected meshes
+  require separate wall slabs to guarantee an exact internal section.
+- The camera component's Enable Sections toggle disables caps independently of
+  the cutout. Both textures and the cap shader are included in runtime resources.
+- Disable the camera's DialogueOcclusionFader to restore authored materials.
+
 ## Source and runtime assets
 
 - `ArtSource/Props/Concepts`: existing environment/prop designs, including walls

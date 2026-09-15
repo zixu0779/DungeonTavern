@@ -15,7 +15,7 @@ Shader "DungeonTavern/Native Pixel Face"
     SubShader
     {
         Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="TransparentCutout" "Queue"="AlphaTest" }
-        Cull Back
+        Cull Off
         ZWrite On
 
         Pass
@@ -24,9 +24,12 @@ Shader "DungeonTavern/Native Pixel Face"
             Tags { "LightMode"="SRPDefaultUnlit" }
 
             HLSLPROGRAM
+            #pragma target 3.5
             #pragma vertex Vert
             #pragma fragment Frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "../../Rendering/TavernWallCutout.hlsl"
+            #include "../../Rendering/TavernWallSection.hlsl"
 
             TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
@@ -51,6 +54,7 @@ Shader "DungeonTavern/Native Pixel Face"
             {
                 float4 positionCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
+                float3 positionWS : TEXCOORD1;
             };
 
             Varyings Vert(Attributes input)
@@ -58,6 +62,7 @@ Shader "DungeonTavern/Native Pixel Face"
                 Varyings output;
                 output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
                 output.uv = input.uv;
+                output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
                 return output;
             }
 
@@ -69,8 +74,16 @@ Shader "DungeonTavern/Native Pixel Face"
                 return float2(1.0 - uv.y, uv.x);
             }
 
-            half4 Frag(Varyings input) : SV_Target
+            half4 Frag(Varyings input, FRONT_FACE_TYPE facing : FRONT_FACE_SEMANTIC, out float depth : SV_Depth) : SV_Target
             {
+                depth=input.positionCS.z;
+                if (!IS_FRONT_VFACE(facing,true,false))
+                {
+                    float3 section=TavernSectionPoint(input.positionWS);
+                    depth=TavernSectionDepth(section);
+                    return TavernSectionColor(section);
+                }
+                TavernWallClip(input.positionWS);
                 // A 90/270 degree turn swaps the sprite's physical width and
                 // height. Swap native texel density before wrapping, otherwise
                 // a 4x16 sprite rotated onto a 16x4 surface samples only one

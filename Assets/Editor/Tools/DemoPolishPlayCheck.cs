@@ -227,6 +227,92 @@ static class DemoPolishPlayCheck
         Assert(checkedPairs>0&&oneSideClear>0,"No real-wall clear/opposite-blocked cases exercised");
         Log($"PASS real authored walls / real characters: {checkedPairs} pairs, {oneSideClear} clear-vs-blocked, {bothBlocked} both-blocked fallback");
     }
+    public static IEnumerator CheckWallCutout(PrototypePlayerMover player,PrototypeCameraOrbit orbit)
+    {
+        player.MovementInputEnabled=false;player.enabled=false;player.GetComponent<CharacterController>().enabled=false;
+        var eve=UnityEngine.Object.FindAnyObjectByType<Day1EveActor>(FindObjectsInactive.Include);eve.gameObject.SetActive(true);eve.enabled=false;eve.StopAllCoroutines();
+        var nav=eve.GetComponent<NpcNavigator>();if(nav){nav.Stop();nav.enabled=false;}
+        var agent=eve.GetComponent<NavMeshAgent>();if(agent)agent.enabled=false;
+        player.transform.position=new Vector3(48.4750023f,.07999992f,17.0015678f);
+        eve.transform.position=new Vector3(46.4133453f,.01999986f,18.0400677f);
+        player.transform.rotation=Quaternion.Euler(0,296.746f,0);eve.transform.rotation=Quaternion.Euler(0,116.746f,0);
+        Physics.SyncTransforms();
+        var effect=orbit.GetComponent<DialogueOcclusionFader>();
+        var walls=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Where(r=>DialogueOcclusionFader.IsWall(r.transform)).ToArray();
+        Assert(walls.Length>0,"No cuttable walls found");
+        effect.enabled=false;
+        var originals=walls.ToDictionary(r=>r,r=>r.sharedMaterials);
+        var leaves=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Where(r=>r.name=="DoorLeaf"||r.name.EndsWith("Door_Leaf")).ToArray();
+        Assert(leaves.All(r=>!DialogueOcclusionFader.IsWall(r.transform)),"Door leaves incorrectly classified as walls");
+        var leafMaterials=leaves.ToDictionary(r=>r,r=>r.sharedMaterials);
+        orbit.BeginDialogueFraming(player.transform,eve.transform);
+        yield return new WaitForSeconds(1.5f);
+        foreach(float yaw in new[]{26.74599f,206.74599f})
+        {
+            Set(orbit,"dialogueTargetYaw",yaw);
+            yield return new WaitForSeconds(.15f);
+            yield return Capture($"/tmp/wall-cutout-before-{(int)yaw}.png");
+            effect.enabled=true;yield return new WaitForSeconds(.7f);
+            Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Player cutout did not open at the reported corner");
+            Assert(((Vector3)Shader.GetGlobalVector("_TavernCutSphere0")-player.transform.position).sqrMagnitude<100,"Invalid wall contact sent to shader");
+            Assert(Shader.GetGlobalFloat("_TavernCutTransition0")>.99f,"Cutout transition failed to finish");
+            Assert(walls.All(r=>r.enabled),"Effect hid a complete wall renderer");
+            Assert(leaves.All(r=>r.sharedMaterials.SequenceEqual(leafMaterials[r])),"Effect changed a moving door leaf");
+            var sample=walls.First(r=>r.name=="Wall_Horizontal_06_3");
+            var pb=new MaterialPropertyBlock();sample.GetPropertyBlock(pb,0);
+            Log($"WALL shader={sample.sharedMaterials[0].shader.name} cuttable={pb.GetFloat("_TavernCuttable")} camera={Shader.GetGlobalVector("_TavernCutCamera")} actual={((Camera)Get(orbit,"gameCamera")).transform.position}");
+            Assert(Shader.GetGlobalTexture("_TavernBrickCore") && Shader.GetGlobalTexture("_TavernStoneCore"), "Section textures missing");
+            Set(effect,"enableSections",false);yield return null;
+            yield return Capture($"/tmp/wall-section-off-{(int)yaw}.png");
+            Set(effect,"enableSections",true);yield return null;
+            yield return Capture($"/tmp/wall-cutout-after-{(int)yaw}.png");
+            Log($"PASS cutout yaw {yaw}: sphere0={Shader.GetGlobalVector("_TavernCutSphere0")} sphere1={Shader.GetGlobalVector("_TavernCutSphere1")}");
+            if (yaw > 180)
+            {
+                // Test-only camera sweep around the reported corner; production yaw rules stay untouched.
+                foreach(float offset in new[]{-12f,-6f,0f,6f,12f})
+                {
+                    Set(orbit,"dialogueTargetYaw",yaw+offset);yield return new WaitForSeconds(.15f);
+                    yield return Capture($"/tmp/wall-section-sweep-{(int)(offset+12)}.png");
+                    Assert(walls.All(r=>r.enabled),"Camera sweep hid a complete wall");
+                }
+                Set(orbit,"dialogueTargetYaw",yaw);yield return null;
+            }
+            effect.enabled=false;
+            Assert(Shader.GetGlobalVector("_TavernCutSphere0").w==0,"Cutout globals survived disable");
+            Assert(walls.All(r=>r.sharedMaterials.SequenceEqual(originals[r])),"Authored wall materials not restored");
+        }
+        orbit.EndDialogueFraming();effect.enabled=true;
+        player.transform.position=new Vector3(30,0,14);orbit.FollowTarget=player.transform;
+        yield return new WaitForSeconds(1);
+        Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Cutout remained in clear hall");
+        Log("PASS local sphere opens at both real corner views, all wall objects remain enabled, materials restored, clear hall closes cutout");
+        yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SealRoom_B1",UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        var basement=UnityEngine.SceneManagement.SceneManager.GetSceneByName("SealRoom_B1");
+        var hostEnvironment=GameObject.Find("Tavern_Main/Environment");
+        Assert(hostEnvironment,"Main environment root missing");hostEnvironment.SetActive(false);
+        var stone=UnityEngine.Object.FindObjectsByType<MeshRenderer>().First(r=>r.gameObject.scene==basement&&DialogueOcclusionFader.IsWall(r.transform)&&r.bounds.size.y>1.5f);
+        yield return new WaitForSeconds(1.2f);
+        Assert(stone.sharedMaterials.Any(m=>m&&m.shader.name=="DungeonTavern/Wall Cutout Unlit"),"B1 stone wall shader not registered");
+        var collider=stone.GetComponent<Collider>();
+        Assert(collider,"B1 test wall has no collider");
+        Vector3 outward=stone.bounds.size.x>stone.bounds.size.z?Vector3.forward:Vector3.right;
+        Vector3 basePoint=stone.bounds.center;basePoint.y=stone.bounds.min.y+.1f;
+        player.transform.position=basePoint-outward*.8f;
+        eve.transform.position=player.transform.position+Vector3.Cross(Vector3.up,outward)*1.5f;
+        orbit.BeginDialogueFraming(player.transform,eve.transform);
+        Set(orbit,"dialogueTargetYaw",Mathf.Atan2(-outward.x,-outward.z)*Mathf.Rad2Deg);
+        Physics.SyncTransforms();yield return new WaitForSeconds(2);
+        Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"B1 wall cutout failed to activate");
+        var stairs=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Where(r=>r.gameObject.scene==basement && r.name.StartsWith("Stair_")).ToArray();
+        Assert(stairs.All(r=>!DialogueOcclusionFader.IsWall(r.transform)),"Stairs incorrectly classified as walls");
+        Set(effect,"enableSections",false);yield return null;yield return Capture("/tmp/wall-section-off-b1.png");
+        Set(effect,"enableSections",true);yield return null;
+        yield return Capture("/tmp/wall-cutout-b1.png");
+        orbit.EndDialogueFraming();effect.enabled=false;
+        Assert(stone.sharedMaterials.All(m=>!m||m.shader.name!="DungeonTavern/Wall Cutout Unlit"),"B1 original stone materials not restored");
+        Log("PASS B1 stone wall registration, local mask activation, original material restore");
+    }
     public static void ClickUi(string name)
     {
         var button=DungeonTavern.UI.TavernUI.Instance.GetComponentsInChildren<UnityEngine.UI.Button>().Single(b=>b.name==name);

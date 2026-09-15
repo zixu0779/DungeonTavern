@@ -54,6 +54,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
             set { StopCustomerFollow(); transitioningFollow = false; followTarget = value; }
         }
 
+        public Transform OcclusionPrimary => dialogueFraming ? dialogueLeft : followTarget;
+        public Transform OcclusionSecondary => dialogueFraming ? dialogueRight : null;
+
         public float CurrentCardinalYaw => Mathf.Repeat(targetYaw, 360f);
 
         private void Awake()
@@ -300,7 +303,6 @@ namespace DungeonTavern.Prototypes.Rotation25D
             dialogueRight = rightCharacter;
             dialogueTargetYaw = ChooseDialogueYaw(leftCharacter, rightCharacter);
             dialogueAge=0;
-            occlusionFader?.RestoreAll();
             dialogueFraming = true;
         }
 
@@ -316,7 +318,6 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 gameCamera.orthographicSize = preDialogueSize;
             transform.SetPositionAndRotation(preDialoguePosition, preDialogueRotation);
             targetYaw = preDialogueTargetYaw;
-            occlusionFader?.RestoreAll();
         }
 
         private void UpdateDialogueFraming()

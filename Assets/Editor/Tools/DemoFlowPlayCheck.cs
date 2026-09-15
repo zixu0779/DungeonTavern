@@ -44,6 +44,8 @@ static class DemoFlowPlayCheck
     static void RunGroups(){SessionState.SetBool(Key+"Groups",true);Run();}
     [MenuItem("Tools/Demo Flow/Test Customer Presentation")]
     static void RunCustomers(){SessionState.SetBool(Key+"Customers",true);Run();}
+    [MenuItem("Tools/Demo Flow/Test Wall Cutout")]
+    static void RunWallCutout(){SessionState.SetBool(Key+"WallCutout",true);Run();}
     [MenuItem("Tools/Demo Flow/Test Dialogue Occlusion")]
     static void RunDialogueCamera(){SessionState.SetBool(Key+"DialogueCamera",true);Run();}
     [MenuItem("Tools/Demo Flow/Test UI")]
@@ -110,6 +112,7 @@ static class DemoFlowPlayCheck
         activation=dispenser.GetComponent<CupDispenserActivation>();
         if(activation==null)activation=(CupDispenserActivation)Get(dispenser,"activation");
         orbit=UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>();orbit.FollowTarget=player.transform;
+        if(SessionState.GetBool(Key+"WallCutout",false)){SessionState.SetBool(Key+"WallCutout",false);yield return DemoPolishPlayCheck.CheckWallCutout(player,orbit);yield break;}
         if(SessionState.GetBool(Key+"DialogueCamera",false)){SessionState.SetBool(Key+"DialogueCamera",false);yield return DemoPolishPlayCheck.CheckRealDialogueCamera(player,orbit);yield break;}
         if(SessionState.GetBool(Key+"Groups",false)){SessionState.SetBool(Key+"Groups",false);yield return DemoGroupOrderingCheck.Run(player,narrative);yield break;}
         if(SessionState.GetBool(Key+"Customers",false)){SessionState.SetBool(Key+"Customers",false);yield return CustomerPresentationCheck.Run(player);yield break;}

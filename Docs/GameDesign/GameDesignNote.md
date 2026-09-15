@@ -67,10 +67,13 @@ This document is the durable source of truth for confirmed game and world design
   line; a lone choice becomes the protagonist's action/speech in the dialogue
   box and continues without a choice button.
 - Dialogue camera yaw is perpendicular to the character pair, selecting between
-  two opposing headings. Prefer the smaller rotation unless that view is blocked
-  by fixed scenery and the opposite is clear. If both are blocked, use the smaller
-  rotation. Orthographic sight lines exclude triggers and other characters.
-  Dialogue framing eases over 1.3 seconds and never fades wall materials.
+  two opposing headings. Choose fewer blocked rays out of 18, then shorter rotation
+  for a tie. Orthographic sight lines exclude triggers and other characters.
+  Dialogue framing eases over 1.3 seconds. Remaining architectural occlusion uses
+  local world-space cutout channels toward the camera, not whole-wall fading. Exploration follows the
+  player; dialogue handles both speakers. Floors, colliders and interaction blocking
+  remain unchanged. Masks fade smoothly. Cut surfaces use masonry-core materials; stairs and other
+  non-wall props remain opaque. Rendering sections do not alter wall collision.
   The protagonist smoothly turns toward the speaker over 0.35–1 second, according to
   turn angle. Temporary-closing turns use the same speed and yield to movement.
 - Lightweight guidance announces B1/F1 on entry and tracks first successful
