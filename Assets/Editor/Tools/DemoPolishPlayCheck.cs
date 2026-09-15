@@ -146,9 +146,86 @@ static class DemoPolishPlayCheck
         Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),0))<.01f,"Unblocked camera did not choose nearer perpendicular");
         near.SetActive(true);Physics.SyncTransforms();Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),180))<.01f,"Blocked nearer view did not choose opposite");
         far.SetActive(true);Physics.SyncTransforms();Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),0))<.01f,"Both blocked should choose shorter rotation");
+        // Both views blocked: a one-person obstruction must beat a wall hiding both people.
+        far.transform.position=new Vector3(500,5,504);far.transform.localScale=new Vector3(.6f,20,.5f);
+        Physics.SyncTransforms();Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),180))<.01f,"Both blocked: lower occlusion count did not win");
+        far.SetActive(false);
+        near.GetComponent<Renderer>().enabled=false;
+        Physics.SyncTransforms();Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),180))<.01f,"Collision-only wall proxy was ignored");
+        near.GetComponent<Renderer>().enabled=true;
+        // A narrow wall strip intersects only one body row, below the old 0.6 m cutoff.
+        near.transform.position=new Vector3(501,3.7f,497);near.transform.localScale=new Vector3(10,.25f,.1f);
+        Physics.SyncTransforms();Assert(Mathf.Abs(Mathf.DeltaAngle(Pick(),180))<.01f,"Single torso obstruction was ignored");
+        near.SetActive(false);
         orbit.transform.rotation=original;
         foreach(var go in new[]{left,right,near,far}){go.SetActive(false);UnityEngine.Object.Destroy(go);}
         Log("PASS two perpendicular dialogue angles: clear/one blocked/both blocked; shortest-turn fallback");
+    }
+    public static IEnumerator CheckRealDialogueCamera(PrototypePlayerMover player,PrototypeCameraOrbit orbit)
+    {
+        CheckDialogueCamera(orbit);
+        player.MovementInputEnabled=false;player.enabled=false;
+        var eve=UnityEngine.Object.FindAnyObjectByType<Day1EveActor>(FindObjectsInactive.Include);eve.gameObject.SetActive(true);
+        eve.StopAllCoroutines();eve.enabled=false;
+        var nav=eve.GetComponent<NpcNavigator>();if(nav){nav.Stop();nav.enabled=false;}
+        var agent=eve.GetComponent<NavMeshAgent>();if(agent)agent.enabled=false;
+        var choose=typeof(PrototypeCameraOrbit).GetMethod("ChooseDialogueYaw",BindingFlags.Instance|BindingFlags.NonPublic);
+        var count=typeof(PrototypeCameraOrbit).GetMethod("CountCandidateBlockers",BindingFlags.Instance|BindingFlags.NonPublic);
+        // Exercise real authored walls with real animated character bounds, not capsule stand-ins.
+        var walls=UnityEngine.Object.FindObjectsByType<BoxCollider>()
+            .Where(c=>c.enabled&&!c.isTrigger&&c.GetComponent<EditableHorizontalWallMiter>()!=null&&c.bounds.size.y>2).ToArray();
+        int checkedPairs=0,oneSideClear=0,bothBlocked=0;bool captured=false;
+        foreach(var wall in walls)
+        {
+            var center=wall.transform.TransformPoint(wall.center);center.y=0;
+            var tangent=wall.transform.right;var normal=wall.transform.forward;
+            for(int side=-1;side<=1;side+=2)
+            {
+                player.GetComponent<CharacterController>().enabled=false;
+                player.transform.position=center+normal*side*.85f-tangent*.65f;
+                eve.transform.position=center+normal*side*.85f+tangent*.65f;
+                Physics.SyncTransforms();yield return null;
+                orbit.transform.rotation=Quaternion.Euler(0,45,0);
+                float yaw=(float)choose.Invoke(orbit,new object[]{player.transform,eve.transform});
+                int selected=(int)count.Invoke(orbit,new object[]{yaw,player.transform,eve.transform});
+                int other=(int)count.Invoke(orbit,new object[]{yaw+180,player.transform,eve.transform});
+                Assert(selected<=other,"Real wall chose more obstructed side: "+wall.name);
+                checkedPairs++;if(selected==0&&other>0)oneSideClear++;if(selected>0&&other>0)bothBlocked++;
+                if(selected==0&&other>0&&!captured
+                    &&NavMesh.SamplePosition(player.transform.position,out _,.3f,NavMesh.AllAreas)
+                    &&NavMesh.SamplePosition(eve.transform.position,out _,.3f,NavMesh.AllAreas))
+                {
+                    captured=true;
+                    var camera=(Camera)Get(orbit,"gameCamera");
+                    var blocked=typeof(PrototypeCameraOrbit).GetMethod("CharacterBlocked",BindingFlags.Static|BindingFlags.NonPublic);
+                    orbit.BeginDialogueFraming(player.transform,eve.transform);
+                    int hiddenFrames=0,totalFrames=0;float until=Time.time+1.5f;
+                    while(Time.time<until)
+                    {
+                        yield return null;totalFrames++;
+                        int hidden=(int)blocked.Invoke(null,new object[]{camera.transform.position,camera.transform.forward,player.transform,player.transform,eve.transform})
+                            +(int)blocked.Invoke(null,new object[]{camera.transform.position,camera.transform.forward,eve.transform,player.transform,eve.transform});
+                        if(hidden>0)hiddenFrames++;
+                    }
+                    Log($"TRANSITION real wall: {hiddenFrames}/{totalFrames} frames have occlusion, final candidate clear");
+                    yield return Capture("/tmp/dialogue-real-wall.png");
+                    orbit.EndDialogueFraming();
+                }
+            }
+        }
+        player.transform.position=new Vector3(48.4750023f,.07999992f,17.0015678f);
+        eve.transform.position=new Vector3(46.4133453f,.01999986f,18.0400677f);
+        player.transform.rotation=Quaternion.Euler(0,296.746f,0);
+        eve.transform.rotation=Quaternion.Euler(0,116.746f,0);
+        orbit.transform.rotation=Quaternion.Euler(0,315,0);
+        Physics.SyncTransforms();yield return null;
+        int front=(int)count.Invoke(orbit,new object[]{26.74599f,player.transform,eve.transform});
+        int back=(int)count.Invoke(orbit,new object[]{206.74599f,player.transform,eve.transform});
+        float chosen=(float)choose.Invoke(orbit,new object[]{player.transform,eve.transform});
+        Assert(back<front&&Mathf.Abs(Mathf.DeltaAngle(chosen,206.74599f))<.1f,"Reported corner did not choose less obstructed perpendicular view");
+        Log($"PASS reported corner: 26.75 degrees {front}/18 blocked; 206.75 degrees {back}/18 blocked; selected {chosen}");
+        Assert(checkedPairs>0&&oneSideClear>0,"No real-wall clear/opposite-blocked cases exercised");
+        Log($"PASS real authored walls / real characters: {checkedPairs} pairs, {oneSideClear} clear-vs-blocked, {bothBlocked} both-blocked fallback");
     }
     public static void ClickUi(string name)
     {

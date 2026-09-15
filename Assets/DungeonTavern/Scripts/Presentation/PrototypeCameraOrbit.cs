@@ -347,9 +347,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
             float current=transform.eulerAngles.y;
             float near=Mathf.Abs(Mathf.DeltaAngle(current,preferred))<=Mathf.Abs(Mathf.DeltaAngle(current,opposite))?preferred:opposite;
             float far=Mathf.Repeat(near+180,360);
-            // Only the two perpendicular views qualify. Both blocked (or neither): retain the shorter turn.
-            return CountCandidateBlockers(near,leftCharacter,rightCharacter)>0
-                &&CountCandidateBlockers(far,leftCharacter,rightCharacter)==0?far:near;
+            // Only the two perpendicular views qualify. Compare all 18 sight lines; ties favour the shorter turn.
+            int nearBlocked = CountCandidateBlockers(near, leftCharacter, rightCharacter);
+            int farBlocked = CountCandidateBlockers(far, leftCharacter, rightCharacter);
+            return farBlocked < nearBlocked ? far : near;
         }
 
         private int CountCandidateBlockers(float yaw, Transform leftCharacter, Transform rightCharacter)
@@ -364,35 +365,41 @@ namespace DungeonTavern.Prototypes.Rotation25D
         }
         private static int CharacterBlocked(Vector3 cameraPosition,Vector3 forward,Transform character,Transform left,Transform right)
         {
-            Vector3 head=GetLookPoint(character);float height=Mathf.Max(.5f,head.y-character.position.y);int blocked=0;
-            for(int i=0;i<3;i++)
+            // Use the complete visible model, not whichever renderer happens to be first.
+            Bounds bounds = new Bounds(character.position + Vector3.up, new Vector3(.5f, 2f, .5f));
+            bool found = false;
+            foreach (var renderer in character.GetComponentsInChildren<Renderer>())
             {
-                Vector3 point=head-Vector3.up*(height*i*.3f);
-                // Parallel sight lines match the actual orthographic projection.
-                float distance=Vector3.Dot(point-cameraPosition,forward);
-                if(distance<=0)continue;
-                Vector3 origin=point-forward*distance;
-                foreach(var hit in Physics.RaycastAll(origin,forward,distance,~0,QueryTriggerInteraction.Ignore))
+                if (!renderer.enabled || renderer is ParticleSystemRenderer || renderer is LineRenderer || renderer is TrailRenderer)
+                    continue;
+                if (!found) { bounds = renderer.bounds; found = true; }
+                else bounds.Encapsulate(renderer.bounds);
+            }
+            Vector3 screenRight = Vector3.Cross(Vector3.up, forward).normalized;
+            float halfWidth = Mathf.Abs(screenRight.x) * bounds.extents.x + Mathf.Abs(screenRight.z) * bounds.extents.z;
+            // Count occluded samples, not individual colliders: multiple walls on one ray count once.
+            int blocked = 0;
+            for (int row = 0; row < 3; row++)
+            for (int column = -1; column <= 1; column++)
+            {
+                Vector3 point = new Vector3(bounds.center.x, bounds.min.y + bounds.size.y * (.35f + row * .25f), bounds.center.z)
+                    + screenRight * (halfWidth * .65f * column);
+                float distance = Vector3.Dot(point - cameraPosition, forward);
+                if (distance <= 0) continue;
+                Vector3 origin = point - forward * distance;
+                foreach (var hit in Physics.RaycastAll(origin, forward, distance, ~0, QueryTriggerInteraction.Ignore))
                 {
-                    var collider=hit.collider;var t=collider.transform;
-                    if(t.IsChildOf(left)||t.IsChildOf(right)||collider.GetComponentInParent<CharacterController>()
-                        ||collider.GetComponentInParent<UnityEngine.AI.NavMeshAgent>())continue;
-                    if(collider.attachedRigidbody&&!collider.attachedRigidbody.isKinematic)continue;
-                    if(collider.bounds.size.y<.6f)continue;
-                    var renderer=t.GetComponent<Renderer>()??t.GetComponentInParent<Renderer>()??t.GetComponentInChildren<Renderer>();
-                    if(renderer==null||!renderer.enabled)continue;
-                    blocked++;break;
+                    var collider = hit.collider;
+                    var t = collider.transform;
+                    if (t.IsChildOf(left) || t.IsChildOf(right) || collider.GetComponentInParent<CharacterController>()
+                        || collider.GetComponentInParent<UnityEngine.AI.NavMeshAgent>()) continue;
+                    if (collider.attachedRigidbody && !collider.attachedRigidbody.isKinematic) continue;
+                    // Collision proxies can be siblings of the rendered wall; do not require a renderer here.
+                    blocked++;
+                    break;
                 }
             }
-            return blocked>=2?1:0;
-        }
-
-        private static Vector3 GetLookPoint(Transform character)
-        {
-            Renderer renderer = character.GetComponentInChildren<Renderer>();
-            if (renderer != null)
-                return new Vector3(renderer.bounds.center.x, renderer.bounds.max.y * 0.75f + renderer.bounds.center.y * 0.25f, renderer.bounds.center.z);
-            return character.position + Vector3.up * 1.2f;
+            return blocked;
         }
 
         private static float SnapYaw(float yaw) => Mathf.Repeat(45f + Mathf.Round((yaw - 45f) / 90f) * 90f, 360f);

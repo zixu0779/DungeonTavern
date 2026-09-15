@@ -10,8 +10,7 @@ This document is the durable source of truth for confirmed game and world design
 - The player is the tavern owner. Handling tavern affairs reveals the world and advances the story.
 - The 2.5D narrative presentation has three confirmed forms: rare opening/memory
   cinematics may use voice-over; short in-world reactions use head bubbles;
-  branch-bearing owner/NPC conversations use a close dialogue view with the owner
-  left, NPC right, and dialogue/choices at the bottom of the screen.
+  branch-bearing owner/NPC conversations use a close dialogue view with dialogue/choices at the bottom of the screen.
 - Optional observation and information questions return to their dialogue hub;
   each hub has a separately motivated progression choice, and meaningful choices
   either converge intentionally or persist a later consequence.
@@ -21,8 +20,10 @@ This document is the durable source of truth for confirmed game and world design
   for at most 0.5 seconds at its normal speed, preserving the existing conversation
   spacing. The approach cannot detour around a counter or increase pair distance.
   Once stopped, both actors turn smoothly toward one another and the close view begins.
-- The close dialogue camera frames the owner on the left and the NPC on the
-  right. World head bubbles persist until replaced by another bubble or closed
+- The close dialogue camera uses one of the two views perpendicular to the speaker
+  pair. Compare 18 visibility rays (nine per actor) at the two hypothetical camera
+  poses; choose fewer obstructed rays, breaking ties by shorter rotation. Do not
+  search nonperpendicular angles. Actor left/right ordering may swap to improve visibility. World head bubbles persist until replaced by another bubble or closed
   by the start of a formal dialogue.
 - Customers queue at the menu before ordering, then move to reserved seats.
   They receive food, eat, and settle in place before leaving; there is no
