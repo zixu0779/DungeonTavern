@@ -98,6 +98,28 @@ static class DemoFlowPlayCheck
         Assert(narrative.State==Day1FlowState.Awakening,"Demo startup state: "+narrative.State);
         Assert(!(bool)Get(narrative,"showingCinematic"),"Opening overlay visible");
         Log("PASS opening text skipped; prone/awakening gate retained");
+        if(SessionState.GetBool(Key+"WallCutout",false)){
+            ScreenCapture.CaptureScreenshot("/tmp/opening-revised.png");yield return new WaitForEndOfFrame();yield return null;
+            var startPosition=player.transform.position;var openingMotion=player.GetComponentInChildren<CharacterModelMotion>();
+            var openingAnimator=openingMotion.GetComponent<Animator>();
+            Log("OPENING body forward="+(openingAnimator.bodyRotation*Vector3.forward));
+            var head=openingAnimator.GetBoneTransform(HumanBodyBones.Head).position;
+            var hand=openingAnimator.GetBoneTransform(HumanBodyBones.RightHand).position;
+            var leftFoot=openingAnimator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
+            var rightFoot=openingAnimator.GetBoneTransform(HumanBodyBones.RightFoot).position;
+            Assert(Vector3.Dot(openingAnimator.bodyRotation*Vector3.forward,Vector3.down)>.95f,"Opening must face down");
+            Assert(Vector3.Distance(leftFoot,rightFoot)>.16f,"Opening feet overlap");
+            Assert(Vector3.Distance(head,hand)<.6f,"Right hand must lie beside the head");
+            Assert(Mathf.Abs(Mathf.DeltaAngle(UnityEngine.Object.FindAnyObjectByType<PrototypeCameraOrbit>().transform.eulerAngles.y,315))<.1f,"Opening camera yaw");
+            var underWall=GameObject.Find("UnderWallFloor");Assert(underWall&&underWall.GetComponentsInChildren<Renderer>().Length>0&&underWall.GetComponentsInChildren<Collider>().Length==0,"B1 wall floor extension without new collision");
+            Log("OPENING hand="+hand+" head="+head+" feet="+leftFoot+" / "+rightFoot);
+            var preview=Camera.main;var size=preview.orthographicSize;preview.orthographicSize=2.7f;
+            ScreenCapture.CaptureScreenshot("/tmp/opening-pose-close.png");yield return new WaitForEndOfFrame();yield return null;preview.orthographicSize=size;
+            yield return openingMotion.WakeAndStand();
+            Assert(!openingMotion.IsFullBodyAction && Vector3.Distance(startPosition,player.transform.position)<.15f,"Revised opening fails to stand in place");
+            ScreenCapture.CaptureScreenshot("/tmp/opening-standing.png");yield return new WaitForEndOfFrame();yield return null;
+            Log("PASS revised prone-to-standing chain preserves position");
+        }
         if(SessionState.GetBool(Key+"UI",false))yield return DemoUiGuidanceCheck.Startup(player,narrative);
         narrative.StopAllCoroutines();narrative.enabled=false;
         player.GetComponentInChildren<CharacterModelMotion>().EndFullBodyAction();

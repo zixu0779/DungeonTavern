@@ -71,9 +71,13 @@ This document is the durable source of truth for confirmed game and world design
   for a tie. Orthographic sight lines exclude triggers and other characters.
   Dialogue framing eases over 1.3 seconds. Remaining architectural occlusion uses
   local world-space cutout channels toward the camera, not whole-wall fading. Exploration follows the
-  player; dialogue handles both speakers. Floors, colliders and interaction blocking
-  remain unchanged. Masks fade smoothly. Cut surfaces use masonry-core materials; stairs and other
-  non-wall props remain opaque. Rendering sections do not alter wall collision.
+  player, using a spherecast that also triggers at narrow doorways; dialogue joins
+  both speakers into a continuous opening sized for their full silhouettes. NPC
+  cutouts only exist during dialogue. Floors, colliders and interaction blocking
+  remain unchanged. Masks move smoothly with stable locomotion dimensions. Cut interiors
+  reuse the wall surface texture and colour. Small doors and B1 stone gates participate;
+  stairs and other non-wall props remain opaque. Rendering sections do not alter wall collision. The F1/B1 floor extends beneath
+  walls to support the cutaway visually; stairwell openings remain clear.
   The protagonist smoothly turns toward the speaker over 0.35–1 second, according to
   turn angle. Temporary-closing turns use the same speed and yield to movement.
 - Lightweight guidance announces B1/F1 on entry and tracks first successful

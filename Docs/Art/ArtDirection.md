@@ -31,25 +31,35 @@ presentation and asset organization, not future feature commitments.
 
 ## Local wall cutouts
 
-- `DialogueOcclusionFader` uses sphere casts every 0.1 seconds and smooth world-space
-  view-segment capsule masks with triplanar noise and independent fade transitions, based on Brendan Sullivan's public breakdown:
-  https://www.artofsully.com/projects/WXVnyD . This is an original Unity implementation;
-  no downloadable source from the author was found.
-- Runtime wall material copies preserve base texture/tint/UVs. Native Pixel Face
-  retains its atlas mapping. Fixed world-space noise breaks up the cut edge.
-- Only architecture under Walls, Walls_Stone and StairRearEnclosure participates.
-  Floors and collisions remain unchanged; renderer objects are never hidden.
-- Hollow wall slabs use depth-correct reconstructed cut surfaces, bounded by each
-  mesh's back faces and local bounds. The original exterior texture is never used
-  as an interior fill. Brick cores use crushed brick/lime mortar; stone cores use
-  grey mineral aggregate. Textures live in Walls/Sections/Resources and use fixed
-  world-space scale. This is a rendering cap, not a change to mesh or collision.
-- Non-wall props (including stairs and moving door leaves) keep their normal
-  occlusion. Stone door frames remain eligible. Deeply concave/disconnected meshes
-  require separate wall slabs to guarantee an exact internal section.
-- The camera component's Enable Sections toggle disables caps independently of
-  the cutout. Both textures and the cap shader are included in runtime resources.
-- Disable the camera's DialogueOcclusionFader to restore authored materials.
+- `DialogueOcclusionFader` spherecasts toward the camera every 0.1 seconds, with
+  a 0.65 m probe that also catches narrow doorways. Its origin starts in front of
+  the actor; walls behind the actor do not initiate a cut. This follows Brendan
+  Sullivan's public breakdown: https://www.artofsully.com/projects/WXVnyD .
+  The Unity implementation is local code, not downloaded author source.
+- Exploration protects the protagonist; dialogue merges both speakers' channels.
+  Locomotion uses stable full-body dimensions, with damped position/radius and
+  world-anchored noise at two scales projected along the view direction. The broad
+  transition band leaves separate fragments and holes; it uses the same field through
+  the wall depth, so section filling does not heal those holes. Full-body actions adapt their bounds.
+- Architecture under Walls, Walls_Stone, StairRearEnclosure and StoneGates,
+  including moving door leaves, participates. Signs, stairs and other props do
+  not. Floors, collisions and shadows remain intact; no whole renderer is hidden.
+- Interior sections use the wall's own front-face texture, tint and UV mapping.
+  Low-poly slabs/door frames intersect actual mesh triangles to respect mitres
+  and doorway openings; higher-poly stone slabs use their local volume bounds.
+  Deeply concave high-poly meshes still require separately authored solid slabs.
+- Authoring face components preserve unrelated material parameters. Moving doors
+  update their section transforms. Disabling DialogueOcclusionFader restores the
+  original materials and property blocks; Enable Sections only controls filling.
+- UnderWallFloor in both scenes extends the existing floor appearance beneath
+  wall footprints, slightly below the original floor to prevent z-fighting. These
+  visual surfaces add no colliders and do not fill the open stairwell.
+- Opening yaw is 315 degrees. The protagonist starts beside the control core,
+  face down with relaxed asymmetric arms; Prone/WakeUp clips are editable Unity
+  assets, while original action FBX files are retained. The right hand rests beside
+  the head, with separated relaxed feet. `Tools > Characters > Preview Opening Pose`
+  previews Prone in B1 without saving posed bones; Stop Opening Pose Preview restores
+  the authored transforms. Wake-up transition refinement is pending pose acceptance.
 
 ## Source and runtime assets
 

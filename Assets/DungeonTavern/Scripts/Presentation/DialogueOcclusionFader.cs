@@ -5,23 +5,37 @@ namespace DungeonTavern.Prototypes.Rotation25D
 {
     // Sphere casting / world-space mask approach from art ofsully's public BG3 breakdown.
     // Runtime material copies only; disabling this component restores all authored materials.
-    [DefaultExecutionOrder(100)]
+    [DefaultExecutionOrder(300)]
     public sealed class DialogueOcclusionFader : MonoBehaviour
     {
-        [SerializeField, Min(.1f)] float probeRadius = .55f;
-        [SerializeField, Min(.1f)] float cutRadius = 1.8f;
+        [SerializeField, Min(0)] float silhouettePadding = .45f;
+        [SerializeField, Min(.1f)] float cutRadius = 1.2f;
+        [SerializeField, Min(.1f)] float probeRadius = .65f;
         [SerializeField, Min(.02f)] float openingSeconds = .2f, closingSeconds = .3f;
         sealed class Wall
         {
             public Renderer renderer;
             public Material[] originals, copies;
             public MaterialPropertyBlock[] blocks;
+            public Matrix4x4 matrix;
+            public Bounds bounds;
         }
         sealed class Mask
         {
             public Transform actor;
             public Vector3 center, targetCenter, actorPoint;
-            public float radius, targetRadius, transition, clearSince;
+            public float radius, targetRadius, transition, clearSince, coverageRadius;
+            public Bounds bounds;
+            public Renderer[] renderers;
+            public Bounds[] localBounds;
+            public Mesh baked;
+            public float nextBounds;
+            public Vector3 centerVelocity;
+            public float radiusVelocity;
+            public int blockedSamples;
+            public DungeonTavern.Tavern25D.CharacterModelMotion motion;
+            public bool stable;
+            public float settleAt, standingHeight, standingRadius;
         }
         readonly Dictionary<Renderer, Wall> walls = new();
         readonly Mask[] masks = { new(), new() };
@@ -29,9 +43,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
         Camera view;
         PrototypeCameraOrbit orbit;
         Shader cutShader;
-        Texture2D brickCore, stoneCore;
         [SerializeField] bool enableSections = true;
-        float nextProbe, nextScan;
+        float nextProbe, nextScan, pairBlend;
         static readonly int Cuttable = Shader.PropertyToID("_TavernCuttable");
         void Awake()
         {
@@ -39,17 +52,13 @@ namespace DungeonTavern.Prototypes.Rotation25D
             orbit = GetComponent<PrototypeCameraOrbit>();
             view = GetComponentInChildren<Camera>();
             cutShader = Resources.Load<Shader>("TavernWallCutout");
-            brickCore = Resources.Load<Texture2D>("WallSectionBrick");
-            stoneCore = Resources.Load<Texture2D>("WallSectionStone");
         }
         public static bool IsWall(Transform item)
         {
             for (var t = item; t; t = t.parent)
             {
-                // Moving leaves are props, even when their door frame lives under Walls.
-                if (t.name == "DoorHinge" || t.name.EndsWith("Door_Hinge") ||
-                    t.name == "DoorLeaf" || t.name.EndsWith("Door_Leaf")) return false;
-                if (t.name == "Walls" || t.name == "Walls_Stone" || t.name == "StairRearEnclosure") return true;
+                if (t.name == "Signs" || t.name == "Stairs") return false;
+                if (t.name == "Walls" || t.name == "Walls_Stone" || t.name == "StairRearEnclosure" || t.name == "StoneGates") return true;
             }
             return false;
         }
@@ -90,85 +99,187 @@ namespace DungeonTavern.Prototypes.Rotation25D
                     var bounds = renderer.localBounds;
                     block.SetVector("_TavernWallMin", bounds.min);
                     block.SetVector("_TavernWallMax", bounds.max);
-                    block.SetMatrix("_TavernWallWorldToLocal", renderer.transform.worldToLocalMatrix);
+                    
                     block.SetFloat("_TavernStoneSection", renderer.gameObject.scene.name == "SealRoom_B1" ? 1 : 0);
+                    SetSectionSurface(renderer, originals, block);
                     renderer.SetPropertyBlock(block, i);
                 }
                 renderer.sharedMaterials = assigned;
                 walls.Add(renderer, state);
             }
         }
-        void Probe(Mask mask, Transform actor)
+        static void SetSectionSurface(Renderer renderer,Material[] materials,MaterialPropertyBlock target)
+        {
+            if(materials.Length==0 || !materials[0])return;
+            var material=materials[0];var front=new MaterialPropertyBlock();renderer.GetPropertyBlock(front,0);
+            target.SetTexture("_SectionMap",front.GetTexture("_BaseMap") ?? material.GetTexture("_BaseMap") ?? Texture2D.whiteTexture);
+            target.SetColor("_SectionTint",front.HasColor("_BaseColor")?front.GetColor("_BaseColor"):material.GetColor("_BaseColor"));
+            target.SetVector("_SectionST",front.HasVector("_BaseMap_ST")?front.GetVector("_BaseMap_ST"):new Vector4(material.mainTextureScale.x,material.mainTextureScale.y,material.mainTextureOffset.x,material.mainTextureOffset.y));
+            bool native=material.shader.name=="DungeonTavern/Native Pixel Face";
+            target.SetFloat("_SectionNative",native?1:0);
+            foreach(var pair in new[]{("_SpriteRect","_SectionRect"),("_FaceUvScale","_SectionScale")})
+                target.SetVector(pair.Item2,front.HasVector(pair.Item1)?front.GetVector(pair.Item1):native?material.GetVector(pair.Item1):Vector4.one);
+            target.SetVector("_SectionOptions",new Vector4(front.GetFloat("_FaceRotation"),front.GetFloat("_FlipX"),front.GetFloat("_FlipY"),0));
+            var mesh=renderer.GetComponent<MeshFilter>()?.sharedMesh;
+            if(!mesh || !mesh.isReadable)return;
+            var v=mesh.vertices;var uv=mesh.uv;var ids=mesh.GetTriangles(0);
+            var triangles=mesh.triangles;
+            if(triangles.Length<=288)
+            {
+                var positions=new Vector4[288];for(int i=0;i<triangles.Length;i++)positions[i]=v[triangles[i]];
+                target.SetVectorArray("_SectionTriangles",positions);target.SetInt("_SectionTriangleCount",triangles.Length/3);
+            }
+            if(uv.Length!=v.Length || ids.Length<3)return;
+            // Largest front-face triangle supplies the authored affine UV projection.
+            float best=0;Vector4 u=Vector4.zero,w=Vector4.zero;
+            for(int i=0;i<ids.Length;i+=3){int a=ids[i],b=ids[i+1],c=ids[i+2];var e=v[b]-v[a];var f=v[c]-v[a];float area=Vector3.Cross(e,f).sqrMagnitude;if(area<=best)continue;
+                float ee=Vector3.Dot(e,e),ff=Vector3.Dot(f,f),ef=Vector3.Dot(e,f),den=ee*ff-ef*ef;if(den<.000001f)continue;
+                var du=uv[b]-uv[a];var dv=uv[c]-uv[a];
+                var gu=(e*(du.x*ff-dv.x*ef)+f*(dv.x*ee-du.x*ef))/den;
+                var gv=(e*(du.y*ff-dv.y*ef)+f*(dv.y*ee-du.y*ef))/den;
+                u=new Vector4(gu.x,gu.y,gu.z,uv[a].x-Vector3.Dot(gu,v[a]));w=new Vector4(gv.x,gv.y,gv.z,uv[a].y-Vector3.Dot(gv,v[a]));best=area;
+            }
+            target.SetVector("_SectionU",u);target.SetVector("_SectionV",w);
+        }
+        void UpdateWallTransforms()
+        {
+            foreach(var wall in walls.Values)
+            {
+                var r=wall.renderer;if(!r || !r.enabled || !r.gameObject.activeInHierarchy)continue;
+                var matrix=r.transform.worldToLocalMatrix;var bounds=r.localBounds;
+                if(wall.matrix==matrix && wall.bounds==bounds)continue;
+                wall.matrix=matrix;wall.bounds=bounds;
+                for(int i=0;i<wall.originals.Length;i++)
+                {
+                    r.GetPropertyBlock(block,i);
+                    block.SetFloat(Cuttable,1);
+                    block.SetMatrix("_TavernWallWorldToLocal",r.transform.worldToLocalMatrix);
+                    block.SetVector("_TavernWallMin",r.localBounds.min);
+                    block.SetVector("_TavernWallMax",r.localBounds.max);
+                    r.SetPropertyBlock(block,i);
+                }
+            }
+        }
+        void Track(Mask mask, Transform actor)
         {
             if (!actor || !actor.gameObject.activeInHierarchy)
-            {
-                mask.actor = null;mask.targetRadius = 0;return;
-            }
+            { mask.actor = null;mask.targetRadius = 0;mask.blockedSamples = 0;return; }
             bool changed = mask.actor != actor;
+            if (changed)
+            {
+                mask.renderers = actor.GetComponentsInChildren<Renderer>();
+                mask.localBounds = new Bounds[mask.renderers.Length];mask.nextBounds=0;
+                mask.motion=actor.GetComponentInChildren<DungeonTavern.Tavern25D.CharacterModelMotion>();
+                mask.stable=false;mask.settleAt=Time.time+.6f;
+            }
+            if(mask.motion && mask.motion.IsFullBodyAction){mask.stable=false;mask.settleAt=Time.time+.6f;}
+            if(mask.stable && !changed)
+            {
+                mask.targetCenter=actor.position+Vector3.up*mask.standingHeight;
+                mask.actorPoint=actor.position;mask.coverageRadius=mask.standingRadius;
+                return;
+            }
+            if (Time.time>=mask.nextBounds)
+            {
+                mask.nextBounds=Time.time+.1f;
+                for(int i=0;i<mask.renderers.Length;i++)
+                {
+                    var r=mask.renderers[i];if(!r)continue;
+                    if(r is SkinnedMeshRenderer skin && skin.enabled && skin.gameObject.activeInHierarchy)
+                    {
+                        if(!mask.baked)mask.baked=new Mesh {name="OcclusionPoseBounds",hideFlags=HideFlags.HideAndDontSave};
+                        skin.BakeMesh(mask.baked, true);mask.baked.RecalculateBounds();mask.localBounds[i]=mask.baked.bounds;
+                    }
+                    else mask.localBounds[i]=r.localBounds;
+                }
+            }
             mask.actor = actor;
             var bounds = new Bounds(actor.position + Vector3.up, new Vector3(.5f, 2, .5f));
             bool found = false;
-            foreach (var r in actor.GetComponentsInChildren<Renderer>())
+            for(int i=0;i<mask.renderers.Length;i++)
             {
-                if (!r.enabled || r is ParticleSystemRenderer || r is LineRenderer || r is TrailRenderer) continue;
-                if (!found) { bounds = r.bounds;found = true; } else bounds.Encapsulate(r.bounds);
-            }
-            var point = bounds.center;
-            mask.actorPoint = point;
-            var direction = view.orthographic ? -view.transform.forward : (view.transform.position - point).normalized;
-            var start = point + direction * (probeRadius + .05f);
-            float distance = Mathf.Max(0, Vector3.Dot(view.transform.position - start, direction));
-            float nearest = float.PositiveInfinity;
-            Vector3 hitPoint = point;
-            foreach (var c in Physics.OverlapCapsule(point, start, probeRadius, ~0, QueryTriggerInteraction.Ignore))
-                if (IsWall(c.transform))
+                var r=mask.renderers[i];
+                if (!r || !r.enabled || !r.gameObject.activeInHierarchy || r is ParticleSystemRenderer || r is LineRenderer || r is TrailRenderer) continue;
+                var local=mask.localBounds[i];
+                for(int k=0;k<8;k++)
                 {
-                    var closest = c.ClosestPoint(point);
-                    if (Vector3.Dot(closest - point, direction) < -.01f) continue;
-                    if ((closest - start).magnitude >= nearest) continue;
-                    nearest = (closest - start).magnitude;hitPoint = closest;
+                    var corner=local.center+Vector3.Scale(local.extents,new Vector3((k&1)==0?-1:1,(k&2)==0?-1:1,(k&4)==0?-1:1));
+                    var point=r.transform.TransformPoint(corner);
+                    if(!found){bounds=new Bounds(point,Vector3.zero);found=true;}else bounds.Encapsulate(point);
                 }
-            foreach (var hit in Physics.SphereCastAll(start, probeRadius, direction, distance, ~0, QueryTriggerInteraction.Ignore))
-            {
-                if (!IsWall(hit.transform) || hit.distance >= nearest) continue;
-                // Initial overlaps are handled above; Unity supplies no usable hit point for them.
-                if (hit.distance <= .0001f) continue;
-                nearest = hit.distance;hitPoint = hit.point;
             }
-            if (!float.IsInfinity(nearest))
+            mask.bounds = bounds;
+            mask.targetCenter = bounds.center;
+            mask.actorPoint = actor.position;
+            float radius=0;
+            // Project each local box once, rather than projecting an inflated world AABB.
+            for(int i=0;i<mask.renderers.Length;i++)
             {
-                mask.targetCenter = hitPoint;
-                mask.targetRadius = Mathf.Max(cutRadius, bounds.size.y * .8f);
-                mask.clearSince = Time.time;
+                var r=mask.renderers[i];
+                if(!r || !r.enabled || !r.gameObject.activeInHierarchy || r is ParticleSystemRenderer || r is LineRenderer || r is TrailRenderer)continue;
+                var local=mask.localBounds[i];
+                for(int k=0;k<8;k++)
+                {
+                    var corner=local.center+Vector3.Scale(local.extents,new Vector3((k&1)==0?-1:1,(k&2)==0?-1:1,(k&4)==0?-1:1));
+                    radius=Mathf.Max(radius,Vector3.ProjectOnPlane(r.transform.TransformPoint(corner)-bounds.center,view.transform.forward).magnitude);
+                }
             }
-            else if (Time.time - mask.clearSince > .15f) mask.targetRadius = 0;
+            mask.coverageRadius=Mathf.Max(cutRadius,radius+silhouettePadding);
+            if(Time.time>=mask.settleAt)
+            {
+                mask.stable=true;mask.standingHeight=bounds.center.y-actor.position.y;
+                mask.standingRadius=mask.coverageRadius;
+            }
             if (changed || Vector3.Distance(mask.center, mask.targetCenter) > 8)
-            { mask.center = mask.targetCenter;mask.radius = Mathf.Max(cutRadius, bounds.size.y * .8f);mask.transition = 0; }
+            { mask.center = mask.targetCenter;mask.radius = mask.coverageRadius;mask.transition = 0;mask.targetRadius = 0; }
         }
+        void Probe(Mask mask)
+        {
+            if (!mask.actor) return;
+            var point=mask.targetCenter;
+            var direction=view.orthographic ? -view.transform.forward : (view.transform.position-point).normalized;
+            // The back of the probe starts at the actor's depth plane, never behind it.
+            var origin=point+direction*(probeRadius+.03f);
+            float distance=Mathf.Max(0,Vector3.Dot(view.transform.position-origin,direction));
+            bool blocked=false;
+            foreach(var c in Physics.OverlapSphere(origin,probeRadius,~0,QueryTriggerInteraction.Ignore))
+                if(IsWall(c.transform) && Vector3.Dot(c.ClosestPoint(origin)-point,direction)>.02f){blocked=true;break;}
+            if(!blocked)
+                foreach(var hit in Physics.SphereCastAll(origin,probeRadius,direction,distance,~0,QueryTriggerInteraction.Ignore))
+                    if(IsWall(hit.transform) && Vector3.Dot(hit.point-point,direction)>.02f){blocked=true;break;}
+            mask.blockedSamples=blocked?1:0;
+            mask.targetRadius=blocked?mask.coverageRadius:0;
+        }
+
         void LateUpdate()
         {
             if (!orbit || !view) return;
             if (Time.time >= nextScan) { nextScan = Time.time + 1;ScanWalls(); }
+            UpdateWallTransforms();
+            Track(masks[0], orbit.OcclusionPrimary);
+            Track(masks[1], orbit.OcclusionSecondary);
             if (Time.time >= nextProbe)
             {
                 nextProbe = Time.time + .1f;
-                Probe(masks[0], orbit.OcclusionPrimary);
-                Probe(masks[1], orbit.OcclusionSecondary);
+                Probe(masks[0]);Probe(masks[1]);
+                // Dialogue is one composition: a blocked participant opens a shared silhouette.
+                if(masks[0].actor && masks[1].actor && (masks[0].targetRadius>0 || masks[1].targetRadius>0))
+                    foreach(var mask in masks) mask.targetRadius=mask.coverageRadius;
             }
-            Shader.SetGlobalTexture("_TavernBrickCore", brickCore);
-            Shader.SetGlobalTexture("_TavernStoneCore", stoneCore);
-            Shader.SetGlobalFloat("_TavernSectionsEnabled", enableSections && brickCore && stoneCore ? 1 : 0);
+            pairBlend=Mathf.MoveTowards(pairBlend, masks[1].actor ? 1 : 0, Time.deltaTime/closingSeconds);
+            Shader.SetGlobalFloat("_TavernCutPair",pairBlend);
+            Shader.SetGlobalFloat("_TavernSectionsEnabled", enableSections ? 1 : 0);
             Shader.SetGlobalVector("_TavernCutCamera", view.transform.position);
             Shader.SetGlobalVector("_TavernCutForward", view.transform.forward);
             Shader.SetGlobalFloat("_TavernCutOrthographic", view.orthographic ? 1 : 0);
             for (int i = 0; i < masks.Length; i++)
             {
                 var mask = masks[i];
-                mask.center = Vector3.Lerp(mask.center, mask.targetCenter, 1 - Mathf.Exp(-Time.deltaTime * 15));
+                mask.center = Vector3.SmoothDamp(mask.center, mask.targetCenter, ref mask.centerVelocity, .18f);
                 float target = mask.targetRadius > 0 ? 1 : 0;
                 float duration = target > mask.transition ? openingSeconds : closingSeconds;
                 mask.transition = Mathf.MoveTowards(mask.transition, target, Time.deltaTime / duration);
-                if (mask.targetRadius > 0) mask.radius = mask.targetRadius;
+                mask.radius = Mathf.SmoothDamp(mask.radius, mask.coverageRadius, ref mask.radiusVelocity, .35f);
                 Shader.SetGlobalFloat(i == 0 ? "_TavernCutTransition0" : "_TavernCutTransition1", mask.transition);
                 Shader.SetGlobalVector(i == 0 ? "_TavernCutSphere0" : "_TavernCutSphere1", new Vector4(mask.center.x, mask.center.y, mask.center.z, mask.transition > 0 ? mask.radius : 0));
                 Shader.SetGlobalVector(i == 0 ? "_TavernCutActor0" : "_TavernCutActor1", mask.actorPoint);
@@ -185,9 +296,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 }
                 foreach (var material in wall.copies) if (material) Destroy(material);
             }
-            walls.Clear();nextScan = nextProbe = 0;
+            walls.Clear();nextScan = nextProbe = 0;pairBlend=0;
+            Shader.SetGlobalFloat("_TavernCutPair",0);
             Shader.SetGlobalFloat("_TavernSectionsEnabled", 0);
-            foreach (var mask in masks) { mask.actor = null;mask.radius = mask.targetRadius = mask.transition = 0; }
+            foreach (var mask in masks) { mask.actor = null;mask.radius = mask.targetRadius = mask.transition = 0;if(mask.baked)Destroy(mask.baked);mask.baked=null; }
             Shader.SetGlobalFloat("_TavernCutTransition0", 0);
             Shader.SetGlobalFloat("_TavernCutTransition1", 0);
             Shader.SetGlobalVector("_TavernCutSphere0", Vector4.zero);

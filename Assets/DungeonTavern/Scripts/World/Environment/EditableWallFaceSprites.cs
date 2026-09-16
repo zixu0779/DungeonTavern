@@ -153,6 +153,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 return;
 
             MaterialPropertyBlock block = new();
+            renderer.GetPropertyBlock(block, materialIndex);
             block.SetColor(BaseColorId, sprite != null ? Color.white : Color.clear);
 
             if (sprite == null)

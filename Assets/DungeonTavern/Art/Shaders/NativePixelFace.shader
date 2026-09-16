@@ -77,13 +77,14 @@ Shader "DungeonTavern/Native Pixel Face"
             half4 Frag(Varyings input, FRONT_FACE_TYPE facing : FRONT_FACE_SEMANTIC, out float depth : SV_Depth) : SV_Target
             {
                 depth=input.positionCS.z;
-                if (!IS_FRONT_VFACE(facing,true,false))
+                if (!IS_FRONT_VFACE(facing,true,false) && TavernCutCameraActive())
                 {
                     float3 section=TavernSectionPoint(input.positionWS);
                     depth=TavernSectionDepth(section);
                     return TavernSectionColor(section);
+
                 }
-                TavernWallClip(input.positionWS);
+                else TavernWallClip(input.positionWS);
                 // A 90/270 degree turn swaps the sprite's physical width and
                 // height. Swap native texel density before wrapping, otherwise
                 // a 4x16 sprite rotated onto a 16x4 surface samples only one
