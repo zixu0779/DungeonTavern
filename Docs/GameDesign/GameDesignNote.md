@@ -75,7 +75,8 @@ This document is the durable source of truth for confirmed game and world design
   both speakers into a continuous opening sized for their full silhouettes. NPC
   cutouts only exist during dialogue. Floors, colliders and interaction blocking
   remain unchanged. Masks move smoothly with stable locomotion dimensions. Cut interiors
-  reuse the wall surface texture and colour. Small doors and B1 stone gates participate;
+  reuse the wall surface texture and colour. B1 stone gates participate; small stone doors retain their original rendering.
+  Wall dissolution pauses locally while passing an open or moving small door;
   stairs and other non-wall props remain opaque. Rendering sections do not alter wall collision. The F1/B1 floor extends beneath
   walls to support the cutaway visually; stairwell openings remain clear.
   The protagonist smoothly turns toward the speaker over 0.35–1 second, according to

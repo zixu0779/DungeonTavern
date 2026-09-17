@@ -31,18 +31,26 @@ presentation and asset organization, not future feature commitments.
 
 ## Local wall cutouts
 
-- `DialogueOcclusionFader` spherecasts toward the camera every 0.1 seconds, with
-  a 0.65 m probe that also catches narrow doorways. Its origin starts in front of
-  the actor; walls behind the actor do not initiate a cut. This follows Brendan
-  Sullivan's public breakdown: https://www.artofsully.com/projects/WXVnyD .
-  The Unity implementation is local code, not downloaded author source.
+- `DialogueOcclusionFader` checks the current camera direction every 0.1 seconds,
+  and every frame during Q/E turns. Narrow ankle probes (6 cm radius) activate
+  when the feet are just becoming occluded; the body probe is 12 cm. Stable root-relative
+  samples avoid animation footstep jitter and broad lower-body proximity triggers.
+  Only walls in front of the actor initiate a cut. Rotation openings use a 0.12-second
+  transition, so the change is visible during the turn. The world-space cutout follows
+  Brendan Sullivan's breakdown: https://www.artofsully.com/projects/WXVnyD .
+  This is a local Unity implementation, not downloaded author source.
 - Exploration protects the protagonist; dialogue merges both speakers' channels.
   Locomotion uses stable full-body dimensions, with damped position/radius and
   world-anchored noise at two scales projected along the view direction. The broad
   transition band leaves separate fragments and holes; it uses the same field through
   the wall depth, so section filling does not heal those holes. Full-body actions adapt their bounds.
 - Architecture under Walls, Walls_Stone, StairRearEnclosure and StoneGates,
-  including moving door leaves, participates. Signs, stairs and other props do
+  including B1 moving stone gates, participates. Closed small stone door frames/leaves
+  share the same cutout field as adjacent walls, without requiring their own probe hit.
+  Their original geometry and surface mapping remain; inferred volume caps are disabled
+  on these door meshes to avoid filling or distorting the arch.
+  Near an open or moving small door, the actor cutout closes for passage and resumes
+  once the door is closed. Signs, stairs and other props do
   not. Floors, collisions and shadows remain intact; no whole renderer is hidden.
 - Interior sections use the wall's own front-face texture, tint and UV mapping.
   Low-poly slabs/door frames intersect actual mesh triangles to respect mitres
@@ -53,7 +61,12 @@ presentation and asset organization, not future feature commitments.
   original materials and property blocks; Enable Sections only controls filling.
 - UnderWallFloor in both scenes extends the existing floor appearance beneath
   wall footprints, slightly below the original floor to prevent z-fighting. These
-  visual surfaces add no colliders and do not fill the open stairwell.
+  visual surfaces add no colliders and do not fill the open stairwell. F1 extensions
+  are clipped to the surveyed concave exterior wall outline, inset 8 mm to avoid
+  exposed pixels outside straight and diagonal wall faces.
+- B1 `Environment/StairArchConnection_Trial` is a removable stone arch tunnel behind
+  the original stair arch. Its sides and curved roof remain opaque when surrounding
+  walls dissolve; it adds no collision and leaves stair/wall transforms unchanged.
 - Opening yaw is 315 degrees. The protagonist starts beside the control core,
   face down with relaxed asymmetric arms; Prone/WakeUp clips are editable Unity
   assets, while original action FBX files are retained. The right hand rests beside

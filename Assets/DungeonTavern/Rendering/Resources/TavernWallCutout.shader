@@ -16,7 +16,7 @@ Shader "DungeonTavern/Wall Cutout Unlit"
         #include "../TavernWallSection.hlsl"
         TEXTURE2D(_BaseMap);SAMPLER(sampler_BaseMap);
         CBUFFER_START(UnityPerMaterial)
-        float4 _BaseMap_ST;half4 _BaseColor;float _Cutoff;
+        float4 _BaseMap_ST;half4 _BaseColor;float _Cutoff;float _TavernSurfaceOnly;
         CBUFFER_END
         struct Attributes{float4 positionOS:POSITION;float2 uv:TEXCOORD0;};
         struct Varyings{float4 positionCS:SV_POSITION;float2 uv:TEXCOORD0;float3 positionWS:TEXCOORD1;};
@@ -24,7 +24,7 @@ Shader "DungeonTavern/Wall Cutout Unlit"
         half4 Frag(Varyings i,FRONT_FACE_TYPE facing:FRONT_FACE_SEMANTIC, out float depth:SV_Depth):SV_Target
         {
             depth=i.positionCS.z;
-            if (!IS_FRONT_VFACE(facing,true,false))
+            if (!IS_FRONT_VFACE(facing,true,false) && _TavernSurfaceOnly < .5)
             {
                 float3 section=TavernSectionPoint(i.positionWS);
                 depth=TavernSectionDepth(section);

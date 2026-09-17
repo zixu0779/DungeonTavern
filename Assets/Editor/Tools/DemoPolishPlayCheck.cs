@@ -229,6 +229,8 @@ static class DemoPolishPlayCheck
     }
     public static IEnumerator CheckWallCutout(PrototypePlayerMover player,PrototypeCameraOrbit orbit)
     {
+        foreach(var trigger in UnityEngine.Object.FindObjectsByType<AutomaticDoorTrigger>())trigger.enabled=false;
+        foreach(var door in UnityEngine.Object.FindObjectsByType<DoorStateController>())if(door.name.StartsWith("Door_Small_Stone"))door.Close();
         player.MovementInputEnabled=false;player.enabled=false;player.GetComponent<CharacterController>().enabled=false;
         var eve=UnityEngine.Object.FindAnyObjectByType<Day1EveActor>(FindObjectsInactive.Include);eve.gameObject.SetActive(true);eve.enabled=false;eve.StopAllCoroutines();
         var nav=eve.GetComponent<NpcNavigator>();if(nav){nav.Stop();nav.enabled=false;}
@@ -243,7 +245,8 @@ static class DemoPolishPlayCheck
         effect.enabled=false;
         var originals=walls.ToDictionary(r=>r,r=>r.sharedMaterials);
         var leaves=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Where(r=>r.name=="DoorLeaf"||r.name.EndsWith("Door_Leaf")).ToArray();
-        Assert(leaves.All(r=>DialogueOcclusionFader.IsWall(r.transform)),"Door leaves missing from wall coverage");
+        var smallLeaves=leaves.Where(r=>r.GetComponentInParent<DoorStateController>()?.name.StartsWith("Door_Small_Stone")==true).ToArray();
+        Assert(smallLeaves.All(r=>DialogueOcclusionFader.IsWall(r.transform)),"Closed small doors must participate in the shared cutout");
         var leafMaterials=leaves.ToDictionary(r=>r,r=>r.sharedMaterials);
         orbit.BeginDialogueFraming(player.transform,eve.transform);
         yield return new WaitForSeconds(1.5f);
@@ -263,7 +266,7 @@ static class DemoPolishPlayCheck
             Assert(Shader.GetGlobalFloat("_TavernCutTransition0")>.99f,"Cutout transition failed to finish");
             Assert(Shader.GetGlobalVector("_TavernCutSphere1").w>1 && Shader.GetGlobalFloat("_TavernCutPair")>.99f,"Dialogue silhouettes not joined");
             Assert(walls.All(r=>r.enabled),"Effect hid a complete wall renderer");
-            Assert(leaves.All(r=>r.sharedMaterials.All(m=>!m || m.shader.name=="DungeonTavern/Wall Cutout Unlit" || m.shader.name=="DungeonTavern/Native Pixel Face")),"Door leaves missing cutout shader");
+            foreach(var leaf in smallLeaves){var props=new MaterialPropertyBlock();leaf.GetPropertyBlock(props,0);Assert(props.GetFloat("_TavernCuttable")==1 && props.GetFloat("_TavernSurfaceOnly")==1,"Small door must share cutout without inferred volume filling");}
             var sample=walls.First(r=>r.name=="Wall_Horizontal_06_3");
             var pb=new MaterialPropertyBlock();sample.GetPropertyBlock(pb,0);
             Log($"WALL shader={sample.sharedMaterials[0].shader.name} cuttable={pb.GetFloat("_TavernCuttable")} camera={Shader.GetGlobalVector("_TavernCutCamera")} actual={((Camera)Get(orbit,"gameCamera")).transform.position}");
@@ -311,7 +314,7 @@ static class DemoPolishPlayCheck
         var jambs=new List<GameObject>();
         foreach(float side in new[]{-1f,1f}){
             var jamb=GameObject.CreatePrimitive(PrimitiveType.Cube);jamb.transform.SetParent(fixture.transform);
-            jamb.transform.position=new Vector3(1000+side*.5f,1.5f,999.6f);jamb.transform.localScale=new Vector3(.2f,3,.25f);jambs.Add(jamb);
+            jamb.transform.position=new Vector3(1000+side*.3f,1.5f,999.6f);jamb.transform.localScale=new Vector3(.2f,3,.25f);jambs.Add(jamb);
         }
         player.transform.position=new Vector3(1000,0,1000);orbit.transform.rotation=Quaternion.identity;Set(orbit,"targetYaw",0f);Physics.SyncTransforms();
         yield return new WaitForSeconds(1.2f);
@@ -320,7 +323,26 @@ static class DemoPolishPlayCheck
         var rear=GameObject.CreatePrimitive(PrimitiveType.Cube);rear.transform.SetParent(fixture.transform);rear.transform.position=new Vector3(1000,1.5f,1000.8f);rear.transform.localScale=new Vector3(5,3,.25f);Physics.SyncTransforms();
         yield return new WaitForSeconds(1);
         Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Wall behind actor incorrectly triggers cutout");
+        rear.SetActive(false);
+        var low=GameObject.CreatePrimitive(PrimitiveType.Cube);low.transform.SetParent(fixture.transform);low.transform.position=new Vector3(1000,.55f,999.6f);low.transform.localScale=new Vector3(4,1.1f,.25f);Physics.SyncTransforms();
+        yield return new WaitForSeconds(1);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Low wall hiding legs fails to open");
+        low.transform.position=new Vector3(1000,.55f,998.5f);Physics.SyncTransforms();
+        yield return new WaitForSeconds(.5f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Clear feet trigger low wall too early");
+        low.transform.position=new Vector3(1000,.55f,999.1f);Physics.SyncTransforms();
+        yield return new WaitForSeconds(.5f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Feet just occluded must activate cutout");
+        orbit.transform.rotation=Quaternion.Euler(0,90,0);Set(orbit,"targetYaw",90f);
+        yield return new WaitForSeconds(.5f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Side view must clear low wall");
+        low.transform.position=new Vector3(1000,.55f,999.4f);Physics.SyncTransforms();
+        orbit.RotateLeft();bool openedDuringRotation=false;
+        while(orbit.IsRotating){yield return null;if(orbit.IsRotating&&Shader.GetGlobalFloat("_TavernCutTransition0")>0)openedDuringRotation=true;}
+        Assert(openedDuringRotation,"Q/E cutout starts only after the camera finishes rotating");
+        yield return new WaitForSeconds(.4f);
+        Log("PASS clear feet stay opaque; first foot occlusion opens; Q/E opens during rotation");
+        var doorObject=new GameObject("Door_Small_Stone_Probe");doorObject.transform.SetParent(fixture.transform);doorObject.transform.position=player.transform.position;var smallDoor=doorObject.AddComponent<DoorStateController>();smallDoor.Configure(null,null,null,false);smallDoor.Open();
+        yield return new WaitForSeconds(1.3f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Open small-door passage must suppress local dissolve");
+        smallDoor.Close();yield return new WaitForSeconds(1);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Closed small door must restore normal wall probes");
         UnityEngine.Object.Destroy(fixture);
+        Log("PASS low wall leg occlusion, open/closed small-door suppression and narrow/rear probes");
         Log("PASS sphere opens narrow doorway with clear centre, rear wall does not activate it");
         yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SealRoom_B1",UnityEngine.SceneManagement.LoadSceneMode.Additive);
         var basement=UnityEngine.SceneManagement.SceneManager.GetSceneByName("SealRoom_B1");
@@ -360,6 +382,21 @@ static class DemoPolishPlayCheck
         yield return new WaitForSeconds(1.2f);yield return Capture("/tmp/wall-cutout-stone-gate.png");
         Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Stone gate does not activate cutout");
         Log("PASS B1 gate leaf participates and its section transform follows movement");
+        var connection=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Single(r=>r.gameObject.scene==basement&&r.name=="StairArchConnection_Trial");
+        Assert(!DialogueOcclusionFader.IsWall(connection.transform)&&!connection.GetComponent<Collider>(),"Stair connection must stay opaque and leave passage collision unchanged");
+        orbit.EndDialogueFraming();orbit.FollowTarget=player.transform;
+        // Isolate additive B1 presentation; these test-only render changes end with Play Mode.
+        foreach(var r in UnityEngine.Object.FindObjectsByType<Renderer>())
+            if(r.gameObject.scene!=basement&&!r.transform.IsChildOf(player.transform))r.enabled=false;
+        player.transform.position=new Vector3(36.3f,.08f,23.0f);Physics.SyncTransforms();
+        orbit.enabled=false;orbit.transform.position=new Vector3(34.2f,1.2f,23.0f);
+        ((Camera)Get(orbit,"gameCamera")).orthographicSize=5.4f;
+        foreach(float yaw in new[]{45f,135f,315f}){
+            orbit.transform.rotation=Quaternion.Euler(0,yaw,0);Set(orbit,"targetYaw",yaw);
+            yield return new WaitForSeconds(1.2f);yield return Capture($"/tmp/stair-connection-play-{yaw}.png");
+        }
+        Log("PASS stair connection remains opaque, three runtime views captured");
+
         effect.enabled=false;
         Assert(stone.sharedMaterials.All(m=>!m||m.shader.name!="DungeonTavern/Wall Cutout Unlit"),"B1 original stone materials not restored");
         Log("PASS B1 stone wall registration, local mask activation, original material restore");

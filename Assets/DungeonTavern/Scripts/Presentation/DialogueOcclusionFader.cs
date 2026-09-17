@@ -10,7 +10,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
     {
         [SerializeField, Min(0)] float silhouettePadding = .45f;
         [SerializeField, Min(.1f)] float cutRadius = 1.2f;
-        [SerializeField, Min(.1f)] float probeRadius = .65f;
+        [SerializeField, Min(.02f)] float probeRadius = .12f;
         [SerializeField, Min(.02f)] float openingSeconds = .2f, closingSeconds = .3f;
         sealed class Wall
         {
@@ -38,6 +38,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             public float settleAt, standingHeight, standingRadius;
         }
         readonly Dictionary<Renderer, Wall> walls = new();
+        readonly List<DungeonTavern.Tavern25D.DoorStateController> smallDoors = new();
         readonly Mask[] masks = { new(), new() };
         MaterialPropertyBlock block;
         Camera view;
@@ -64,6 +65,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
         }
         void ScanWalls()
         {
+            smallDoors.Clear();
+            foreach(var door in FindObjectsByType<DungeonTavern.Tavern25D.DoorStateController>())
+                if(door.name.StartsWith("Door_Small_Stone"))smallDoors.Add(door);
             // Additive floor travel unloads meshes while this camera persists.
             var removed = new List<Renderer>();
             foreach (var pair in walls)
@@ -96,6 +100,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
                     }
                     renderer.GetPropertyBlock(block, i);
                     block.SetFloat(Cuttable, 1);
+                    // Door frames and leaves retain their authored surfaces, without inferred volume caps.
+                    block.SetFloat("_TavernSurfaceOnly", renderer.GetComponentInParent<DungeonTavern.Tavern25D.DoorStateController>()?.name.StartsWith("Door_Small_Stone") == true ? 1 : 0);
                     var bounds = renderer.localBounds;
                     block.SetVector("_TavernWallMin", bounds.min);
                     block.SetVector("_TavernWallMax", bounds.max);
@@ -233,20 +239,40 @@ namespace DungeonTavern.Prototypes.Rotation25D
             if (changed || Vector3.Distance(mask.center, mask.targetCenter) > 8)
             { mask.center = mask.targetCenter;mask.radius = mask.coverageRadius;mask.transition = 0;mask.targetRadius = 0; }
         }
+        bool PassingSmallDoor(Vector3 position)
+        {
+            foreach(var door in smallDoors)
+            {
+                if(!door || (!door.IsOpen && !door.IsTransitioning))continue;
+                if(door.BlockingCollider is BoxCollider box)
+                {
+                    var p=box.transform.InverseTransformPoint(position)-box.center;
+                    var allowance=new Vector3(1.1f/Mathf.Abs(box.transform.lossyScale.x),0,1.1f/Mathf.Abs(box.transform.lossyScale.z));
+                    if(Mathf.Abs(p.x)<box.size.x*.5f+allowance.x && Mathf.Abs(p.z)<box.size.z*.5f+allowance.z)return true;
+                }
+                else if(Vector3.ProjectOnPlane(position-door.transform.position,Vector3.up).sqrMagnitude<4)return true;
+            }
+            return false;
+        }
+        bool ProbePoint(Vector3 point, float radius)
+        {
+            var direction=view.orthographic ? -view.transform.forward : (view.transform.position-point).normalized;
+            var origin=point+direction*(radius+.01f);
+            float distance=Mathf.Max(0,Vector3.Dot(view.transform.position-origin,direction));
+            foreach(var c in Physics.OverlapSphere(origin,radius,~0,QueryTriggerInteraction.Ignore))
+                if(IsWall(c.transform) && Vector3.Dot(c.bounds.ClosestPoint(origin)-point,direction)>.01f)return true;
+            foreach(var hit in Physics.SphereCastAll(origin,radius,direction,distance,~0,QueryTriggerInteraction.Ignore))
+                if(IsWall(hit.transform) && Vector3.Dot(hit.point-point,direction)>.01f)return true;
+            return false;
+        }
         void Probe(Mask mask)
         {
             if (!mask.actor) return;
-            var point=mask.targetCenter;
-            var direction=view.orthographic ? -view.transform.forward : (view.transform.position-point).normalized;
-            // The back of the probe starts at the actor's depth plane, never behind it.
-            var origin=point+direction*(probeRadius+.03f);
-            float distance=Mathf.Max(0,Vector3.Dot(view.transform.position-origin,direction));
-            bool blocked=false;
-            foreach(var c in Physics.OverlapSphere(origin,probeRadius,~0,QueryTriggerInteraction.Ignore))
-                if(IsWall(c.transform) && Vector3.Dot(c.ClosestPoint(origin)-point,direction)>.02f){blocked=true;break;}
-            if(!blocked)
-                foreach(var hit in Physics.SphereCastAll(origin,probeRadius,direction,distance,~0,QueryTriggerInteraction.Ignore))
-                    if(IsWall(hit.transform) && Vector3.Dot(hit.point-point,direction)>.02f){blocked=true;break;}
+            // Stable ankle samples, not animated feet: only a few centimetres of anticipation.
+            var feet=mask.actor.position+Vector3.up*.12f;
+            var side=view.transform.right*.18f;
+            bool blocked=!PassingSmallDoor(mask.actor.position) &&
+                (ProbePoint(mask.targetCenter,probeRadius) || ProbePoint(feet-side,.06f) || ProbePoint(feet+side,.06f));
             mask.blockedSamples=blocked?1:0;
             mask.targetRadius=blocked?mask.coverageRadius:0;
         }
@@ -258,7 +284,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             UpdateWallTransforms();
             Track(masks[0], orbit.OcclusionPrimary);
             Track(masks[1], orbit.OcclusionSecondary);
-            if (Time.time >= nextProbe)
+            if (orbit.IsRotating || Time.time >= nextProbe)
             {
                 nextProbe = Time.time + .1f;
                 Probe(masks[0]);Probe(masks[1]);
@@ -277,7 +303,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 var mask = masks[i];
                 mask.center = Vector3.SmoothDamp(mask.center, mask.targetCenter, ref mask.centerVelocity, .18f);
                 float target = mask.targetRadius > 0 ? 1 : 0;
-                float duration = target > mask.transition ? openingSeconds : closingSeconds;
+                float duration = target > mask.transition ? (orbit.IsRotating ? Mathf.Min(openingSeconds,.12f) : openingSeconds) : closingSeconds;
                 mask.transition = Mathf.MoveTowards(mask.transition, target, Time.deltaTime / duration);
                 mask.radius = Mathf.SmoothDamp(mask.radius, mask.coverageRadius, ref mask.radiusVelocity, .35f);
                 Shader.SetGlobalFloat(i == 0 ? "_TavernCutTransition0" : "_TavernCutTransition1", mask.transition);

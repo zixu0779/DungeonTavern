@@ -57,6 +57,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
         public Transform OcclusionPrimary => dialogueFraming ? dialogueLeft : followTarget;
         public Transform OcclusionSecondary => dialogueFraming ? dialogueRight : null;
 
+        public bool IsRotating => rotating;
+
         public float CurrentCardinalYaw => Mathf.Repeat(targetYaw, 360f);
 
         private void Awake()
