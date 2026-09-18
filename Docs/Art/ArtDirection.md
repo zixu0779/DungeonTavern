@@ -35,7 +35,11 @@ presentation and asset organization, not future feature commitments.
   and every frame during Q/E turns. Narrow ankle probes (6 cm radius) activate
   when the feet are just becoming occluded; the body probe is 12 cm. Stable root-relative
   samples avoid animation footstep jitter and broad lower-body proximity triggers.
-  Only walls in front of the actor initiate a cut. Rotation openings use a 0.12-second
+  Every probe collects the `WallCutoutGroup` parents of all wall hits between
+  the actor and camera. Only those groups permit a local cut, with a 0.16-second
+  hit grace period and smooth opening/closing. Other groups remain opaque even
+  inside the shared mask. No wall-facing or actor-depth-plane heuristic is used.
+  Rotation openings use a 0.12-second
   transition, so the change is visible during the turn. The world-space cutout follows
   Brendan Sullivan's breakdown: https://www.artofsully.com/projects/WXVnyD .
   This is a local Unity implementation, not downloaded author source.
@@ -46,11 +50,16 @@ presentation and asset organization, not future feature commitments.
   the wall depth, so section filling does not heal those holes. Full-body actions adapt their bounds.
 - Architecture under Walls, Walls_Stone, StairRearEnclosure and StoneGates,
   including B1 moving stone gates, participates. Closed small stone door frames/leaves
-  share the same cutout field as adjacent walls, without requiring their own probe hit.
+  share their wall group's eligibility and local cutout field without requiring their
+  own probe hit. Groups are authored as parents in the scene Hierarchy, split at
+  corners; B1 stone gates belong to EastWall. Dialogue uses the union of both actors'
+  hit groups. A group permits a local hole, never whole-wall hiding.
   Their original geometry and surface mapping remain; inferred volume caps are disabled
   on these door meshes to avoid filling or distorting the arch.
-  Near an open or moving small door, the actor cutout closes for passage and resumes
-  once the door is closed. Signs, stairs and other props do
+  When an open or moving small door intersects the potential cutout volume (including
+  its noise edge and dialogue bridge), the shared cutout closes and resumes once
+  the door closes or leaves that volume. Detection uses door render bounds, not actor
+  proximity or the currently faded radius. Signs, stairs and other props do
   not. Floors, collisions and shadows remain intact; no whole renderer is hidden.
 - Interior sections use the wall's own front-face texture, tint and UV mapping.
   Low-poly slabs/door frames intersect actual mesh triangles to respect mitres

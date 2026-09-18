@@ -309,23 +309,74 @@ static class DemoPolishPlayCheck
         yield return new WaitForSeconds(1);
         Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Cutout remained in clear hall");
         Log("PASS local sphere opens at both real corner views, all wall objects remain enabled, materials restored, clear hall closes cutout");
+        // Reported open small-door edge: player is outside the old proximity box.
+        player.transform.position=new Vector3(46.28782f,.07999992f,15.25949f);
+        player.transform.rotation=Quaternion.Euler(0,48.412f,0);
+        orbit.transform.rotation=Quaternion.Euler(0,225,0);Set(orbit,"targetYaw",225f);Physics.SyncTransforms();
+        var reportedDoor=UnityEngine.Object.FindObjectsByType<DoorStateController>().Single(d=>d.name=="Door_Small_Stone_3");
+        reportedDoor.Close();yield return new WaitForSeconds(.8f);
+        var doorGroup=reportedDoor.GetComponentInParent<WallCutoutGroup>();
+        Assert(doorGroup && reportedDoor.GetComponentsInChildren<Renderer>().All(r=>r.GetComponentInParent<WallCutoutGroup>()==doorGroup),"Door/frame/leaf do not share their wall group");
+        var closedDoorProps=new MaterialPropertyBlock();reportedDoor.GetComponentInChildren<Renderer>().GetPropertyBlock(closedDoorProps,0);
+        Assert(closedDoorProps.GetFloat("_TavernCutGroup")>.99f,"Closed small door does not follow the occluding wall group");
+        Assert(Shader.GetGlobalFloat("_TavernCutTransition0")>.9f,"Reported closed door should participate in wall dissolve");
+        reportedDoor.Open();yield return new WaitForSeconds(.8f);
+        Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Reported open door still dissolves");
+        yield return Capture("/tmp/small-door-open-fixed.png");
+        orbit.BeginDialogueFraming(player.transform,eve.transform);yield return new WaitForSeconds(1.6f);
+        Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f&&Shader.GetGlobalVector("_TavernCutSphere1").w<.01f,"Dialogue merge reopened cut around an open door");
+        orbit.EndDialogueFraming();reportedDoor.Close();yield return new WaitForSeconds(.8f);
+        Log("PASS reported open door position and dialogue shared-mask suppression");
         // A narrow doorway must activate the sphere even with a clear centre ray.
         var fixture=new GameObject("Walls");
         var jambs=new List<GameObject>();
         foreach(float side in new[]{-1f,1f}){
             var jamb=GameObject.CreatePrimitive(PrimitiveType.Cube);jamb.transform.SetParent(fixture.transform);
-            jamb.transform.position=new Vector3(1000+side*.3f,1.5f,999.6f);jamb.transform.localScale=new Vector3(.2f,3,.25f);jambs.Add(jamb);
+            jamb.transform.position=new Vector3(1000+side*.3f,1.5f,999.6f);jamb.transform.localScale=new Vector3(.2f,3,.25f);jamb.AddComponent<WallCutoutGroup>();jambs.Add(jamb);
         }
         player.transform.position=new Vector3(1000,0,1000);orbit.transform.rotation=Quaternion.identity;Set(orbit,"targetYaw",0f);Physics.SyncTransforms();
         yield return new WaitForSeconds(1.2f);
         Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Narrow doorway sphere probe failed");
         foreach(var jamb in jambs)jamb.SetActive(false);
-        var rear=GameObject.CreatePrimitive(PrimitiveType.Cube);rear.transform.SetParent(fixture.transform);rear.transform.position=new Vector3(1000,1.5f,1000.8f);rear.transform.localScale=new Vector3(5,3,.25f);Physics.SyncTransforms();
+        var rear=GameObject.CreatePrimitive(PrimitiveType.Cube);rear.transform.SetParent(fixture.transform);rear.transform.position=new Vector3(1000,1.5f,1000.8f);rear.transform.localScale=new Vector3(5,3,.25f);rear.AddComponent<WallCutoutGroup>();Physics.SyncTransforms();
         yield return new WaitForSeconds(1);
         Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Wall behind actor incorrectly triggers cutout");
         rear.SetActive(false);
-        var low=GameObject.CreatePrimitive(PrimitiveType.Cube);low.transform.SetParent(fixture.transform);low.transform.position=new Vector3(1000,.55f,999.6f);low.transform.localScale=new Vector3(4,1.1f,.25f);Physics.SyncTransforms();
+        var low=GameObject.CreatePrimitive(PrimitiveType.Cube);low.transform.SetParent(fixture.transform);low.transform.position=new Vector3(1000,.55f,999.6f);low.transform.localScale=new Vector3(4,1.1f,.25f);low.AddComponent<WallCutoutGroup>();Physics.SyncTransforms();
         yield return new WaitForSeconds(1);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Low wall hiding legs fails to open");
+        // A rear-only trigger test misses the bug: activate a foreground cut while
+        // a coloured rear wall is present, then compare actual rendered pixels.
+        rear.SetActive(true);
+        var rearMaterial=new Material(Shader.Find("Universal Render Pipeline/Unlit"));rearMaterial.SetColor("_BaseColor",Color.red);
+        var frontMaterial=new Material(rearMaterial);frontMaterial.SetColor("_BaseColor",Color.blue);
+        effect.enabled=false;
+        rear.GetComponent<Renderer>().sharedMaterial=rearMaterial;low.GetComponent<Renderer>().sharedMaterial=frontMaterial;
+        effect.enabled=true;Physics.SyncTransforms();yield return new WaitForSeconds(1.2f);
+        Assert(Shader.GetGlobalFloat("_TavernCutTransition0")>.99f,"Concurrent front/rear test has no active cut");
+        var frontRenderer=low.GetComponent<Renderer>();var rearRenderer=rear.GetComponent<Renderer>();
+        var testBlock=new MaterialPropertyBlock();
+        rearRenderer.GetPropertyBlock(testBlock,0);Assert(testBlock.GetFloat("_TavernCutGroup")==0,"Unhit rear wall group became eligible");
+        frontRenderer.GetPropertyBlock(testBlock,0);Assert(testBlock.GetFloat("_TavernCutGroup")>.99f,"Hit foreground wall group is not eligible");
+        // A child mesh without a collider still follows its wall group's probe hits.
+        var unhitPiece=GameObject.CreatePrimitive(PrimitiveType.Cube);unhitPiece.name="UnhitGroupMember";
+        unhitPiece.transform.SetParent(low.transform,false);unhitPiece.transform.localPosition=Vector3.right*.3f;
+        unhitPiece.transform.localScale=Vector3.one*.05f;UnityEngine.Object.Destroy(unhitPiece.GetComponent<Collider>());
+        unhitPiece.GetComponent<Renderer>().sharedMaterial=frontMaterial;
+        yield return new WaitForSeconds(1.1f);
+        unhitPiece.GetComponent<Renderer>().GetPropertyBlock(testBlock,0);
+        Assert(testBlock.GetFloat("_TavernCutGroup")>.99f,"Unhit member does not follow the parent wall group");
+        frontRenderer.GetPropertyBlock(testBlock,0);testBlock.SetFloat("_TavernCuttable",0);frontRenderer.SetPropertyBlock(testBlock,0);
+        rearRenderer.GetPropertyBlock(testBlock,0);testBlock.SetFloat("_TavernCuttable",0);rearRenderer.SetPropertyBlock(testBlock,0);
+        yield return new WaitForEndOfFrame();var opaquePixels=CutoutPixelCounts();
+        frontRenderer.GetPropertyBlock(testBlock,0);testBlock.SetFloat("_TavernCuttable",1);frontRenderer.SetPropertyBlock(testBlock,0);
+        rearRenderer.GetPropertyBlock(testBlock,0);testBlock.SetFloat("_TavernCuttable",1);rearRenderer.SetPropertyBlock(testBlock,0);
+        yield return null;yield return new WaitForEndOfFrame();var cutPixels=CutoutPixelCounts();
+        Assert(opaquePixels.x>100&&opaquePixels.y>100,"Coloured wall test is not visible");
+        Assert(cutPixels.x>=opaquePixels.x*.99f,"Rear wall loses pixels when foreground cut is active");
+        Assert(cutPixels.y<opaquePixels.y*.85f,"Foreground wall no longer dissolves");
+        Log($"PASS rendered front/rear walls: rear red {opaquePixels.x}->{cutPixels.x}, front blue {opaquePixels.y}->{cutPixels.y}");
+        yield return Capture("/tmp/wall-cutout-front-rear.png");
+        rear.SetActive(false);
         low.transform.position=new Vector3(1000,.55f,998.5f);Physics.SyncTransforms();
         yield return new WaitForSeconds(.5f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Clear feet trigger low wall too early");
         low.transform.position=new Vector3(1000,.55f,999.1f);Physics.SyncTransforms();
@@ -340,6 +391,14 @@ static class DemoPolishPlayCheck
         Log("PASS clear feet stay opaque; first foot occlusion opens; Q/E opens during rotation");
         var doorObject=new GameObject("Door_Small_Stone_Probe");doorObject.transform.SetParent(fixture.transform);doorObject.transform.position=player.transform.position;var smallDoor=doorObject.AddComponent<DoorStateController>();smallDoor.Configure(null,null,null,false);smallDoor.Open();
         yield return new WaitForSeconds(1.3f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Open small-door passage must suppress local dissolve");
+        doorObject.transform.position=player.transform.position+Vector3.right*2.6f;
+        yield return new WaitForSeconds(.7f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Open door outside old proximity range must suppress intersecting cut");
+        yield return new WaitForSeconds(.7f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w<.01f,"Suppression oscillates when cut fades to zero");
+        doorObject.transform.position=player.transform.position+Vector3.right*20;
+        yield return new WaitForSeconds(.7f);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Unrelated distant open door suppresses cut");
+        doorObject.transform.position=player.transform.position+Vector3.right*2.6f;
+        yield return new WaitForSeconds(.7f);
+        Log("PASS open door beyond old range suppresses shared cut stably; distant door does not");
         smallDoor.Close();yield return new WaitForSeconds(1);Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Closed small door must restore normal wall probes");
         UnityEngine.Object.Destroy(fixture);
         Log("PASS low wall leg occlusion, open/closed small-door suppression and narrow/rear probes");
@@ -388,6 +447,10 @@ static class DemoPolishPlayCheck
         // Isolate additive B1 presentation; these test-only render changes end with Play Mode.
         foreach(var r in UnityEngine.Object.FindObjectsByType<Renderer>())
             if(r.gameObject.scene!=basement&&!r.transform.IsChildOf(player.transform))r.enabled=false;
+        player.transform.position=new Vector3(48.1432f,.08f,25.0443f);
+        player.transform.rotation=Quaternion.Euler(0,-101.293f,0);
+        orbit.transform.rotation=Quaternion.Euler(0,315,0);Set(orbit,"targetYaw",315f);Physics.SyncTransforms();
+        yield return new WaitForSeconds(1.2f);yield return Capture("/tmp/rear-wall-fixed-b1.png");
         player.transform.position=new Vector3(36.3f,.08f,23.0f);Physics.SyncTransforms();
         orbit.enabled=false;orbit.transform.position=new Vector3(34.2f,1.2f,23.0f);
         ((Camera)Get(orbit,"gameCamera")).orthographicSize=5.4f;
@@ -409,6 +472,16 @@ static class DemoPolishPlayCheck
         var hits=new List<UnityEngine.EventSystems.RaycastResult>();events.RaycastAll(pointer,hits);
         Assert(hits.Count>0&&hits[0].gameObject.GetComponentInParent<UnityEngine.UI.Button>()==button,"UI obscured/not clickable: "+name);
         UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject,pointer,UnityEngine.EventSystems.ExecuteEvents.pointerClickHandler);
+    }
+    static Vector2Int CutoutPixelCounts()
+    {
+        var image=ScreenCapture.CaptureScreenshotAsTexture();var count=Vector2Int.zero;
+        foreach(var pixel in image.GetPixels32())
+        {
+            if(pixel.r>80 && pixel.r>pixel.g*2 && pixel.r>pixel.b*2)count.x++;
+            if(pixel.b>80 && pixel.b>pixel.g*2 && pixel.b>pixel.r*2)count.y++;
+        }
+        UnityEngine.Object.Destroy(image);return count;
     }
     static IEnumerator Capture(string path)
     {

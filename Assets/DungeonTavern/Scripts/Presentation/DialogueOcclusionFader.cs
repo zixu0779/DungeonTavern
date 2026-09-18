@@ -19,6 +19,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
             public MaterialPropertyBlock[] blocks;
             public Matrix4x4 matrix;
             public Bounds bounds;
+            public WallCutoutGroup group;
+            public float appliedGroup = -1;
         }
         sealed class Mask
         {
@@ -37,6 +39,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
             public bool stable;
             public float settleAt, standingHeight, standingRadius;
         }
+        sealed class GroupState { public float lastHit = float.NegativeInfinity, strength; }
+        readonly Dictionary<WallCutoutGroup, GroupState> groups = new();
         readonly Dictionary<Renderer, Wall> walls = new();
         readonly List<DungeonTavern.Tavern25D.DoorStateController> smallDoors = new();
         readonly Mask[] masks = { new(), new() };
@@ -59,6 +63,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             for (var t = item; t; t = t.parent)
             {
                 if (t.name == "Signs" || t.name == "Stairs") return false;
+                if (t.GetComponent<WallCutoutGroup>()) return true;
                 if (t.name == "Walls" || t.name == "Walls_Stone" || t.name == "StairRearEnclosure" || t.name == "StoneGates") return true;
             }
             return false;
@@ -80,8 +85,11 @@ namespace DungeonTavern.Prototypes.Rotation25D
             foreach (var renderer in FindObjectsByType<MeshRenderer>())
             {
                 if (!IsWall(renderer.transform) || walls.ContainsKey(renderer)) continue;
+                var group=renderer.GetComponentInParent<WallCutoutGroup>();
+                if(!group)continue; // Ungrouped props never inherit another wall's cut.
+                if(!groups.ContainsKey(group))groups.Add(group,new GroupState());
                 var originals = renderer.sharedMaterials;
-                var state = new Wall { renderer = renderer, originals = originals,
+                var state = new Wall { renderer = renderer, originals = originals, group = group,
                     copies = new Material[originals.Length], blocks = new MaterialPropertyBlock[originals.Length] };
                 var assigned = (Material[])originals.Clone();
                 for (int i = 0; i < originals.Length; i++)
@@ -100,6 +108,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
                     }
                     renderer.GetPropertyBlock(block, i);
                     block.SetFloat(Cuttable, 1);
+                    block.SetFloat("_TavernCutGroup",0);
                     // Door frames and leaves retain their authored surfaces, without inferred volume caps.
                     block.SetFloat("_TavernSurfaceOnly", renderer.GetComponentInParent<DungeonTavern.Tavern25D.DoorStateController>()?.name.StartsWith("Door_Small_Stone") == true ? 1 : 0);
                     var bounds = renderer.localBounds;
@@ -239,31 +248,85 @@ namespace DungeonTavern.Prototypes.Rotation25D
             if (changed || Vector3.Distance(mask.center, mask.targetCenter) > 8)
             { mask.center = mask.targetCenter;mask.radius = mask.coverageRadius;mask.transition = 0;mask.targetRadius = 0; }
         }
-        bool PassingSmallDoor(Vector3 position)
+        readonly List<Renderer> doorRenderers = new();
+        bool CutTouchesBounds(Vector3 center, float radius, Bounds bounds)
+        {
+            // Conservative envelope includes the shader's +/-0.9 m noise band.
+            // Test the full potential cut, not the fading radius: no reopening loop.
+            var start=view.transform.position;
+            if(view.orthographic)start=center-view.transform.forward*Mathf.Max(0,Vector3.Dot(center-start,view.transform.forward));
+            bounds.Expand(2*(radius+.9f));
+            var segment=center-start;
+            return bounds.Contains(start) || bounds.Contains(center) ||
+                (bounds.IntersectRay(new Ray(start,segment.normalized),out float distance) && distance<=segment.magnitude);
+        }
+        bool OpenDoorTouchesCut()
         {
             foreach(var door in smallDoors)
             {
-                if(!door || (!door.IsOpen && !door.IsTransitioning))continue;
-                if(door.BlockingCollider is BoxCollider box)
+                if(!door || !door.gameObject.activeInHierarchy || (!door.IsOpen && !door.IsTransitioning))continue;
+                door.GetComponentsInChildren(false,doorRenderers);
+                var bounds=new Bounds(door.transform.position,Vector3.one*.1f);
+                bool found=false;
+                foreach(var r in doorRenderers){if(!r.enabled)continue;if(!found){bounds=r.bounds;found=true;}else bounds.Encapsulate(r.bounds);}
+                foreach(var mask in masks)
+                    if(mask.actor && (CutTouchesBounds(mask.center,Mathf.Max(mask.radius,mask.coverageRadius),bounds) ||
+                        CutTouchesBounds(mask.targetCenter,mask.coverageRadius,bounds)))return true;
+                // The dialogue bridge can intersect a door between both speakers.
+                if(masks[0].actor && masks[1].actor)
                 {
-                    var p=box.transform.InverseTransformPoint(position)-box.center;
-                    var allowance=new Vector3(1.1f/Mathf.Abs(box.transform.lossyScale.x),0,1.1f/Mathf.Abs(box.transform.lossyScale.z));
-                    if(Mathf.Abs(p.x)<box.size.x*.5f+allowance.x && Mathf.Abs(p.z)<box.size.z*.5f+allowance.z)return true;
+                    var a=masks[0].center;var delta=masks[1].center-a;
+                    var projected=Vector3.ProjectOnPlane(delta,view.transform.forward);
+                    float t=Mathf.Clamp01(Vector3.Dot(Vector3.ProjectOnPlane(bounds.center-a,view.transform.forward),projected)/Mathf.Max(projected.sqrMagnitude,.0001f));
+                    if(CutTouchesBounds(a+delta*t,Mathf.Max(masks[0].coverageRadius,masks[1].coverageRadius),bounds))return true;
                 }
-                else if(Vector3.ProjectOnPlane(position-door.transform.position,Vector3.up).sqrMagnitude<4)return true;
             }
             return false;
+        }
+        bool MarkOccludingGroup(Collider collider)
+        {
+            if(!IsWall(collider.transform))return false;
+            var group=collider.GetComponentInParent<WallCutoutGroup>();
+            if(!group || !group.isActiveAndEnabled)return false;
+            if(!groups.TryGetValue(group,out var state))groups.Add(group,state=new GroupState());
+            state.lastHit=Time.time;
+            return true;
         }
         bool ProbePoint(Vector3 point, float radius)
         {
             var direction=view.orthographic ? -view.transform.forward : (view.transform.position-point).normalized;
             var origin=point+direction*(radius+.01f);
             float distance=Mathf.Max(0,Vector3.Dot(view.transform.position-origin,direction));
+            bool blocked=false;
             foreach(var c in Physics.OverlapSphere(origin,radius,~0,QueryTriggerInteraction.Ignore))
-                if(IsWall(c.transform) && Vector3.Dot(c.bounds.ClosestPoint(origin)-point,direction)>.01f)return true;
+                if(Vector3.Dot(c.bounds.ClosestPoint(origin)-point,direction)>.01f)
+                    blocked |= MarkOccludingGroup(c);
             foreach(var hit in Physics.SphereCastAll(origin,radius,direction,distance,~0,QueryTriggerInteraction.Ignore))
-                if(IsWall(hit.transform) && Vector3.Dot(hit.point-point,direction)>.01f)return true;
-            return false;
+                if(Vector3.Dot(hit.point-point,direction)>.01f)blocked |= MarkOccludingGroup(hit.collider);
+            return blocked;
+        }
+        void UpdateGroups(bool suppressed)
+        {
+            foreach(var pair in groups)
+            {
+                var state=pair.Value;
+                bool hit=pair.Key && pair.Key.isActiveAndEnabled && Time.time-state.lastHit<=.16f && !suppressed;
+                float duration=hit?(orbit.IsRotating?Mathf.Min(openingSeconds,.12f):openingSeconds):closingSeconds;
+                state.strength=Mathf.MoveTowards(state.strength,hit?1:0,Time.deltaTime/duration);
+            }
+            foreach(var wall in walls.Values)
+            {
+                if(!wall.renderer || !wall.group)continue;
+                float strength=groups[wall.group].strength;
+                if(Mathf.Approximately(strength,wall.appliedGroup))continue;
+                wall.appliedGroup=strength;
+                for(int i=0;i<wall.originals.Length;i++)
+                {
+                    wall.renderer.GetPropertyBlock(block,i);
+                    block.SetFloat("_TavernCutGroup",strength);
+                    wall.renderer.SetPropertyBlock(block,i);
+                }
+            }
         }
         void Probe(Mask mask)
         {
@@ -271,8 +334,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             // Stable ankle samples, not animated feet: only a few centimetres of anticipation.
             var feet=mask.actor.position+Vector3.up*.12f;
             var side=view.transform.right*.18f;
-            bool blocked=!PassingSmallDoor(mask.actor.position) &&
-                (ProbePoint(mask.targetCenter,probeRadius) || ProbePoint(feet-side,.06f) || ProbePoint(feet+side,.06f));
+            bool blocked=(ProbePoint(mask.targetCenter,probeRadius) | ProbePoint(feet-side,.06f) | ProbePoint(feet+side,.06f));
             mask.blockedSamples=blocked?1:0;
             mask.targetRadius=blocked?mask.coverageRadius:0;
         }
@@ -292,6 +354,11 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 if(masks[0].actor && masks[1].actor && (masks[0].targetRadius>0 || masks[1].targetRadius>0))
                     foreach(var mask in masks) mask.targetRadius=mask.coverageRadius;
             }
+            // Run after dialogue merging, every frame; neither speaker can reopen
+            // the shared cut while an intersecting small door is open or moving.
+            bool suppressed=OpenDoorTouchesCut();
+            if(suppressed)foreach(var mask in masks)mask.targetRadius=0;
+            UpdateGroups(suppressed);
             pairBlend=Mathf.MoveTowards(pairBlend, masks[1].actor ? 1 : 0, Time.deltaTime/closingSeconds);
             Shader.SetGlobalFloat("_TavernCutPair",pairBlend);
             Shader.SetGlobalFloat("_TavernSectionsEnabled", enableSections ? 1 : 0);
@@ -322,7 +389,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 }
                 foreach (var material in wall.copies) if (material) Destroy(material);
             }
-            walls.Clear();nextScan = nextProbe = 0;pairBlend=0;
+            walls.Clear();groups.Clear();nextScan = nextProbe = 0;pairBlend=0;
             Shader.SetGlobalFloat("_TavernCutPair",0);
             Shader.SetGlobalFloat("_TavernSectionsEnabled", 0);
             foreach (var mask in masks) { mask.actor = null;mask.radius = mask.targetRadius = mask.transition = 0;if(mask.baked)Destroy(mask.baked);mask.baked=null; }

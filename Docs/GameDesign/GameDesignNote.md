@@ -70,7 +70,12 @@ This document is the durable source of truth for confirmed game and world design
   two opposing headings. Choose fewer blocked rays out of 18, then shorter rotation
   for a tie. Orthographic sight lines exclude triggers and other characters.
   Dialogue framing eases over 1.3 seconds. Remaining architectural occlusion uses
-  local world-space cutout channels toward the camera, not whole-wall fading. Exploration follows the
+  local world-space cutout channels toward the camera, not whole-wall fading.
+  Eligibility belongs to complete wall faces grouped in the Hierarchy, including
+  their door frames and leaves. Only groups hit by character occlusion probes
+  participate; non-occluding groups remain intact even inside a nearby cutout.
+  Corners separate wall groups, and dialogue combines both speakers' hit groups.
+  Exploration follows the
   player, using a spherecast that also triggers at narrow doorways; dialogue joins
   both speakers into a continuous opening sized for their full silhouettes. NPC
   cutouts only exist during dialogue. Floors, colliders and interaction blocking
