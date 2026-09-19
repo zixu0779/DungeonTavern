@@ -40,6 +40,9 @@ namespace DungeonTavern.Tavern25D
             if (!SetHostContentVisible(false))
                 yield break;
 
+            yield return null;
+            var cutout=FindAnyObjectByType<DungeonTavern.Prototypes.Rotation25D.DialogueOcclusionFader>();
+            if(cutout)yield return cutout.PrepareForReveal();
             float elapsed = 0f;
             while (elapsed < fadeDuration)
             {

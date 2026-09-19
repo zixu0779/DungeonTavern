@@ -174,6 +174,9 @@ namespace DungeonTavern.Tavern25D
                 }
             }
 
+            yield return null;
+            var cutout=FindAnyObjectByType<DungeonTavern.Prototypes.Rotation25D.DialogueOcclusionFader>();
+            if(cutout)yield return cutout.PrepareForReveal();
             yield return Fade(1f, 0f, fadeDuration);
             PlayerAreaTransition.RaiseCompleted(sceneToLoad, sceneToUnload);
             nextAllowedTime = Time.unscaledTime + 0.15f;

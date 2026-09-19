@@ -257,17 +257,19 @@ namespace DungeonTavern.Prototypes.Rotation25D
             state.lastHit=Time.time;
             return true;
         }
-        bool ProbePoint(Vector3 point, float radius)
+        bool ProbePoint(Vector3 point, float radius, bool predicted = false)
         {
             var direction=view.orthographic ? -view.transform.forward : (view.transform.position-point).normalized;
             var origin=point+direction*(radius+.01f);
             float distance=Mathf.Max(0,Vector3.Dot(view.transform.position-origin,direction));
             bool blocked=false;
-            foreach(var c in Physics.OverlapSphere(origin,radius,~0,QueryTriggerInteraction.Ignore))
+            if(!predicted) foreach(var c in Physics.OverlapSphere(origin,radius,~0,QueryTriggerInteraction.Ignore))
                 if(Vector3.Dot(c.bounds.ClosestPoint(origin)-point,direction)>.01f)
                     blocked |= MarkOccludingGroup(c);
             foreach(var hit in Physics.SphereCastAll(origin,radius,direction,distance,~0,QueryTriggerInteraction.Ignore))
-                if(Vector3.Dot(hit.point-point,direction)>.01f)blocked |= MarkOccludingGroup(hit.collider);
+                if(Vector3.Dot(hit.point-point,direction)>.01f &&
+                    (!predicted || hit.collider.Raycast(new Ray(point,direction),out _,distance)))
+                    blocked |= MarkOccludingGroup(hit.collider);
             return blocked;
         }
         void UpdateGroups()
@@ -308,13 +310,36 @@ namespace DungeonTavern.Prototypes.Rotation25D
             // Predict only while an actual obstruction is active, never from clear space.
             // The short swept path admits the next wall without admitting walls behind us.
             if(continuing && mask.lookAhead.sqrMagnitude>.0001f)
+            {
+                var reachable=ReachableAhead(mask);
                 for(int step=1;step<=3;step++)
                 {
-                    var offset=mask.lookAhead*(step/3f);
-                    ProbePoint(mask.targetCenter+offset,probeRadius);
-                    ProbePoint(feet-side+offset,.06f);
-                    ProbePoint(feet+side+offset,.06f);
+                    var offset=reachable*(step/3f);
+                    ProbePoint(mask.targetCenter+offset,probeRadius,true);
+                    ProbePoint(feet-side+offset,.06f,true);
+                    ProbePoint(feet+side+offset,.06f,true);
                 }
+            }
+        }
+
+        Vector3 ReachableAhead(Mask mask)
+        {
+            var ahead=mask.lookAhead;float length=ahead.magnitude;
+            if(length<.001f)return Vector3.zero;
+            var controller=mask.actor.GetComponent<CharacterController>();
+            float radius=controller?controller.radius*Mathf.Max(mask.actor.lossyScale.x,mask.actor.lossyScale.z):.2f;
+            var bottom=mask.actor.position+Vector3.up*(radius+.08f);
+            var top=bottom+Vector3.up*Mathf.Max(.1f,(controller?controller.height*mask.actor.lossyScale.y:1.6f)-2*radius);
+            foreach(var hit in Physics.CapsuleCastAll(bottom,top,radius,ahead/length,length,~0,QueryTriggerInteraction.Ignore))
+                if(IsWall(hit.transform))length=Mathf.Min(length,Mathf.Max(0,hit.distance-.04f));
+            return ahead.normalized*length;
+        }
+        bool prepareReveal = true;
+        public System.Collections.IEnumerator PrepareForReveal()
+        {
+            nextScan=nextProbe=0;prepareReveal=true;
+            yield return new WaitForEndOfFrame();
+            // LateUpdate has run after camera placement, under the loading overlay.
         }
 
         void LateUpdate()
@@ -330,7 +355,9 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 var delta=Vector3.ProjectOnPlane(mask.actor.position-mask.previousPosition,Vector3.up);
                 mask.previousPosition=mask.actor.position;
                 var ahead=delta.sqrMagnitude>4?Vector3.zero:Vector3.ClampMagnitude(delta/Mathf.Max(Time.deltaTime,.001f)*.3f,.65f);
-                mask.lookAhead=Vector3.Lerp(mask.lookAhead,ahead,1-Mathf.Exp(-Time.deltaTime*12));
+                if(delta.sqrMagnitude>4 || mask.targetRadius<=0)mask.lookAhead=Vector3.zero;
+                else if(delta.sqrMagnitude>.000001f)
+                    mask.lookAhead=Vector3.Lerp(mask.lookAhead,ahead,1-Mathf.Exp(-Time.deltaTime*12));
             }
             if (orbit.IsRotating || Time.time >= nextProbe)
             {
@@ -340,6 +367,8 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 if(masks[0].actor && masks[1].actor && (masks[0].targetRadius>0 || masks[1].targetRadius>0))
                     foreach(var mask in masks) mask.targetRadius=mask.coverageRadius;
             }
+            if(prepareReveal)
+                foreach(var state in groups.Values)state.strength=Time.time-state.lastHit<=.16f?1:0;
             UpdateGroups();
             pairBlend=Mathf.MoveTowards(pairBlend, masks[1].actor ? 1 : 0, Time.deltaTime/closingSeconds);
             Shader.SetGlobalFloat("_TavernCutPair",pairBlend);
@@ -355,10 +384,12 @@ namespace DungeonTavern.Prototypes.Rotation25D
                 float duration = target > mask.transition ? openingSeconds : closingSeconds;
                 mask.transition = Mathf.MoveTowards(mask.transition, target, Time.deltaTime / duration);
                 mask.radius = Mathf.SmoothDamp(mask.radius, mask.coverageRadius, ref mask.radiusVelocity, .35f);
+                if(prepareReveal){mask.center=mask.targetCenter;mask.radius=mask.coverageRadius;mask.transition=target;mask.centerVelocity=Vector3.zero;mask.radiusVelocity=0;}
                 Shader.SetGlobalFloat(i == 0 ? "_TavernCutTransition0" : "_TavernCutTransition1", mask.transition);
                 Shader.SetGlobalVector(i == 0 ? "_TavernCutSphere0" : "_TavernCutSphere1", new Vector4(mask.center.x, mask.center.y, mask.center.z, mask.transition > 0 ? mask.radius : 0));
                 Shader.SetGlobalVector(i == 0 ? "_TavernCutActor0" : "_TavernCutActor1", mask.actorPoint);
             }
+            prepareReveal=false;
         }
         public void RestoreAll()
         {

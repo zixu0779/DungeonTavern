@@ -74,6 +74,8 @@ This document is the durable source of truth for confirmed game and world design
   Eligibility belongs to complete wall faces grouped in the Hierarchy, including
   their door frames and leaves. Actual occlusion starts the shared cutout. While occluded, probes also sample
   the next 0.3 seconds of movement (at most 0.65 m) to admit approaching walls.
+  Prediction is limited by physical wall clearance and retained when stopped at
+  a still-occluded corner. Loading reveals a prepared cutout instead of its startup animation.
   New groups fade into the existing footprint over 0.22 seconds without growing
   a separate opening. Unhit groups stay intact; clear space cannot start prediction.
   Corners separate wall groups, and dialogue combines both speakers' hit groups.

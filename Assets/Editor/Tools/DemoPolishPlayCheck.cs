@@ -422,6 +422,20 @@ static class DemoPolishPlayCheck
             Assert(Shader.GetGlobalFloat("_TavernCutTransition0")>.99f,"Wall handoff restarts the shared opening");
         }
         Assert(predicted,"Approaching adjacent wall did not join before actual occlusion");
+        yield return new WaitForSeconds(.8f);
+        nextRenderer.GetPropertyBlock(nextProps,0);
+        Assert(nextProps.GetFloat("_TavernCutGroup")>.99f,"Stopping at corner drops valid predicted wall");
+        var perpendicular=GameObject.CreatePrimitive(PrimitiveType.Cube);perpendicular.transform.SetParent(fixture.transform);
+        perpendicular.transform.position=new Vector3(1001.95f,1,1000);perpendicular.transform.localScale=new Vector3(.1f,2,2);
+        perpendicular.AddComponent<WallCutoutGroup>();
+        player.transform.position=new Vector3(1001.55f,0,1000);Physics.SyncTransforms();
+        yield return new WaitForSeconds(1.3f);
+        var perpendicularProps=new MaterialPropertyBlock();perpendicular.GetComponent<Renderer>().GetPropertyBlock(perpendicularProps,0);
+        Assert(perpendicularProps.GetFloat("_TavernCutGroup")==0,"Unoccluding perpendicular wall incorrectly predicted through collision");
+        effect.enabled=false;effect.enabled=true;
+        yield return effect.PrepareForReveal();
+        Assert(Shader.GetGlobalFloat("_TavernCutTransition0")>.99f,"Reveal exposes an unfinished initial cutout");
+        Log("PASS stopped corner prediction, perpendicular collision and prepared reveal");
         Log("PASS adjacent wall prediction preserves fully opened shared silhouette");
         UnityEngine.Object.Destroy(fixture);
         Log("PASS sphere opens narrow doorway with clear centre, rear wall does not activate it");
@@ -445,6 +459,15 @@ static class DemoPolishPlayCheck
         Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"B1 wall cutout failed to activate");
         var stairs=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Where(r=>r.gameObject.scene==basement && r.name.StartsWith("Stair_")).ToArray();
         Assert(stairs.All(r=>!DialogueOcclusionFader.IsWall(r.transform)),"Stairs incorrectly classified as walls");
+        var ascending=stairs.First(r=>r.name=="Stair_Stone_B1_Ascending");
+        Assert(UnityEditor.AssetDatabase.GetAssetPath(ascending.GetComponent<MeshFilter>().sharedMesh).EndsWith("Stair_InsideWallFootprint.asset"),"Scene stair missing exterior trim");
+        Assert(ascending.GetComponent<MeshFilter>().sharedMesh.vertices.All(v=>{var p=ascending.transform.TransformPoint(v);return p.x>=33.309f||p.z>=22.789f;}),"Stair extends outside enclosure footprint");
+        var coping=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Where(r=>r.gameObject.scene==basement&&r.name.StartsWith("B1Coping_")).ToArray();
+        Assert(coping.Length==92&&coping.All(r=>Mathf.Abs(r.bounds.size.y-.3f)<.002f),"Coping coverage or thickness changed");
+        for(int i=0;i<coping.Length;i++)for(int j=i+1;j<coping.Length;j++){var b=coping[i].bounds;b.Expand(-.003f);Assert(!b.Intersects(coping[j].bounds),"Coping stones overlap");}
+        var fog=GameObject.Find("BlackFog_ToMain").GetComponentsInChildren<MeshRenderer>();
+        Assert(fog.Length==18&&fog.All(r=>r.sharedMaterial.GetFloat("_FogBoundsEnabled")>.5f&&r.sharedMaterial.GetVector("_FogBoundsMax").x<33.293f),"Fog leaks beyond passage boundary");
+        Log("PASS B1 coping thickness and non-overlap, stair footprint, bounded exterior fog");
         effect.enabled=false;yield return null;yield return Capture("/tmp/wall-cutout-before-b1.png");
         effect.enabled=true;yield return new WaitForSeconds(.7f);
         Set(effect,"enableSections",false);yield return null;yield return Capture("/tmp/wall-section-off-b1.png");
@@ -463,8 +486,14 @@ static class DemoPolishPlayCheck
         yield return new WaitForSeconds(1.2f);yield return Capture("/tmp/wall-cutout-stone-gate.png");
         Assert(Shader.GetGlobalVector("_TavernCutSphere0").w>1,"Stone gate does not activate cutout");
         Log("PASS B1 gate leaf participates and its section transform follows movement");
-        var connection=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Single(r=>r.gameObject.scene==basement&&r.name=="StairArchConnection_Trial");
-        Assert(!DialogueOcclusionFader.IsWall(connection.transform)&&!connection.GetComponent<Collider>(),"Stair connection must stay opaque and leave passage collision unchanged");
+        var connection=UnityEngine.Object.FindObjectsByType<MeshRenderer>().SingleOrDefault(r=>r.gameObject.scene==basement&&r.name=="StairArchConnection_Trial");
+        if(connection)Assert(!DialogueOcclusionFader.IsWall(connection.transform)&&!connection.GetComponent<Collider>(),"Stair connection must stay opaque and leave passage collision unchanged");
+        var masonry=GameObject.Find("StairPassage_MasonrySample");
+        Assert(masonry,"Stair masonry sample missing");
+        var rearWall=UnityEngine.Object.FindObjectsByType<MeshRenderer>().Single(r=>r.gameObject.scene==basement&&r.name=="RearEnd");
+        Assert(Mathf.Abs(rearWall.bounds.min.z-22.77f)<.002f,"Rear exposed end not trimmed");
+        Assert(!Physics.RaycastAll(new Vector3(33.79f,3,24.1f),Vector3.left,2.3f,~0,QueryTriggerInteraction.Ignore).Any(h=>DialogueOcclusionFader.IsWall(h.transform)),"New masonry blocks passage");
+        Log("PASS trimmed rear wall, framed opening and clear passage");
         orbit.EndDialogueFraming();orbit.FollowTarget=player.transform;
         // Isolate additive B1 presentation; these test-only render changes end with Play Mode.
         foreach(var r in UnityEngine.Object.FindObjectsByType<Renderer>())

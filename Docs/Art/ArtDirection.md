@@ -38,7 +38,10 @@ presentation and asset organization, not future feature commitments.
   Every probe collects the `WallCutoutGroup` parents of all wall hits between
   the actor and camera. Actual hits plus short movement-predicted hits permit a local cut, with a 0.16-second
   hit grace period. While actually occluded, movement prediction extends probes by
-  0.3 seconds (maximum 0.65 m). Group membership fades over 0.22 seconds using
+  0.3 seconds (maximum 0.65 m), clipped to character-width collision clearance.
+  Predicted hits require an actual view ray intersection; valid look-ahead is retained
+  while stopped under occlusion. Initial and portal reveals prepare the cutout under
+  the loading overlay before the image fades in. Group membership fades over 0.22 seconds using
   depth-consistent stippling inside the shared footprint, without resizing it.
   Other groups remain opaque even
   inside the shared mask. No wall-facing or actor-depth-plane heuristic is used.
@@ -75,9 +78,16 @@ presentation and asset organization, not future feature commitments.
   visual surfaces add no colliders and do not fill the open stairwell. F1 extensions
   are clipped to the surveyed concave exterior wall outline, inset 8 mm to avoid
   exposed pixels outside straight and diagonal wall faces.
-- B1 `Environment/StairArchConnection_Trial` is a removable stone arch tunnel behind
-  the original stair arch. Its sides and curved roof remain opaque when surrounding
-  walls dissolve; it adds no collision and leaves stair/wall transforms unchanged.
+- B1 stair masonry sample uses large dressed arch stones and coping stones, with
+  separate top/front/side material values. The rear wall ends at z=22.77 and joins
+  a short south return instead of exposing a free-standing wall end. Perpendicular
+  returns keep separate WallCutoutGroups. Existing stair placement and arch clearance
+  remain unchanged. Dressed opening assets live under `Walls/StoneWall/StairPassageSample`.
+- All B1 rubble walls use the approved top/front/side values. Coping stones are
+  0.30 m thick and cover the union of wall tops, including corner pillars, without
+  overlapping faces. Rollout meshes and local materials live under
+  `Walls/StoneWall/B1StoneMasonry`. B1 stair fog uses separate bounded materials
+  confined to the exterior passage; F1 fog materials retain their original behavior.
 - Opening yaw is 315 degrees. The protagonist starts beside the control core,
   face down with relaxed asymmetric arms; Prone/WakeUp clips are editable Unity
   assets, while original action FBX files are retained. The right hand rests beside
@@ -131,3 +141,9 @@ presentation and asset organization, not future feature commitments.
 
 Completed one-off migration, repair, screenshot and validation scripts were
 removed in the 2026-09-18 cleanup. They are not runtime dependencies.
+
+- B1 ascending stone stair uses `Stair_Stone_B1_NoArch.fbx` through its existing
+  prefab: upper arch removed and pillar footprints capped. Original FBX is retained
+  in the same model folder. The B1 scene uses `Stair_InsideWallFootprint.asset`,
+  derived from the arch-free mesh, to remove the exterior overhang at the rear
+  return wall. Authored scene placement and materials are unchanged.
