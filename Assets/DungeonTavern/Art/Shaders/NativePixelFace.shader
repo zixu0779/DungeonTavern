@@ -78,7 +78,7 @@ Shader "DungeonTavern/Native Pixel Face"
             half4 Frag(Varyings input, FRONT_FACE_TYPE facing : FRONT_FACE_SEMANTIC, out float depth : SV_Depth) : SV_Target
             {
                 depth=input.positionCS.z;
-                if (!IS_FRONT_VFACE(facing,true,false) && TavernCutCameraActive() && _TavernSurfaceOnly < .5)
+                if (!IS_FRONT_VFACE(facing,true,false) && TavernCutCameraActive() && _TavernSurfaceOnly < .5 && _TavernCutGroup > 0)
                 {
                     float3 section=TavernSectionPoint(input.positionWS);
                     depth=TavernSectionDepth(section);

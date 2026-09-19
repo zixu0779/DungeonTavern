@@ -135,8 +135,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
             ApplyFace(meshRenderer, 0, front, false, frontDirection);
             ApplyFace(meshRenderer, 1, back, mirrorBackHorizontally, backDirection);
-            ApplyFace(meshRenderer, 2, left, false, leftDirection);
-            ApplyFace(meshRenderer, 3, right, false, rightDirection);
+            // Grouped walls expose their existing end faces when adjacent walls dissolve.
+            Sprite endFallback = GetComponentInParent<WallCutoutGroup>() != null ? front : null;
+            ApplyFace(meshRenderer, 2, left != null ? left : endFallback, false, leftDirection);
+            ApplyFace(meshRenderer, 3, right != null ? right : endFallback, false, rightDirection);
             ApplyFace(meshRenderer, 4, top, false, topDirection);
             ApplyFace(meshRenderer, 5, leftJamb != null ? leftJamb : left, false, leftJambDirection);
             ApplyFace(meshRenderer, 6, rightJamb != null ? rightJamb : left, false, rightJambDirection);

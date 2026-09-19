@@ -24,7 +24,7 @@ Shader "DungeonTavern/Wall Cutout Unlit"
         half4 Frag(Varyings i,FRONT_FACE_TYPE facing:FRONT_FACE_SEMANTIC, out float depth:SV_Depth):SV_Target
         {
             depth=i.positionCS.z;
-            if (!IS_FRONT_VFACE(facing,true,false) && _TavernSurfaceOnly < .5)
+            if (!IS_FRONT_VFACE(facing,true,false) && _TavernSurfaceOnly < .5 && _TavernCutGroup > 0)
             {
                 float3 section=TavernSectionPoint(i.positionWS);
                 depth=TavernSectionDepth(section);

@@ -28,6 +28,9 @@ namespace DungeonTavern.Tavern25D
         private Coroutine transition;
         private Collider[] movingLeafColliders = Array.Empty<Collider>();
 
+        public bool IsLeaf(Transform item) =>
+            (leftHinge && item.IsChildOf(leftHinge)) || (rightHinge && item.IsChildOf(rightHinge));
+
         public bool IsOpen => isOpen;
         public bool IsTransitioning => transition != null;
         public Collider BlockingCollider => blockingCollider;

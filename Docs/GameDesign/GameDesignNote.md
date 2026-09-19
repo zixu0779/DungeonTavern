@@ -72,8 +72,10 @@ This document is the durable source of truth for confirmed game and world design
   Dialogue framing eases over 1.3 seconds. Remaining architectural occlusion uses
   local world-space cutout channels toward the camera, not whole-wall fading.
   Eligibility belongs to complete wall faces grouped in the Hierarchy, including
-  their door frames and leaves. Only groups hit by character occlusion probes
-  participate; non-occluding groups remain intact even inside a nearby cutout.
+  their door frames and leaves. Actual occlusion starts the shared cutout. While occluded, probes also sample
+  the next 0.3 seconds of movement (at most 0.65 m) to admit approaching walls.
+  New groups fade into the existing footprint over 0.22 seconds without growing
+  a separate opening. Unhit groups stay intact; clear space cannot start prediction.
   Corners separate wall groups, and dialogue combines both speakers' hit groups.
   Exploration follows the
   player, using a spherecast that also triggers at narrow doorways; dialogue joins
@@ -81,7 +83,8 @@ This document is the durable source of truth for confirmed game and world design
   cutouts only exist during dialogue. Floors, colliders and interaction blocking
   remain unchanged. Masks move smoothly with stable locomotion dimensions. Cut interiors
   reuse the wall surface texture and colour. B1 stone gates participate; small stone doors retain their original rendering.
-  Wall dissolution pauses locally while passing an open or moving small door;
+  Small hinged door leaves remain opaque in every state; fixed frames share wall
+  cutouts, and door state never pauses the surrounding wall dissolution;
   stairs and other non-wall props remain opaque. Rendering sections do not alter wall collision. The F1/B1 floor extends beneath
   walls to support the cutaway visually; stairwell openings remain clear.
   The protagonist smoothly turns toward the speaker over 0.35–1 second, according to

@@ -18,7 +18,6 @@ float _TavernCutOrthographic, _TavernCutTransition0, _TavernCutTransition1, _Tav
 // Orthographic rays must remain parallel, including for off-centre actors.
 float CutChannel(float3 p, float4 sphere, float transition, float noise)
 {
-    transition = min(transition, _TavernCutGroup);
     if (sphere.w < .001 || transition <= 0) return 1;
     float3 start = _TavernCutCamera.xyz;
     if (_TavernCutOrthographic > .5)
@@ -36,6 +35,10 @@ float TavernWallField(float3 p)
 {
     // Keep noise constant through wall depth so filling does not heal the fragments.
     float3 noisePosition=p-dot(p,_TavernCutForward.xyz)*_TavernCutForward.xyz;
+    // Membership fades across the existing complete footprint, never rescales it.
+    // World-projected stippling stays identical through wall depth and section filling.
+    if (_TavernCutGroup <= 0 || (_TavernCutGroup < 1 &&
+        CutHash(floor(noisePosition*80)) >= _TavernCutGroup)) return 1;
     float noise = (CutNoise(noisePosition * 6)*.75 + CutNoise(noisePosition * 14)*.25);
     float field = min(CutChannel(p,_TavernCutSphere0,_TavernCutTransition0,noise),
                       CutChannel(p,_TavernCutSphere1,_TavernCutTransition1,noise));
