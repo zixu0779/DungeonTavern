@@ -62,8 +62,8 @@ internal static class SeatingLogicCheck
             foreach (var member in fullParty) registry.Release(member);
             var counts = Enumerable.Range(0, 1000).Select(i => day.ChooseOrdinaryKind(i / 1000f)).GroupBy(k => k).ToDictionary(g => g.Key, g => g.Count());
             Assert(counts[CustomerSeatingKind.Solitary] > counts[CustomerSeatingKind.Sociable] && counts[CustomerSeatingKind.Sociable] > counts[CustomerSeatingKind.Party], "Weighted frequency order");
-            Directory.CreateDirectory(SeatingSetup.Output);
-            File.WriteAllText(SeatingSetup.Output + "rules.txt", "PASS: all solo priorities, personal-space relation, idempotent reservation, occupied round exclusion, standing limit, 2/4-person exclusive party reservation, partial departure, destroyed member, invalid-party rollback, generation capacity gate and weighted frequencies.\n");
+            Directory.CreateDirectory((Path.Combine(Path.GetTempPath(), "DungeonTavern/Seating") + Path.DirectorySeparatorChar));
+            File.WriteAllText((Path.Combine(Path.GetTempPath(), "DungeonTavern/Seating") + Path.DirectorySeparatorChar) + "rules.txt", "PASS: all solo priorities, personal-space relation, idempotent reservation, occupied round exclusion, standing limit, 2/4-person exclusive party reservation, partial departure, destroyed member, invalid-party rollback, generation capacity gate and weighted frequencies.\n");
         }
         finally { EditorSceneManager.ClosePreviewScene(scene); }
     }

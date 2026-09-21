@@ -93,7 +93,8 @@ presentation and asset organization, not future feature commitments.
   assets, while original action FBX files are retained. The right hand rests beside
   the head, with separated relaxed feet. `Tools > Characters > Preview Opening Pose`
   previews Prone in B1 without saving posed bones; Stop Opening Pose Preview restores
-  the authored transforms. Wake-up transition refinement is pending pose acceptance.
+  the authored transforms. WakeUp and GetUp use continuous two-hand ground support, leg recovery and standing
+  settlement. The B1 player start is authored at (40.62213, 0.08, 17.68641).
 
 ## Source and runtime assets
 

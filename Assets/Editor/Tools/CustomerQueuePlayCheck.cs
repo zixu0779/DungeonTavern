@@ -16,7 +16,7 @@ using UnityEngine.AI;
 internal static class CustomerQueuePlayCheck
 {
     const string Key="DungeonTavern.QueuePlayCheck";
-    const string Output=CustomerQueueReview.Output;
+    static readonly string Output=(Path.Combine(Path.GetTempPath(), "DungeonTavern/CustomerQueue") + Path.DirectorySeparatorChar);
     [Serializable] class SavedScene {public string path;public bool active;public bool loaded;}
     [Serializable] class SavedSetup {public SavedScene[] scenes;}
     static BusinessDayController day;

@@ -138,7 +138,7 @@ namespace DungeonTavern.Tavern25D
         public IEnumerator WakeAndStand()
         {
             fullBodyAction = true;
-            animator.CrossFadeInFixedTime("WakeUp", .12f, 0);
+            animator.CrossFadeInFixedTime("WakeUp", .12f, 0, 0f);
             yield return null;
             // Wait for the actual state chain, not a second independent duration.
             while (animator && (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || animator.IsInTransition(0)))

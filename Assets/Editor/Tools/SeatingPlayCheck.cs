@@ -16,7 +16,7 @@ using UnityEngine.AI;
 internal static class SeatingPlayCheck
 {
     const string Key="DungeonTavern.SeatingPlayCheck";
-    const string Output=SeatingSetup.Output;
+    static readonly string Output=(Path.Combine(Path.GetTempPath(), "DungeonTavern/Seating") + Path.DirectorySeparatorChar);
     [Serializable] class SavedScene {public string path;public bool active;public bool loaded;}
     [Serializable] class SavedSetup {public SavedScene[] scenes;}
     static BusinessDayController day;

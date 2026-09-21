@@ -288,7 +288,7 @@ The following are not design commitments:
 - Only Day 1 is wired to the current narrative controller. Days 2 and 3 exist
   in Ink and are not yet complete playable scene flows. The current Demo skips the
   opening cinematic text and starts with the prone player; movement input starts
-  the floor-to-standing animation. The later Eve narrative remains enabled.
+  the face-down, two-hand-supported floor-to-standing animation. The later Eve narrative remains enabled.
   Movement and F interaction stay locked until standing. Space vaulting drives
   a full-body animation with hand contact alongside the collision-controlled arc.
 - F1/B1 stair travel is connected; the unfinished F2 entrance is temporarily

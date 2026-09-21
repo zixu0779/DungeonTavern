@@ -60,6 +60,13 @@ namespace DungeonTavern.Prototypes.Rotation25D
 
         private void Update()
         {
+            // Vaulting and scene travel temporarily own movement while the controller is disabled.
+            if (!controller.enabled)
+            {
+                MovementDirection = Vector3.zero;
+                verticalVelocity = 0f;
+                return;
+            }
             if (DungeonTavern.Gameplay.Interaction.GamePauseMenu.IsPaused || DungeonTavern.UI.TavernUI.WindowOpen) return;
             if (cameraTransform == null && Camera.main != null)
                 cameraTransform = Camera.main.transform;

@@ -36,8 +36,8 @@ internal static class CustomerQueueLogicCheck
             Assert(Mathf.Abs(order.Portions[0].RemainingFraction-.5f)<.001f&&!order.TryPay(),"Eating progress or premature settlement");
             order.Eat(4);Assert(!order.AllConsumed,"Unserved portion lost");order.TryDeliver(HeldItem.TestDrink);order.Eat(8);
             Assert(order.TryPay()&&!order.TryPay(),"Duplicate settlement");
-            Directory.CreateDirectory(CustomerQueueReview.Output);
-            File.WriteAllText(CustomerQueueReview.Output+"edgechecks.txt","PASS: duplicate enqueue, FIFO, overflow spacing, menu movement, cancelled/destroyed head, empty marker fallback, icon consumption fraction, unserved portions and one-time settlement.\n");
+            Directory.CreateDirectory((Path.Combine(Path.GetTempPath(), "DungeonTavern/CustomerQueue") + Path.DirectorySeparatorChar));
+            File.WriteAllText((Path.Combine(Path.GetTempPath(), "DungeonTavern/CustomerQueue") + Path.DirectorySeparatorChar)+"edgechecks.txt","PASS: duplicate enqueue, FIFO, overflow spacing, menu movement, cancelled/destroyed head, empty marker fallback, icon consumption fraction, unserved portions and one-time settlement.\n");
         }
         finally{EditorSceneManager.ClosePreviewScene(scene);}
     }

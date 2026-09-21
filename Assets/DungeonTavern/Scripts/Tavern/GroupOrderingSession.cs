@@ -54,6 +54,8 @@ namespace DungeonTavern.Gameplay.Interaction
                 foreach(var d in diners){d.Guest.BeginGroupOrdering();Show(d);}
                 return;
             }
+            // Give thought, confirmation and voting bubbles 25% more reading time.
+            dt /= 1.25f;
             if(votePhase>0){TickShared(dt);return;}
             nextProposal-=dt;
             foreach(var d in diners)TickIndividual(d,dt);
