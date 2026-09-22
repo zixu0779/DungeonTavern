@@ -147,6 +147,12 @@ This document is the durable source of truth for confirmed game and world design
 
 ## Confirmed character identities
 
+- On 2026-10-01, the user selected protagonist concept B: compact low-poly
+  proportions, dark hair with a grey forelock, blue-grey travel clothing and an
+  asymmetric torn black cloak with the hood destroyed. The current concept is
+  `ArtSource/Characters/Concepts/Protagonist/concept.png`; model replacement and animation
+  validation are not yet complete.
+
 - The protagonist went out to investigate the truth and was ambushed. Their
   opening appearance, waking prone in the seal chamber, retains damaged travel
   clothing and a torn black cloak, not tavern workwear. The hood is completely

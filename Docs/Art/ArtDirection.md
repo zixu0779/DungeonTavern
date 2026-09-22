@@ -24,7 +24,9 @@ presentation and asset organization, not future feature commitments.
   interaction animation. The protagonist uses KayKit Mage, Eve uses Rogue, and customers use Barbarian.
   Character direction now follows the current KayKit-style proportions, silhouettes,
   and simple low-poly forms; the previous protagonist concept is no longer the
-  production target. Its source files and pre-replacement prefab remain local.
+  production target. Protagonist concept B is now selected in
+  `ArtSource/Characters/Concepts/Protagonist/concept.png`, replacing the old concept image;
+  the previous model and pre-replacement prefab remain local.
   Protagonist/customer scale is uniform, calibrated to shoulders above the counter.
   Original sprite children are inactive for rollback. Seating uses three imported
   clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
@@ -148,3 +150,20 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
   in the same model folder. The B1 scene uses `Stair_InsideWallFootprint.asset`,
   derived from the arch-free mesh, to remove the exterior overhang at the rear
   return wall. Authored scene placement and materials are unchanged.
+
+## Character references and Hyper3D
+
+- Each character has one folder under `ArtSource/Characters/Concepts/<Name>/`.
+  Keep the approved `concept.png` and separate `front.png`, `left.png`, `back.png`.
+  Each direction file contains one character only; do not upload a combined sheet.
+- Before modeling, check matching identity, proportions, costume, pose and anatomical
+  left/right across the three images. A left view shows the character's left side.
+- Use the service's multi-view workflow and explicit direction fields. The official
+  Rodin Gen-2.5 REST API accepts ordered `images` with `image_label=["F","L","B"]`.
+  The currently exposed MCP lacks `image_label`; filenames or prompt descriptions
+  alone are not an equivalent direction setting. Verify support before spending credits.
+- User authorization covers uploading these project character references to Hyper3D
+  for requested modeling. Proceed without repetitive confirmation within that scope;
+  this does not override tool approval or security restrictions.
+- Do not save discarded iterations, standalone design explanations or prompt logs.
+  Keep adopted images and usable production assets; temporary checks stay outside the project.
