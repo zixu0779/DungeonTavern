@@ -21,14 +21,17 @@ presentation and asset organization, not future feature commitments.
 - B1 uses cutaway walls and a flat stone backdrop at wall-top height. Preserve
   authored stair/gate geometry, travel triggers and collision support.
 - The playable protagonist uses a 3D Humanoid model with idle, walk and cup
-  interaction animation. The protagonist uses KayKit Mage, Eve uses Rogue, and customers use Barbarian.
-  Character direction now follows the current KayKit-style proportions, silhouettes,
-  and simple low-poly forms; the previous protagonist concept is no longer the
-  production target. Protagonist concept B is now selected in
+  interaction animation. The protagonist uses the approved generated design B; Eve uses KayKit Rogue, and customers use Barbarian.
+  Character style now targets the rounded proportions and simple forms of the
+  ThirdParty Mage, Barbarian and Rogue references. The protagonist concept has
+  been revised accordingly; the current runtime model still uses the earlier B design. Their character models are
+  temporary placeholders and must be redesigned for the final game. Protagonist concept B is now selected in
   `ArtSource/Characters/Concepts/Protagonist/concept.png`, replacing the old concept image;
-  the previous model and pre-replacement prefab remain local.
-  Protagonist/customer scale is uniform, calibrated to shoulders above the counter.
-  Original sprite children are inactive for rollback. Seating uses three imported
+  the obsolete first-design model and pre-replacement prefab have been removed.
+  Current third-party characters remain under `Assets/DungeonTavern/Art/Characters/ThirdParty`
+  without an extra vendor directory; their source license is retained.
+  The new protagonist keeps a uniform scale; its vertical offset is calibrated from the sampled idle mesh sole.
+  Retired 2D character sheets and their inactive sprite references have been removed. Seating uses three imported
   clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
 
 ## Local wall cutouts
@@ -167,3 +170,14 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
   this does not override tool approval or security restrictions.
 - Do not save discarded iterations, standalone design explanations or prompt logs.
   Keep adopted images and usable production assets; temporary checks stay outside the project.
+
+## Protagonist Unity integration (2026-10-02)
+
+- Runtime model, Unlit material, 2K shaded texture, independent controller and prefab: `Assets/DungeonTavern/Art/Characters/Protagonist`. Editable rig stays in `ArtSource/Characters/AIGenerated/Protagonist/Protagonist_Rig.blend`.
+- B1 `Player/CharacterModel` now uses this Humanoid model. Player movement, interaction, collision and story components are preserved; the cup anchor points to the new right hand.
+- `ProtagonistCapeMotion` reproduces the front-cloak thigh lift after Humanoid animation; Blender drivers are not imported. This is bone-driven cloth, not cloth collision simulation. Extreme-pose surface stretching remains a visual limitation.
+- ThirdParty model/animation assets retain their contents and GUIDs. The new controller reuses existing clips without overwriting their sources.
+- `Tools > Characters > Check Protagonist Rig` checks avatar, cape lift/rest and skin references. Opening/vault and drink/seating functional checks passed; the final opening report includes an unrelated remote WebSocket connection failure. This does not establish full four-view or wall/counter clipping acceptance.
+
+- Final character visuals must be newly designed to match the adopted protagonist. ThirdParty models are temporary/reference-only; their silhouettes are not a guarantee of final stylistic consistency. Rogue assets are grouped under `ThirdParty/Rogue`. Eve currently uses only Idle/Walk; unused seating states and their standalone `Seating.fbx` source have been removed.
+- The protagonist controller uses its own `Protagonist/Idle.anim` with reduced arm abduction. Idle-based empty-hand/holding states share this base pose; hand IK remains responsible for the held cup. Original third-party clips remain unchanged.

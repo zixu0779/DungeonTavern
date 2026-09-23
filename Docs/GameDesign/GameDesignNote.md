@@ -150,8 +150,7 @@ This document is the durable source of truth for confirmed game and world design
 - On 2026-10-01, the user selected protagonist concept B: compact low-poly
   proportions, dark hair with a grey forelock, blue-grey travel clothing and an
   asymmetric torn black cloak with the hood destroyed. The current concept is
-  `ArtSource/Characters/Concepts/Protagonist/concept.png`; model replacement and animation
-  validation are not yet complete.
+  `ArtSource/Characters/Concepts/Protagonist/concept.png`. The model is now imported and replaces the B1 player visual; core action checks passed, while full visual clipping acceptance remains pending.
 
 - The protagonist went out to investigate the truth and was ambushed. Their
   opening appearance, waking prone in the seal chamber, retains damaged travel
@@ -283,9 +282,9 @@ The following are not design commitments:
 - The serialized output resolution is 1920x1080. Exploration orthographic size
   is 4.5; dialogue has its own closer framing. Ordinary 3D scene materials use
   Unlit to retain authored colors. A future softly lit setup is proposed only.
-- The playable protagonist temporarily uses the KayKit Mage Humanoid rig with movement-driven Idle
+- The playable protagonist uses the generated design B Humanoid rig with movement-driven Idle
   and Walk, plus a right-arm pickup/holding layer and a right-hand cup anchor.
-  Eve uses the KayKit Rogue and customers use the KayKit Barbarian. The previous protagonist model remains locally available.
+  Eve uses the KayKit Rogue and customers use the KayKit Barbarian. The obsolete first-design protagonist assets have been removed. Current Mage/Rogue/Barbarian resources are preserved under `Assets/DungeonTavern/Art/Characters/ThirdParty`; importing the new protagonist must not overwrite them.
   Models are uniformly scaled so protagonist/customer shoulders sit above the counter.
   Customers use SitDown, SeatedIdle and StandUp at seated service positions.
   The protagonist also has seating clips and a callable drink presentation;
@@ -421,3 +420,7 @@ from old layouts. F1 narrative arrival currently references the authored
   joins them without routing the player onto the counter.
 
 The demo menu prices and geometric dish icons are prototype tuning/presentation assets, not final economy balance.
+
+- 2026-10-02: Protagonist design B is imported as an independent Humanoid prefab and replaces only B1 Player/CharacterModel. Existing gameplay and third-party source assets are preserved. Front-cloak bone follow is implemented in Unity; full cloth collision is not.
+
+- 2026-10-03: Third-party character models are temporary placeholders and visual references only. They must not appear as final character visuals; Eve, customers and other characters require new designs consistent with the adopted protagonist style. This does not require replacing their reusable animation sources.
