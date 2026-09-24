@@ -157,7 +157,9 @@ namespace DungeonTavern.Tavern25D
         {
             fullBodyAction = vaultPose = false;
             animator.SetLayerWeight(1, 1);
-            animator.CrossFadeInFixedTime("Idle", .12f, 0);
+            // WakeAndStand has already completed its transition to Idle.
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || animator.IsInTransition(0))
+                animator.CrossFadeInFixedTime("Idle", .12f, 0);
         }
         private void OnAnimatorIK(int layerIndex)
         {
