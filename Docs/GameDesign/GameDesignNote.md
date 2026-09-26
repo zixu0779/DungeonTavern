@@ -158,6 +158,21 @@ This document is the durable source of truth for confirmed game and world design
   destroyed, with at most cloth remnants remaining, exposing the head and face.
   The departure memory may still show the intact cloak concealing their face.
 - Eve is a female elf.
+- On 2026-10-05, the user broadly accepted Eve's compact character concept:
+  chestnut bun, green eyes, cream blouse, moss-green work dress, short apron
+  and a small belt-mounted ledger. The user approved slightly longer upward/backward
+  pointed ears and a simple copper leaf clasp on the green hair band; the revised
+  `ArtSource/Characters/Concepts/Eve/concept.png` was accepted for three-view production.
+  This accessory does not establish wider elven cultural lore. Separate `front.png`,
+  `left.png` and `back.png` references are now prepared in the same folder for review;
+  all three use an elevated A pose, with arms approximately 45 degrees away from
+  the torso. Preserve the concept's sleeve length and round hands with minimal
+  exposed wrist; do not lengthen bare forearms. The ledger retains the concept's book-to-body
+  size; do not shrink it to hide it from the back. It sits snugly on her anatomical
+  left-front waist, within the body silhouette and fully hidden from the back.
+  The leaf clasp remains on her anatomical left. The user reports an earlier Eve
+  model already generated in Hyper3D; these revised references have not been submitted
+  by this chat for regeneration.
 - Mira is a female tiefling and an appraiser. Her former adventuring party
   subjected her to racial prejudice while relying on her expertise. Her refusal
   to falsify appraisals brought that prejudice into the open and precipitated
