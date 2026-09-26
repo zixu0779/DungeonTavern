@@ -170,9 +170,12 @@ This document is the durable source of truth for confirmed game and world design
   exposed wrist; do not lengthen bare forearms. The ledger retains the concept's book-to-body
   size; do not shrink it to hide it from the back. It sits snugly on her anatomical
   left-front waist, within the body silhouette and fully hidden from the back.
-  The leaf clasp remains on her anatomical left. The user reports an earlier Eve
-  model already generated in Hyper3D; these revised references have not been submitted
-  by this chat for regeneration.
+  The leaf clasp remains on her anatomical left. The user supplied the generated Eve GLBs on 2026-10-05. The shaded model now has
+  a fitted Humanoid rig and replaces the Rogue visual in Tavern_Main. Original GLBs
+  and the editable Eve_Rig.blend are retained. Idle is reused from the protagonist;
+  Eve has her own reduced-stride, sole-calibrated Walk clip. The avatar and pose
+  samples passed; Play Mode guidance reached its destination with a complete path
+  and no Console errors. The apron hem weights were matched to the adjacent skirt surface; final close-up appearance remains subject to user acceptance.
 - Mira is a female tiefling and an appraiser. Her former adventuring party
   subjected her to racial prejudice while relying on her expertise. Her refusal
   to falsify appraisals brought that prejudice into the open and precipitated

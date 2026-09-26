@@ -21,7 +21,7 @@ presentation and asset organization, not future feature commitments.
 - B1 uses cutaway walls and a flat stone backdrop at wall-top height. Preserve
   authored stair/gate geometry, travel triggers and collision support.
 - The playable protagonist uses a 3D Humanoid model with idle, walk and cup
-  interaction animation. The protagonist uses the approved generated design B; Eve uses KayKit Rogue, and customers use Barbarian.
+  interaction animation. The protagonist uses the approved generated design B; Eve uses her generated elf Humanoid model, and customers use Barbarian.
   Character style now targets the rounded proportions and simple forms of the
   ThirdParty Mage, Barbarian and Rogue references. The protagonist concept has
   been revised accordingly; the current runtime model still uses the earlier B design. Their character models are
@@ -181,3 +181,9 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
 
 - Final character visuals must be newly designed to match the adopted protagonist. ThirdParty models are temporary/reference-only; their silhouettes are not a guarantee of final stylistic consistency. Rogue assets are grouped under `ThirdParty/Rogue`. Eve currently uses only Idle/Walk; unused seating states and their standalone `Seating.fbx` source have been removed.
 - The protagonist controller uses its own `Protagonist/Idle.anim` with reduced arm abduction. Idle-based empty-hand/holding states share this base pose; hand IK remains responsible for the held cup. Original third-party clips remain unchanged.
+
+## Eve Unity integration (2026-10-05)
+
+- Runtime FBX, Unlit shaded texture/material, independent controller, adapted Walk and prefab are under `Assets/DungeonTavern/Art/Characters/Eve`; original GLBs and `Eve_Rig.blend` remain in her AIGenerated folder.
+- Tavern_Main replaces only Eve's visual child. Skeleton hierarchy and Idle are reused from the protagonist, while joint placement, skin weights and Walk stride/sole height are adapted for Eve.
+- Avatar/skin/pose checks and Play Mode navigation to the opening guide passed. Apron hem weights now follow the underlying skirt; final close-up appearance remains subject to user acceptance; no new service actions are implied.
