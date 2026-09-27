@@ -46,6 +46,18 @@ public static class EveRigCheck
             cam.orthographic = true; cam.orthographicSize = 1.12f; cam.cullingMask = 1 << 31;
             cam.clearFlags = CameraClearFlags.SolidColor; cam.backgroundColor = new Color(.17f, .2f, .24f); cam.targetTexture = rt;
             var report = new List<string>();
+            float expectedSole = float.NaN;
+            var rigidPoints = skins.Select(skin => {
+                var weights = skin.sharedMesh.boneWeights;
+                return new[] { "Foot.L", "Foot.R" }.SelectMany(name => {
+                    int bone = Array.FindIndex(skin.bones, b => b.name == name);
+                    var ids = Enumerable.Range(0, weights.Length).Where(i => weights[i].boneIndex0 == bone && weights[i].weight0 > .999f).ToArray();
+                    if (ids.Length < 20) throw new Exception("Missing rigid boot region: " + name);
+                    var vertices = skin.sharedMesh.vertices;
+                    return Enumerable.Range(0, 3).SelectMany(axis => new[] { ids.OrderBy(i => vertices[i][axis]).First(), ids.OrderByDescending(i => vertices[i][axis]).First() });
+                }).ToArray();
+            }).ToArray();
+            var restDistances = new Dictionary<string, float>();
             foreach (var state in new[] { "Idle", "Walk" })
             {
                 var clip = animator.runtimeAnimatorController.animationClips.Single(c => c.name == state);
@@ -77,7 +89,21 @@ public static class EveRigCheck
                         var points = baked.SelectMany(mf => mf.sharedMesh.vertices.Select(v => mf.transform.TransformPoint(v))).ToArray();
                         var bounds = new Bounds(points[0], Vector3.zero);
                         foreach (var point in points) bounds.Encapsulate(point);
-                        if (Mathf.Abs(bounds.min.y - 1000 + .0445f) > .006f) throw new Exception("Foot grounding drift: " + state + " " + i + " min=" + (bounds.min.y - 1000));
+                        if (float.IsNaN(expectedSole)) expectedSole = bounds.min.y - 1000;
+                        for (int k = 0; k < baked.Length; k++)
+                        {
+                            var vertices = baked[k].sharedMesh.vertices;
+                            for (int foot = 0; foot < 2; foot++)
+                                for (int j = 1; j < 6; j++)
+                                {
+                                    var ids = rigidPoints[k];
+                                    float distance = Vector3.Distance(vertices[ids[foot * 6]], vertices[ids[foot * 6 + j]]);
+                                    string key = k + ":" + foot + ":" + j;
+                                    if (!restDistances.ContainsKey(key)) restDistances[key] = distance;
+                                    else if (Mathf.Abs(distance - restDistances[key]) > .002f) throw new Exception("Boot shape deformed: " + state + " " + i);
+                                }
+                        }
+                        if (Mathf.Abs(bounds.min.y - 1000 - expectedSole) > .008f) throw new Exception("Foot grounding drift: " + state + " " + i + " min=" + (bounds.min.y - 1000));
                         if (bounds.size.y < 1.7f || bounds.size.y > 2.1f) throw new Exception("Unexpected deformed height");
                         report.Add($"{state} {i}: minY={bounds.min.y - 1000:F4} height={bounds.size.y:F4} width={bounds.size.x:F4}");
                     }

@@ -20,6 +20,8 @@ namespace DungeonTavern.Tavern25D
         private Vector3 modelRestPosition;
         private float seatBlend;
         private NpcNavigator navigator;
+        private DungeonTavern.Prototypes.Rotation25D.PrototypePlayerMover playerMover;
+        private bool hasWalkRate;
         private bool fullBodyAction;
         private bool vaultPose;
         private float vaultClipLength = 1;
@@ -38,6 +40,7 @@ namespace DungeonTavern.Tavern25D
         private HeldItem previousItem;
         private float gripWeight;
         private static readonly int Speed = Animator.StringToHash("Speed");
+        private static readonly int WalkRate = Animator.StringToHash("WalkRate");
         private static readonly int HoldingCup = Animator.StringToHash("HoldingCup");
         private static readonly int PickUp = Animator.StringToHash("PickUp");
 
@@ -50,7 +53,10 @@ namespace DungeonTavern.Tavern25D
             cupVisual = motionRoot.GetComponent<HeldCupVisual>();
             customer = motionRoot.GetComponent<CustomerServicePoint>();
             navigator = motionRoot.GetComponent<NpcNavigator>();
+            playerMover = motionRoot.GetComponent<DungeonTavern.Prototypes.Rotation25D.PrototypePlayerMover>();
             animator.applyRootMotion = false;
+            foreach (var parameter in animator.parameters)
+                if (parameter.nameHash == WalkRate) hasWalkRate = true;
             if(customer)animator.keepAnimatorStateOnDisable=true;
             foreach (var clip in animator.runtimeAnimatorController.animationClips)
                 if (clip.name == "Vault") vaultClipLength = clip.length;
@@ -76,7 +82,13 @@ namespace DungeonTavern.Tavern25D
             float speed = Time.deltaTime > 0 ? delta.magnitude / Time.deltaTime : 0;
             // Scene travel must not appear as a burst of walking.
             if (delta.sqrMagnitude > 1f) speed = 0;
-            animator.SetFloat(Speed, speed, .1f, Time.deltaTime);
+            if (playerMover)
+            {
+                // Follow measured travel during slowdown and stop; other actions keep their own timing.
+                animator.SetFloat(Speed, speed);
+                if (hasWalkRate) animator.SetFloat(WalkRate, speed / Mathf.Max(.01f, playerMover.MoveSpeed));
+            }
+            else animator.SetFloat(Speed, speed, .1f, Time.deltaTime);
             if (cupVisual) cupVisual.DrinkTilt = drinkBlend;
             bool holding = hands && IsCup(hands.CurrentItem);
             gripWeight = Mathf.MoveTowards(gripWeight, holding ? 1f : 0f, Time.deltaTime * 3f);
