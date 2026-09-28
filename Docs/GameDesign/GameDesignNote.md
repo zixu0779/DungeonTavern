@@ -172,7 +172,7 @@ This document is the durable source of truth for confirmed game and world design
   left-front waist, within the body silhouette and fully hidden from the back.
   The leaf clasp remains on her anatomical left. The user supplied the generated Eve GLBs on 2026-10-05. The shaded model now has
   a fitted Humanoid rig and replaces the Rogue visual in Tavern_Main. Original GLBs
-  and the editable Eve_Rig.blend are retained. Idle is reused from the protagonist;
+  and the editable Eve_Rig.blend are retained. Idle is adapted to Eve with subtle upper-body breathing and stable legs;
   Eve has her own reduced-stride, sole-calibrated Walk clip. The avatar and pose
   samples passed; Play Mode guidance reached its destination with a complete path
   and no Console errors. The apron hem weights were matched to the adjacent skirt surface; final close-up appearance remains subject to user acceptance.
@@ -442,3 +442,7 @@ The demo menu prices and geometric dish icons are prototype tuning/presentation 
 - 2026-10-02: Protagonist design B is imported as an independent Humanoid prefab and replaces only B1 Player/CharacterModel. Existing gameplay and third-party source assets are preserved. Front-cloak bone follow is implemented in Unity; full cloth collision is not.
 
 - 2026-10-03: Third-party character models are temporary placeholders and visual references only. They must not appear as final character visuals; Eve, customers and other characters require new designs consistent with the adopted protagonist style. This does not require replacing their reusable animation sources.
+
+- 2026-10-05: Standing Idle should retain subtle upper-body breathing, with slight head and arm follow, rather than being completely frozen. It should not visibly bob, repeatedly bend the knees, or shift weight from side to side. The protagonist and Eve use their original model foot spacing as the standing reference; standing action endpoints should match that stance.
+
+- 2026-10-05: Idle must start at the original model standing height without a downward jump. In-game protagonist/Eve sizes should align with the ThirdParty Mage/Rogue placeholder references using uniform scaling.

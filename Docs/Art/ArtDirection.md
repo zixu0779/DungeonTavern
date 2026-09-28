@@ -30,7 +30,7 @@ presentation and asset organization, not future feature commitments.
   the obsolete first-design model and pre-replacement prefab have been removed.
   Current third-party characters remain under `Assets/DungeonTavern/Art/Characters/ThirdParty`
   without an extra vendor directory; their source license is retained.
-  The new protagonist keeps a uniform scale; its vertical offset is calibrated from the sampled idle mesh sole.
+  The protagonist and Eve keep uniform scale and match the visible total height of the Mage and Rogue placeholders respectively. Idle starts at each generated model's original standing height; the former scene lift offsets are removed.
   Retired 2D character sheets and their inactive sprite references have been removed. Seating uses three imported
   clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
 

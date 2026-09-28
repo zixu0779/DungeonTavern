@@ -8,12 +8,12 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 public static class IdleComparisonCheck {
- [MenuItem("Tools/Characters/Fix and Verify Idle Feet")]
+ [MenuItem("Tools/Characters/Verify Idle Feet")]
  public static void Fix(){
  const string folder="Assets/DungeonTavern/Art/Characters/Protagonist/";
  var controller=AssetDatabase.LoadAssetAtPath<AnimatorController>(folder+"Protagonist.controller");
  var idle=controller.layers[0].stateMachine.states.Single(s=>s.state.name=="Idle").state;
- Undo.RecordObject(idle,"Enable Idle foot IK");idle.iKOnFeet=true;EditorUtility.SetDirty(idle);AssetDatabase.SaveAssets();
+ // Verify the authored controller without altering the accepted standing pose.
  var go=UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(folder+"Protagonist.prefab"));
  var graph=PlayableGraph.Create("Idle controller verification");graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
  try{

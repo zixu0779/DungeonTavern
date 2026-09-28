@@ -66,7 +66,7 @@ public static class EveRigCheck
                 try
                 {
                     var playable = AnimationClipPlayable.Create(graph, clip);
-                    playable.SetApplyFootIK(state == "Idle");
+                    playable.SetApplyFootIK(false);
                     AnimationPlayableOutput.Create(graph, "Preview", animator).SetSourcePlayable(playable); graph.Play();
                     for (int i = 0; i < 8; i++)
                     {
