@@ -30,7 +30,7 @@ presentation and asset organization, not future feature commitments.
   the obsolete first-design model and pre-replacement prefab have been removed.
   Current third-party characters remain under `Assets/DungeonTavern/Art/Characters/ThirdParty`
   without an extra vendor directory; their source license is retained.
-  The protagonist and Eve keep uniform scale and match the visible total height of the Mage and Rogue placeholders respectively. Idle starts at each generated model's original standing height; the former scene lift offsets are removed.
+  The protagonist and Eve keep uniform scale, with Mage/Rogue as the relative size references. On 2026-10-06, all runtime character visuals were enlarged by 8 percent. Idle starts at each generated model's original standing height; the former scene lift offsets are removed.
   Retired 2D character sheets and their inactive sprite references have been removed. Seating uses three imported
   clips; protagonist drinking uses an Animator curve driving hand IK and cup tilt.
 
@@ -187,3 +187,10 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
 - Runtime FBX, Unlit shaded texture/material, independent controller, adapted Walk and prefab are under `Assets/DungeonTavern/Art/Characters/Eve`; original GLBs and `Eve_Rig.blend` remain in her AIGenerated folder.
 - Tavern_Main replaces only Eve's visual child. Skeleton hierarchy and Idle are reused from the protagonist, while joint placement, skin weights and Walk stride/sole height are adapted for Eve.
 - Avatar/skin/pose checks and Play Mode navigation to the opening guide passed. Apron hem weights now follow the underlying skirt; final close-up appearance remains subject to user acceptance; no new service actions are implied.
+
+## Character size baseline (2026-10-06)
+
+- Use approximately 2.3 world units of standing visual height, with a 5 percent allowance, as the initial integration target for ordinary adult character models. Preserve intended relative stature; unusually tall/short species need individual review.
+- Measure from the soles to the normal head/hair silhouette in the original standing pose. Oversized hats, horns or carried props should not force the body to shrink; compare shoulders and body size as well in those cases.
+- Scale uniformly on the runtime visual root, keep soles on the actor floor plane, and match Idle's initial height to the original model pose. Do not resize colliders or gameplay interaction distances solely to match visual scale.
+- Verify beside the bar and other characters with the actual exploration camera. For Idle, judge visible motion in that camera, not only close-up animation previews; the current target is roughly 3 screen pixels of upper-body rise at 1080p with planted feet.

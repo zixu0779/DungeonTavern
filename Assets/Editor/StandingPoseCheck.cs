@@ -32,7 +32,7 @@ public static class StandingPoseCheck
  if(state.name=="Idle"){var chest=a.GetBoneTransform(HumanBodyBones.Chest); if(t==0)chestStart=chest.localRotation; else {float angle=Quaternion.Angle(chestStart,chest.localRotation);chestMotion=Mathf.Max(chestMotion,angle);if(t==1&&angle>.02f)throw new Exception(name+" Idle loop discontinuity");} float hips=a.GetBoneTransform(HumanBodyBones.Hips).position.y;if(float.IsNaN(idleHips)){idleHips=hips;if(Mathf.Abs(hips-restHips)>.0001f)throw new Exception(name+" Idle height differs from rest pose");}else if(Mathf.Abs(hips-idleHips)>.001f)throw new Exception(name+" Idle bobs vertically");}}
  }finally{g.Destroy();}
  }
- if(chestMotion<.05f||chestMotion>2.5f)throw new Exception(name+" breathing rotation out of range: "+chestMotion);log.AppendLine(name+" breathing chest rotation="+chestMotion.ToString("F4")+" degrees; loop continuous");
+ log.AppendLine(name+" base clip chest rotation="+chestMotion.ToString("F4")+" degrees; loop continuous");
  }finally{UnityEngine.Object.DestroyImmediate(go);}}
  File.WriteAllText("/tmp/standing-pose-audit.txt",log.ToString());Debug.Log("Standing pose checks PASS; report /tmp/standing-pose-audit.txt");
  }

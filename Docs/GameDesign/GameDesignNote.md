@@ -443,6 +443,8 @@ The demo menu prices and geometric dish icons are prototype tuning/presentation 
 
 - 2026-10-03: Third-party character models are temporary placeholders and visual references only. They must not appear as final character visuals; Eve, customers and other characters require new designs consistent with the adopted protagonist style. This does not require replacing their reusable animation sources.
 
-- 2026-10-05: Standing Idle should retain subtle upper-body breathing, with slight head and arm follow, rather than being completely frozen. It should not visibly bob, repeatedly bend the knees, or shift weight from side to side. The protagonist and Eve use their original model foot spacing as the standing reference; standing action endpoints should match that stance.
+- 2026-10-05: Standing Idle should retain subtle upper-body breathing, with slight head and arm follow, rather than being completely frozen. It should show a small upper-body rise visible in the normal gameplay camera, without whole-body bobbing, repeated knee bends, or side-to-side weight shifts. The protagonist and Eve use their original model foot spacing as the standing reference; standing action endpoints should match that stance.
 
 - 2026-10-05: Idle must start at the original model standing height without a downward jump. In-game protagonist/Eve sizes should align with the ThirdParty Mage/Rogue placeholder references using uniform scaling.
+
+- 2026-10-06: Enlarge current runtime character visuals uniformly by 8 percent while preserving relative proportions. Use the ordinary-character size baseline in ArtDirection.md for later imports; Idle must be visibly alive at the normal gameplay camera distance.
