@@ -450,6 +450,8 @@ The demo menu prices and geometric dish icons are prototype tuning/presentation 
 
 - 2026-10-06: Enlarge current runtime character visuals uniformly by 8 percent while preserving relative proportions. Use the ordinary-character size baseline in ArtDirection.md for later imports; Idle must be visibly alive at the normal gameplay camera distance.
 
-- 2026-10-06: Bar redesign proceeds by first compressing the existing bar in place for size review, then confirming a modular corner/straight-section design before model generation. The current 0.95 countertop height is a review value, not final.
+- 2026-10-06: Bar redesign proceeds by first compressing the existing bar in place for size review, then confirming a modular corner/straight-section design before model generation. The user has confirmed the current scene dimensions, including 0.95 countertop height, one-tile depth and 1.50 gate widths. Proceed to modular concept design; model generation follows design approval.
 
 - 2026-10-06: The bar counter depth means the width of each L-shaped arm: one existing floor tile (1 world unit), preserving the overall arm lengths.
+
+- 2026-10-06: The bar uses three modular part types: a repeating straight section cut at panel midpoints, a corner extended by half a panel on both arms, and a finished terminal mirrored for left/right use. Keep assembled panels square and join without overlapping framing.
