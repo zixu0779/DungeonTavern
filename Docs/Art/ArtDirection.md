@@ -194,3 +194,13 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
 - Measure from the soles to the normal head/hair silhouette in the original standing pose. Oversized hats, horns or carried props should not force the body to shrink; compare shoulders and body size as well in those cases.
 - Scale uniformly on the runtime visual root, keep soles on the actor floor plane, and match Idle's initial height to the original model pose. Do not resize colliders or gameplay interaction distances solely to match visual scale.
 - Verify beside the bar and other characters with the actual exploration camera. For Idle, judge visible motion in that camera, not only close-up animation previews; the current target is roughly 3 screen pixels of upper-body rise at 1080p with planted feet.
+
+## Bar proportion review (2026-10-06)
+
+- Review the existing bar directly; do not add a separate blockout. Tavern_Main's bar visual root is temporarily compressed vertically from a 1.10 to a 0.95 countertop height, with width/depth preserved. This height is pending user acceptance, not the final authored proportion.
+- After size acceptance, confirm a more regular modular design using a corner piece and repeatable straight sections. Avoid generating the entire L-shaped bar as one model. Do not start new model generation before those confirmations.
+- Dialogue portraits now frame the head silhouette consistently rather than fitting each character's full-body bounds; baked skinned geometry must not receive its renderer scale a second time.
+
+- Follow-up review: the user clarified that each L-shaped counter arm should be one floor tile deep (1.00 world unit), not shorter in overall length. The prior X shortening is restored; both arms are narrowed in a separate review mesh while preserving the outer span and 0.95 height. Original FBX remains intact. Bar collision boxes, staff-gate positions and countertop props follow the revised footprint. CupDispenser remains uniformly reduced by 10 percent with its base at the 0.95 tabletop. Visual dimensions remain under review; navigation has been rebaked for the revised footprint and gates.
+
+- Gate review: both leaves now measure 1.50 world units along their passage direction. The whole bar shifts +0.4072 on world X while its long span remains 13.3019; the short arm extends +0.0670 on world Z. The east hinge/post stay fixed, the north hinge/post follow the rightward translation. Passage blockers/triggers follow the gate width adjustment; countertop devices follow the bar. Isolated close/open/close state checks passed; navigation has been rebaked for this layout.

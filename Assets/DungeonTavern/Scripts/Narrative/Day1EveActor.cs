@@ -10,7 +10,7 @@ namespace DungeonTavern.Tavern25D.Narrative
     public sealed class Day1EveActor : InteractionPoint
     {
         [SerializeField, Min(0.1f)] private float moveSpeed = 4.25f;
-        [SerializeField, Min(0.5f)] private float conversationRange = 1.35f;
+        [SerializeField, Min(0.5f)] private float conversationRange = 2.7f;
         [SerializeField, Min(0.5f)] private float minimumSpacing = 0.65f;
         [SerializeField, Min(0.05f)] private float conversationClearanceRadius = 0.2f;
         [SerializeField, Min(0.1f)] private float sightLowerHeight = 0.35f;
@@ -34,7 +34,9 @@ namespace DungeonTavern.Tavern25D.Narrative
         private string openingGuidanceLine;
         private bool turningToOpeningSwitch;
         private const float TriggerRange = 4.2f;
-        public const float ApproachSeconds = .5f;
+        private float retryConversationAt;
+        public event Action ApproachStarted;
+        public event Action ApproachCancelled;
 
         public bool IsOpeningGuidanceReady => openingGuidanceReady;
 
@@ -173,19 +175,23 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private bool CanStartConversation()
         {
-            return playerInTavernArea && Vector3.Distance(player.position,transform.position)<=TriggerRange
+            return Time.time >= retryConversationAt && player.GetComponent<CharacterController>().enabled
+                && playerInTavernArea && Vector3.Distance(player.position,transform.position)<=TriggerRange
                 && HasClearConversationLineOfSight();
         }
 
-        private bool HasClearConversationLineOfSight()
+        private bool HasClearConversationLineOfSight(bool ignoreCounter = true) =>
+            HasClearConversationLineOfSight(transform.position, ignoreCounter);
+
+        private bool HasClearConversationLineOfSight(Vector3 origin, bool ignoreCounter)
         {
-            var delta=player.position-transform.position;delta.y=0;
-            foreach(var hit in Physics.CapsuleCastAll(transform.position+Vector3.up*sightLowerHeight,
-                transform.position+Vector3.up*sightUpperHeight,conversationClearanceRadius,delta.normalized,delta.magnitude,conversationBlockers,QueryTriggerInteraction.Ignore))
+            var delta=player.position-origin;delta.y=0;
+            foreach(var hit in Physics.CapsuleCastAll(origin+Vector3.up*sightLowerHeight,
+                origin+Vector3.up*sightUpperHeight,conversationClearanceRadius,delta.normalized,delta.magnitude,conversationBlockers,QueryTriggerInteraction.Ignore))
             {
                 var t=hit.transform;
                 if(t.IsChildOf(transform)||t.IsChildOf(player)||t.GetComponentInParent<CharacterController>())continue;
-                if(t.GetComponentInParent<CounterVaultObstacle>() || Array.Exists(counterGroups,group=>group&&t.IsChildOf(group)))continue;
+                if(ignoreCounter && (t.GetComponentInParent<CounterVaultObstacle>() || Array.Exists(counterGroups,group=>group&&t.IsChildOf(group))))continue;
                 return false;
             }
             return true;
@@ -193,36 +199,73 @@ namespace DungeonTavern.Tavern25D.Narrative
 
         private IEnumerator SettleBeforeConversation()
         {
-            var mover=player.GetComponent<PrototypePlayerMover>();
-            bool wasEnabled=mover.MovementInputEnabled;mover.MovementInputEnabled=false;
-            var start=transform.position;var end=start;var delta=player.position-start;delta.y=0;
-            float distance=delta.magnitude;
-            // A straight, short approach cannot route around the counter or start by moving away.
-            float length=Mathf.Min(moveSpeed*ApproachSeconds,Mathf.Max(0,distance-conversationRange));
-            if(length>.05f && NavMesh.SamplePosition(start,out var source,.5f,NavMesh.AllAreas))
+            var mover = player.GetComponent<PrototypePlayerMover>();
+            bool wasEnabled = mover.MovementInputEnabled;
+            mover.MovementInputEnabled = false;
+            bool completed = false;
+            try
             {
-                end=start+delta.normalized*length;
-                if(NavMesh.Raycast(source.position,end,out var boundary,NavMesh.AllAreas))
-                    end=boundary.position-delta.normalized*.15f;
-                if(!NavMesh.SamplePosition(end,out var sample,.25f,NavMesh.AllAreas))end=start;
-                else end=sample.position;
-                var path=new NavMeshPath();
-                if(!NavMesh.CalculatePath(source.position,end,NavMesh.AllAreas,path)||path.status!=NavMeshPathStatus.PathComplete)end=start;
-                else foreach(var corner in path.corners)
-                    if(Vector3.ProjectOnPlane(corner-player.position,Vector3.up).magnitude>distance+.02f) {end=start;break;}
+                ApproachStarted?.Invoke();
+                Vector3 lastProgress = transform.position;
+                float stalledFor = 0, nextTargetAt = 0;
+                while (player && playerInTavernArea)
+                {
+                    float distance = Vector3.ProjectOnPlane(player.position - transform.position, Vector3.up).magnitude;
+                    if (distance <= conversationRange && HasClearConversationLineOfSight(false))
+                    {
+                        navigator.Stop(true);
+                        completed = true;
+                        StartConversation();
+                        yield break;
+                    }
+                    // The player's carving obstacle makes its centre an invalid destination.
+                    // Pick a reachable standing point inside the close conversation radius.
+                    if (Time.time >= nextTargetAt)
+                    {
+                        if (TryConversationPosition(out var target)) navigator.MoveTo(target, .05f);
+                        nextTargetAt = Time.time + .25f;
+                    }
+                    if (Vector3.ProjectOnPlane(transform.position - lastProgress, Vector3.up).sqrMagnitude > .01f)
+                    { lastProgress = transform.position; stalledFor = 0; }
+                    else stalledFor += Time.deltaTime;
+                    if (stalledFor >= 8f) yield break;
+                    yield return null;
+                }
             }
-            float elapsed=0;
-            while(elapsed<ApproachSeconds && Vector3.Distance(transform.position,end)>.12f)
+            finally
             {
-                elapsed+=Time.deltaTime;
-                if(Vector3.ProjectOnPlane(transform.position-player.position,Vector3.up).magnitude>distance+.02f)break;
-                navigator.MoveTo(end,.1f);
-                yield return null;
+                if (!completed)
+                {
+                    navigator.Stop(true);
+                    if (mover) mover.MovementInputEnabled = wasEnabled;
+                    retryConversationAt = Time.time + 2f;
+                    arriving = true;
+                    ApproachCancelled?.Invoke();
+                }
             }
-            navigator.Stop(true);
-            if(!HasClearConversationLineOfSight())
-            {mover.MovementInputEnabled=wasEnabled;arriving=true;yield break;}
-            StartConversation();
+        }
+
+        private bool TryConversationPosition(out Vector3 target)
+        {
+            target = transform.position;
+            if (!NavMesh.SamplePosition(transform.position, out var source, .5f, NavMesh.AllAreas)) return false;
+            var towardNpc = Vector3.ProjectOnPlane(transform.position - player.position, Vector3.up).normalized;
+            var path = new NavMeshPath();
+            float best = float.PositiveInfinity;
+            for (int i = 0; i < 16; i++)
+            {
+                var candidate = player.position + Quaternion.Euler(0, i * 22.5f, 0) * towardNpc * (conversationRange - .1f);
+                if (!NavMesh.SamplePosition(candidate, out var hit, .2f, NavMesh.AllAreas)) continue;
+                float spacing = Vector3.ProjectOnPlane(hit.position - player.position, Vector3.up).magnitude;
+                if (spacing < minimumSpacing || spacing > conversationRange || !HasClearConversationLineOfSight(hit.position, false)) continue;
+                if (!NavMesh.CalculatePath(source.position, hit.position, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete) continue;
+                float length = 0;
+                for (int j = 1; j < path.corners.Length; j++) length += Vector3.Distance(path.corners[j-1], path.corners[j]);
+                if (length >= best) continue;
+                best = length;
+                target = hit.position;
+            }
+            return !float.IsPositiveInfinity(best);
         }
 
         public void ShowBubble(string text)

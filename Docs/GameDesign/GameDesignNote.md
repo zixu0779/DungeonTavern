@@ -14,12 +14,13 @@ This document is the durable source of truth for confirmed game and world design
 - Optional observation and information questions return to their dialogue hub;
   each hub has a separately motivated progression choice, and meaningful choices
   either converge intentionally or persist a later consequence.
-- NPC-initiated conversations use active approach: the NPC follows the player
-  until entering a 4.2 metre trigger range with a clear conversation line. Walls block
-  triggering; marked counters do not. The player pauses while the NPC approaches
-  for at most 0.5 seconds at its normal speed, preserving the existing conversation
-  spacing. The approach cannot detour around a counter or increase pair distance.
-  Once stopped, both actors turn smoothly toward one another and the close view begins.
+- NPC-initiated conversations separate the 4.2 metre trigger range from the
+  2.7 metre speaking distance (current spacing review: doubled from 1.35). Walls block triggering; marked counters do not.
+  On triggering, lock the player's position, turn them toward the NPC and start
+  the close camera transition. The NPC continues along a walkable route, including
+  detours through the counter gates, until within speaking distance with a clear
+  line between actors. Only then start the formal dialogue. A stalled approach
+  releases the player instead of starting dialogue from too far away.
 - The close dialogue camera uses one of the two views perpendicular to the speaker
   pair. Compare 18 visibility rays (nine per actor) at the two hypothetical camera
   poses; choose fewer obstructed rays, breaking ties by shorter rotation. Do not
@@ -31,7 +32,7 @@ This document is the durable source of truth for confirmed game and world design
 - Customers walk at the player's configured movement speed; Eve walks 8% faster.
 - NPC movement inside the tavern uses walkable-route navigation rather than
   direct movement toward a target. An NPC-initiated conversation requires a clear line between speakers except
-  for marked counters. Its final short approach stays on the NPC side of a counter;
+  for marked counters. The NPC may detour around the counter during approach;
   walls cannot trigger dialogue through them.
 - Seated customers occupy the actual stool surface. Navigation approach points
   are separate from sitting poses; seated bodies leave the approach aisle clear.
@@ -448,3 +449,7 @@ The demo menu prices and geometric dish icons are prototype tuning/presentation 
 - 2026-10-05: Idle must start at the original model standing height without a downward jump. In-game protagonist/Eve sizes should align with the ThirdParty Mage/Rogue placeholder references using uniform scaling.
 
 - 2026-10-06: Enlarge current runtime character visuals uniformly by 8 percent while preserving relative proportions. Use the ordinary-character size baseline in ArtDirection.md for later imports; Idle must be visibly alive at the normal gameplay camera distance.
+
+- 2026-10-06: Bar redesign proceeds by first compressing the existing bar in place for size review, then confirming a modular corner/straight-section design before model generation. The current 0.95 countertop height is a review value, not final.
+
+- 2026-10-06: The bar counter depth means the width of each L-shaped arm: one existing floor tile (1 world unit), preserving the overall arm lengths.

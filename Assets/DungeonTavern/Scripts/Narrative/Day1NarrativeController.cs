@@ -142,6 +142,8 @@ namespace DungeonTavern.Tavern25D.Narrative
             businessDay.CustomerSpawned += OnCustomerSpawned;
             businessDay.DayCompleted += OnBusinessDayCompleted;
             eve.ConversationRequested += OnEveConversationRequested;
+            eve.ApproachStarted += OnEveApproachStarted;
+            eve.ApproachCancelled += OnEveApproachCancelled;
             player.GetComponentInChildren<CharacterModelMotion>()?.BeginProne();
             story = new Story(chapterOne.storyJson);
             openingCinematic = !skipOpeningCinematic;
@@ -175,7 +177,11 @@ namespace DungeonTavern.Tavern25D.Narrative
             if (bran != null)
                 bran.SettlementRequested -= OnSettlementRequested;
             if (eve != null)
+            {
                 eve.ConversationRequested -= OnEveConversationRequested;
+                eve.ApproachStarted -= OnEveApproachStarted;
+                eve.ApproachCancelled -= OnEveApproachCancelled;
+            }
         }
 
         private void Update()
@@ -265,6 +271,24 @@ namespace DungeonTavern.Tavern25D.Narrative
             bran.SettlementRequested += OnSettlementRequested;
         }
 
+        private bool eveApproaching;
+        private void OnEveApproachStarted()
+        {
+            if (State != Day1FlowState.AwaitingEveInteraction) return;
+            eveApproaching = true;
+            SetDialogueActive(true);
+            cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
+            cameraOrbit?.BeginDialogueFraming(player.transform, eve.transform);
+            StartCoroutine(player.TurnToward(eve.transform.position));
+        }
+
+        private void OnEveApproachCancelled()
+        {
+            if (!eveApproaching) return;
+            eveApproaching = false;
+            SetDialogueActive(false);
+        }
+
         private void OnEveConversationRequested()
         {
             if (State == Day1FlowState.AwaitingEveInteraction)
@@ -292,7 +316,8 @@ namespace DungeonTavern.Tavern25D.Narrative
             closeDialogueActive = true;
             SetDialogueActive(true);
             cameraOrbit ??= FindAnyObjectByType<PrototypeCameraOrbit>();
-            cameraOrbit?.BeginDialogueFraming(player.transform, speaker);
+            if (!eveApproaching) cameraOrbit?.BeginDialogueFraming(player.transform, speaker);
+            eveApproaching = false;
             StartCoroutine(player.TurnToward(speaker.GetComponent<CustomerServicePoint>() is {} guest?guest.ServicePosition:speaker.position));
             StartCoroutine(TurnSpeaker(speaker));
         }
