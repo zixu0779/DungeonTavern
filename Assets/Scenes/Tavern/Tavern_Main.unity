@@ -37799,7 +37799,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: e542c7341d8534e3bb1dbcbe39b64283, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 34da53b7372634168acc5ff1c10c5474, type: 2}
 --- !u!1 &513817603
 GameObject:
   m_ObjectHideFlags: 0
@@ -150936,7 +150936,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: e542c7341d8534e3bb1dbcbe39b64283, type: 2}
+      objectReference: {fileID: 4300000, guid: 34da53b7372634168acc5ff1c10c5474, type: 2}
     - target: {fileID: 4522211820993050552, guid: 9a632baa3ee8743d2b195cd0a873b91d,
         type: 3}
       propertyPath: m_LocalScale.y
@@ -159289,7 +159289,7 @@ PrefabInstance:
     - target: {fileID: 5734939558307860738, guid: 941016f3dc38b487a83fd686bc02ed37,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.237
+      value: 22.802
       objectReference: {fileID: 0}
     - target: {fileID: 5734939558307860738, guid: 941016f3dc38b487a83fd686bc02ed37,
         type: 3}
