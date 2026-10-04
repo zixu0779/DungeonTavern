@@ -16,6 +16,9 @@ static class TavernNavigationBake
     {
         if(EditorApplication.isPlaying)throw new Exception("Exit Play Mode before baking");
         var surface=UnityEngine.Object.FindObjectsByType<NavMeshSurface>().Single();
+        // Solid interaction props (including the barrel) live outside Environment.
+        surface.collectObjects=CollectObjects.All;
+        EditorUtility.SetDirty(surface);
         var settings=surface.GetBuildSettings();
         settings.agentClimb=.25f;
         settings.agentRadius=.34f;
@@ -35,6 +38,16 @@ static class TavernNavigationBake
             sources=(List<NavMeshBuildSource>)typeof(NavMeshSurface).GetMethod("CollectSources",flags).Invoke(surface,null);
         }
         finally{for(int i=0;i<blockers.Length;i++)blockers[i].enabled=enabled[i];}
+        // Do not bake additive floors or movable character bodies as tavern obstacles.
+        sources.RemoveAll(source => source.component != null &&
+            (source.component.gameObject.scene != surface.gameObject.scene
+             || source.component.GetComponentInParent<NpcNavigator>() != null
+             || source.component.GetComponentInParent<DungeonTavern.Tavern25D.Narrative.Day1EveActor>() != null
+             || source.component.GetComponentInParent<DungeonTavern.Prototypes.Rotation25D.PrototypePlayerMover>() != null));
+        var barrel=UnityEngine.Object.FindObjectsByType<Collider>()
+            .FirstOrDefault(c=>c.name=="Barrel_Wood_Horizontal_Tap"&&!c.isTrigger);
+        if(barrel!=null&&!sources.Any(source=>source.component==barrel))
+            throw new Exception("Barrel collider is missing from navigation sources");
         // Thin frame meshes can lose their vertical jambs during voxelization. Keep their physical clearance.
         foreach(var door in UnityEngine.Object.FindObjectsByType<DoorStateController>().Where(d=>d.name.StartsWith("Door_Small_Stone")))
         {

@@ -68,7 +68,7 @@ namespace DungeonTavern.Tavern25D
             bool destinationChanged = !hasDestination
                 || (worldDestination - lastDestination).sqrMagnitude
                 >= destinationMoveThreshold * destinationMoveThreshold;
-            if (destinationChanged || Time.time >= nextRepathTime)
+            if (destinationChanged || (!agent.hasPath && !agent.pathPending) || Time.time >= nextRepathTime)
             {
                 if (!NavMesh.SamplePosition(worldDestination, out NavMeshHit hit, navMeshSampleRadius, agent.areaMask))
                 {
@@ -90,8 +90,11 @@ namespace DungeonTavern.Tavern25D
 
         public bool HasArrived(float tolerance)
         {
-            bool arrived = HasCompletePath
-                && RemainingDistance <= Mathf.Max(tolerance, agent.stoppingDistance);
+            float arrivalDistance = Mathf.Max(tolerance, agent.stoppingDistance);
+            bool arrived = hasDestination && HasCompletePath
+                && RemainingDistance <= arrivalDistance
+                && Vector3.ProjectOnPlane(agent.destination - transform.position, Vector3.up).sqrMagnitude
+                    <= arrivalDistance * arrivalDistance;
             if (arrived)
                 Stop();
             return arrived;
