@@ -1,129 +1,122 @@
-# 人物动作现状与制作清单
+# Character animation status and production plan
 
-依据：GameDesignNote、Chapter01/Day01–03 Ink、现有取杯器/酒桶/拉杆/箱子/服务交互。本文是动作制作建议，不代表新增玩法或已实现动画。现阶段 Unity 的剧情驱动器只接通第一日；第二、三日内容是 Ink 脚本，动作可预留，不能称作已接入游戏。
+**English** | [简体中文](CharacterActionPlan.zh-CN.md)
 
-审计日期：2026-10-01。总优先级及跨系统验收见 [后续开发计划](../GameDesign/NextDevelopmentPlan.md)。
+Basis: GameDesignNote, Chapter01/Day01–03 Ink, and the current dispenser/barrel/lever/chest/service interactions. This is an animation plan, not authorization for new gameplay or evidence that proposed clips exist. Unity currently connects Day 1 only. Day 2/3 Ink can inform future actions but is not integrated gameplay.
 
-## 主角模型本轮收尾（2026-10-05）
+Audit date: 2026-10-01. Overall priorities and cross-system acceptance are in the [development plan](../GameDesign/NextDevelopmentPlan.md).
 
-- **已完成，用户确认**：左臂袖管形状、肘部权重衔接与浅色袖口修复；保留已确认的原披肩结构。源文件、Unity 模型及动画预览已同步。
-- 本轮主角模型与绑定修缮可以进入清理，没有已知必须先补做的建模项。后续服务、机关与对话动作仍按下方清单推进，不属于本轮模型收尾阻塞项。
-- **已收尾，用户决定跳过运行复验**：起身末尾脚部 IK 跳变及重复 Idle 切换已修正，编辑器完整状态链采样通过；未做 Play Mode 复验，不再保留为待验收项。
-- 清理已执行：删除 8 个一次性姿态重建/修复脚本及其元数据、未引用的独立发光贴图；保留正式模型、原始 GLB、可编辑 Blender 源文件、现有动画和制作预览工具。接酒、递放、端盘等尚未制作的后续动作，本轮暂不推进。
+## Protagonist model completion (2026-10-05)
 
-## 伊芙模型接入（2026-10-05）
+- **Completed and accepted:** Left sleeve shape, elbow-weight transition, and pale cuff repairs, preserving the approved shoulder-cloak structure. Source, Unity model, and animation previews are synchronized.
+- Model/rig repairs can enter cleanup with no known blocking modeling work. Service, mechanism, and dialogue actions remain separate future work.
+- **Closed; user chose to skip runtime recheck:** End-of-rise foot IK jumps and repeated Idle switching were corrected. Full Editor state-chain sampling passed; Play Mode was not rerun and this is no longer a pending acceptance item.
+- Cleanup removed eight one-off pose repair/reconstruction scripts and metadata plus an unreferenced emissive texture. Keep final models, original GLB, editable Blender sources, current animations, and production preview tools. Filling, delivery, and tray carrying were outside this repair round.
 
-- 原始 GLB 保留；可编辑绑定源为 `ArtSource/Characters/AIGenerated/Eve/Eve_Rig.blend`，运行资源在 `Assets/DungeonTavern/Art/Characters/Eve`。
-- 沿用主角骨架层级，按伊芙关节位置重新绑定；账本随腰部整体运动。独立 Walk 缩小抬腿幅度并按蒙皮脚底校准高度，未修改主角动画。
-- 已替换 Tavern_Main 的伊芙外观，保留剧情与移动组件。Avatar、蒙皮权重、待机/行走四视角采样通过；Play Mode 拉杆带路检查为 `ready=True / PathComplete`，Console 无错误。
-- 围裙下沿已同步相邻裙面的权重，已检查的步行帧交叠改善；完整近景已获用户验收（2026-10-06）；没有新增坐姿、递钥匙或服务手势。
-- 绑定复修：靴底和鞋面改为由脚掌骨骼整体驱动，靴筒上缘平滑过渡至小腿；同步 Blender 源、FBX、Walk 落地高度与场景外观偏移。Idle/Walk 四视角采样及靴形刚性检查通过，完整近景已获用户验收（2026-10-06）。
+## Eve integration (2026-10-05)
 
-## 主角减速与停步修复（2026-10-05）
+- Keep original GLBs; editable rig: `ArtSource/Characters/AIGenerated/Eve/Eve_Rig.blend`; runtime assets: `Assets/DungeonTavern/Art/Characters/Eve`.
+- Reuse protagonist skeleton hierarchy, re-rig at Eve's joints, and attach the ledger to the waist. Eve's independent Walk has a reduced leg lift and sole-calibrated height; protagonist clips are unchanged.
+- Replace Eve's appearance in Tavern_Main while preserving story/movement components. Avatar, skin, and four-view Idle/Walk samples passed; Play Mode lever guidance reported `ready=True / PathComplete` with no Console errors.
+- Apron hem weights follow the adjacent skirt. Sampled walking overlap improved; close-up appearance was accepted on 2026-10-06. No sitting, key handoff, or service gestures were added.
+- Rig repair makes soles/uppers follow foot bones rigidly, blending boot tops into shins. Blender, FBX, Walk landing height, and scene visual offset are synchronized. Four-view Idle/Walk and boot-rigidity checks passed; close-up acceptance was completed on 2026-10-06.
 
-- Walk 步频跟随实际水平位移速度，覆盖仍在移动时的减速；停止判断取消额外速度平滑，Walk → Idle 过渡缩短为 0.08 秒。只调整主角 Walk，不改变其他动作播放速度。
-- 渐减速度及三个步态时刻的急停采样通过；真实 Play Mode 按键释放后约 0.082 秒进入 Idle，检查期间 Console 无错误。此结果验证速度同步和状态过渡，不等同于所有地形下的脚底锁定。
+## Protagonist deceleration and stopping (2026-10-05)
 
-## 站姿、呼吸与游戏内尺寸（2026-10-06）
+- Walk cadence follows actual horizontal displacement speed, including deceleration. Remove extra stop-speed smoothing and shorten Walk → Idle to 0.08 s. Only Walk timing changes.
+- Gradual deceleration and sudden stops at three gait phases passed. Actual Play Mode entered Idle about 0.082 s after key release, without Console errors. This proves synchronization/transitions, not foot locking on every terrain.
 
-- Idle 起始髋部和脚底对齐原始模型，保留原始脚距；GetUp、StandUp 结束及 SitDown 开始同步站姿。
-- 呼吸已直接写入主角与伊芙各自的 `Idle.anim`：4.5 秒循环，上半身峰值位移 0.032，使用 Humanoid 原生 SpineTDOF 通道并校准髋部补偿。动画资源单独预览与控制器播放一致。曾使用的运行时呼吸组件已完全移除；其他基础动画明确清零该通道，Walk 脚底高度已同步校准。
-- 按实际探索镜头参数（45°、正交尺寸 4.5、1920×1080）采样，主角/伊芙头部竖向起伏约 3.25/3.39 像素，脚底位移为零。连续控制器两轮及转入 Walk 检查通过；此为隔离预览与控制器检查，最终游戏观感已获用户验收（2026-10-06）。
-- 主角、伊芙及运行顾客外观统一放大 8%，保留相对比例。当前主角/伊芙站立可见高度为 2.257/2.347；ThirdParty 原始模型未修改，顾客调整在 `Customer_Test` 的外观实例上。
+## Stance, breathing, and runtime size (2026-10-06)
 
-## 当前动作核查
+- Idle starts with hips/soles at original-model height and original foot spacing. GetUp/StandUp endings and SitDown start use that stance.
+- Breathing is authored directly in each protagonist/Eve `Idle.anim`: 4.5 s cycle, peak upper-body displacement 0.032, native Humanoid SpineTDOF with calibrated hip compensation. Asset and controller previews agree. The old runtime breathing component is removed; other basic clips explicitly zero that channel and Walk sole height is recalibrated.
+- With the exploration camera (45°, orthographic size 4.5, 1920×1080), protagonist/Eve head rise is about 3.25/3.39 pixels with stationary feet. Two controller cycles and transition to Walk passed. These are isolated/controller checks; final in-game appearance was accepted on 2026-10-06.
+- Protagonist, Eve, and runtime customer visuals are enlarged uniformly by 8%, preserving relative proportions. Protagonist/Eve standing visible heights are 2.257/2.347. ThirdParty sources are unchanged; customer scaling is on the `Customer_Test` visual instance.
 
-人物动画与机关模型自身的动画分别统计；能按 F 完成功能不等于人物已有相应动作。
+## Current action audit
 
-| 动作 | 当前状态 |
+Character and mechanism animations are counted separately. An F interaction working does not prove a matching character animation exists.
+
+| Action | Status |
 |---|---|
-| 主角空手待机、行走 | 已接运行；转向由角色移动控制器驱动，没有独立原地转身动画 |
-| 主角取杯、持杯、持杯行走 | 已接运行；取杯仍在交互成功时立即入手，尚非接触帧交接 |
-| 主角饮用 | Drink 动作通过右臂 IK 与杯子倾斜曲线完成；提供 PlayDrink 调用，不改变库存，没有新增喝酒按键 |
-| 主角坐下、坐姿保持、起身 | 三段动画接入 Animator；提供 SetSeated 调用，尚无主角坐椅子的 F 交互 |
-| 伊芙/顾客待机、行走 | 伊芙已替换为新精灵 Humanoid 模型，独立适配 Idle 与 Walk；顾客仍为 Barbarian，ThirdParty 原资源保留 |
-| 伊芙坐姿 | 暂无需求；已移除控制器中闲置坐姿状态及独立 Seating.fbx，不影响主角和顾客的坐姿动画 |
-| 顾客坐下、坐姿保持、起身 | 接真实座位等待/用餐/结账状态；坐姿对齐凳面，跨楼层隐藏再显示时保留 Animator 姿态；站立位置保持站立；起身后释放座位并恢复寻路 |
-| 台阶移动 | 复用行走；没有专门上下楼梯和脚底贴合 |
-| 接酒、递杯、送菜 | 功能已有；人物对齐龙头、递放及端盘动作缺失 |
-| 拉杆、箱子、菜单 | 机关/界面功能已有；人物拨杆、掀盖、查看动作缺失 |
-| 用餐、顾客饮酒、付款 | 服务计时和结账已有；顾客的餐具/杯子及进食、支付动画缺失 |
-| 对话、指示、递钥匙 | 对话及带路已有；专用手势和交接动画缺失 |
-| 开场伏地、苏醒、撑起、站稳 | 已接开场剧情；面朝下、双臂不对称放松，第一次 WASD 起身，站稳后恢复控制；Prone/WakeUp 为可编辑动画资产，原动作 FBX 保留 |
-| 翻越吧台 | Space 翻越驱动全身动作、扶台 IK 与落地控制恢复 |
+| Protagonist empty-hand Idle/Walk | Integrated; mover drives turning, without a separate turn-in-place clip |
+| Pickup, holding, holding-walk | Integrated; pickup still transfers immediately on successful interaction, not on a contact frame |
+| Protagonist drinking | Drink uses right-arm IK and cup-tilt curves; callable PlayDrink, without inventory changes or a new drinking key |
+| Protagonist sit/hold/stand | Three Animator clips and callable SetSeated; no F chair interaction |
+| Eve/customer Idle/Walk | Eve has her elf Humanoid with adapted Idle/Walk; customers remain Barbarian, preserving ThirdParty sources |
+| Eve seating | Not required; unused states and standalone Seating.fbx removed without affecting protagonist/customer seating |
+| Customer sit/hold/stand | Integrated with waiting/eating/settlement; aligned to stools, Animator pose retained across floor visibility, standing guests stay upright; seats release and navigation resumes after standing |
+| Stairs | Reuse Walk; no dedicated stair/foot-placement animation |
+| Filling, cup/food delivery | Functional interaction exists; faucet alignment, handoff, and tray animations are missing |
+| Lever, chest, ledger | Mechanism/UI works; character lever/lid/viewing actions are missing |
+| Eating, customer drinking/payment | Timers/settlement exist; customer tableware/cup and eating/payment animations are missing |
+| Dialogue, pointing, key handoff | Dialogue/guidance exists; dedicated gestures/handoff are missing |
+| Opening prone/wake/rise/settle | Integrated; face-down asymmetric relaxed arms, first WASD starts rise, control returns when standing; editable Prone/WakeUp retained with original action FBX |
+| Bar vault | Space drives full-body action, contact IK, landing and control restoration |
 
-**结论：移动、持杯、饮用/坐姿、伏地起身和翻越已有，完整服务表现尚未齐全。**
-后续未完成项为端盘与递放、顾客进食、操作机关和对话手势；列入后续制作，尚未全部实施。
-餐具结账后自动消失，暂不制作手动回收动作。
+**Movement, holding, drinking/seating, prone rise, and vaulting exist; complete service presentation does not.** Remaining work includes tray carrying/delivery, customer eating, mechanism operation, and dialogue gestures. Tableware disappears after settlement; manual collection is not planned now.
 
-编辑模式打开 B1 后，可用 `Tools > Characters > Preview Opening Pose` 预览当前伏地动画；
-`Stop Opening Pose Preview` 恢复编辑状态。预览不把骨骼姿态写入场景，运行时仍由 Prone 动画驱动。
-开局使用连续的 Prone → WakeUp → GetUp → Idle：先收手落掌，再双手撑起上身、收腿蹬地，最后站稳。伏地时双臂向身体外侧自然展开，WakeUp 用 1.2 秒呈现收手、落掌过程，GetUp 为 2.75 秒；两处片段交界保持相同姿态，站稳后恢复操作。
-`Tools > Characters > Test Opening Rise` 从主场景启动并等待加载完成，检查起身输入锁、原地起身、控制恢复和翻越。
+In Edit Mode with B1 open, `Tools > Characters > Preview Opening Pose` previews Prone; `Stop Opening Pose Preview` restores authored transforms. Preview does not save posed bones. Runtime remains driven by Prone.
 
-### 动作验证入口
+Opening sequence: Prone → WakeUp → GetUp → Idle. Hands draw inward and plant, both arms support the torso, legs recover and push, then the actor settles. Arms spread naturally when prone. WakeUp lasts 1.2 s; GetUp lasts 2.75 s. Boundaries share the same pose; controls return after standing. `Tools > Characters > Test Opening Rise` starts from the main scene, waits for loading, and checks input lock, stationary rise, control return, and vaulting.
 
-当前 Demo 跳过开头文字小剧场，进入后首次 WASD 会触发起身，站稳之前禁止移动和 F 交互；
-靠近可翻越柜台并朝它移动时，按 Space 触发翻越。
-`Tools > Characters > Check Opening and Vault` 在新启动的 Play Mode 中检查开场输入锁和真实 Bar Prefab 的翻越落地。
-该检查会推进起身流程；退出并重新进入 Play Mode 可重新体验伏地起身。
+### Validation entry points
 
+The demo skips opening text. First WASD starts the rise; movement/F remain locked until standing. Near a vaultable counter, move toward it and press Space.
 
-Play Mode 等主角加载后，运行 `Tools > Characters > Check Drink and Seating`。
-检查饮用、收杯、坐下保持、屈膝和起身，临时持物和移动锁在结束后恢复；结果写入系统临时目录
-`character-action-check.txt`，两张近景截图为 `character-drink.png`、`character-seated.png`。
-这属于自动动作验证，不等同于完整人工服务流程验收。
+`Tools > Characters > Check Opening and Vault` in a fresh Play Mode checks the opening lock and real Bar Prefab landing. It advances the rise; restart Play Mode to experience the opening again.
 
-主角 `CharacterModel` 的 `CharacterModelMotion` 组件菜单也提供饮用、坐下、起身预览；
-饮用需要已持有满杯。主角坐姿预览需停在空旷位置，不会自动寻找或占用座位。
+After the protagonist loads, `Tools > Characters > Check Drink and Seating` checks drinking, cup stowing, seated hold, knee bend, and standing. Temporary items and movement locks restore afterward. Output goes to the system temporary directory: `character-action-check.txt`, `character-drink.png`, and `character-seated.png`. This is automated animation validation, not a full manual service playthrough.
 
-最新开局调整已通过运行中的连续性、输入锁、原地起身和恢复控制断言；手掌接地及动作自然程度已获用户验收确认。自动检查最终捕获 Unity AI 插件联网错误，因此整份报告并非全绿。
+The protagonist CharacterModel's CharacterModelMotion component menu also previews drinking/sitting/standing. Drinking requires a filled held cup. Seating preview needs open space and does not find or reserve a chair.
 
-以下批次是动作目录，包含已实现动作的打磨项；状态以上表为准，不应整批视为待制作。
+Latest opening checks passed continuity, input locking, stationary rise, and control return; hand contact and naturalness were accepted. The report also captured a Unity AI plugin networking error, so the entire report was not all-green.
 
-## 第一批：主角基础与现有交互
+The batches below are an action catalog including polishing of implemented actions. Use the status table; do not treat whole batches as unfinished.
 
-| 动作组 | 应制作的动作 | 使用场景 |
+## Batch 1: protagonist basics and existing interactions
+
+| Group | Actions | Use |
 |---|---|---|
-| 基础移动 | 空手待机、行走、停步转身 | 全场景；移动方向与四个相机方位分别处理 |
-| 楼梯 | 上台阶、下台阶 | F1/B1及储藏室；先复用步行动作并调整步频，正式骨骼角色再做脚底贴合 |
-| 持物 | 单手持杯待机、持杯行走 | 空杯/满杯共享动作，杯中液体单独变化 |
-| 取放 | 伸手取物、收回手、递出/放下 | 取浮空杯、上酒、钥匙和小物件交接；不同高度用手部目标适配 |
-| 接酒 | 把杯子移到龙头下、保持、收回 | 杯口与出酒口对齐；是否需要另一只手操作龙头依最终交互确定 |
-| 机关 | 拉杆拨向两侧的独立动作 | 开业/打烊；手随杆端绕轴运动，不能只播放伸手 |
-| 箱子 | 俯身掀盖、合盖、回正 | 两段动作与箱盖当前状态同步；离开后的自动关盖无须角色动作 |
-| 查看 | 看向菜单/物件、短暂停留 | 看订单；固定菜单不必虚构手持书本 |
-| 对话 | 转向对方、听、说话、轻微点头 | 伊芙及客人近景对话；避免大幅循环手势 |
-| 翻越 | 扶住吧台、越过、落地恢复 | Space 翻越已接扶台、跨越和落地表现 |
+| Locomotion | Empty-hand Idle, Walk, stop-turn | All scenes; separate world movement from the four camera headings |
+| Stairs | Up/down steps | F1/B1/storage; initially reuse Walk with cadence adjustment, later add foot placement |
+| Carrying | One-hand cup Idle/Walk | Share empty/full cup clips; liquid changes separately |
+| Pickup/place | Reach, retract, hand over/place | Floating cup, serving, keys, small props; hand targets adapt height |
+| Filling | Move cup under faucet, hold, retract | Align cup and spout; second-hand faucet operation depends on final interaction |
+| Mechanism | Separate lever actions in each direction | Open/close; hand follows lever arc rather than a generic reach |
+| Chest | Bend, lift/close lid, straighten | Two clips synchronized with lid state; automatic close needs no character action |
+| Inspect | Look at menu/prop, pause | Read orders; do not invent a handheld book for a fixed menu |
+| Dialogue | Turn, listen, speak, subtle nod | Eve/guest close dialogue; avoid exaggerated looping gestures |
+| Vault | Support, cross, recover | Space already connects contact, crossing, and landing |
 
-## 第二批：第一日剧情与完整服务表现
+## Batch 2: Day 1 and complete service presentation
 
-- 主角：伏地静止 → 支撑身体 → 起身 → 站稳。按首次移动输入起身；动作完成再恢复移动，不能边起身边滑走。
-- 伊芙递钥匙、主角接过并握紧；回忆结束放松手。交接可复用通用取放，握紧需补专用手势。
-- 伊芙：走近、停步、转身带路、指示拉杆；与实际寻路到达同步。
-- 服务人员：端盘待机/行走、放盘/碗；记录订单/记账可以共享书写动作。
-- 客人：拉近座位或就位、坐下、坐姿等待、举杯饮用、进食、放下餐具、起立、付款、离开。
-- 结账双方：递钱/接钱；可以复用交接动作，不必新增收银玩法。
-- 伊芙环境工作：擦桌、整理吧台、清点/拿放库存。先做循环表现，不自动扩展成清洁数值系统。
+- Protagonist: prone → support → rise → settle; first movement input triggers it, with no sliding before completion.
+- Eve hands over a key; protagonist takes and grips it, relaxing after the memory. Reuse generic handoff; add gripping.
+- Eve approaches, stops, turns to guide, and points to the lever, synchronized with navigation arrival.
+- Service: carry tray Idle/Walk, place plates/bowls; order recording/accounting may share writing actions.
+- Guests: move into position, sit, wait, lift cup, eat, put tableware down, rise, pay, leave.
+- Payment handoff can reuse exchange actions; no separate cashier gameplay is required.
+- Eve background work: wipe tables, organize the bar, count/carry stock. Start with presentation loops, not a new cleanliness system.
 
-## 第三批：第二、三日与特写（后续接入剧情时做）
+## Batch 3: Day 2/3 and close-ups during later integration
 
-- 米拉：把石片放桌上、递晶石；主角拾取、近看、感知魔力、短暂失神后恢复。
-- 诺克斯：递申报单、擦汗、移开视线；主角读单据、翻阅/对照进货簿、收好文件。
-- 伊芙：双手抱箱站立/行走、放箱、封存；主角开箱、检查封口/箱内物品。
-- 核心调查：手持晶石、对准晶槽插入、收手、操作/读取记录。
-- 反应：思考、疑惑、惊讶、疲惫。优先头部和上身小动作，可与说话/待机复用。
-- 回忆专用：锻造挥锤、让座/挪行李、推盐罐、上炖菜。只在相应镜头需要时制作，可只做手部特写。
+- Mira: place fragment, hand over crystal; protagonist picks up, inspects, senses magic, briefly loses focus and recovers.
+- Nox: hand over declaration, wipe sweat, avert gaze; protagonist reads it, compares inventory records, and stores papers.
+- Eve: two-hand box Idle/Walk, set down, seal; protagonist opens and inspects seal/contents.
+- Core investigation: hold crystal, align and insert into slot, retract, operate/read records.
+- Reactions: thinking, confusion, surprise, fatigue, prioritizing small head/upper-body actions reusable with Idle/speech.
+- Memories: hammering, yielding a seat/moving luggage, passing salt, serving stew. Produce only for required shots, including hand close-ups if sufficient.
 
-## 统一制作要求
+## Shared production requirements
 
-1. 当前采用 3D 骨骼人物；先检查每组动作的手持物、脚底与遮挡，再批量制作。
-2. 3D方案给左右手设置握持点，给杯子/盘子/箱子设置握持参考，给龙头/拉杆/箱盖设置手部目标。2D方案需要逐帧手部锚点及前后遮挡层，不能只把3D杯子固定在人物根节点上。
-3. 下身移动与上身持物可组合；空杯/满杯不需要重做整套步行。双手抱箱需要独立姿势。
-4. 取物到手、杯子装满、放盘交付、钥匙易手应在动作接触帧发生；取消/中断必须处理物品归属，避免重复生成或丢失。
-5. 根位移与 CharacterController 只选一个作为实际位移来源，避免脚滑、穿墙或两次移动。交互开始先就位、朝向目标，再播动作。
-6. 每组动作在四个相机方位、空手/持物、靠墙/桌边、楼梯上验证。相机旋转不应改变人物真实朝向或把杯子甩到另一侧。
+1. Use current 3D skeletal characters; inspect held objects, feet, and occlusion before batch production.
+2. Give hands grip anchors, cups/trays/boxes grip references, and faucets/levers/lids hand targets; do not attach cups only to the actor root.
+3. Combine lower-body movement with upper-body holding. Empty/full cups need not duplicate Walk; two-hand boxes need their own pose.
+4. Pickup, filling, delivery, and key transfer occur on contact frames. Cancellation/interruption must preserve ownership without duplication/loss.
+5. Choose root motion or CharacterController as the displacement source, not both. Align position/facing before interaction clips.
+6. Check each group from four camera headings, empty/holding, near walls/tables, and on stairs. Camera turns must not change world facing or swing a cup to the other side.
 
-优先验收闭环：产生订单 → 取杯器按缺杯量自动激活 → 取杯 → 持杯行走 → 接酒 → 送酒 → 空手。功能链已有，接酒和递放的人物接触动作仍待制作。
+Priority acceptance loop: order → deficit-driven dispenser activation → pickup → holding-walk → fill → serve → empty hand. The functional chain exists; filling/delivery contact animation remains unfinished.
 
-顾客坐定预览：在 Project 中展开 `Assets/DungeonTavern/Art/Characters/ThirdParty/Barbarian/Barbarian.fbx`，选中 `SeatedIdle`，在 Inspector 底部动画预览窗口播放。运行时也可选中顾客的 `CharacterModel`，打开 Animator 窗口观察 `SitDown → SeatedIdle → StandUp`。`Tools > Demo Flow > Test Customer Presentation` 自动检查坐姿循环、停用恢复、全部座位朝向与交互遮挡；检查会重新启动 Play Mode，结束后退出。
+For seated preview, expand `Assets/DungeonTavern/Art/Characters/ThirdParty/Barbarian/Barbarian.fbx`, select SeatedIdle, and play the Inspector preview. At runtime select CharacterModel and observe SitDown → SeatedIdle → StandUp in Animator. `Tools > Demo Flow > Test Customer Presentation` checks seated loops, disable/restore, all seat facings, and interaction occlusion. It restarts Play Mode and exits afterward.

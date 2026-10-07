@@ -1,17 +1,19 @@
-# 项目文档
+# Project documentation
 
-项目启动、依赖与目录说明见[根 README](../README.md)。
+**English** | [简体中文](README.zh-CN.md)
 
-| 文档 | 职责 |
+See the [root README](../README.md) for setup, dependencies, and project structure.
+
+Every Markdown document under `Docs` has English and Simplified Chinese versions with language links. Game localization is separate from documentation translation.
+
+| Document | Purpose |
 |---|---|
-| [游戏设计约定](GameDesign/GameDesignNote.md) | 已确认的世界观、玩法与场景规则；未定提案单独标注 |
-| [后续开发计划](GameDesign/NextDevelopmentPlan.md) | 下一步目标、尚未完成的工作与待讨论范围 |
-| [美术规范](Art/ArtDirection.md) | 当前画面表现、源资产组织与制作要求 |
-| [UI 规范](Art/UIDesign.md) | 界面风格、显示层级与实现入口 |
-| [人物动作计划](Characters/CharacterActionPlan.md) | 当前动作支持、验证入口与待制作动作 |
-| [角色形象文案](Characters/CharacterDesignBrief.md) | 已确认身份和外观，以及尚未确认的设计提案 |
-| [座位与客流](Gameplay/SeatingImplementationReview.md) | 座位分配、客流规则和专项验证入口 |
-| [剧情呈现约定](../Assets/DungeonTavern/Narrative/PresentationContract.md) | 对话、气泡、选择与记忆表现的职责边界 |
-| [第一章 Ink 说明](../Assets/DungeonTavern/Narrative/Chapter01/README.md) | 剧情入口、续接点与事实变量 |
+| [Game design](GameDesign/GameDesignNote.md) | Confirmed world, gameplay, and scene rules; undecided proposals are labeled separately |
+| [Development plan](GameDesign/NextDevelopmentPlan.md) | Next goals, unfinished work, and topics still under discussion |
+| [Art direction](Art/ArtDirection.md) | Current presentation, source asset organization, and production requirements |
+| [UI design](Art/UIDesign.md) | Interface style, visual hierarchy, and implementation entry points |
+| [Character action plan](Characters/CharacterActionPlan.md) | Supported actions, validation entry points, and remaining animation work |
+| [Character design brief](Characters/CharacterDesignBrief.md) | Confirmed identities and appearances, plus unconfirmed design proposals |
+| [Narrative presentation contract](../Assets/DungeonTavern/Narrative/PresentationContract.md) | Responsibilities for dialogue, speech bubbles, choices, and memory presentation |
 
-已验收内容不重复列为后续制作。专项实现文档保留操作和验证细节，开发计划只记录当前剩余工作，不复制完整实现过程。
+Accepted work is not listed again as future work. Implementation documents retain operational and validation details; the development plan tracks remaining work without duplicating implementation history.
