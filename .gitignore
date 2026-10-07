@@ -12,7 +12,7 @@
 #
 .utmp/
 /[Ll]ibrary/
-/[Tt]emp/
+/[Tt][Ee][Mm][Pp]/
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
@@ -116,3 +116,9 @@ InitTestScene*.unity*
 # Numbered Blender backups
 *.blend[0-9]*
 *.blend[0-9]*.meta
+
+# Local editor preferences and demo capture helpers
+/.vscode/
+/Tools/DemoCapture/
+/Assets/Editor/Tools/DemoInputBridge.cs
+/Assets/Editor/Tools/DemoInputBridge.cs.meta
