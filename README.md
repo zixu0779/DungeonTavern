@@ -98,7 +98,7 @@ Unity Skills 按[官方 README](https://github.com/Besty0728/Unity-Skills#-quick
 
 ## 开发路线与文档
 
-剩余工作集中于人物与服务动作、门外过渡空间、订单明细和后续剧情接入；已知问题与验收状态统一记录在[开发计划](Docs/GameDesign/NextDevelopmentPlan.md)。
+下一步优先优化地下室场景并重新设计控制核心；其后还有人物与服务动作、门外过渡空间、订单明细和后续剧情接入。剩余工作与已知问题统一记录在[开发计划](Docs/GameDesign/NextDevelopmentPlan.md)。
 
 - [游戏设计约定](Docs/GameDesign/GameDesignNote.md)：世界观、已确认玩法与范围边界。
 - [美术规范](Docs/Art/ArtDirection.md)：画面表现与资产制作要求。

@@ -455,3 +455,7 @@ The demo menu prices and geometric dish icons are prototype tuning/presentation 
 - 2026-10-06: The bar counter depth means the width of each L-shaped arm: one existing floor tile (1 world unit), preserving the overall arm lengths.
 
 - 2026-10-06: The bar uses three modular part types: a repeating straight section cut at panel midpoints, a corner extended by half a panel on both arms, and a finished terminal mirrored for left/right use. Keep assembled panels square and join without overlapping framing.
+
+## Basement redesign scope (2026-10-07)
+
+The next art task is to refine the B1 basement scene and completely redesign the control core, whose current mass is too bulky. Exact form, dimensions and layout remain to be approved; do not treat this as authorization for new gameplay.

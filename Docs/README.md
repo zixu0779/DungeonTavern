@@ -5,7 +5,7 @@
 | 文档 | 职责 |
 |---|---|
 | [游戏设计约定](GameDesign/GameDesignNote.md) | 已确认的世界观、玩法与场景规则；未定提案单独标注 |
-| [后续开发计划](GameDesign/NextDevelopmentPlan.md) | 尚未完成的工作、待讨论范围及验收记录 |
+| [后续开发计划](GameDesign/NextDevelopmentPlan.md) | 下一步目标、尚未完成的工作与待讨论范围 |
 | [美术规范](Art/ArtDirection.md) | 当前画面表现、源资产组织与制作要求 |
 | [UI 规范](Art/UIDesign.md) | 界面风格、显示层级与实现入口 |
 | [人物动作计划](Characters/CharacterActionPlan.md) | 当前动作支持、验证入口与待制作动作 |
