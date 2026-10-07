@@ -4,7 +4,7 @@
 
 See the [root README](../README.md) for setup, dependencies, and project structure.
 
-The overview and this index are available in both languages. The detailed documents linked below are currently in Chinese; their titles are translated here for navigation. Game localization is separate from documentation translation.
+Every Markdown document under `Docs` has English and Simplified Chinese versions with language links. Game localization is separate from documentation translation.
 
 | Document | Purpose |
 |---|---|
@@ -14,8 +14,6 @@ The overview and this index are available in both languages. The detailed docume
 | [UI design](Art/UIDesign.md) | Interface style, visual hierarchy, and implementation entry points |
 | [Character action plan](Characters/CharacterActionPlan.md) | Supported actions, validation entry points, and remaining animation work |
 | [Character design brief](Characters/CharacterDesignBrief.md) | Confirmed identities and appearances, plus unconfirmed design proposals |
-| [Seating and customer flow](Gameplay/SeatingImplementationReview.md) | Seating allocation, arrival rules, and focused validation entry points |
 | [Narrative presentation contract](../Assets/DungeonTavern/Narrative/PresentationContract.md) | Responsibilities for dialogue, speech bubbles, choices, and memory presentation |
-| [Chapter 1 Ink guide](../Assets/DungeonTavern/Narrative/Chapter01/README.md) | Story entry points, continuation points, and fact variables |
 
 Accepted work is not listed again as future work. Implementation documents retain operational and validation details; the development plan tracks remaining work without duplicating implementation history.

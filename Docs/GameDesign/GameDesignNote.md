@@ -1,5 +1,7 @@
 # Dungeon Tavern — Game Design Notes
 
+**English** | [简体中文](GameDesignNote.zh-CN.md)
+
 This document is the durable source of truth for confirmed game and world design. Items under **Open questions** are intentionally undecided and must not be implemented as final systems without explicit confirmation.
 
 ## Confirmed world canon
@@ -176,14 +178,13 @@ This document is the durable source of truth for confirmed game and world design
   and the editable Eve_Rig.blend are retained. Idle is adapted to Eve with subtle upper-body breathing and stable legs;
   Eve has her own reduced-stride, sole-calibrated Walk clip. The avatar and pose
   samples passed; Play Mode guidance reached its destination with a complete path
-  and no Console errors. The apron hem weights were matched to the adjacent skirt surface; final close-up appearance remains subject to user acceptance.
+  and no Console errors. The apron hem weights were matched to the adjacent skirt surface; close-up appearance was accepted on 2026-10-06.
 - Mira is a female tiefling and an appraiser. Her former adventuring party
   subjected her to racial prejudice while relying on her expertise. Her refusal
   to falsify appraisals brought that prejudice into the open and precipitated
   her departure; she retains her professional integrity and agency.
 - Bran's species remains undecided between an orc and a suitable underground
-  people such as grey dwarves. The protagonist's detailed appearance remains
-  a design proposal, not a locked character model.
+  people such as grey dwarves. The protagonist's approved concept and imported model are documented above; remaining character proposals must not be treated as final.
 
 ## Tavern peace rules
 
@@ -250,7 +251,7 @@ The following are not design commitments:
   TavernSign prefab includes the user-adjusted mechanism housing. Preserve its
   authored poses and pivots when editing animation keys.
 
-- The generated L-shaped bar, its two staff gate leaves, and fixed hinge posts
+- The modular bar, its two staff gate leaves, and fixed hinge posts
   form one reusable bar Prefab. Staff gates swing around vertical hinges and
   retain independent automatic opening and closing; they no longer lift upward.
   `Tavern_Main` uses `Assets/DungeonTavern/Art/Models/Bar/Bar.prefab`; the old
@@ -303,7 +304,7 @@ The following are not design commitments:
   Unlit to retain authored colors. A future softly lit setup is proposed only.
 - The playable protagonist uses the generated design B Humanoid rig with movement-driven Idle
   and Walk, plus a right-arm pickup/holding layer and a right-hand cup anchor.
-  Eve uses the KayKit Rogue and customers use the KayKit Barbarian. The obsolete first-design protagonist assets have been removed. Current Mage/Rogue/Barbarian resources are preserved under `Assets/DungeonTavern/Art/Characters/ThirdParty`; importing the new protagonist must not overwrite them.
+  Eve uses her project-specific elf Humanoid model; customers still use the KayKit Barbarian placeholder. The obsolete first-design protagonist assets have been removed. Current Mage/Rogue/Barbarian resources are preserved under `Assets/DungeonTavern/Art/Characters/ThirdParty`; importing the new protagonist must not overwrite them.
   Models are uniformly scaled so protagonist/customer shoulders sit above the counter.
   Customers use SitDown, SeatedIdle and StandUp at seated service positions.
   The protagonist also has seating clips and a callable drink presentation;

@@ -109,7 +109,7 @@ The next priority is improving the basement environment and redesigning the cont
 - [Character action plan](Docs/Characters/CharacterActionPlan.md): Current support, validation entry points, and remaining animations.
 - [Documentation index](Docs/README.md): UI, customer flow, character, and narrative documents.
 
-The project overview and documentation index are available in English and Simplified Chinese. Detailed design and implementation documents are currently maintained in Chinese. This documentation translation does not add English localization to the game.
+The project overview and all Markdown documents under `Docs` have English and Simplified Chinese versions. Use the language links at the top of each document. Documentation translation does not add English localization to the game.
 
 ## Resources and licensing
 

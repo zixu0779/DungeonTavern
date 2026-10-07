@@ -1,42 +1,44 @@
-# 后续开发与修正计划
+# Development and fixes
 
-## 下一步：地下室场景与控制核心重设计
+**English** | [简体中文](NextDevelopmentPlan.zh-CN.md)
 
-- 优先优化 B1 地下室场景设计，重新评估控制核心与人物、通道及周边空间的比例关系。
-- 当前控制核心体量臃肿，确认完全重新设计，不以现模型的局部缩放或修补作为最终方案。
-- 先确认场景布局、核心功能边界和尺寸，再制作新的 Concept；设计确认后再推进视图、模型与 Unity 替换。具体外形尚未确定。
+## Next: basement environment and control core redesign
 
-## 优先修正
+- Improve the B1 basement layout, reviewing the control core against character size, circulation, and surrounding space.
+- The current control core is too bulky. A complete redesign is confirmed; scaling or patching the current model is not the final solution.
+- Confirm layout, functional boundaries, and dimensions before making a new concept. After design approval, proceed to views, modeling, and Unity replacement. The exact form is still undecided.
 
-| 事项 | 剩余工作 | 完成标准 |
+## Priority fixes
+
+| Item | Remaining work | Acceptance |
 |---|---|---|
-| 帽檐穿墙 | 处理宽帽檐在靠墙、墙角和窄门处的穿模，评估形状、姿态或局部避让 | 改善穿模，同时保持正常通行 |
-| 对话转镜时溶解边缘闪烁 | 复现缓慢转镜期间的连续闪烁，区分切口投影、噪声采样与墙组切换的影响 | 保留缓慢转镜和必要的遮挡消除，边缘连续稳定，结束时平顺过渡 |
+| Hat brim clipping | Address wide brims near walls, corners, and narrow doors; assess shape, pose, or local avoidance | Reduce clipping while preserving normal traversal |
+| Dissolve-edge flicker during dialogue camera turns | Reproduce continuous flicker during slow turns; distinguish cutout projection, noise sampling, and wall-group changes | Preserve slow turns and necessary occlusion handling; stable edges and smooth transitions |
 
-## 后续制作
+## Further production
 
-以下仅列尚未完成的内容，具体制作顺序按下一轮目标确定。
+Only unfinished work is listed here. Production order follows the next agreed goal.
 
-| 事项 | 下一步与范围 |
+| Item | Next step and scope |
 |---|---|
-| 其余人物设计与模型 | 布兰、米拉、诺克斯及普通顾客。沿用已确认的主角与伊芙风格，先确认 Concept，再制作独立视图、模型与绑定。角色身份及未定项见[角色形象文案](../Characters/CharacterDesignBrief.md) |
-| 服务与交互动作 | 补齐取物接触帧、接酒、递杯/放餐、端盘、拨杆、掀盖、查看菜单、顾客进食与付款、对话手势。建议先完成取杯—接酒—递杯流程；详见[人物动作计划](../Characters/CharacterActionPlan.md) |
-| 酒馆门外过渡场景 | 制作地下城内部的门外小范围空间，衔接建筑与客流出现、离开的位置；这里不是地下城入口 |
-| 账簿“具体订单”页 | 在已有标签页和空状态基础上补充订单明细，明确个人订单、整组共享份数及订单状态的展示 |
-| 第二、三日剧情接入 | Ink 文本已有，尚未接入运行流程。随剧情补齐所需角色、场景事件、道具和动作 |
+| Remaining character designs and models | Bran, Mira, Nox, and ordinary guests. Follow the approved protagonist/Eve style: concept approval, individual views, then models and rigs. See the [character brief](../Characters/CharacterDesignBrief.md) for identities and open questions |
+| Service and interaction animation | Add pickup contact frames, filling, cup/food delivery, tray carrying, lever and lid operation, ledger viewing, customer eating/payment, and dialogue gestures. Start with pickup → fill → deliver; see the [action plan](../Characters/CharacterActionPlan.md) |
+| Exterior transition space | Build a small space outside the tavern within the dungeon, connecting the building to guest arrival/departure points; this is not the dungeon entrance |
+| Ledger order-details tab | Extend the existing tab and empty state with personal orders, shared portions, and order status |
+| Day 2 and Day 3 integration | Ink scripts exist but are not connected to runtime flow. Add the required characters, scene events, props, and actions alongside integration |
 
-## 待讨论或暂缓
+## Open or deferred
 
-| 事项 | 当前边界 |
+| Item | Current boundary |
 |---|---|
-| 菜品与酒品实体制作 | 当前仍用满杯代交餐点。需先确定菜品模型、备餐和酒品制作的范围 |
-| NPC AI 扩展 | 当前继续使用既有状态机与寻路；是否引入新框架或自主行为尚未决定 |
-| 保存/读取 | 暂缓，当前 Demo 不支持存档；持久化范围和格式未定 |
-| 正式光照 | 待讨论，当前保留 Unlit 表现；环境光及局部灯光方案尚未确定 |
+| Food and drink assets | Filled cups still stand in for food portions. Confirm the scope of dish models, preparation, and drink making first |
+| NPC AI expansion | Continue using the current state machine and navigation; a new framework or autonomous behavior is undecided |
+| Save/load | Deferred; the demo has no saves, and persistence scope and format are undecided |
+| Final lighting | Open for discussion. Keep current Unlit presentation; ambient and local lighting are not confirmed |
 
-## 保留的范围约定
+## Retained scope boundaries
 
-- 主角饮用、坐姿已有动作预览与调用，尚未增加喝酒规则或坐椅子的交互。
-- F1/B1 双向传送已有；F2 尚未搭建，入口保持封闭。
-- 餐具结账后自动消失，暂不制作手动回收。
-- 开头文字小剧场保持跳过。
+- Protagonist drinking and seating have previews and callable animation; drinking rules and chair interactions have not been added.
+- F1/B1 travel works both ways. F2 is not built and its entrance remains blocked.
+- Tableware disappears after settlement; manual collection is not planned for the current demo.
+- The opening text cinematic remains skipped.

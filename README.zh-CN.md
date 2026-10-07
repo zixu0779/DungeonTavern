@@ -13,7 +13,7 @@
 ![Narrative](https://img.shields.io/badge/Narrative-Ink-5B7162)
 ![Status](https://img.shields.io/badge/Status-Prototype-C28A45)
 
-[项目特色](#项目特色) · [快速开始](#快速开始) · [开发路线](Docs/GameDesign/NextDevelopmentPlan.md) · [项目文档](Docs/README.zh-CN.md)
+[项目特色](#项目特色) · [快速开始](#快速开始) · [开发路线](Docs/GameDesign/NextDevelopmentPlan.zh-CN.md) · [项目文档](Docs/README.zh-CN.md)
 
 </div>
 
@@ -102,14 +102,14 @@ ProjectSettings/             # Unity 项目设置
 
 ## 开发路线与文档
 
-下一步优先优化地下室场景并重新设计控制核心；其后还有人物与服务动作、门外过渡空间、订单明细和后续剧情接入。剩余工作与已知问题统一记录在[开发计划](Docs/GameDesign/NextDevelopmentPlan.md)。
+下一步优先优化地下室场景并重新设计控制核心；其后还有人物与服务动作、门外过渡空间、订单明细和后续剧情接入。剩余工作与已知问题统一记录在[开发计划](Docs/GameDesign/NextDevelopmentPlan.zh-CN.md)。
 
-- [游戏设计约定](Docs/GameDesign/GameDesignNote.md)：世界观、已确认玩法与范围边界。
-- [美术规范](Docs/Art/ArtDirection.md)：画面表现与资产制作要求。
-- [人物动作计划](Docs/Characters/CharacterActionPlan.md)：现状、验证入口与待制作动作。
+- [游戏设计约定](Docs/GameDesign/GameDesignNote.zh-CN.md)：世界观、已确认玩法与范围边界。
+- [美术规范](Docs/Art/ArtDirection.zh-CN.md)：画面表现与资产制作要求。
+- [人物动作计划](Docs/Characters/CharacterActionPlan.zh-CN.md)：现状、验证入口与待制作动作。
 - [完整文档索引](Docs/README.zh-CN.md)：UI、客流、角色和剧情文档。
 
-项目概览和文档索引提供中英文版本，详细设计与实现文档目前以中文维护。文档翻译不代表游戏内已支持英文。
+项目概览及 `Docs` 下全部 Markdown 文档提供中英文版本，可通过各文档顶部切换。文档翻译不代表游戏内已支持英文。
 
 ## 资源与许可
 

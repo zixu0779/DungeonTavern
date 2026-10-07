@@ -1,92 +1,94 @@
-# 角色形象设计文案
+# Character design brief
 
-整理日期：2026-10-01。
+**English** | [简体中文](CharacterDesignBrief.zh-CN.md)
 
-本文汇总已找回的角色外观文案，供后续设计图与建模使用。**整理不等于定稿**：已确认的剧情与身份以 [GameDesignNote](../GameDesign/GameDesignNote.md) 为准，当前美术方向见 [ArtDirection](../Art/ArtDirection.md)，动作需求见 [CharacterActionPlan](CharacterActionPlan.md)。
+Compiled: 2026-10-01.
 
-历史来源：[导入模型到Unity](thread://01a0a8bb-86e4-7ff2-9e67-8be29eac9bc2?hostId=local) 中的人物形象提案、种族调整和主角开场服装纠正。下文为归纳整理，不是逐字原文。
+This document collects recovered appearance proposals for later concept art and modeling. **Compilation is not approval.** Confirmed identities and story facts follow [GameDesignNote](../GameDesign/GameDesignNote.md); current presentation follows [ArtDirection](../Art/ArtDirection.md); animation needs follow [CharacterActionPlan](CharacterActionPlan.md).
 
-## 当前共同约束
+Historical source: appearance proposals, species changes, and opening-costume corrections in [Import models into Unity](thread://01a0a8bb-86e4-7ff2-9e67-8be29eac9bc2?hostId=local). This is a synthesis, not a verbatim transcript. The conversation link is local context, not a public GitHub resource.
 
-- 正式人物风格参考当前已认可的 KayKit 比例、清楚的轮廓与简洁低多边形造型；历史上的约四头身、主角六至七头身不作为当前统一比例标准。
-- 运行中主角已采用设计 B 模型；伊芙已接入新精灵模型、顾客 Barbarian 仍为替代模型，不代表其正式服装与外貌已经确定。
-- 角色应适合当前斜俯视探索、近景对话、坐下、持杯与服务动作。检查真实 Game View 中的识别效果，不能只凭正面设计图决定细节。
-- 主角正式外观方向采用用户于 2026-10-01 选定的 B：紧凑低多边形比例、灰黑短发与浅色发束、蓝灰旅行衣及不对称破损黑斗篷。概念图为 `ArtSource/Characters/Concepts/Protagonist/concept.png`，已替换旧图；新版绑定源文件位于 `ArtSource/Characters/AIGenerated/Protagonist/Protagonist_Rig.blend`，Unity 模型已接入，初版旧设计已清理。
-- 每名角色分别制作设计图。建模用中立 A/T 姿态、四肢分离、双手空置；职业道具可另列，不把所有道具固定在手上。
+## Shared constraints
 
-## 主角／酒馆老板
+- Use the accepted KayKit-inspired proportions, clear silhouettes, and simple low-poly forms. Earlier four-head or six-to-seven-head proposals are not the current shared proportion standard.
+- The protagonist uses design B; Eve has her new elf model. Barbarian remains a customer placeholder, not a confirmed final costume or appearance.
+- Characters must work in oblique exploration, close dialogue, sitting, cup holding, and service. Judge recognition in the actual Game View, not only front-view concepts.
+- The protagonist's selected B direction (2026-10-01) uses compact proportions, grey-black short hair with a pale forelock, blue-grey travel clothing, and an asymmetric damaged black cloak. The concept is `ArtSource/Characters/Concepts/Protagonist/concept.png`; the editable rig is `ArtSource/Characters/AIGenerated/Protagonist/Protagonist_Rig.blend`. The Unity model is integrated and obsolete first-design assets are removed.
+- Produce each character separately. Modeling references use neutral A/T poses, separated limbs, and empty hands. Show occupational props separately rather than permanently attaching every prop to the hands.
 
-**已确认**：主角外出调查真相时遇袭，在 B1 封印室伏地醒来。开场穿外出旅行服与破损黑斗篷；兜帽完全损毁，最多留下残布，露出头脸。离开酒馆的回忆可以保留完整斗篷遮脸。开场不能穿酒馆工作服。
+## Protagonist / tavern owner
 
-**已选定的外观方向（B）**：人类外形，灰黑短发夹一缕浅色，简化面部与紧凑低多边形比例；蓝灰旅行衣、皮带与小腰包、深色长裤、棕色旧皮靴，外披不对称破损黑斗篷。以现存主角概念图为外观依据。实际年龄与来历仍留白；三张方向参考、新版模型和基础动作接入已完成；大幅动作与环境穿模仍需视觉验收。
+**Confirmed:** Ambushed while investigating the truth, the owner wakes prone in the B1 seal room. The opening uses damaged travel clothing and a torn black cloak. The hood is destroyed, with at most scraps remaining, exposing the head and face. Departure memories may retain an intact face-concealing cloak. Do not use tavern workwear for the opening.
 
-**已被纠正的开场方案**：米白卷袖衬衣、炭灰短马甲、深酒红半围裙，以及“浅色发束＋酒红围裙＋旧钥匙”的组合最初用于老板形象提案，不再作为开场建模依据；是否作为后续工作装也尚未确认。
+**Selected appearance B:** Human appearance, short grey-black hair with a pale streak, simple face and compact low-poly proportions; blue-grey travel clothes, belt and small pouch, dark trousers, worn brown boots, and an asymmetric damaged black cloak. Use the current concept as the appearance reference. Exact age and origins remain open. Directional references, the replacement model, and basic action integration are complete; large-motion/environment clipping still needs visual acceptance.
 
-## 伊芙／店员
+**Superseded opening proposal:** Cream rolled-sleeve shirt, charcoal waistcoat, wine-red half apron, and the pale-forelock/red-apron/old-key combination were an early owner proposal. They are no longer the opening-model basis; possible later workwear is also unconfirmed.
 
-**已确认**：女性精灵，熟悉酒馆事务。
+## Eve / attendant
 
-**已确认外观（2026-10-05）**：绿色眼睛，铜叶发扣；栗色头发盘起，用深绿色发带固定，露出清楚的精灵耳轮廓；奶油色衬衣、苔绿工作裙、短围裙，腰间携带小账本。整体干练，衣服便于搬箱、端盘和擦桌。
+**Confirmed:** Female elf familiar with tavern operations.
 
-识别重点为盘发、苔绿色与账本。最初的人类女性提案已被精灵身份替代；Rogue 仅保留为参考，场景已采用新设计模型。
+**Approved appearance (2026-10-05):** Green eyes and copper leaf clasp; chestnut hair in a bun secured with a dark-green band, exposing clear elf ears; cream blouse, moss-green work dress, short apron, and a small waist ledger. Practical clothing supports carrying boxes and trays and wiping tables.
 
-## 布兰／老铁匠
+Recognition centers on the bun, moss green, and ledger. The early human proposal is superseded by her elf identity. Rogue is reference-only; the scene uses Eve's new model.
 
-**身份方向**：经历战争、希望安静生活的工匠。种族仍未最终锁定，当前设定保留兽人或灰矮人等合适地下种族的选择。
+## Bran / old blacksmith
 
-**旧外观提案，待确认**：宽肩厚手、灰棕短发、分束胡须，靛蓝工作衣、磨旧皮革护腰，腰侧挂普通尺寸的旧铁锤。后续灰矮人版本提议石灰色皮肤与灰白短胡须。
+**Identity direction:** A craftsman shaped by war who wants a quiet life. Species is not final; an orc or suitable underground people such as grey dwarves remain options.
 
-识别重点为宽厚轮廓、工作痕迹与旧锤。锤子首先是长期使用的工具，不以夸张武器取代人物经历。灰矮人配色与矮壮比例须在种族确定后再定稿，不套用其他作品的阵营与性格设定。
+**Earlier appearance proposal, unconfirmed:** Broad shoulders and heavy hands, short grey-brown hair, divided beard, indigo workwear, worn leather waist protection, and an ordinary-sized old hammer at the belt. A later grey-dwarf variant proposed limestone skin and a short grey-white beard.
 
-## 米拉／鉴定师
+Focus on a broad silhouette, work-worn details, and the old hammer. It is first a long-used tool, not an exaggerated weapon replacing personal history. Finalize grey-dwarf colors and stocky proportions only after species approval; do not import another work's faction or personality assumptions.
 
-**已确认**：女性提夫林、鉴定师。原冒险队长期依赖她的专业能力，却存在种族偏见；她拒绝伪造鉴定书成为决裂的导火索。保留职业底线和自主选择。
+## Mira / appraiser
 
-**旧外观提案，待确认**：实用的灰紫短外套、深色裤装，斜挎带硬质分隔的小鉴定箱；提夫林版本提出小型后弯角、暗铜红或灰紫肤色，尾巴保持简洁。最初精灵版本曾提银灰短发，是否沿用到提夫林版本未确认。
+**Confirmed:** Female tiefling and appraiser. Her former adventuring party depended on her expertise while harboring racial prejudice. Refusing to falsify an appraisal precipitated the split. Preserve professional integrity and agency.
 
-识别重点为角的轮廓、灰紫服装与鉴定箱，像经常外出工作的专业人士。旧提案倾向不用大法袍和高帽，便于坐下和交接物品；角、尾巴大小仍需结合动作验证。最初的精灵身份已作废。
+**Earlier appearance proposal, unconfirmed:** Practical grey-violet short coat, dark trousers, and a small cross-body appraisal case with rigid compartments. The tiefling variant proposed small swept-back horns, dark copper-red or grey-violet skin, and a simple tail. Short silver-grey hair belonged to the initial elf proposal; carrying it into the tiefling design is undecided.
 
-## 诺克斯／素材商人
+Focus on horns, grey-violet clothing, and the case: a working professional who travels. Earlier proposals avoided large robes and tall hats to support sitting and handoffs. Horn/tail size needs animation checks. The former elf identity is obsolete.
 
-**旧外观提案，待确认**：人类男性，中年、身形略圆，后梳头发与短胡须；赭黄色马甲、暗褐短外套，胸袋放单据，腰侧挂钱袋。
+## Nox / material merchant
 
-识别重点为圆润轮廓、赭黄色与文件。平时体面、熟练，紧张时通过擦汗、回避目光等表现变化，不在外观上直接画成反派。种族、年龄与面貌在这份历史文案中属于提案，不提升为已确认设定。
+**Earlier appearance proposal, unconfirmed:** Middle-aged human man with a somewhat rounded build, swept-back hair and short beard; ochre waistcoat, dark-brown short coat, documents in a chest pocket, and a money pouch at the belt.
 
-## 普通客人候选
+Focus on rounded form, ochre, and paperwork. Normally polished and practiced; tension appears through wiping sweat and avoiding eye contact rather than overt villain styling. Species, age, and face in this historical proposal are not confirmed canon.
 
-以下均为历史制作提案，不是已完成角色或固定客流名单。
+## Ordinary guest candidates
 
-| 候选 | 外观与职业方向 |
+These are historical production proposals, not finished characters or a fixed arrival list.
+
+| Candidate | Appearance and occupation direction |
 |---|---|
-| 人类男性 | 年轻采集者，普通体型，轻装与旧背包 |
-| 人类女性 | 有经验的盾手，短发、褪色蓝披肩与轻甲；初稿还提出深肤色、短卷发和圆盾，未最终确定 |
-| 蜥蜴人 | 灰青鳞片、短吻、普通直立体型的搬运工或商旅；初稿提出沙色无袖工作衣、肩带与短尾，需检查坐姿 |
-| 兽人 | 正常身高、较结实的地下工匠，避免巨型战士轮廓；初稿曾为灰绿皮肤、小獠牙、暗红围巾与采集包的采集者，职业与服装待选择 |
-| 侏儒 | 工具商或修补匠，作为后续补充；不能只把矮人整体缩小 |
+| Human man | Young gatherer, ordinary build, light clothing and old backpack |
+| Human woman | Experienced shield bearer, short hair, faded blue cloak and light armor; dark skin, short curls, and round shield appeared in an early draft but are not final |
+| Lizardfolk | Grey-cyan scales, short snout, ordinary upright porter/traveler; sand-colored sleeveless workwear, shoulder strap, and short tail were proposed and need seating checks |
+| Orc | Ordinary height, sturdy underground artisan rather than a giant warrior; earlier gatherer variant had grey-green skin, small tusks, dark-red scarf, and gathering bag; occupation/costume remain open |
+| Gnome | Tool merchant or repairer for later expansion; not simply a uniformly shrunken dwarf |
 
-早期还有橄榄绿皮肤、大耳朵、砖红工作背心、胸前护目镜与工具腰包的地精修补匠提案，后来提出用侏儒替代，尚未确认最终名单。所有客人共享大厅、吧台和座位，不按阵营或种族划分公共区域。
+An early goblin repairer proposal used olive skin, large ears, brick-red vest, chest goggles, and a tool belt. A later proposal replaced it with a gnome; the final roster is unconfirmed. All guests share the hall, bar, and seating without species/faction segregation.
 
-## 法师形象与帽子待讨论项
+## Mage appearance and hat questions
 
-2026-10-01 用户确认：目前宽檐帽只出现在主控角色的临时模型上，但法师身份的角色形象仍需要存在。尚未指定该正式法师角色是谁，也未确认沿用当前 Mage 外观。
+On 2026-10-01, the user confirmed that the wide-brim hat then belonged to the protagonist's temporary model, while a mage identity should still exist. The final mage character and reuse of the current Mage appearance remain undecided.
 
-当前问题有两项，应分别判断：帽檐在靠墙时穿模；斜俯视镜头下，即使去掉帽子，脸部仍可能不易辨认。不能把缩小帽檐视为解决全部面部可读性问题。
+Treat two issues separately: brim clipping near walls, and poor face recognition from the exploration angle even without the hat. A smaller brim does not solve every face-readability issue.
 
-**讨论建议，未批准实施**：先确定法师帽轮廓，评估缩短或上翻前檐、收窄侧檐，保留帽冠识别；再判断剩余穿模是否需要局部避让。探索中的角色识别与对话中的面部表达分别验收。不得据此直接改变相机、碰撞体、帽子网格或角色姿态。
+**Discussion only, not approved implementation:** Establish the hat silhouette; assess shortening or turning up the front brim and narrowing the sides while preserving the crown; then assess local avoidance for remaining clipping. Validate exploration recognition and close-dialogue expression separately. This does not authorize camera, collider, hat-mesh, or pose changes.
 
-## 后续定稿需明确
+## Remaining decisions
 
-主角已选定 B 作为后续制作依据，其余角色仍待设计。各角色概念图按人物文件夹保存；主角保留 concept.png 和独立 front.png、left.png、back.png。不保留对比图、独立设计说明或提示词记录。
+The protagonist and Eve have current approved designs and integrated models. Bran, Mira, Nox, and ordinary guests still need final designs. Store concepts per character. The protagonist keeps concept.png and separate front.png, left.png, back.png; do not retain comparison sheets, standalone design explanations, or prompt logs.
 
-1. 主角、伊芙、布兰、米拉与诺克斯在 KayKit 风格下的统一比例及各自轮廓。
-2. 布兰最终种族，以及各角色仍属提案的发型、肤色、服装与配色。
-3. 正式法师角色的身份、帽子与衣装；不把占位 Mage 自动等同于主角最终造型。
-4. 探索距离下的识别目标，以及近景对话和肖像各自承担的表情展示。
+1. Shared proportions and distinct silhouettes for the protagonist, Eve, Bran, Mira, and Nox within the KayKit-inspired direction.
+2. Bran's final species and still-provisional hair, skin, costumes, and colors.
+3. The final mage's identity, hat, and clothing; do not assume the placeholder Mage is the final protagonist.
+4. Recognition at exploration distance versus expression in dialogue and portraits.
 
-确认后的设计再更新相应设定与美术文档，并进入设计图制作。
+After approval, update design/art documents and proceed to concept production.
 
-2026-10-03 确认：ThirdParty 人物仅作为临时占位与重新设计时的参考，不能进入最终游戏画面。后续伊芙、顾客等需要与已采用的主角风格统一的新设计；此限制针对角色外观，不等同于禁止复用动作素材。
+2026-10-03 confirmation: ThirdParty models are temporary/reference-only and must not remain as final visuals. Customers and later characters need designs matching the adopted protagonist. This restriction concerns appearance, not reuse of animation sources.
 
-2026-10-03 主角修订：以 ThirdParty 的 Mage、Barbarian、Rogue 为统一风格参照，采用更圆的大头、短而紧凑的身体、简洁五官和大块配色，减少尖碎发、肌肉感与细碎破损。保留白色额发、蓝灰衣服和不对称黑披肩。Concepts/Protagonist 保留已认可的圆手、短腿版 Concept 及其配套三视图；现有 AIGenerated 模型与 Unity 模型仍是修订前版本，不能视为已同步。
+2026-10-03 protagonist revision: Use Mage, Barbarian, and Rogue as references for rounder large heads, short compact bodies, simple faces, and broad color areas, reducing spiky hair, muscularity, and tiny tears. Retain the white forelock, blue-grey clothes, and asymmetric black shoulder cloak. Concepts/Protagonist keeps the round-hand, short-leg concept and matching views. At that revision point, AIGenerated and Unity models still predated it; concept changes alone did not prove model synchronization.
 
-主角当前基准：已恢复圆手、短腿、未收窄靴子或拉长躯干的版本。现有 front/left/back 与该版本配套。停止强行匹配 ThirdParty 的精确尺寸；继续参考其圆润体块、简洁五官与配色，后续角色按已认可主角的风格统一并逐一替换占位外观。后续流程固定为先确认 Concept，再制作三视图。
+Current protagonist reference: the round-hand, short-leg version without narrowed boots or an elongated torso has been restored. Existing front/left/back match it. Stop forcing exact ThirdParty dimensions; continue using their rounded masses, simple faces, and colors as references. Match later characters to the approved protagonist and replace placeholders individually. The workflow is concept approval before orthographic views.

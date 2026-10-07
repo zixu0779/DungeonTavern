@@ -1,81 +1,82 @@
-# 地下酒馆 UI
+# DungeonTavern UI
 
-## 视觉规范
+**English** | [简体中文](UIDesign.zh-CN.md)
 
-暗铁色底板、旧铜细边、切角轮廓、暖金重点与羊皮纸气泡。经营信息贴边，场景中央留给角色与动作。布局参考《失落城堡 2》的资源信息和按键提示组织方式，不复制其美术素材。
+## Visual specification
 
-- 背板：#1B1E1F；深底：#131619；旧铜：#8F663B。
-- 正文：#F0E3C4；重点：#E6B361；次要文字：#A6A89C。
-- 气泡：#E6D1A3，配深棕文字。酒杯与食物使用独立几何图标，不依赖 emoji 字体。
-- 中文字体：Noto Sans CJK SC，随游戏打包；授权位于 `Assets/DungeonTavern/Art/UI/OFL.txt`。
-- 正文 24–28，次要提示 19–22，标题 34–38；以上为 1920×1080 参考画布单位。
-- 按钮有悬停、按下、禁用反馈；关闭、返回和确认动作明确区分。
+Dark iron panels, thin aged-copper borders, cut corners, warm-gold emphasis, and parchment bubbles. Management information stays near screen edges, leaving the center for characters and action. Resource displays and control hints take layout inspiration from Lost Castle 2 without copying its assets.
 
-## 显示层级
+- Panel: #1B1E1F; deep background: #131619; aged copper: #8F663B.
+- Body text: #F0E3C4; emphasis: #E6B361; secondary text: #A6A89C.
+- Bubbles: #E6D1A3 with dark-brown text. Drinks and food use dedicated geometric icons rather than emoji fonts.
+- Chinese font: bundled Noto Sans CJK SC; license at `Assets/DungeonTavern/Art/UI/OFL.txt`.
+- Body 24–28, secondary hints 19–22, headings 34–38, in 1920×1080 reference-canvas units.
+- Buttons show hover, pressed, and disabled states. Close, back, and confirm actions are distinct.
 
-运行时独立根节点 `TavernUI`，跨 F1/B1 保留。所有对象位于 Unity UI 层（Layer 5），通过 Screen Space Overlay Canvas 的 sortingOrder 明确叠放；CanvasScaler 适配屏幕尺寸，边缘界面遵循屏幕安全区域。
+## Display layers
 
-| Canvas | 顺序 | 内容 |
+The independent runtime root `TavernUI` persists across F1/B1. Objects use Unity UI Layer 5 and Screen Space Overlay canvases with explicit sortingOrder. CanvasScaler adapts to screen size; edge UI respects the safe area.
+
+| Canvas | Order | Content |
 |---|---:|---|
-| GameOutput | -100 | 游戏画面 RenderTexture，等比显示、黑边填充 |
-| WorldBubbles | 10 | 人物喊话、顾客订单、食用进度 |
-| HUD | 20 | 左上菜单、右上金币与在店人数、右下交互与手持物、区域名称与首次操作引导 |
-| Ledger | 40 | 账簿遮罩、菜品总览与具体订单标签页 |
-| Dialogue | 60 | 对话文字、选项、继续按钮、开场字幕 |
-| Transition | 80 | 启动与楼层切换黑幕 |
-| Pause | 100 | 暂停遮罩、菜单、操作说明 |
-| Confirmation | 110 | 退出确认 |
+| GameOutput | -100 | Game RenderTexture, aspect-preserving with black borders |
+| WorldBubbles | 10 | Speech, customer orders, eating progress |
+| HUD | 20 | Top-left menu, top-right coins/guest count, bottom-right interaction/carried-item hints, location and first-action guidance |
+| Ledger | 40 | Overlay, dish overview and order-details tabs |
+| Dialogue | 60 | Dialogue, choices, continue control, opening subtitles |
+| Transition | 80 | Startup and floor-transition blackout |
+| Pause | 100 | Pause overlay, menu, controls |
+| Confirmation | 110 | Exit confirmation |
 
-气泡按照游戏画面实际显示区域投影，不受墙体遮挡；离开镜头或角色隐藏时一起隐藏。普通装饰和文字不拦截点击，窗口与遮罩负责拦截；暂停与账簿打开时禁止世界操作，账簿不暂停经营。对话继续及分支仍由 Ink 控制，暂停时不接受对话推进。
+Bubbles project into the displayed game-image rectangle and remain readable through walls. They hide when off-camera or when their actor is hidden. Decoration and text do not intercept clicks; windows and overlays do. Pause and ledger block world input, but the ledger does not pause business simulation. Ink controls dialogue continuation and branching; pause blocks dialogue advancement.
 
-## 窗口内容
+## Window content
 
-- 账簿显示 Day 1、营业状态、菜品图标、单价、待上份数和点单人数；具体订单页保留空状态，详细订单功能待开发。营业状态区分尚未营业、准备营业、营业中、正在打烊、今日已结束营业；同一天再次营业不会增加日期。
-- 对话底栏仅在显示时去掉从人物前缀中拆出的成对外引号，历史保留原始文字；人物名牌按名称宽度伸缩。对话底栏只显示当前句，右侧为当前模型渲染的角色立绘，选项以较窄的居中按钮组排列在对话框上方，正文去除外引号与编号，仅鼠标点击选择；数字键不再选择选项。单个选项作为主角的动作或语言在主对话框显示，不生成选项按钮；多个选项与其前一句台词同时呈现。选项组固定排列，不使用滚动条。回顾入口读取本轮完整对话记录；打开时暂停，返回后仍停留在原句，不推进剧情。
-- 左上角只保留菜单图标，悬停说明 Esc；暂停菜单提供保存进度、读取进度、操作说明、退出和对话历史。存取档暂时禁用，退出必须二次确认。
+- The ledger shows Day 1, business state, dish icons, prices, pending portions, and ordering-customer counts. Order details remain an empty state. Business states distinguish not opened, preparing to open, open, closing, and finished for the day. Reopening on the same day does not increment the day.
+- The dialogue strip removes only paired outer quotation marks extracted after the speaker prefix; history keeps the original text. Nameplates fit their names. Only the current line appears in the strip, with a model-rendered portrait on the right. Narrow centered choice buttons sit above it, without outer quotes or numbering; selection is mouse-only. A lone choice becomes the protagonist's action/speech in the main box, without a button. Multiple choices appear alongside the preceding line. Choice positions are fixed and do not scroll. Review opens the entire current-session history, pauses, and returns to the same line without advancing the story.
+- The top-left menu icon has an Esc tooltip. Pause provides save, load, controls, exit, and dialogue history. Save/load are disabled; exit requires confirmation.
 
-## 实现入口
+## Implementation entry points
 
-`Scripts/UI/TavernUI.cs` 管理视图与层级；`TavernUiTheme.cs` 定义排版、颜色和控件；`TavernPanelGraphic.cs` 绘制可缩放边框。经营、剧情和暂停状态保留在各自的控制器内，UI 不修改订单或剧情进度。
+`Scripts/UI/TavernUI.cs` manages views and layers; `TavernUiTheme.cs` defines type, colors, and controls; `TavernPanelGraphic.cs` draws scalable borders. Business, story, and pause state remain in their controllers. UI does not mutate orders or narrative progress.
 
-参考：[Lost Castle 2 官方页面](https://store.steampowered.com/app/2445690/Lost_Castle_2/)
+Reference: [Lost Castle 2 official page](https://store.steampowered.com/app/2445690/Lost_Castle_2/)
 
-## 经营 HUD 入场
+## Management HUD entrance
 
-右上角采用金币图标、双人图标与数字，悬停补充含义。伊芙首次正式对话到达营业拉杆阶段后，经营 HUD 与 M/场景菜单交互同时解锁。
+The top-right HUD uses coin and two-person icons with values and explanatory tooltips. It unlocks together with M and the physical ledger when the first Eve conversation reaches the opening-lever gate.
 
-- 0.00–0.55 秒：底板从右侧 12 单位归位，透明度从 0 到 1，使用 ease-out cubic。
-- 0.18–0.58 秒：金币图标与金额淡入，同时上移 4 单位归位。
-- 0.30–0.70 秒：人数图标与人数按相同方式出现。
-- 全过程约 0.8 秒，无缩放弹跳、数字滚动或循环闪光；只在首次解锁播放。暂停、对话隐藏期间不推进该动画，换层不重新解锁。
+- 0.00–0.55 s: panel moves 12 units left into place and fades from 0 to 1 with ease-out cubic.
+- 0.18–0.58 s: coin icon/value fade in and move up 4 units.
+- 0.30–0.70 s: guest icon/count enter the same way.
+- About 0.8 s overall, without scale bounce, number rolling, or looping flashes. Runs only on first unlock. Pause/dialogue hiding suspends the entrance; floor changes do not unlock it again.
 
-## 区域与首次操作引导
+## Location and first-action guidance
 
-- 开局及 F1/B1 切换完成后，在顶部正中显示当前区域。0.4 秒淡入并下移 8 单位，停留 2.4 秒，0.6 秒淡出。区域名居中显示，已展开的引导位于左上角，两者不重叠。
-- 开局即显示引导入口；接受 WASD 后完成起身引导，转为出口引导。
-- 引导入口位于左上菜单按钮右侧；引导卡在该按钮下方展开，以左侧金线和左对齐文字区别于区域牌匾。底部为 17 号灰色说明和紧凑按键框，正文为 23 号。
-- 转场开始即清除旧地点提示，完成后从透明状态展示新地点，不恢复旧提示。
-- 出口、营业拉杆、查看菜单、取杯、接酒、上菜、结账分别记录是否完成。实际操作成功即记录，包括提示出现前的完成；完成后本轮游戏不再出现。
-- 从开局显示安静的引导按钮，八项首次操作全部完成后才消失。当前操作可执行且 25 秒仍未完成时按钮增加沿切角轮廓渐淡的暖金呼吸光，不使用实心矩形光底。悬浮显示“旅途指引”。金光以 3 秒一轮柔和呼吸，暗部仍保留金光，亮部清晰。点击按钮同时展开引导卡与路线，再点收起；超时不自动展开。引导按钮、卡片和路线出现／消失均有 0.22 秒 smoothstep 淡入／淡出。起身引导没有路线。当前操作完成后收起对应卡片，入口继续保留；暂时没有可执行操作时显示等待说明。时间可在 TavernGuidance 调整；暂停、剧情、账簿和转场不计时。
-- 一次只显示一个有效目标；结账和当前持有物品对应的操作优先，避免同时展示一串任务。没有需要杯子的订单时不提示取杯。
-- 目标使用低悬浮菱形符文徽记、青蓝光晕、渐淡落地光柱与地面光斑；通过世界位置投影到独立 UI 层，作为可穿过遮挡物阅读的引导，不影响场景光照。
-- 路线为高于地面 0.28 米的连续柔光线，在路径安全余量内圆滑拐角；线头每帧跟随玩家，正常沿线移动只裁去已经走过的部分；偏离路线超过 0.85 米且移动超过 1 米后才重新规划，最短间隔 1.5 秒。
-- F1 复用 NavMesh；B1 根据碰撞支撑规划地板与阶梯路线。目标人物保持锁定，直到该目标不再适用；首次求得的可达落地点固定用于目的地标记。B1 物理搜索分帧执行，每帧约 2 毫秒预算；静止及正常沿线移动不重算。找不到可走路径时不画穿墙直线。进入 B1 时保留尚未完成的酒馆任务、计时和展开状态，路线暂时指向返回楼梯；回到 F1 后恢复原目标。
-- 引导完成记录跨楼层保留；目前没有存档功能，重新开始游戏会重置。
+- After startup and F1/B1 travel, show the location at top center: 0.4 s fade-in and 8-unit downward movement, 2.4 s hold, 0.6 s fade-out. Centered location text does not overlap the top-left expanded guide.
+- The guide entry is available from the start. Accepting WASD completes awakening guidance and advances to exit guidance.
+- Its button sits right of the top-left menu. The card opens below, using a left gold line and left-aligned text to distinguish it from the location plaque. Body size is 23; footer size is 17 in grey with compact key boxes.
+- Clear the old location hint when travel starts. Show the new hint from transparency when travel completes, without restoring the old hint.
+- Exit, lever, ledger, cup pickup, filling, serving, and settlement each track first success, including actions performed before the hint. Completed hints do not repeat in that run.
+- The quiet guide button remains until all eight first actions finish. After 25 actionable seconds, add a warm-gold glow fading along its cut-corner outline, not a solid rectangle. The tooltip reads `旅途指引`. Its 3 s breathing cycle retains visible gold at minimum brightness. Clicking toggles card and route together; timeout does not auto-expand. Button, card, and route fade over 0.22 s with smoothstep. Awakening has no route. Completing an action closes its card but retains the entry; unavailable actions show a waiting message. Timing is configurable in TavernGuidance; pause, story, ledger, and travel do not count.
+- Show one applicable target at a time. Settlement and actions appropriate to the carried item take priority; do not request a cup without cup demand.
+- The target uses a low-floating diamond rune, cyan-blue halo, fading ground shaft, and ground spot. Project world positions onto an independent UI layer, readable through occluders without changing scene lighting.
+- The route is a continuous soft line 0.28 m above the ground, smoothing corners within path clearance. Its start follows the player each frame; normal movement trims the traversed section. Replan only after deviation exceeds 0.85 m and movement exceeds 1 m, no more often than every 1.5 s.
+- F1 uses NavMesh; B1 plans across physically supported floors and steps. Keep the target actor locked until inapplicable and retain the first reachable ground endpoint as the destination marker. B1 physical search is spread across frames with about a 2 ms budget. Standing still or following the path does not replan. Never draw a straight route through walls if no path is found. Entering B1 preserves unfinished tavern guidance, timer, and expanded state, temporarily routing to the return stairs; F1 restores the original target.
+- Completion survives floor changes. With no save system, restarting the game resets it.
 
-突然出现的窗口、选项、交互提示、手持物提示和气泡统一使用 0.22 秒 smoothstep 淡入／淡出；已有框内只更新文字时不重复入场。地点和经营 HUD 保留各自的入场动画。
+New windows, choices, interaction/carried-item hints, and bubbles use 0.22 s smoothstep fades. Updating text inside an existing frame does not replay the entrance. Location and management HUD retain their own entrance animations.
 
-设计预览与测试截图保存在项目外；项目内只保留运行时代码、字体及本规范。
+Design previews and test screenshots stay outside the project; retain runtime code, fonts, and this specification inside it.
 
-对话镜头使用 1.3 秒 smoothstep 平移／旋转／缩放，不修改墙壁材质。开店镜头被输入打断后，回归使用与开店平移相同的时长（当前 1.3 秒），并跟随回归过程中主角的新位置。
+Dialogue framing uses 1.3 s smoothstep position/rotation/zoom. Camera interpolation itself does not change wall materials; the separate occlusion system handles wall cutouts. If input interrupts the opening shot, return over the same duration as the outward pan (currently 1.3 s), following the moving protagonist.
 
-## 多人点单气泡
+## Group-order bubbles
 
-已确认的菜品在上方独立确认区排列；下方保留思考、菜品确认、共享提议及投票。
-确认图标用 0.45 秒向上移动并恢复大小，进入上方确认区。共享提议者保留菜品 + 问号，
-同伴完成正在确认的菜品后参与投票，用对勾或叉反馈；通过后全员增加同一份共享菜图标。
-取杯器的引导标记定位真实器具，地面路线终点仍可达，末段光线向上连接器具。
+Confirmed dishes occupy a separate upper area; the lower area shows thinking, confirmation, shared proposals, and votes. Icons rise and return to normal size over 0.45 s into the upper area. The proposer holds dish + question mark; members finish their current confirmation before voting with a check or cross. Acceptance adds the same shared-dish icon to every member.
 
-多份待上餐点按紧凑图标网格显示，单份保留原有数量样式。多人气泡避让并以细线连接头顶，避免相邻气泡遮挡。
+The dispenser marker targets the real prop. Its ground-route endpoint remains reachable, with a final upward connector.
 
-多人点单状态的停留时间延长 25%，便于阅读思考、个人确认及共享投票；图标上浮确认动画仍为 0.45 秒。
+Multiple pending portions use a compact icon grid; single portions retain their quantity style. Group bubbles avoid overlap and connect to heads with thin lines.
+
+Group-order state dwell times are increased by 25% for readable thinking, personal confirmation, and shared voting. The upward icon animation remains 0.45 s.

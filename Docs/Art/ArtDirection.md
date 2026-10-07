@@ -1,5 +1,7 @@
 # Current art workflow
 
+**English** | [简体中文](ArtDirection.zh-CN.md)
+
 This short reference replaces the retired tile-production and environment-handoff
 instructions. GameDesignNote contains world canon; this file describes current
 presentation and asset organization, not future feature commitments.
@@ -24,7 +26,7 @@ presentation and asset organization, not future feature commitments.
   interaction animation. The protagonist uses the approved generated design B; Eve uses her generated elf Humanoid model, and customers use Barbarian.
   Character style now targets the rounded proportions and simple forms of the
   ThirdParty Mage, Barbarian and Rogue references. The protagonist concept has
-  been revised accordingly; the current runtime model still uses the earlier B design. Their character models are
+  been revised accordingly; the current runtime model still uses the earlier B design. The third-party customer models are
   temporary placeholders and must be redesigned for the final game. Protagonist concept B is now selected in
   `ArtSource/Characters/Concepts/Protagonist/concept.png`, replacing the old concept image;
   the obsolete first-design model and pre-replacement prefab have been removed.
@@ -186,7 +188,7 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
 
 - Runtime FBX, Unlit shaded texture/material, independent controller, adapted Walk and prefab are under `Assets/DungeonTavern/Art/Characters/Eve`; original GLBs and `Eve_Rig.blend` remain in her AIGenerated folder.
 - Tavern_Main replaces only Eve's visual child. Skeleton hierarchy and Idle are reused from the protagonist, while joint placement, skin weights and Walk stride/sole height are adapted for Eve.
-- Avatar/skin/pose checks and Play Mode navigation to the opening guide passed. Apron hem weights now follow the underlying skirt; final close-up appearance remains subject to user acceptance; no new service actions are implied.
+- Avatar/skin/pose checks and Play Mode navigation to the opening guide passed. Apron hem weights now follow the underlying skirt; close-up appearance was accepted on 2026-10-06; no new service actions are implied.
 
 ## Character size baseline (2026-10-06)
 
@@ -196,6 +198,8 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
 - Verify beside the bar and other characters with the actual exploration camera. For Idle, judge visible motion in that camera, not only close-up animation previews; the current target is roughly 3 screen pixels of upper-body rise at 1080p with planted feet.
 
 ## Bar proportion review (2026-10-06)
+
+The following records the proportion review. The final runtime assets are the modular replacement described at the end of this section.
 
 - Review the existing bar directly; do not add a separate blockout. Tavern_Main's bar visual root is temporarily compressed vertically from a 1.10 to a 0.95 countertop height, with width/depth preserved. The user has confirmed this height and the current scene footprint; use them as constraints for the modular redesign.
 - After size acceptance, confirm a more regular modular design using a corner piece and repeatable straight sections. Avoid generating the entire L-shaped bar as one model. Do not start new model generation before those confirmations.
@@ -209,7 +213,7 @@ removed in the 2026-09-18 cleanup. They are not runtime dependencies.
 
 - Three-part proportion correction: preserve the accepted terminal half-panel proportions. Every mating half-panel has clear width:height 1:2; corner extensions each span half the clear square-panel height. Straight and corner bodies must have the full accepted 1.00 depth against 0.95 total height, not resemble thin partitions. These are object-space dimensions, not ratios measured on a perspective image.
 
-- Dimensioned orthographic proposal (pending visual acceptance): `ArtSource/Props/Concepts/Bar/Bar_Modular_Orthographic.svg` and its PNG preview use one scale for top/front/side views. Height 0.95 and depth 1.00; square clear panel 0.723611, half-panel 0.361806; straight pitch 0.823611, terminal length 0.461806, corner outer span 1.309539. A corner plus 14 straight pieces and one terminal spans 13.3019; the other arm with 5 straight pieces and one mirrored terminal spans 5.8894. The shared corner is counted once per arm length. The assembled model now follows these dimensions; the current Unity staff-gate diffuse is the wood color reference.
+- Dimensioned orthographic reference used by the assembled model: `ArtSource/Props/Concepts/Bar/Bar_Modular_Orthographic.svg` and its PNG preview use one scale for top/front/side views. Height 0.95 and depth 1.00; square clear panel 0.723611, half-panel 0.361806; straight pitch 0.823611, terminal length 0.461806, corner outer span 1.309539. A corner plus 14 straight pieces and one terminal spans 13.3019; the other arm with 5 straight pieces and one mirrored terminal spans 5.8894. The shared corner is counted once per arm length. The assembled model now follows these dimensions; the current Unity staff-gate diffuse is the wood color reference.
 
 - Orthographic end-face correction: the straight mating cross-section and the terminal outer end are plain full boards, each 1.00 wide by 0.95 high; neither has framing strips or an inset panel.
 
