@@ -76,25 +76,27 @@ git lfs pull
 
 ```text
 Assets/
-├── DungeonTavern/    # 游戏代码与运行资源
-├── Scenes/          # 酒馆和地下层场景
-└── Editor/          # 项目编辑器与验证工具
-ArtSource/           # Concept、模型和美术制作源文件
-Docs/                # 设计约定、制作规范和开发计划
-Packages/            # 包声明与依赖锁文件
-ProjectSettings/     # Unity 项目设置
+├── DungeonTavern/
+│   ├── Art/                 # 角色、环境、道具模型、UI 与美术 Shader
+│   ├── Gameplay/            # 预制体、动画、交互材质、导航与场景切换资源
+│   ├── Narrative/           # Ink 剧情源文件、编译资源与呈现约定
+│   ├── Rendering/           # URP 渲染器配置、墙体切口与遮挡 Shader
+│   └── Scripts/
+│       ├── Player/          # 主角移动、动作与持物
+│       ├── Interaction/     # 交互检测与交互对象
+│       ├── Tavern/          # 营业日、订单、客流、座位与服务流程
+│       ├── Narrative/       # 剧情驱动与 NPC 对话衔接
+│       ├── Presentation/    # 镜头与场景表现
+│       ├── UI/              # HUD、菜单、引导与对话立绘
+│       └── World/           # 场景加载、楼层传送、寻路、门与环境
+├── Scenes/                  # Tavern 主场景与 SealRoom 地下层
+├── Settings/                # 渲染配置与构建配置
+└── Editor/                  # 资源导入、制作工具与综合检查
+ArtSource/                   # Concept、生成模型、Blender 与第三方源资产
+Docs/                        # 设计约定、制作规范和开发计划
+Packages/                    # 包声明与依赖锁文件
+ProjectSettings/             # Unity 项目设置
 ```
-
-<details>
-<summary><b>依赖与本地开发工具</b></summary>
-
-`Packages/manifest.json` 声明直接依赖，`Packages/packages-lock.json` 记录解析后的依赖和 Git 提交。两者都纳入版本管理；锁文件由 Unity 更新。
-
-Unity Skills 按[官方 README](https://github.com/Besty0728/Unity-Skills#-quick-start)通过 Git URL 安装，源码缓存在 `Library/PackageCache`，用于 AI 操作编辑器。需要此功能时，在 `Window > UnitySkills` 启动服务，再通过 AI Config 配置使用的 AI 工具。
-
-`Library`、`Temp`、`Logs`、`UserSettings`、`Builds` 和 IDE 自动生成的工程文件不提交。个人窗口布局与偏好保留在 `UserSettings`；不要在 Unity 运行时删除缓存目录。
-
-</details>
 
 ## 开发路线与文档
 
@@ -107,4 +109,16 @@ Unity Skills 按[官方 README](https://github.com/Besty0728/Unity-Skills#-quick
 
 ## 资源与许可
 
-项目使用第三方资源，使用与再分发须遵循各资源附带的许可证。仓库未声明统一开源许可证，不应将代码、美术源文件和第三方资源视为同一授权范围。
+感谢以下资源作者。第三方资源保留各自许可，不适用统一的项目授权。
+
+| 资源 | 作者 / 来源 | 许可与记录 |
+|---|---|---|
+| KayKit Adventurers Character Pack | Kay Lousberg / KayKit | [CC0，随包许可](ArtSource/Characters/ThirdParty/KayKitAdventurers/LICENSE.txt) |
+| Universal Animation Library — Standard | Quaternius | [CC0](ArtSource/Characters/ThirdParty/Quaternius/LICENSE) · [来源记录](ArtSource/Characters/ThirdParty/Quaternius/SOURCE.txt) |
+| UI 字体 `TavernSans.otf` | 项目内字体资源 | [随附 SIL Open Font License 1.1](Assets/DungeonTavern/Art/UI/OFL.txt)；原字体名称与作者信息尚待补齐 |
+
+角色 Concept 和部分道具模型采用 AI 辅助制作，包含生成后的人工作业、绑定与贴图调整，源文件位于 `ArtSource`。这些资产不因与 CC0 资源同处仓库而自动获得 CC0 授权。
+
+以上列出已有本地来源或许可记录的资源，并非完整授权审计。其余环境素材的来源及再分发许可仍需补齐；Ink、Unity 包和开发工具遵循各自随包许可证。
+
+项目自有代码与美术尚未指定统一开源许可证，当前不声明整仓库为 MIT、CC0 或其他统一授权。
