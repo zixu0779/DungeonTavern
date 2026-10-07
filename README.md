@@ -2,51 +2,53 @@
 
 # DungeonTavern · 地下酒馆
 
-**在地下城的一角，招待冒险者，也招待他们的对手。**
+**English** | [简体中文](README.zh-CN.md)
 
-一款以酒馆经营与角色对话推进故事的 2.5D Unity 原型。
+**In a quiet corner of the dungeon, serve adventurers—and their adversaries.**
+
+A 2.5D Unity prototype where tavern management and conversations with guests unfold the story.
 
 ![Unity](https://img.shields.io/badge/Unity-6000.5.3f1-222222?logo=unity&logoColor=white)
 ![Rendering](https://img.shields.io/badge/Rendering-URP-8B6845)
 ![Narrative](https://img.shields.io/badge/Narrative-Ink-5B7162)
 ![Status](https://img.shields.io/badge/Status-Prototype-C28A45)
 
-[项目特色](#项目特色) · [快速开始](#快速开始) · [开发路线](Docs/GameDesign/NextDevelopmentPlan.md) · [项目文档](Docs/README.md)
+[Features](#features) · [Getting started](#getting-started) · [Roadmap](Docs/GameDesign/NextDevelopmentPlan.md) · [Documentation](Docs/README.md)
 
 </div>
 
 <p align="center">
-  <img src="Docs/Images/opening.png" width="960" alt="第一日开场：地下封印室中的主角与控制核心">
-  <br><sub>第一日开场 · 当前版本实机画面</sub>
+  <img src="Docs/Images/opening.png" width="960" alt="Day 1 opening: the protagonist and control core in the underground seal room">
+  <br><sub>Day 1 opening · Screenshot from the current game</sub>
 </p>
 
-## 项目特色
+## Features
 
-地下酒馆藏在地下城内部，冒险者与地下城生物共用大厅、吧台和座位。玩家作为老板，在日常服务与客人的交谈中逐步了解这个世界。
+The tavern occupies a secluded corner inside the dungeon. Adventurers and dungeon creatures share its hall, bar, and seating. As its owner, you learn about the world through everyday service and conversations with your guests.
 
-| 经营酒馆 | 认识来客 | 探索空间 |
+| Run the tavern | Meet the guests | Explore the space |
 |---|---|---|
-| 开店、接单、送餐、结账与打烊 | Ink 分支对话、信息追问与记忆线索 | 斜俯视镜头、遮挡消除与地下层切换 |
-| 独行与结伴客流、排队和座位分配 | 近景对话、人物立绘与对白回顾 | 模块化吧台、交互道具与 NPC 寻路 |
+| Open, take orders, serve, settle bills, and close | Ink branching dialogue, follow-up questions, and memory clues | Isometric camera, occlusion handling, and underground floor transitions |
+| Solo and group arrivals, queues, and seating | Close-up conversations, portraits, and dialogue history | Modular bar, interactive props, and NPC navigation |
 
-**当前范围：** 第一日流程已接入；第二、三日 Ink 文本可预览，完整场景流程尚未接入。当前 Demo 不支持存档，部分服务动作和其他人物仍在制作中。
+**Current scope:** The Day 1 flow is integrated. Day 2 and Day 3 Ink scripts can be previewed, but their full scene flows are not yet integrated. The demo does not support saving; some service animations and other characters are still in development.
 
-## 角色与美术
+## Characters and art
 
-主角与伊芙已经完成模型接入。以下为角色 Concept，展示设计方向，**不是游戏实机截图**。
+The protagonist and Eve have been integrated into the game. The images below are character concepts showing the design direction, **not gameplay screenshots**.
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="ArtSource/Characters/Concepts/Protagonist/concept.png" width="360" alt="酒馆老板角色 Concept"><br><b>酒馆老板</b></td>
-    <td align="center" width="50%"><img src="ArtSource/Characters/Concepts/Eve/concept.png" width="360" alt="伊芙角色 Concept"><br><b>伊芙 · 店员</b></td>
+    <td align="center" width="50%"><img src="ArtSource/Characters/Concepts/Protagonist/concept.png" width="360" alt="Tavern owner character concept"><br><b>Tavern owner</b></td>
+    <td align="center" width="50%"><img src="ArtSource/Characters/Concepts/Eve/concept.png" width="360" alt="Eve character concept"><br><b>Eve · Tavern attendant</b></td>
   </tr>
 </table>
 
-角色采用 Concept → 独立视图 → 模型与绑定的制作流程。当前环境以 Unlit 材质呈现贴图颜色，模型、贴图和 Blender 源文件保留在 `ArtSource`。
+Characters follow a concept → individual views → modeling and rigging workflow. The current environment uses Unlit materials to display texture colors. Models, textures, and Blender source files are retained in `ArtSource`.
 
-## 快速开始
+## Getting started
 
-需要 **Unity Hub、Unity 6000.5.3f1、Git 和 Git LFS**，首次导入需要网络下载依赖。
+Requires **Unity Hub, Unity 6000.5.3f1, Git, and Git LFS**. The first import requires an internet connection to download dependencies.
 
 ```bash
 git lfs install
@@ -55,70 +57,72 @@ cd DungeonTavern
 git lfs pull
 ```
 
-仓库访问权限以 GitHub 设置为准。克隆后：
+Repository access follows its GitHub settings. After cloning:
 
-1. 在 Unity Hub 中添加项目，使用 `6000.5.3f1` 打开。
-2. 等待包解析、资源导入和脚本编译完成。
-3. 打开 `Assets/Scenes/Tavern/Tavern_Main.unity`。
-4. 进入 Play Mode，按游戏内提示开始。
+1. Add the project in Unity Hub and open it with `6000.5.3f1`.
+2. Wait for package resolution, asset import, and script compilation to finish.
+3. Open `Assets/Scenes/Tavern/Tavern_Main.unity`.
+4. Enter Play Mode and follow the in-game prompts.
 
-> 模型或贴图缺失时，先确认 Git LFS 文件已经下载，而不是仅有文本指针。Unity 版本以 `ProjectSettings/ProjectVersion.txt` 为准。
+> If models or textures are missing, check that Git LFS downloaded the actual files rather than text pointers. `ProjectSettings/ProjectVersion.txt` is the source of truth for the Unity version.
 
-## 技术与结构
+## Technology and structure
 
-| 技术 | 项目用途 |
+| Technology | Use in this project |
 |---|---|
-| Unity 6 / C# | 角色控制、交互与经营流程 |
-| URP | 2.5D 场景呈现与遮挡效果 |
-| Ink | 对话、选择、叙事事实与记忆分支 |
-| AI Navigation | NPC 移动与场景寻路 |
-| Input System / UGUI | 输入与游戏界面 |
+| Unity 6 / C# | Character controls, interactions, and tavern operations |
+| URP | 2.5D presentation and occlusion effects |
+| Ink | Dialogue, choices, narrative facts, and memory branches |
+| AI Navigation | NPC movement and pathfinding |
+| Input System / UGUI | Input and game interfaces |
 
 ```text
 Assets/
 ├── DungeonTavern/
-│   ├── Art/                 # 角色、环境、道具模型、UI 与美术 Shader
-│   ├── Gameplay/            # 预制体、动画、交互材质、导航与场景切换资源
-│   ├── Narrative/           # Ink 剧情源文件、编译资源与呈现约定
-│   ├── Rendering/           # URP 渲染器配置、墙体切口与遮挡 Shader
+│   ├── Art/                 # Characters, environments, props, UI, and art shaders
+│   ├── Gameplay/            # Prefabs, animation, interaction materials, navigation, transitions
+│   ├── Narrative/           # Ink sources, compiled assets, and presentation contracts
+│   ├── Rendering/           # URP renderer settings, wall cutaway and occlusion shaders
 │   └── Scripts/
-│       ├── Player/          # 主角移动、动作与持物
-│       ├── Interaction/     # 交互检测与交互对象
-│       ├── Tavern/          # 营业日、订单、客流、座位与服务流程
-│       ├── Narrative/       # 剧情驱动与 NPC 对话衔接
-│       ├── Presentation/    # 镜头与场景表现
-│       ├── UI/              # HUD、菜单、引导与对话立绘
-│       └── World/           # 场景加载、楼层传送、寻路、门与环境
-├── Scenes/                  # Tavern 主场景与 SealRoom 地下层
-├── Settings/                # 渲染配置与构建配置
-└── Editor/                  # 资源导入、制作工具与综合检查
-ArtSource/                   # Concept、生成模型、Blender 与第三方源资产
-Docs/                        # 设计约定、制作规范和开发计划
-Packages/                    # 包声明与依赖锁文件
-ProjectSettings/             # Unity 项目设置
+│       ├── Player/          # Movement, animation, and carried items
+│       ├── Interaction/     # Interaction detection and targets
+│       ├── Tavern/          # Business days, orders, arrivals, seating, and service
+│       ├── Narrative/       # Story flow and NPC dialogue integration
+│       ├── Presentation/    # Cameras and visual presentation
+│       ├── UI/              # HUD, menus, guidance, and dialogue portraits
+│       └── World/           # Scene loading, floor transitions, navigation, doors, environment
+├── Scenes/                  # Tavern main scene and underground SealRoom
+├── Settings/                # Rendering and build configuration
+└── Editor/                  # Importers, authoring tools, and project checks
+ArtSource/                   # Concepts, generated models, Blender, and third-party source assets
+Docs/                        # Design contracts, production guidelines, and development plans
+Packages/                    # Package manifest and dependency lock file
+ProjectSettings/             # Unity project settings
 ```
 
-## 开发路线与文档
+## Roadmap and documentation
 
-下一步优先优化地下室场景并重新设计控制核心；其后还有人物与服务动作、门外过渡空间、订单明细和后续剧情接入。剩余工作与已知问题统一记录在[开发计划](Docs/GameDesign/NextDevelopmentPlan.md)。
+The next priority is improving the basement environment and redesigning the control core. Further work includes character and service animations, the space outside the entrance, order details, and later story integration. Remaining tasks and known issues are maintained in the [development plan](Docs/GameDesign/NextDevelopmentPlan.md).
 
-- [游戏设计约定](Docs/GameDesign/GameDesignNote.md)：世界观、已确认玩法与范围边界。
-- [美术规范](Docs/Art/ArtDirection.md)：画面表现与资产制作要求。
-- [人物动作计划](Docs/Characters/CharacterActionPlan.md)：现状、验证入口与待制作动作。
-- [完整文档索引](Docs/README.md)：UI、客流、角色和剧情文档。
+- [Game design](Docs/GameDesign/GameDesignNote.md): World rules, confirmed gameplay, and scope boundaries.
+- [Art direction](Docs/Art/ArtDirection.md): Visual style and asset production requirements.
+- [Character action plan](Docs/Characters/CharacterActionPlan.md): Current support, validation entry points, and remaining animations.
+- [Documentation index](Docs/README.md): UI, customer flow, character, and narrative documents.
 
-## 资源与许可
+The project overview and documentation index are available in English and Simplified Chinese. Detailed design and implementation documents are currently maintained in Chinese. This documentation translation does not add English localization to the game.
 
-感谢以下资源作者。第三方资源保留各自许可，不适用统一的项目授权。
+## Resources and licensing
 
-| 资源 | 作者 / 来源 | 许可与记录 |
+Thanks to the following resource creators. Third-party assets retain their own licenses and are not covered by a single project-wide license.
+
+| Resource | Author / source | License and records |
 |---|---|---|
-| KayKit Adventurers Character Pack | Kay Lousberg / KayKit | [CC0，随包许可](ArtSource/Characters/ThirdParty/KayKitAdventurers/LICENSE.txt) |
-| Universal Animation Library — Standard | Quaternius | [CC0](ArtSource/Characters/ThirdParty/Quaternius/LICENSE) · [来源记录](ArtSource/Characters/ThirdParty/Quaternius/SOURCE.txt) |
-| UI 字体 `TavernSans.otf` | 项目内字体资源 | [随附 SIL Open Font License 1.1](Assets/DungeonTavern/Art/UI/OFL.txt)；原字体名称与作者信息尚待补齐 |
+| KayKit Adventurers Character Pack | Kay Lousberg / KayKit | [CC0, bundled license](ArtSource/Characters/ThirdParty/KayKitAdventurers/LICENSE.txt) |
+| Universal Animation Library — Standard | Quaternius | [CC0](ArtSource/Characters/ThirdParty/Quaternius/LICENSE) · [Source record](ArtSource/Characters/ThirdParty/Quaternius/SOURCE.txt) |
+| UI font `TavernSans.otf` | Font asset included in the project | [Bundled SIL Open Font License 1.1](Assets/DungeonTavern/Art/UI/OFL.txt); the original font name and author still need to be documented |
 
-角色 Concept 和部分道具模型采用 AI 辅助制作，包含生成后的人工作业、绑定与贴图调整，源文件位于 `ArtSource`。这些资产不因与 CC0 资源同处仓库而自动获得 CC0 授权。
+Character concepts and some prop models were produced with AI assistance, followed by manual work, rigging, and texture adjustments. Source files are in `ArtSource`. These assets do not automatically acquire a CC0 license by sharing a repository with CC0 resources.
 
-以上列出已有本地来源或许可记录的资源，并非完整授权审计。其余环境素材的来源及再分发许可仍需补齐；Ink、Unity 包和开发工具遵循各自随包许可证。
+The table lists resources with existing local source or license records; it is not a complete licensing audit. Sources and redistribution permissions for other environment assets still need to be documented. Ink, Unity packages, and development tools follow their respective bundled licenses.
 
-项目自有代码与美术尚未指定统一开源许可证，当前不声明整仓库为 MIT、CC0 或其他统一授权。
+No unified open-source license has been designated for the project's own code and art. The repository as a whole is not declared to be MIT, CC0, or covered by another single license.
