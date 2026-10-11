@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: B1_MAT_Stair_FogBlob_Depth_00
+  m_Shader: {fileID: 4800000, guid: 9db78678fbc2c45d68cbde2d98a97c1d, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3150
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ArchEnabled: 1
+    - _Density: 1.5
+    - _FogBoundsEnabled: 1
+    - _Speed: 0.11
+    m_Colors:
+    - _ArchDepth: {r: 31.932, g: 31.142, b: 0.05, a: 0.12}
+    - _ArchShape: {r: 24.31, g: 4.1, b: 0.82, a: 2.06}
+    - _Color: {r: 0.075, g: 0.08400001, b: 0.1035, a: 0.26}
+    - _FogBoundsMax: {r: 31.982, g: 5.6, b: 26.5, a: 0}
+    - _FogBoundsMin: {r: 29.5, g: 0.7, b: 22.1, a: 0}
+    - _NoiseOffset: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

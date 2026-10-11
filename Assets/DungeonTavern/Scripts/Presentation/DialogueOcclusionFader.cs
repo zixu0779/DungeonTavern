@@ -84,7 +84,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             foreach (var renderer in removed) walls.Remove(renderer);
             foreach (var renderer in FindObjectsByType<MeshRenderer>())
             {
-                if (!IsWall(renderer.transform) || walls.ContainsKey(renderer)) continue;
+                if (!renderer.enabled || !renderer.gameObject.activeInHierarchy || !IsWall(renderer.transform) || walls.ContainsKey(renderer)) continue;
                 var group=renderer.GetComponentInParent<WallCutoutGroup>();
                 if(!group)continue; // Ungrouped props never inherit another wall's cut.
                 if(!groups.ContainsKey(group))groups.Add(group,new GroupState());
@@ -98,7 +98,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
                     state.blocks[i] = new MaterialPropertyBlock();
                     renderer.GetPropertyBlock(state.blocks[i], i);
                     if (!material) continue;
-                    if (material.shader.name != "DungeonTavern/Native Pixel Face")
+                    if (material.shader.name != "DungeonTavern/Native Pixel Face" && !material.HasProperty(Cuttable))
                     {
                         // The environment currently uses unlit colours; preserve its texture, tint and UV transform.
                         if (!cutShader || material.shader.name != "Universal Render Pipeline/Unlit") continue;
@@ -128,7 +128,7 @@ namespace DungeonTavern.Prototypes.Rotation25D
             if(materials.Length==0 || !materials[0])return;
             var material=materials[0];var front=new MaterialPropertyBlock();renderer.GetPropertyBlock(front,0);
             target.SetTexture("_SectionMap",front.GetTexture("_BaseMap") ?? material.GetTexture("_BaseMap") ?? Texture2D.whiteTexture);
-            target.SetColor("_SectionTint",front.HasColor("_BaseColor")?front.GetColor("_BaseColor"):material.GetColor("_BaseColor"));
+            target.SetColor("_SectionTint",front.HasColor("_BaseColor")?front.GetColor("_BaseColor"):(material.HasProperty("_BaseColor") ? material.GetColor("_BaseColor") : Color.white));
             target.SetVector("_SectionST",front.HasVector("_BaseMap_ST")?front.GetVector("_BaseMap_ST"):new Vector4(material.mainTextureScale.x,material.mainTextureScale.y,material.mainTextureOffset.x,material.mainTextureOffset.y));
             bool native=material.shader.name=="DungeonTavern/Native Pixel Face";
             target.SetFloat("_SectionNative",native?1:0);
