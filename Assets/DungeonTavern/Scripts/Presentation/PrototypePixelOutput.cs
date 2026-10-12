@@ -9,16 +9,20 @@ namespace DungeonTavern.Prototypes.Rotation25D
         [SerializeField, Min(64)] private int referenceHeight = 360;
 
         private Camera targetCamera;
+        private bool previousAllowMSAA;
         private RenderTexture pixelTarget;
         private GameObject displayCameraObject;
 
         private void OnEnable()
         {
             targetCamera = GetComponent<Camera>();
+            previousAllowMSAA = targetCamera.allowMSAA;
+            targetCamera.allowMSAA = true;
             pixelTarget = new RenderTexture(referenceWidth, referenceHeight, 24, RenderTextureFormat.ARGB32)
             {
                 name = "Rotation25D_PixelTarget",
                 filterMode = FilterMode.Point,
+                antiAliasing = 4,
                 wrapMode = TextureWrapMode.Clamp,
                 useMipMap = false,
                 autoGenerateMips = false
@@ -33,7 +37,10 @@ namespace DungeonTavern.Prototypes.Rotation25D
         {
             DungeonTavern.UI.TavernUI.Instance?.SetWorldTexture(null);
             if (targetCamera != null)
+            {
                 targetCamera.targetTexture = null;
+                targetCamera.allowMSAA = previousAllowMSAA;
+            }
 
             if (displayCameraObject != null)
             {
