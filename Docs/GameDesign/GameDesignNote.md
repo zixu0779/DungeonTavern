@@ -138,6 +138,11 @@ This document is the durable source of truth for confirmed game and world design
 - There is one shared public entrance, one shared bar, and mixed seating. Public areas are never segregated by species or faction.
 - The owner created the tavern and its peace rules after a long first-floor conflict between adventurers and dungeon residents. All conventional routes to deeper floors are sealed; the sole controlled route is beneath the tavern. The route is open to any species that meets its peace conditions, although deep residents use it most often.
 - The principal seal combines layered wards, rare "anchor crystals", a control core, and a past Wish-like reality change. The owner can no longer cast Wish normally. A later emergency reconfiguration locked the route and cost the owner memories tied to the sealing incident, while leaving their ordinary knowledge and protective strength intact.
+- When passage is permitted, the B1 seal allows only a small volume of approved
+  travel for trade, resource gathering, and similar purposes; the control core
+  detects purposes outside that allowance. This does not reopen the currently
+  locked story route. Visitor access currently crosses the bar and storage;
+  a revised access route remains a design question, not a scene change.
 - The antagonist bypassed the seal's purpose check with one unique relic found
   in a small ruin in the dungeon's deeper levels. Mira's black stone fragment is
   a different remnant originating from the same ruin, not a broken piece of the
@@ -216,6 +221,16 @@ Potential later unlocks, driven by story or achievements:
 The tavern has no conventional building-upgrade ladder. Progression may expose or open additional physical areas, but must not silently become a generic upgrade economy.
 
 ## Confirmed visual direction
+
+- Surface shading does not use scene lighting; texture-authored front/side/top values and recess shadows establish volume.
+
+- Seal-room crystals, including the removable statue crystal and the control
+  core's three socket crystals, are single-use consumables; there is no
+  rechargeable variant. Charged crystals are intact and luminous. Depleted
+  crystals dim and develop cracks; the statue crystal is severely fractured.
+  The depletion presentation calls for fading light, emerging cracks and a
+  small burst of crystal flecks that fall and fade. These are confirmed design
+  requirements, not implemented Unity effects.
 
 - Pixel-art presentation.
 - The game uses an oblique top-down view, not a completely vertical overhead view.
