@@ -6,6 +6,9 @@ Shader "DungeonTavern/Stair Fog Blob"
         _Density("Density", Range(0,2)) = 1
         _NoiseOffset("Noise Offset", Vector) = (0,0,0,0)
         _Speed("Drift Speed", Float) = 0.12
+        _ArchEnabled("Arch Mask", Float) = 0
+        _ArchShape("Arch center, spring, radius, floor", Vector) = (24.31,4.1,.82,2.06)
+        _ArchDepth("Arch front, rear, fringe, blend", Vector) = (31.932,31.142,.05,.12)
         _FogBoundsEnabled("Bounded Fog", Float) = 0
         _FogBoundsMin("Fog Minimum", Vector) = (0,0,0,0)
         _FogBoundsMax("Fog Maximum", Vector) = (0,0,0,0)
@@ -30,6 +33,8 @@ Shader "DungeonTavern/Stair Fog Blob"
                 float4 _NoiseOffset;
                 float _Speed;
                 float _FogBoundsEnabled;
+                float _ArchEnabled;
+                float4 _ArchShape, _ArchDepth;
                 float4 _FogBoundsMin, _FogBoundsMax;
             CBUFFER_END
             struct Attributes { float4 positionOS:POSITION; float2 uv:TEXCOORD0; };
@@ -51,6 +56,20 @@ Shader "DungeonTavern/Stair Fog Blob"
                     float3 edge=min(i.positionWS-_FogBoundsMin.xyz,_FogBoundsMax.xyz-i.positionWS);
                     clip(min(edge.x,min(edge.y,edge.z)));
                     alpha*=smoothstep(0,.12,min(edge.x,min(edge.y,edge.z)));
+                }
+                if(_ArchEnabled>.5)
+                {
+                    float2 q=float2(i.positionWS.z-_ArchShape.x,max(0,i.positionWS.y-_ArchShape.y));
+                    float d=max(length(q)-_ArchShape.z,_ArchShape.w-i.positionWS.y);
+                    float core=1-smoothstep(-.035,0,d);
+                    float fringe=(1-smoothstep(0,_ArchDepth.z,max(d,0)))*.07;
+                    float mask=max(core,fringe);
+                    float inDoor=smoothstep(_ArchDepth.y-.03,_ArchDepth.y+_ArchDepth.w,i.positionWS.x);
+                    float3 rear=(i.positionWS-float3(_ArchDepth.y-.34,3.1,_ArchShape.x))/float3(1.25,2.45,2.3);
+                    float rearCloud=1-smoothstep(.62,1.0,length(rear));
+                    alpha*=lerp(rearCloud,mask,inDoor);
+                    alpha*=1-smoothstep(_ArchDepth.x,_ArchDepth.x+.05,i.positionWS.x);
+                    alpha=saturate(alpha*1.8);
                 }
                 return half4(_Color.rgb*lerp(.70,1.28,n1),alpha);
             }
