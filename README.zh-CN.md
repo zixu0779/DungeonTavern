@@ -2,24 +2,24 @@
 
 # DungeonTavern · 地下酒馆
 
-[English](README.md) | **简体中文**
+<p>
+  <a href="README.md"><img src="https://img.shields.io/badge/English-DCE6F0?style=for-the-badge" alt="English"></a>
+  <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/简体中文-2563EB?style=for-the-badge" alt="简体中文"></a>
+</p>
 
 **在地下城的一角，招待冒险者，也招待他们的对手。**
 
 一款以酒馆经营与角色对话推进故事的 2.5D Unity 原型。
 
-![Unity](https://img.shields.io/badge/Unity-6000.5.3f1-222222?logo=unity&logoColor=white)
-![Rendering](https://img.shields.io/badge/Rendering-URP-8B6845)
-![Narrative](https://img.shields.io/badge/Narrative-Ink-5B7162)
-![Status](https://img.shields.io/badge/Status-Prototype-C28A45)
+[![License: MIT (code only)](https://img.shields.io/badge/License-MIT_(code_only)-blue)](LICENSE)
 
 [项目特色](#项目特色) · [快速开始](#快速开始) · [开发路线](Docs/GameDesign/NextDevelopmentPlan.zh-CN.md) · [项目文档](Docs/README.zh-CN.md)
 
 </div>
 
 <p align="center">
-  <img src="Docs/Images/opening.png" width="960" alt="第一日开场：地下封印室中的主角与控制核心">
-  <br><sub>第一日开场 · 当前版本实机画面</sub>
+  <img src="Docs/Images/opening.png" width="960" alt="地下封印室：站立的主角面朝守卫雕像">
+  <br><sub>B1 封印室 · Unity 编辑器摆姿场景展示</sub>
 </p>
 
 ## 项目特色
@@ -125,4 +125,10 @@ ProjectSettings/             # Unity 项目设置
 
 以上列出已有本地来源或许可记录的资源，并非完整授权审计。其余环境素材的来源及再分发许可仍需补齐；Ink、Unity 包和开发工具遵循各自随包许可证。
 
-项目自有代码与美术尚未指定统一开源许可证，当前不声明整仓库为 MIT、CC0 或其他统一授权。
+### 授权范围
+
+项目原创程序代码采用 [MIT License](LICENSE)，包括自有 C# 脚本、Shader、编辑器工具及辅助构建脚本，允许在保留版权与许可声明的前提下复用、修改和商用。
+
+MIT 不适用于剧情与 Ink 文本、角色设定、概念图、模型、贴图、动画、音频、字体、截图、场景、预制体及其他美术或游戏内容。除另有明确授权外，项目方对其拥有的上述内容保留权利；第三方内容仍遵循原作者许可。README 与 `Docs` 中的项目文案也不纳入 MIT 授权。单个文件附有其他许可声明时，以该声明为准。
+
+因此，本仓库不是整套游戏素材均可自由复用的 MIT 资源包；公开代码不代表取得第三方资源的再分发授权。

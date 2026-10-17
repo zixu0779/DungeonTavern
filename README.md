@@ -2,24 +2,24 @@
 
 # DungeonTavern · 地下酒馆
 
-**English** | [简体中文](README.zh-CN.md)
+<p>
+  <a href="README.md"><img src="https://img.shields.io/badge/English-2563EB?style=for-the-badge" alt="English"></a>
+  <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/简体中文-DCE6F0?style=for-the-badge" alt="简体中文"></a>
+</p>
 
 **In a quiet corner of the dungeon, serve adventurers—and their adversaries.**
 
 A 2.5D Unity prototype where tavern management and conversations with guests unfold the story.
 
-![Unity](https://img.shields.io/badge/Unity-6000.5.3f1-222222?logo=unity&logoColor=white)
-![Rendering](https://img.shields.io/badge/Rendering-URP-8B6845)
-![Narrative](https://img.shields.io/badge/Narrative-Ink-5B7162)
-![Status](https://img.shields.io/badge/Status-Prototype-C28A45)
+[![License: MIT (code only)](https://img.shields.io/badge/License-MIT_(code_only)-blue)](LICENSE)
 
 [Features](#features) · [Getting started](#getting-started) · [Roadmap](Docs/GameDesign/NextDevelopmentPlan.md) · [Documentation](Docs/README.md)
 
 </div>
 
 <p align="center">
-  <img src="Docs/Images/opening.png" width="960" alt="Day 1 opening: the protagonist and control core in the underground seal room">
-  <br><sub>Day 1 opening · Screenshot from the current game</sub>
+  <img src="Docs/Images/opening.png" width="960" alt="The protagonist facing the guardian statue in the underground seal room">
+  <br><sub>B1 seal room · Staged scene view rendered in Unity Editor</sub>
 </p>
 
 ## Features
@@ -125,4 +125,10 @@ Character concepts and some prop models were produced with AI assistance, follow
 
 The table lists resources with existing local source or license records; it is not a complete licensing audit. Sources and redistribution permissions for other environment assets still need to be documented. Ink, Unity packages, and development tools follow their respective bundled licenses.
 
-No unified open-source license has been designated for the project's own code and art. The repository as a whole is not declared to be MIT, CC0, or covered by another single license.
+### License scope
+
+Original program code is licensed under the [MIT License](LICENSE), including project-owned C# scripts, shaders, editor tools, and supporting build scripts. It may be reused, modified, and used commercially provided the copyright and license notices are retained.
+
+MIT does not cover narrative and Ink text, character designs, concept art, models, textures, animations, audio, fonts, screenshots, scenes, prefabs, or other art and game content. Unless separately licensed, rights to such content owned by the project are reserved; third-party content remains subject to its original license. Project prose in the README files and `Docs` is also excluded from MIT. A separate license notice attached to an individual file takes precedence.
+
+This repository is therefore not an MIT-licensed asset pack for the entire game. Publishing the code does not grant redistribution rights to third-party resources.
